@@ -1,0 +1,22 @@
+<article>
+    <div class="row">
+        <h3 class="page-title col-sm-8">
+            Products
+        </h3>
+        <order-cloud-search servicename="Products" controlleras="products"></order-cloud-search>
+    </div>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Products" listobject="products.list">
+            <li ng-click="products.goToEdit(product.ID)" class="list-group-item" ng-repeat="product in products.list.Items">
+                <p>{{product.ID}}</p>
+                <p>{{product.Name}}</p>
+                <button type="button" ng-click="$event.stopPropagation(); products.goToAssignments(product.ID);" class="btn btn-primary">Assignments</button>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.productCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

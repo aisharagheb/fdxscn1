@@ -1,0 +1,47 @@
+<article>
+    <h3 class="page-title">
+        <b>Edit Category</b>
+    </h3>
+    <form name="CategoryEditForm" ng-submit="categoryEdit.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="categoryIDInput">Category ID</label>
+                <input id="categoryIDInput" type="text" class="form-control" ng-model="categoryEdit.category.ID" ng-required="true"/>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label for="categoryNameInput">Category Name</label>
+                <input id="categoryNameInput" type="text" class="form-control" ng-model="categoryEdit.category.Name"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label for="categoryDescriptionInput">Description</label>
+                <textarea id="categoryDescriptionInput" type="text" class="form-control" ng-model="categoryEdit.category.Description"></textarea>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="categoryParentIDInput">Parent ID</label>
+                <input id="categoryParentIDInput" type="text" class="form-control" ng-model="categoryEdit.category.ParentID"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="categoryOrderInput">List Order</label>
+                    <input id="categoryOrderInput" type="number" class="form-control" ng-model="categoryEdit.category.ListOrder"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="categoryActiveInput">
+                    <input id="categoryActiveInput" type="checkbox" ng-model="categoryEdit.category.Active"/>
+                    Active
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="CategoryEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.categories">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="categoryEdit.Delete()"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+    </form>
+</article>

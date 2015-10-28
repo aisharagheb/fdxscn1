@@ -41,7 +41,7 @@ gulp.task('karma:unit', function() {
 
 gulp.task('watch:js', function() {
     console.log("running 'watch:js' task");
-    gulp.watch(config.app_files.js, gulp.series('build:js', 'build:styles', 'build:inject', function() {browserSync.reload()}));
+    gulp.watch(config.app_files.js, gulp.series('build:js', 'build:assets', 'build:styles', 'build:inject', function() {browserSync.reload()}));
     gulp.watch(vendorJS, gulp.series('build:js_bower', 'build:inject', function() {browserSync.reload()}));
 });
 
@@ -53,7 +53,7 @@ gulp.task('watch:assets', function() {
 
 gulp.task('watch:other', function() {
     console.log("running 'watch:other' task");
-    gulp.watch(config.app_files.atpl, gulp.series('build:templateCache', 'build:inject', function() {browserSync.reload()}));
+    gulp.watch(config.app_files.atpl, gulp.series('build:templateCache', 'build:assets', 'build:inject', function() {browserSync.reload()}));
     gulp.watch(config.source + config.index, gulp.series( 'build:inject', function() {browserSync.reload()}));
 });
 

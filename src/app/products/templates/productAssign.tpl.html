@@ -1,0 +1,98 @@
+<article>
+    <div class="col-sm-7">
+        <h3 class="page-title">
+            Create and Update Assignment(s) for {{productAssign.product.Name}}
+        </h3>
+        <ul class="list-group prod-assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+            <li class="list-group-item" ng-click="productAssign.toOne()">
+                <p>Step One - Select Party Assignment(s)
+                    <i class="fa fa-question-circle"
+                       tooltip-placement="right"
+                       uib-tooltip="Assignments for selected groups will be overwritten if a price schedule of the same type as the existing assignment is selected (standard/replenishment).">
+                    </i>
+                </p>
+            </li>
+            <div ordercloud-infinite-scroll pagingfunction="productAssign.pagingFunction()" ng-show="productAssign.stepOne === true">
+                <fieldset>
+                    <li class="list-group-item"><strong>Buyer</strong></li>
+                    <li class="list-group-item">
+                        <input type="checkbox" class="pull-left" ng-model="productAssign.assignBuyer">
+                        <p>{{productAssign.buyer.Name}}</p>
+                    </li>
+                </fieldset>
+                <fieldset ng-disabled="productAssign.assignBuyer">
+                    <li class="list-group-item"><strong>User Groups</strong></li>
+                    <li class="list-group-item" ng-repeat="group in productAssign.userGroups track by $index">
+                        <input type="checkbox" class="pull-left" ng-model="group.selected">
+                        <p>{{group.ID}}</p>
+                    </li>
+                </fieldset>
+            </div>
+        </ul>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-click="productAssign.toTwo()" class="btn btn-default prod-assign" ng-hide="productAssign.stepTwo === true">Next</button>
+            </div>
+        </div>
+        <ul class="list-group prod-assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+            <li class="list-group-item" ng-click="productAssign.toTwo()">
+                <p>Step Two - Select Price Schedule(s)</p>
+            </li>
+            <div ordercloud-infinite-scroll pagingfunction="productAssign.pagingFunction()" ng-show="productAssign.stepTwo === true">
+                <li class="list-group-item"><strong>Standard Price Schedules</strong></li>
+                <li class="list-group-item" ng-if="priceSchedule.OrderType =='Standard'" ng-repeat="priceSchedule in productAssign.priceSchedules track by $index">
+                    <input type="radio" value="false" name="standardPS" ng-click="productAssign.selectPriceSchedule(priceSchedule)" ng-model="priceSchedule.selected">
+                    <p>{{priceSchedule.ID}}</p>
+                </li>
+                <li class="list-group-item"><strong>Replenishment Price Schedules</strong></li>
+                <li class="list-group-item" ng-if="priceSchedule.OrderType =='Replenishment'" ng-repeat="priceSchedule in productAssign.priceSchedules track by $index">
+                    <input type="radio" value="false" name="replenishmentPS" ng-click="productAssign.selectPriceSchedule(priceSchedule)" ng-model="priceSchedule.selected">
+                    <p>{{priceSchedule.ID}}</p>
+                </li>
+            </div>
+        </ul>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-click="productAssign.toOne()" class="btn btn-default prod-assign" ng-hide="productAssign.stepOne === true">Previous</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" ui-sref="^.products"><i class="fa fa-arrow-left"></i> Back</button>
+            <button type="button" class="btn btn-primary" ng-click="productAssign.saveAssignments($index)"><i class="fa fa-save"></i> Update Assignments</button>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <h3 class="page-title">
+            Existing Assignments for {{productAssign.product.Name}}
+        </h3>
+        <ul class="list-group">
+            <li class="list-group-item assignment" ng-repeat="assignment in productAssign.assignments track by $index">
+                <div>
+                    <div class="col-xs-2" style="padding: 15px 0 0;">
+                        <a class="fa fa-trash-o text-danger fa-2x" ng-click="productAssign.deleteAssignment(assignment)"></a>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="row">
+                            <div class="pull-left">{{assignment.UserGroupID ? assignment.UserGroupID + ' (group)' : assignment.BuyerID + ' (buyer)'}}</div>
+                        </div>
+
+                        <div class="row" ng-show="assignment.StandardPriceScheduleID">
+                            <div class="pull-left">Standard:</div>
+                            <div class="pull-right">
+                                {{assignment.StandardPriceScheduleID}}
+                                <a class="fa fa-minus-circle text-danger" ng-show="assignment.StandardPriceScheduleID && assignment.ReplenishmentPriceScheduleID" ng-click="productAssign.deleteAssignment(assignment, 'Standard')"></a>
+                            </div>
+                        </div>
+                        <div class="row" ng-show="assignment.ReplenishmentPriceScheduleID">
+                            <div class="pull-left">Replenishment:</div>
+                            <div class="pull-right">
+                                {{assignment.ReplenishmentPriceScheduleID}}
+                                <a class="fa fa-minus-circle text-danger" ng-show="assignment.StandardPriceScheduleID && assignment.ReplenishmentPriceScheduleID" ng-click="productAssign.deleteAssignment(assignment, 'Replenishment')"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</article>

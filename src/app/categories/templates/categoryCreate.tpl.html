@@ -1,0 +1,45 @@
+<article>
+    <h3 class="page-title">
+        <b>New Category</b>
+    </h3>
+    <form name="CategoryCreateForm" ng-submit="categoryCreate.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="categoryIDInput">Category ID</label>
+                <input id="categoryIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="categoryCreate.category.ID"/>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label for="categoryNameInput">Category Name</label>
+                <input id="categoryNameInput" type="text" class="form-control" ng-model="categoryCreate.category.Name" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label for="categoryDescriptionInput">Description</label>
+                <textarea id="categoryDescriptionInput" type="text" class="form-control" ng-model="categoryCreate.category.Description"></textarea>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="categoryParentIDInput">Parent ID</label>
+                <input id="categoryParentIDInput" type="text" class="form-control" ng-model="categoryCreate.category.ParentID"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="categoryOrderInput">List Order</label>
+                <input id="categoryOrderInput" type="number" class="form-control" ng-model="categoryCreate.category.ListOrder"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="categoryActiveInput">
+                    <input id="categoryActiveInput" type="checkbox" ng-model="categoryCreate.category.Active"/>
+                    Active
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="CategoryCreateForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.categories">Cancel</button>
+        </div>
+    </form>
+</article>

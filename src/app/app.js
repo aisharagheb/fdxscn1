@@ -7,7 +7,8 @@ angular.module( 'orderCloud', [
 	'ui.router',
 	'ui.bootstrap',
 	'orderCloud.sdk',
-	'toastr'
+	'toastr',
+    'ordercloud-infinite-scroll'
 ])
 
 	.run( SetBuyerID )
@@ -20,22 +21,28 @@ angular.module( 'orderCloud', [
 
 	//Constants needed for the OrderCloud AngularJS SDK
 	.constant('ocscope', 'FullAccess')
-	.constant('appname', 'OrderCloud AngularJS Seed')
+	.constant('appname', 'OrderCloud Components Dev')
 
 	//Client ID for a Registered Distributor or Buyer Company
-	.constant('clientid', '6d60154e-8a55-4bd2-93aa-494444e69996')
+    .constant('clientid', '0e0450e6-27a0-4093-a6b3-d7cd9ebc2b8f') //DISTRIBUTOR - Four51 OrderCloud Components
+    //.constant('clientid', 'f0976e5c-ed16-443a-98ad-d084c7010e05') //BUYER - Four51 OrderCloud Components Buyer
 
 	//Test Environment
-	//.constant('authurl', 'https://testauth.ordercloud.io/oauth/token')
-	//.constant('apiurl', 'https://testapi.ordercloud.io')
+	.constant('authurl', 'https://testauth.ordercloud.io/oauth/token')
+	.constant('apiurl', 'https://testapi.ordercloud.io')
 
-	.constant('authurl', 'http://core.four51.com:11629/OAuth/Token')
-	.constant('apiurl', 'http://core.four51.com:9002')
-	.constant('devcenterClientID', '6d60154e-8a55-4bd2-93aa-494444e69996') //Local
+    //Production Environment
+    //.constant('authurl', 'http://core.four51.com:11629/OAuth/Token')
+    //.constant('apiurl', 'http://core.four51.com:9002')
+
+    .constant('buyerid', '451ORDERCLOUD')
+
 ;
 
-function SetBuyerID( BuyerID ) {
-	BuyerID.Set('xxxx');
+function SetBuyerID( BuyerID, buyerid ) {
+    if (!BuyerID.Get()) {
+        BuyerID.Set(buyerid);
+    }
 }
 
 function Security( $rootScope, $state, Auth ) {

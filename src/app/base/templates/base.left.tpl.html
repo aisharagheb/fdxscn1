@@ -1,0 +1,13 @@
+<div class="sidenav-padding">
+    <h2>Buyer</h2>
+
+    <span style="white-space: normal" id="buyer-dropdown" ng-click="baseLeft.isCollapsed = !baseLeft.isCollapsed">
+        {{baseLeft.buyer.Name}} <i class="fa fa-caret-down"></i>
+    </span>
+    <div ordercloud-infinite-scroll pagingfunction="baseLeft.PagingFunction()" uib-collapse="baseLeft.isCollapsed" class="list-group infinite-scroll-window" role="menu" aria-labelledby="buyer-dropdown">
+        <a ng-repeat="buyer in baseLeft.buyerList.Items" class="list-group-item" ng-click="baseLeft.changeBuyer(buyer)" href>{{buyer.Name}}</a>
+    </div>
+
+    <h4>Buyer Components</h4>
+    <li ng-repeat="state in baseLeft.StateList"><a ui-sref="{{state.Link}}">{{state.Name}}</a></li>
+</div>
