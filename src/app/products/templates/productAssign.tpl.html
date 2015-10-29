@@ -1,6 +1,107 @@
-<article>
+<article class="container-fluid">
+    <div class="row">
+    <!--TODO:let's make the below HTML work-->
+<!--    <h3>Party Assignment</h3>
+    <div class="row" >
+        <div class="col-sm-6">
+            <div class="form-group">
+                <button class="btn btn-block btn-default" ng-class="{active: productAssign.assignBuyer}" ng-click="productAssign.assignBuyer = !productAssign.assignBuyer">
+                    <i class="fa" ng-class="{'fa-square-o':!productAssign.assignBuyer, 'fa-check-square-o':productAssign.assignBuyer}"></i> Assign at the Buyer Level
+                </button>
+            </div>
+            <div uib-collapse="productAssign.assignBuyer">
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Find a group..." ng-model="productAssign.groupSearchTerm"/>
+                    </div>
+                </form>
+                <section class="table-fixed-header">
+                    <div class="table-header-bg"></div>
+                    <div class="table-container" ordercloud-infinite-scroll pagingfunction="productAssign.pagingFunction()" style="max-height:160px;">
+                        <table class="table table-hover">
+                            <colgroup>
+                                <col class="action-column"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    <div>ID</div>
+                                </th>
+                                <th>
+                                    <div>Name</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="group in productAssign.userGroups track by $index">
+                                <td class="text-center">
+                                    <input type="checkbox" ng-model="group.selected">
+                                </td>
+                                <td>{{group.ID}}</td>
+                                <td>{{group.Name}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <div class="col-sm-6" uib-collapse="productAssign.assignBuyer">
+            <div class="well well-lg text-center" ng-if="!(productAssign.userGroups | filter:{selected:true}).length">
+                <b>No User Group(s) Selected</b>
+            </div>
+            <section class="table-fixed-header"  ng-if="(productAssign.userGroups | filter:{selected:true}).length">
+                <div class="table-header-bg"></div>
+                <div class="table-container" style="max-height:160px;">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>
+                                <div>ID</div>
+                            </th>
+                            <th>
+                                <div>Name</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="group in productAssign.userGroups | filter:{selected:true} track by $index">
+                            <td>{{group.ID}}</td>
+                            <td>{{group.Name}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h3 class="page-header">Standard Price Schedules</h3>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="priceSchedule in productAssign.priceSchedules | filter:{OrderType:'Standard'} track by $index" ng-class="{active: priceSchedule.selected}" ng-click="productAssign.selectPriceSchedule(priceSchedule)">
+                    {{priceSchedule.ID}}
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <h3 class="page-header">Replenishment Price Schedules</h3>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="priceSchedule in productAssign.priceSchedules | filter:{OrderType:'Replenishment'} track by $index" ng-class="{active: priceSchedule.selected}" ng-click="productAssign.selectPriceSchedule(priceSchedule)">
+                    {{priceSchedule.ID}}
+                </li>
+
+            </ul>
+        </div>
+    </div>-->
     <div class="col-sm-7">
-        <h3 class="page-title">
+        <h3 class="page-header">
             Create and Update Assignment(s) for {{productAssign.product.Name}}
         </h3>
         <ul class="list-group prod-assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
@@ -94,5 +195,6 @@
                 </div>
             </li>
         </ul>
+    </div>
     </div>
 </article>
