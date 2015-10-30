@@ -1,12 +1,12 @@
-<article>
-	<h3 class="page-title">
+<article class="container-fluid">
+	<h3 class="page-header">
 		<b>New Address</b>
 	</h3>
 	<form name="AddressCreateForm" ng-submit="addressCreate.Submit()">
         <div class="row">
             <div class="col-sm-6 form-group">
                 <label for="addressIDInput">Address ID</label>
-                <input id="addressIDInput" type="text" class="form-control" ng-model="addressCreate.address.ID"/>
+                <input id="addressIDInput" type="text" class="form-control" ordercloud-auto-id ng-model="addressCreate.address.ID"/>
             </div>
             <div class="col-sm-6 form-group">
                 <label for="addressNameInput">Address Name</label>

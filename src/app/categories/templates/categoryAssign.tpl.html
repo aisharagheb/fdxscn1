@@ -1,24 +1,38 @@
-<article>
-    <h3 class="page-title">
+<article class="container-fluid">
+    <h3 class="page-header">
         Party Assignments for {{categoryAssign.Category.Name}}
     </h3>
-    
-    <h4>Assign User Groups</h4>
-    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
-        <li class="list-group-item">
-            <p>Assign</p>
-            <p>ID</p>
-            <p>Name</p>
-        </li>
-        <div ordercloud-infinite-scroll servicename="Categories" listobject="categoryAssign.AssignedUserGroups" usergrouplist="categoryAssign.UserGroups" selectedid="CategoryID">
-            <li class="list-group-item" ng-repeat="group in categoryAssign.UserGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
-                <input name="{{'assignCheckbox' + $index}}" ng-change="categoryAssign.resetSelections(assignmentsTable, $index)" type="checkbox" ng-model="group.selected">
-                <p>{{group.ID}}</p>
-                <p>{{group.Name}}</p>
-            </li>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" listobject="categoryAssign.list" ng-form="assignmentsTable" disable-dynamic-validation>
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                    <th>
+                        <div>Name</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="group in categoryAssign.list.Items track by $index">
+                    <td class="text-center">
+                        <input name="{{'assignCheckbox' + $index}}"  type="checkbox" ng-model="group.selected">
+                    </td>
+                    <td>{{group.ID}}</td>
+                    <td>{{group.Name}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </ul>
-
+    </section>
     <div class="form-group">
         <button type="button" ui-sref="^.categories" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</button>
         <button type="button" ng-click="categoryAssign.saveAssignments(assignmentsTable)" class="btn btn-primary"><i class="fa fa-save"></i> Save Assignments</button>

@@ -138,14 +138,25 @@ function CategoryTreeController() {
 function CategoryAssignController(UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
     var vm = this;
     vm.Category = SelectedCategory;
-    vm.UserGroups = UserGroupList;
+    vm.list = UserGroupList;
     vm.AssignedUserGroups = AssignedUserGroups;
     vm.saveAssignments = SaveAssignment;
     vm.resetSelections = ResetSelections;
 
+    function SetSelected() {
+        angular.forEach(vm.list.Items, function(group) {
+            angular.forEach(vm.AssignedUserGroups.Items, function(assignment) {
+                if (group.ID === assignment.UserGroupID) {
+                    group.selected = true;
+                }
+            });
+        });
+    }
+    SetSelected();
+
     function SaveAssignment(form) {
         var assignmentObject = {};
-        angular.forEach(vm.UserGroups.Items, function(group, index) {
+        angular.forEach(vm.list.Items, function(group, index) {
             if (form['assignCheckbox' + index].$dirty) {
                 if (group.selected) {
                     assignmentObject = {UserID: null, UserGroupID: group.ID, CategoryID: vm.Category.ID};
@@ -164,19 +175,20 @@ function CategoryAssignController(UserGroupList, AssignedUserGroups, SelectedCat
             }
         });
         form.$setPristine(true);
+        SetSelected();
     }
 
     function ResetSelections(form, index) {
         var matched = false;
         angular.forEach(vm.AssignedUserGroups.Items, function(assignment) {
-            if (assignment.UserGroupID === vm.UserGroups.Items[index].ID) {
+            if (assignment.UserGroupID === vm.list.Items[index].ID) {
                 matched = true
             }
         });
-        if (matched && vm.UserGroups.Items[index].selected) {
+        if (matched && vm.list.Items[index].selected) {
             form['assignCheckbox' + index].$setPristine(true);
         }
-        else if (!matched && !vm.UserGroups.Items[index].selected) {
+        else if (!matched && !vm.list.Items[index].selected) {
             form['assignCheckbox' + index].$setPristine(true);
         }
     }
@@ -186,14 +198,14 @@ function CategoryAssignProductController(ProductList, ProductAssignments, Select
     var vm = this,
         page = 1;
     vm.Category = SelectedCategory;
-    vm.ProductList = ProductList;
+    vm.list = ProductList;
     vm.ProductAssignments = ProductAssignments;
     vm.SaveAssignment = SaveAssignment;
     vm.ResetSelection = ResetAssignment;
     vm.PagingFunction = PagingFunction;
 
     function SetSelected() {
-        angular.forEach(vm.ProductList.Items, function(product) {
+        angular.forEach(vm.list.Items, function(product) {
             angular.forEach(vm.ProductAssignments.Items, function(assignment) {
                 if (product.ID === assignment.ProductID) {
                     product.selected = true;
@@ -205,7 +217,7 @@ function CategoryAssignProductController(ProductList, ProductAssignments, Select
 
     function SaveAssignment(form) {
         var assignmentObject = {};
-        angular.forEach(vm.ProductList.Items, function(product, index) {
+        angular.forEach(vm.list.Items, function(product, index) {
             if (form['assignCheckbox' + index].$dirty) {
                 if (product.selected) {
                     assignmentObject = {CategoryID: vm.Category.ID, ProductID: product.ID, ListOrder: null};
@@ -229,25 +241,25 @@ function CategoryAssignProductController(ProductList, ProductAssignments, Select
     function ResetAssignment(form, index) {
         var matched = false;
         angular.forEach(vm.ProductAssignments.Items, function(assignment) {
-            if (assignment.ProductID === vm.ProductList.Items[index].ID) {
+            if (assignment.ProductID === vm.list.Items[index].ID) {
                 matched = true
             }
         });
-        if (matched && vm.ProductList.Items[index].selected) {
+        if (matched && vm.list.Items[index].selected) {
             form['assignCheckbox' + index].$setPristine(true);
         }
-        else if (!matched && !vm.ProductList.Items[index].selected) {
+        else if (!matched && !vm.list.Items[index].selected) {
             form['assignCheckbox' + index].$setPristine(true);
         }
     }
 
     function PagingFunction() {
         page += 1;
-        if (page <= vm.ProductList.Meta.TotalPages) {
+        if (page <= vm.list.Meta.TotalPages) {
             Products.List(null, page)
                 .then(function(data) {
-                    vm.ProductList.Meta = data.Meta;
-                    vm.ProductList.Items = [].concat(vm.ProductList.Items, data.Items);
+                    vm.list.Meta = data.Meta;
+                    vm.list.Items = [].concat(vm.list.Items, data.Items);
                     if (page <= vm.ProductAssignments.Meta.TotalPages) {
                         Categories.ListProductAssignments(vm.Category.ID, null, page)
                             .then(function(data) {
