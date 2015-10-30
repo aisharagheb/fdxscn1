@@ -16,11 +16,11 @@ function UserGroupsConfig( $stateProvider ) {
             templateUrl:'userGroups/templates/groups.tpl.html',
             controller:'UserGroupsCtrl',
             controllerAs: 'userGroups',
-            data: {componentName: 'Groups'},
+            data: {componentName: 'User Groups'},
             resolve: {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List(null, 1, 20);
-                },
+                }
             }
         })
         .state( 'base.groupEdit', {

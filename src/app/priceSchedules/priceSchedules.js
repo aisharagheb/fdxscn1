@@ -14,7 +14,7 @@ function PriceSchedulesConfig( $stateProvider ) {
             templateUrl:'priceSchedules/templates/priceSchedules.tpl.html',
             controller:'PriceSchedulesCtrl',
             controllerAs: 'priceSchedules',
-            data: {componentName: 'PriceSchedules'},
+            data: {componentName: 'Price Schedules'},
             resolve: {
                 PriceScheduleList: function(PriceSchedules) {
                     return PriceSchedules.List();

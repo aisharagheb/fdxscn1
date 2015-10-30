@@ -15,7 +15,7 @@ function CreditCardsConfig( $stateProvider ) {
             templateUrl:'creditCards/templates/creditCards.tpl.html',
             controller:'CreditCardsCtrl',
             controllerAs: 'creditCards',
-            data: {componentName: 'Cost Centers'},
+            data: {componentName: 'Credit Cards'},
             resolve: {
                 CreditCardList: function(CreditCards) {
                     return CreditCards.List();

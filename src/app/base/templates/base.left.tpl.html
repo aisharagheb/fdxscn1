@@ -7,7 +7,11 @@
     <div ordercloud-infinite-scroll pagingfunction="baseLeft.PagingFunction()" uib-collapse="baseLeft.isCollapsed" class="list-group infinite-scroll-window" role="menu" aria-labelledby="buyer-dropdown">
         <a ng-repeat="buyer in baseLeft.buyerList.Items" class="list-group-item" ng-click="baseLeft.changeBuyer(buyer)" href>{{buyer.Name}}</a>
     </div>
-
-    <h4>Buyer Components</h4>
-    <li ng-repeat="state in baseLeft.StateList"><a ui-sref="{{state.Link}}">{{state.Name}}</a></li>
+    <nav>
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation" ng-repeat="item in baseLeft.navItems" ui-sref-active="active">
+                <a href="" ui-sref="{{item.StateRef}}">{{item.Display}}</a>
+            </li>
+        </ul>
+    </nav>
 </div>

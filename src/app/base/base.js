@@ -41,18 +41,29 @@ function BaseConfig( $stateProvider ) {
                 BuyerList: function(Buyers) {
                     return Buyers.List();
                 },
-                StateList: function($state) {
-                    var StateList = [];
-                    var stateName = '';
-
+                ComponentList: function($state, $q) {
+                    var deferred = $q.defer();
+                    var nonSpecific = ['Products', 'Specs', 'Price Schedules'];
+                    var components = {
+                        nonSpecific: [],
+                        buyerSpecific: []
+                    };
                     angular.forEach($state.get(), function(state) {
-                        if (state.name.match(/base./) && !state.name.match(/(home|Edit|Create|Assign|Tree)/)) {
-                            stateName = state.name.replace('base.', '');
-                            stateName = stateName.substr(0, 1).toUpperCase() + stateName.substr(1);
-                            StateList.push({Name: stateName, Link: state.name});
+                        if (!state.data || !state.data.componentName) return;
+                        if (nonSpecific.indexOf(state.data.componentName) > -1) {
+                            components.nonSpecific.push({
+                                Display: state.data.componentName,
+                                StateRef: state.name
+                            })
+                        } else {
+                            components.buyerSpecific.push({
+                                Display: state.data.componentName,
+                                StateRef: state.name
+                            })
                         }
                     });
-                    return StateList;
+                    deferred.resolve(components);
+                    return deferred.promise;
                 }
             }
 		});
@@ -62,9 +73,10 @@ function BaseController() {
 	var vm = this;
 }
 
-function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, StateList) {
+function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, ComponentList) {
     var vm = this,
         page = 1;
+    vm.navItems = ComponentList.buyerSpecific;
     vm.buyer = Buyer;
     vm.isCollapsed = true;
     vm.buyerList = BuyerList;
@@ -72,7 +84,7 @@ function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, StateList) {
         vm.buyer = buyer;
         BuyerID.Set(buyer.ID);
         vm.isCollapsed = true;
-    }
+    };
     vm.PagingFunction = function() {
         page += 1;
         if (page <= vm.buyerList.Meta.TotalPages) {
@@ -82,24 +94,13 @@ function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, StateList) {
                     vm.buyerList.Items = [].concat(vm.buyerList.Items, data.Items);
                 });
         }
-    }
-
-    vm.StateList = [];
-    angular.forEach(StateList, function(state) {
-        if (!state.Name.match(/(Products|Price Schedules|Specs)/)) {
-            vm.StateList.push(state);
-        }
-    });
+    };
 }
 
-function BaseTopController(StateList) {
+function BaseTopController(ComponentList) {
     var vm = this;
+    vm.navItems = ComponentList.nonSpecific;
     vm.StateList = [];
-    angular.forEach(StateList, function(state) {
-        if (state.Name.match(/(Products|Price Schedules|Specs)/)) {
-            vm.StateList.push(state);
-        }
-    });
     vm.toggleMenu = function() {
         angular.element(document.querySelector('#wrapper')).toggleClass('toggled');
     }
