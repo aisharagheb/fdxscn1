@@ -17,15 +17,15 @@ function LoginConfig( $stateProvider ) {
 	});
 }
 
-function LoginController( $state, Credentials ) {
+function LoginController( $state, $exceptionHandler, Credentials ) {
 	var vm = this;
 
 	vm.submit = function( ) {
 		Credentials.Get( vm.credentials ).then(
 			function() {
 				$state.go( 'base.home' );
-			}).catch(function( ex ) {
-				console.dir( ex );
+			}).catch(function(ex) {
+				$exceptionHandler(ex);
 			});
 	};
 }

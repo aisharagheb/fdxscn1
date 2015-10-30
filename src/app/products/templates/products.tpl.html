@@ -34,7 +34,8 @@
                             <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
                             <ul uib-dropdown-menu role="menu">
                                 <li role="menuitem"><a ng-click="products.goToEdit(product.ID)">Edit Product</a></li>
-                                <li role="menuitem"><a ng-click="products.goToAssignments(product.ID);">View/Edit Assignments</a></li>
+                                <li role="menuitem"><a ui-sref="base.productAssignments({productid:product.ID})">View Assignments</a></li>
+                                <!--<li role="menuitem"><a ng-click="products.goToAssignments(product.ID);">View/Edit Assignments</a></li>-->
                             </ul>
                         </div>
                     </td>
@@ -45,5 +46,5 @@
             </table>
         </div>
     </section>
-    <button type="button" class="btn btn-primary" ui-sref="^.productCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+    <button type="button" class="btn btn-success" ui-sref="^.productCreate"><i class="fa fa-plus-circle"></i> New Product</button>
 </article>
