@@ -1,0 +1,19 @@
+<article>
+    <h3 class="page-title">
+        Specs
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Specs" listobject="specs.list">
+            <li ng-click="specs.goToEdit(spec.ID)" class="list-group-item" ng-repeat="spec in specs.list.Items">
+                <p>{{spec.ID}}</p>
+                <p>{{spec.Name}}</p>
+                <button type="button" ng-click="$event.stopPropagation(); specs.goToAssignments(spec.ID);" class="btn btn-primary">Assignments</button>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.specCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

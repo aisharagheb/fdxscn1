@@ -1,0 +1,23 @@
+<article>
+    <h3 class="page-title">
+        User Assignments for {{userGroupAssign.group.Name}}
+    </h3>
+    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+        <li class="list-group-item">
+            <p>Assign</p>
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Users" listObject="userGroupAssign.list">
+            <li class="list-group-item" ng-repeat="user in userGroupAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <input name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="user.selected" ng-change="userGroupAssign.resetSelections($index, assignmentsTable)">
+                <p>{{user.ID}}</p>
+                <p>{{user.Username}}</p>
+            </li>
+        </div>
+    </ul>
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.groups"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="userGroupAssign.saveAssignments(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+    </div>
+</article>

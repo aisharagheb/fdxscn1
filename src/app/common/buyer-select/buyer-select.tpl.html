@@ -1,0 +1,19 @@
+<div class="select-buyer-button row" ng-if="selectBuyer.BuyerList.Items.length > 1">
+    <div class="col-xs-12" uib-dropdown dropdown-append-to-body="true">
+        <button id="toggle-dropdown" class="btn btn-default form-control" uib-dropdown-toggle>Selected Buyer: {{selectBuyer.selectedBuyer.Name}}</button>
+        <div class="container uib-dropdown-menu">
+            <ul class="buyer-list-menu list-group display-table" role="menu" aria-label="toggle-dropdown">
+                <li class="list-group-item">
+                    <p>ID</p>
+                    <p>Name</p>
+                </li>
+                <div ordercloud-infinite-scroll pagingfunction="selectBuyer.PagingFunction()">
+                    <li class="list-group-item" role="menuitem" ng-repeat="buyer in selectBuyer.BuyerList.Items" ng-click="selectBuyer.ChangeBuyer(buyer)">
+                        <p>{{buyer.ID}}</p>
+                        <p>{{buyer.Name}}</p>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>

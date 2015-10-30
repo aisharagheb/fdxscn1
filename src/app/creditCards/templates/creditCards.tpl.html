@@ -1,0 +1,20 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <h3 class="page-title">
+        Credit Cards
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Cardholder Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="CreditCards" listobject="creditCards.list">
+            <li ng-click="creditCards.goToEdit(creditCard.ID)" class="list-group-item" ng-repeat="creditCard in creditCards.list.Items">
+                <p>{{creditCard.ID}}</p>
+                <p>{{creditCard.CardholderName}}</p>
+                <button type="button" ng-click="$event.stopPropagation(); creditCards.goToAssignments(creditCard.ID);" class="btn btn-primary">Assignments</button>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.creditCardCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

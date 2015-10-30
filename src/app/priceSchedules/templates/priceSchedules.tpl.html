@@ -1,0 +1,18 @@
+<article>
+    <h3 class="page-title">
+        Price Schedules
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="PriceSchedules" listobject="priceSchedules.list">
+            <li ui-sref="^.priceScheduleEdit({priceScheduleid:priceSchedule.ID})" class="list-group-item" ng-repeat="priceSchedule in priceSchedules.list.Items">
+            <p>{{priceSchedule.ID}}</p>
+            <p>{{priceSchedule.Name}}</p>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.priceScheduleCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

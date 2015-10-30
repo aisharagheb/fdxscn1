@@ -1,0 +1,19 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <h3 class="page-title">
+        Gift Cards
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="GiftCards" listobject="giftCards.list">
+            <li ui-sref="^.giftCardEdit({giftCardid:giftCard.ID})" class="list-group-item" ng-repeat="giftCard in giftCards.list.Items">
+                <p>{{giftCard.ID}}</p>
+                <p>{{giftCard.Name}}</p>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.giftCardCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

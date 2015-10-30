@@ -1,0 +1,35 @@
+<article>
+    <h3 class="page-title">
+        <b>New User Group</b>
+    </h3>
+    <form name="UserGroupCreateForm" ng-submit="userGroupCreate.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="UserGroupIDInput">User Group ID</label>
+                <input id="UserGroupIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="userGroupCreate.userGroup.ID"/>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label for="UserGroupNameInput">User Group Name</label>
+                <input id="UserGroupNameInput" type="text" class="form-control" ng-model="userGroupCreate.userGroup.Name"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <label for="UserGroupDescriptionInput">Description</label>
+                <textarea id="UserGroupDescriptionInput" type="text" class="form-control" ng-model="userGroupCreate.userGroup.Description"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="UserGroupReportingGroupInput">
+                <input id="UserGroupReportingGroupInput" type="checkbox" ng-model="userGroupCreate.userGroup.ReportingGroup" />
+                Reporting Group</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="UserGroupCreateForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.groups">Cancel</button>
+        </div>
+    </form>
+</article>

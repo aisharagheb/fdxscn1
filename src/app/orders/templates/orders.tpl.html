@@ -1,0 +1,16 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <h3 class="page-title">
+        Orders
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Orders" listobject="orders.list">
+            <li ui-sref="^.orderEdit({orderid:order.ID})" class="list-group-item" ng-repeat="order in orders.list.Items">
+                <p>{{order.ID}}</p>
+            </li>
+        </div>
+    </ul>
+</article>

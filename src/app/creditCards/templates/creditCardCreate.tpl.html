@@ -1,0 +1,50 @@
+<article>
+    <h3 class="page-title">
+        <b>New Credit Card</b>
+    </h3>
+    <form name="CreditCardCreateForm" ng-submit="creditCardCreate.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="creditCardIDInput">Credit Card ID</label>
+                <input id="creditCardIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="creditCardCreate.creditCard.ID"/>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label for="creditCardNumberInput">Account Number</label>
+                <input id="creditCardNumberInput" type="text" class="form-control" ng-model="creditCardCreate.creditCard.AccountNumber" minlength="4" maxlength="6" ng-pattern="/^[0-9]+$/" ng-pattern-err-type="number" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label for="creditCardNameInput">Cardholder Name</label>
+                <input id="creditCardNameInput" type="text" class="form-control" ng-model="creditCardCreate.creditCard.CardholderName"/>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="creditCardTypeInput">Card Type</label>
+                <select id="creditCardTypeInput" class="form-control" ng-model="creditCardCreate.creditCard.CardType">
+                    <option value="Visa">Visa</option>
+                    <option value="MasterCard">MasterCard</option>
+                    <option value="AmericanExpress">American Express</option>
+                    <option value="Discover">Discover</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-2">
+                <label for="creditCardExpirationInput">Expiration Date</label>
+                <input class="form-control"
+                       type="text"
+                       is-open="open1"
+                       uib-datepicker-popup="MM/yy"
+                       datepicker-mode="'year'"
+                       min-mode="'month'"
+                       ng-click="open1 = !open1"
+                       id="creditCardExpirationInput"
+                       datepicker-append-to-body="true"
+                       show-weeks="false"
+                       ng-model="creditCardCreate.creditCard.ExpirationDate"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="CreditCardCreateForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.creditCards">Cancel</button>
+        </div>
+    </form>
+</article>

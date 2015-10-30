@@ -1,0 +1,20 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <div class="row">
+        <h3 class="page-title col-sm-8">
+            Approval Rules
+        </h3>
+        <order-cloud-search servicename="ApprovalRules" controlleras="approvalRules"></order-cloud-search>
+    </div>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="ApprovalRules" listobject="approvalRules.list">
+            <li ui-sref="^.approvalRuleEdit({approvalRuleid:approvalRule.ID})" class="list-group-item" ng-repeat="approvalRule in approvalRules.list.Items">
+                <p>{{approvalRule.ID}}</p>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.approvalRuleCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

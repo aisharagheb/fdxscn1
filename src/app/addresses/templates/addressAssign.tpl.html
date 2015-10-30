@@ -1,0 +1,27 @@
+<article>
+    <h3 class="page-title">
+        Assignments for {{addressAssign.address.AddressName}}
+    </h3>
+    <ul class="list-group assignments-table address" ng-form="assignmentsTable" disable-dynamic-validation>
+        <li class="list-group-item">
+            <p>Assign</p>
+            <p>ID</p>
+            <p>Name</p>
+            <p>Is Shipping</p>
+            <p>Is Billing</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="UserGroups" listObject="addressAssign.list">
+            <li class="list-group-item" ng-repeat="group in addressAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <input name="{{'assignCheckbox' + $index}}" ng-change="addressAssign.resetSelections($index, assignmentsTable)" type="checkbox" ng-model="group.selected">
+                <p>{{group.ID}}</p>
+                <p>{{group.Name}}</p>
+                <input name="{{'shippingCheckbox' + $index}}" type="checkbox" ng-model="group.IsShipping" />
+                <input name="{{'billingCheckbox' + $index}}" type="checkbox" ng-model="group.IsBilling" />
+            </li>
+        </div>
+    </ul>
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.addresses"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" ng-disabled="addressAssign.canSubmit(assignmentsTable) || assignmentsTable.$pristine" class="btn btn-primary" ng-click="addressAssign.saveAssignments(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+    </div>
+</article>

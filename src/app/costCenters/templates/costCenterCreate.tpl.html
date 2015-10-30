@@ -1,0 +1,27 @@
+<article>
+    <h3 class="page-title">
+        <b>New Cost Center</b>
+    </h3>
+    <form name="CostCenterCreateForm" ng-submit="costCenterCreate.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="costCenterIDInput">CostCenter ID</label>
+                <input id="costCenterIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="costCenterCreate.costCenter.ID"/>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label for="costCenterNameInput">CostCenter Name</label>
+                <input id="costCenterNameInput" type="text" class="form-control" ng-model="costCenterCreate.costCenter.Name"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <label for="costCenterDescriptionInput">Description</label>
+                <textarea id="costCenterDescriptionInput" type="text" class="form-control" ng-model="costCenterCreate.costCenter.Description"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="CostCenterCreateForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.costCenters">Cancel</button>
+        </div>
+    </form>
+</article>

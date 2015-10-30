@@ -1,0 +1,37 @@
+<article>
+    <h3 class="page-title">
+        <b>Edit User Groups</b>
+    </h3>
+    <form name="userGroupEditForm" ng-submit="userGroupEdit.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-5">
+                <label for="UserGroupIDInput">User Group ID</label>
+                <input id="UserGroupIDInput" type="text" class="form-control" ng-model="userGroupEdit.userGroup.ID" ng-required="true"/>
+            </div>
+            <div class="col-sm-5 form-group">
+                <label for="UserGroupNameInput">User Group Name</label>
+                <input id="UserGroupNameInput" type="text" class="form-control" ng-model="userGroupEdit.userGroup.Name"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-10 form-group">
+                <label for="UserGroupDescriptionInput">Description</label>
+                <textarea id="UserGroupDescriptionInput" type="text" class="form-control" ng-model="userGroupEdit.userGroup.Description"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-5">
+                <label for="UserGroupReportingGroupInput">
+                <input id="UserGroupReportingGroupInput" type="checkbox" ng-model="userGroupEdit.userGroup.ReportingGroup" />
+                Reporting Group</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="userGroupEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.groups">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="userGroupEdit.Delete()"><i class="fa fa-trash"></i></button>
+        </div>
+        </div>
+    </form>
+</article>

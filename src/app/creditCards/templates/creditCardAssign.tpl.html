@@ -1,0 +1,24 @@
+<article>
+    <h3 class="page-title">
+        User Group Assignments for {{creditCardAssign.creditCard.ID}}
+    </h3>
+    <h4>Assign User Groups</h4>
+    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+        <li class="list-group-item">
+            <p>Assign</p>
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="CreditCards" listObject="creditCardAssign.assignedUserGroups" usergrouplist="creditCardAssign.userGroups" selectedid="CreditCardID">
+            <li class="list-group-item" ng-repeat="group in creditCardAssign.userGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <input name="{{'assignCheckbox' + $index}}" ng-change="creditCardAssign.resetSelections($index, creditCardAssign.assignedUserGroups, creditCardAssign.userGroups, assignmentsTable)" type="checkbox" ng-model="group.selected">
+                <p>{{group.ID}}</p>
+                <p>{{group.Name}}</p>
+            </li>
+        </div>
+    </ul>
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.creditCards"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="creditCardAssign.saveAssignments('CreditCards', creditCardAssign.creditCard.ID, creditCardAssign.assignBuyer, creditCardAssign.userGroups, creditCardAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+    </div>
+</article>
