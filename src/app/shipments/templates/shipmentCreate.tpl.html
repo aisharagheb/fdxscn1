@@ -1,0 +1,73 @@
+<article>
+    <h3 class="page-title">
+        <b>New Shipment</b>
+    </h3>
+    <form name="ShipmentCreateForm" ng-submit="shipmentCreate.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="productIDInput">Shipment ID</label>
+                <input id="productIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="shipmentCreate.shipment.ID"/>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="shipperInput">Shipper</label>
+                <input id="shipperInput" type="text" class="form-control" ng-model="shipmentCreate.shipment.Shipper" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="trackingNumberInput">Tracking Number</label>
+                <input id="trackingNumberInput" type="text" class="form-control" ng-model="shipmentCreate.shipment.TrackingNumber"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="shipDateInput">Ship Date</label>
+                <input id="shipDateInput" class="form-control" type="text" is-open="open1" uib-datepicker-popup="MM/dd/yyyy" ng-click="open1 = !open1"  datepicker-append-to-body="true" show-weeks="false" ng-model="shipmentCreate.shipment.DateShipped"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="costInput">Cost</label>
+                <input id="costInput" type="number" step="any" class="form-control" ng-model="shipmentCreate.shipment.Cost"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h4>
+                    Select Order
+                </h4>
+                <ul class="list-group display-table-line form-group">
+                    <li class="list-group-item">
+                        <p>ID</p>
+                    </li>
+                    <div ordercloud-infinite-scroll servicename="Orders" listobject="shipmentCreate.list">
+                        <li class="list-group-item" ng-repeat="order in shipmentCreate.list.Items track by $index" ng-click="shipmentCreate.goToLineItems(order)">
+                            <p>{{order.ID}}</p>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+            <div class=" col-sm-6" ng-hide="!shipmentCreate.OrderSelected">
+                <h4>
+                    Select Line Items
+                </h4>
+                <ul class="list-group display-table-line-ship form-group">
+                    <li class="list-group-item">
+                        <p></p>
+                        <p>ID</p>
+                        <p>Quantity Requested</p>
+                        <p>Quantity Shipped</p>
+                    </li>
+                    <div ordercloud-infinite-scroll servicename="LineItems" listobject="shipmentCreate.listli">
+                        <li class="list-group-item" ng-repeat="li in shipmentCreate.listli.Items track by $index">
+                            <input type="checkbox" ng-model="li.addToShipment">
+                            <p>{{li.ID}}</p>
+                            <p>{{li.Quantity}}</p>
+                            <input type="number" class="form-control" ng-model="li.QuantityShipped"/>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="ShipmentCreateForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.shipments">Cancel</button>
+        </div>
+    </form>
+</article>

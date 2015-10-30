@@ -1,0 +1,23 @@
+<article>
+    <h3 class="page-title">
+        Product Assignments for {{specAssign.spec.Name}}
+    </h3>
+    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+        <li class="list-group-item">
+            <p>Assign</p>
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Products" listObject="specAssign.list">
+            <li class="list-group-item" ng-repeat="product in specAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <input name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="product.selected" ng-change="specAssign.resetSelections($index, assignmentsTable)">
+                <p>{{product.ID}}</p>
+                <p>{{product.Name}}</p>
+            </li>
+        </div>
+    </ul>
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.specs"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="specAssign.saveAssignments(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+    </div>
+</article>

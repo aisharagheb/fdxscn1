@@ -1,0 +1,28 @@
+<article>
+    <h3 class="page-title">
+        Category Assignments for {{couponAssignCat.Coupon.Label}}
+    </h3>
+
+    <h4>Assign Categories</h4>
+    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+        <li class="list-group-item">
+            <p>Assign</p>
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll pagingfunction="couponAssignCat.pagingFunction()">
+            <li class="list-group-item" ng-repeat="category in couponAssignCat.CategoryList.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <input ng-change="couponAssignCat.resetSelection($index, assignmentsTable)" name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="category.selected">
+                <p>{{category.ID}}</p>
+                <p>{{category.Name}}</p>
+            </li>
+        </div>
+    </ul>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="couponAssignCat.saveAssignment(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+        <button type="button" class="btn btn-primary" ui-sref="^.couponAssignParty({couponid: couponAssignCat.Coupon.ID})">Assign Parties</button>
+        <button type="button" class="btn btn-primary" ui-sref="^.couponAssignProduct({couponid: couponAssignCat.Coupon.ID})">Assign Products</button>
+    </div>
+</article>

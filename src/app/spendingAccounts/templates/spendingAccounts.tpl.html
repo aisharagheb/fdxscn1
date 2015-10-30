@@ -1,0 +1,19 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <h3 class="page-title">
+        Spending Accounts
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="SpendingAccounts" listobject="spendingAccounts.list">
+            <li ui-sref="^.spendingAccountEdit({spendingAccountid:spendingAccount.ID})" class="list-group-item" ng-repeat="spendingAccount in spendingAccounts.list.Items">
+                <p>{{spendingAccount.ID}}</p>
+                <p>{{spendingAccount.Name}}</p>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.spendingAccountCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

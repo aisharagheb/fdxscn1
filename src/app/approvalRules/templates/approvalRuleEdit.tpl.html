@@ -1,0 +1,115 @@
+<article>
+    <h3 class="page-title">
+        <b>Edit Approval Rule</b>
+    </h3>
+    <form name="ApprovalRuleEditForm" ng-submit="approvalRuleEdit.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="approvalRuleIDInput">Approval Rule ID</label>
+                <input id="approvalRuleIDInput" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.ID"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="submitTypeInput">Submit Type</label>
+                <select id="submitTypeInput" class="form-control" ng-model="approvalRuleEdit.approvalRule.SubmitType" required>
+                    <option value="Approve">Approve</option>
+                    <option value="Submit">Submit</option>
+                    <option value="SubmitOrApprove">Submit or Approve</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="sequenceInput">Sequence</label>
+                <input id="sequenceInput" type="number" class="form-control" ng-model="approvalRuleEdit.approvalRule.Sequence"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label for="priceInput">Price</label>
+                <input id="priceInput" type="number" step="any" class="form-control" ng-model="approvalRuleEdit.approvalRule.Price"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="quantityInput">Quantity</label>
+                <input id="quantityInput" type="number" class="form-control" ng-model="approvalRuleEdit.approvalRule.Quantity"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="costCenterInput">Cost Center ID</label>
+                <input id="costCenterInput" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.CostCenterID"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="categoryInput">Category ID</label>
+                <input id="categoryInput" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.CategoryID"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label for="paymentTypeInput">Payment Method</label>
+                <select id="paymentTypeInput" class="form-control" ng-model="approvalRuleEdit.approvalRule.PaymentMethod">
+                    <option value="PurchaseOrder">Purchase Order</option>
+                    <option value="CreditCard">Credit Card</option>
+                    <option value="BudgetAccount">Spending Account</option>
+                    <option value="PayPalExpressCheckout">Pay Pal Express Checkout</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="stageInput">Stage</label>
+                <input id="stageInput" type="number" class="form-control" ng-model="approvalRuleEdit.approvalRule.Stage" required/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="minutesInput">Minutes Allowed</label>
+                <input id="minutesInput" type="number" class="form-control" ng-model="approvalRuleEdit.approvalRule.MinutesAllowed"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="implicitActionInput">Implicit Action</label>
+                <select id="implicitActionInput" class="form-control" ng-model="approvalRuleEdit.approvalRule.ImplicitAction">
+                    <option value="None">None</option>
+                    <option value="Approve">Approve</option>
+                    <option value="Decline">Decline</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label>Apply Rule to these submitters:</label>
+                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.BuyerID" placeholder="Buyer ID" required/>
+            </div>
+            <div class="form-group col-sm-4 no-padding">
+                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.UserGroupID" placeholder="User Group ID"/>
+            </div>
+            <div class="form-group col-sm-4 no-padding">
+                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.UserID" placeholder="User ID"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label>Apply Rule to these approvers:</label>
+                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.BuyerID" placeholder="Buyer ID" required/>
+            </div>
+            <div class="form-group col-sm-4 no-padding">
+                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.UserGroupID" placeholder="User Group ID"/>
+            </div>
+            <div class="form-group col-sm-4 no-padding">
+                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.UserID" placeholder="User ID"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label for="shipNoticeInput">
+                    <input id="shipNoticeInput" type="checkbox" ng-model="approvalRuleEdit.approvalRule.SendShipNoticeEmail"/>
+                    Send Ship Notice Email
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <label for="approvalNoticeInput">
+                    <input id="approvalNoticeInput" type="checkbox" ng-model="approvalRuleEdit.approvalRule.SendApprovalNoticeEmail"/>
+                    Send Approval Notice Email
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="ApprovalRuleEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.approvalRules">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="approvalRuleEdit.Delete()"><i class="fa fa-trash"></i></button>
+        </div>
+    </form>
+</article>

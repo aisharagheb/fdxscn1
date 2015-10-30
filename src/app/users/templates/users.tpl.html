@@ -1,0 +1,22 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <div class="row">
+        <h3 class="page-title col-sm-8">
+            Users
+        </h3>
+        <order-cloud-search servicename="Users" controlleras="users"></order-cloud-search>
+    </div>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Users" listobject="users.list">
+            <li ui-sref="^.userEdit({userid:user.ID})" class="list-group-item" ng-repeat="user in users.list.Items">
+                <p>{{user.ID}}</p>
+                <p>{{user.Username}}</p>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.userCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

@@ -1,0 +1,17 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <h3 class="page-title">
+        Shipments
+    </h3>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Shipments" listobject="shipments.list">
+            <li ng-click="shipments.goToEdit(shipment.ID)" class="list-group-item" ng-repeat="shipment in shipments.list.Items">
+                <p>{{shipment.ID}}</p>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.shipmentCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

@@ -1,0 +1,54 @@
+<article>
+    <h3 class="page-title">
+        <b>New Gift Cards</b>
+    </h3>
+    <form name="GiftCardEditForm" ng-submit="giftCardEdit.Update(giftCardEdit.giftCard)">
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="giftcardIDInput">Gift Card ID</label>
+                <input id="giftcardIDInput" type="text" class="form-control" ng-model="giftCardEdit.giftCard.ID">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="giftcardNameInput">Gift Card Name</label>
+                <input id="giftcardNameInput" type="text" class="form-control" ng-model="giftCardEdit.giftCard.Name" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="giftcardStartDate">Start Date</label>
+                <input id="giftcardStartDate" type="text" ng-click="open1 = !open1" is-open="open1" uib-datepicker-popup="{{giftCardEdit.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardEdit.giftCard.StartDate">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="giftcardExpirationDate">ExpirationDate</label>
+                <input id="giftcardExpirationDate" type="text" ng-click="open2 = !open2" is-open="open2" min-date="giftCardEdit.giftCard.StartDate" ng-disabled="!giftCardEdit.giftCard.StartDate" uib-datepicker-popup="{{giftCardEdit.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardEdit.giftCard.ExpirationDate">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="giftcardBalance">Balance</label>
+                <input id="giftcardBalance" type="text" class="form-control" ng-model="giftCardEdit.giftCard.Balance">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="giftcardMaxPercentOfTotal">Max Percent of Total</label>
+                <input id="giftcardMaxPercentOfTotal" type="text" class="form-control" ng-model="giftCardEdit.giftCard.MaxPercentOfTotal">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="giftcardCode">Code</label>
+                <input id="giftcardCode" type="text" class="form-control" ng-model="giftCardEdit.giftCard.Code" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label for="giftcardHideWhenUnavailable">Hide When Unavailable</label>
+                <input id="giftcardHideWhenUnavailable" type="checkbox" ng-model="giftCardEdit.giftCard.HideWhenUnavailable">
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="GiftCardEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.giftCards">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="giftCardEdit.Delete(giftCardEdit.giftCard)"><i class="fa fa-trash"></i></button>
+        </div>
+    </form>
+</article>

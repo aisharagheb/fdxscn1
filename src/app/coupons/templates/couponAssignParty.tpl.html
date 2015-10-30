@@ -1,0 +1,36 @@
+<article>
+    <h3 class="page-title">
+        Party Assignments for {{couponAssign.coupon.Label}}
+    </h3>
+    <div class="panel panel-default">
+        <label class="panel-body">
+            <input type="checkbox" ng-model="couponAssign.assignBuyer">
+            Assign {{couponAssign.coupon.Label}} to {{couponAssign.buyer.Name}}
+        </label>
+    </div>
+    
+    <h4>Assign User Groups</h4>
+    <fieldset ng-disabled="couponAssign.assignBuyer">
+        <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+            <li class="list-group-item">
+                <p>Assign</p>
+                <p>ID</p>
+                <p>Name</p>
+            </li>
+            <div ng-disabled="couponAssign.assignBuyer" ordercloud-infinite-scroll servicename="Coupons" listobject="couponAssign.assignedUserGroups" usergrouplist="couponAssign.userGroups" selectedid="CouponID">
+                <li class="list-group-item" ng-repeat="group in couponAssign.userGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                    <input name="{{'assignCheckbox' + $index}}" ng-change="couponAssign.resetSelections($index, couponAssign.assignedUserGroups, couponAssign.userGroups, assignmentsTable)" type="checkbox" ng-model="group.selected">
+                    <p>{{group.ID}}</p>
+                    <p>{{group.Name}}</p>
+                </li>
+            </div>
+        </ul>
+    </fieldset>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="couponAssign.saveAssignments('Coupons', couponAssign.coupon.ID, couponAssign.assignBuyer, couponAssign.userGroups, couponAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+        <button type="button" class="btn btn-primary" ui-sref="^.couponAssignProduct({couponid: couponAssign.coupon.ID})">Assign Products</button>
+        <button type="button" class="btn btn-primary" ui-sref="^.couponAssignCategory({couponid: couponAssign.coupon.ID})">Assign Categories</button>
+    </div>
+</article>

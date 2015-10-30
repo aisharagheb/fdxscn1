@@ -1,0 +1,23 @@
+<article>
+    <ordercloud-select-buyer></ordercloud-select-buyer>
+    <div class="row">
+        <h3 class="page-title col-sm-8">
+            Addresses
+        </h3>
+        <order-cloud-search servicename="Addresses" controlleras="addresses"></order-cloud-search>
+    </div>
+    <ul class="list-group display-table">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll servicename="Addresses" listobject="addresses.list">
+            <li ng-click="addresses.goToEdit(address.ID)" class="list-group-item" ng-repeat="address in addresses.list.Items">
+                <p>{{address.ID}}</p>
+                <p>{{address.AddressName}}</p>
+                <button type="button" ng-click="$event.stopPropagation(); addresses.goToAssignments(address.ID);" class="btn btn-primary">Assignments</button>
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.addressCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+</article>

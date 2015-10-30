@@ -1,0 +1,33 @@
+<article>
+    <h3 class="page-title">
+        Party Assignments for {{costCenterAssign.costCenter.Name}}
+    </h3>
+    <div class="panel panel-default">
+        <label class="panel-body">
+            <input type="checkbox" ng-model="costCenterAssign.assignBuyer">
+            Assign {{costCenterAssign.costCenter.Name}} to {{costCenterAssign.buyer.Name}}
+        </label>
+    </div>
+    <h4>Assign User Groups</h4>
+    <fieldset ng-disabled="costCenterAssign.assignBuyer">
+        <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
+            <li class="list-group-item">
+                <p>Assign</p>
+                <p>ID</p>
+                <p>Name</p>
+            </li>
+            <div ng-disabled="costCenterAssign.assignBuyer" ordercloud-infinite-scroll servicename="CostCenters" listObject="costCenterAssign.assignedUserGroups" usergrouplist="costCenterAssign.userGroups" selectedid="CostCenterID">
+                <li class="list-group-item" ng-repeat="group in costCenterAssign.userGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                    <input name="{{'assignCheckbox' + $index}}" ng-change="costCenterAssign.resetSelections($index, costCenterAssign.assignedUserGroups, costCenterAssign.userGroups, assignmentsTable)" type="checkbox" ng-model="group.selected">
+                    <p>{{group.ID}}</p>
+                    <p>{{group.Name}}</p>
+                </li>
+            </div>
+        </ul>
+    </fieldset>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-default" ui-sref="^.costCenters"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="costCenterAssign.saveAssignments('CostCenters', costCenterAssign.costCenter.ID, costCenterAssign.assignBuyer, costCenterAssign.userGroups, costCenterAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+    </div>
+</article>

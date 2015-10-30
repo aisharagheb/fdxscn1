@@ -1,0 +1,22 @@
+<articles>
+    <h3 class="page-title">
+        Buyers
+    </h3>
+
+    <ul class="list-group display-table buyers-list">
+        <li class="list-group-item">
+            <p>ID</p>
+            <p>Name</p>
+        </li>
+        <div ordercloud-infinite-scroll pagingfunction="buyer.PagingFunction()">
+            <li class="list-group-item" ng-repeat="buy in buyer.Buyers.Items track by $index" ui-sref="^.buyerEdit({buyerid: buy.ID})" ng-class="{'selected': buyer.SelectedBuyer.ID === buy.ID}">
+                <p>{{buy.ID}}</p>
+                <p>{{buy.Name}}</p>
+                <!--<button ng-click="$event.stopProgagation(); buyer.goToEdit(buy.ID)" class="btn btn-primary">Edit</button>-->
+            </li>
+        </div>
+    </ul>
+    <button type="button" class="btn btn-primary" ui-sref="^.buyerCreate"><i class="fa fa-plus-circle"></i> Create New</button>
+
+    <ui-view></ui-view>
+</articles>

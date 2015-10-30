@@ -1,0 +1,81 @@
+<article>
+    <h3 class="page-title">
+        <b>Edit {{orderEdit.order.Type}} Order</b>
+    </h3>
+    <form name="EditForm" ng-submit="orderEdit.Submit()">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="orderIDInput">Order ID</label>
+                <input id="orderIDInput" type="text" class="form-control" ng-model="orderEdit.order.ID" required/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderShippingCostInput">Shipping Cost</label>
+                <input id="orderShippingCostInput" type="number" step="any" class="form-control" ng-model="orderEdit.order.ShippingCost"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderTaxCostInput">Tax Cost</label>
+                <input id="orderTaxCostInput" type="number" step="any" class="form-control" ng-model="orderEdit.order.TaxCost"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label for="orderFromUserInput">From User</label>
+                <input id="orderFromUserInput" type="text" class="form-control" ng-model="orderEdit.order.FromUserID" required/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderBillAddInput">Billing Address ID</label>
+                <input id="orderBillAddInput" type="text" class="form-control" ng-model="orderEdit.order.BillingAddressID"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderShipAddInput">Shipping Address ID</label>
+                <input id="orderShipAddInput" type="text" class="form-control" ng-model="orderEdit.order.ShippingAddressID"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderSpendingAccountInput">Spending Account ID</label>
+                <input id="orderSpendingAccountInput" type="text" class="form-control" ng-model="orderEdit.order.SpendingAccountID"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label for="orderPaymentTypeInput">Payment Method</label>
+                <select id="orderPaymentTypeInput" class="form-control" ng-model="orderEdit.order.PaymentMethod">
+                    <option value="PurchaseOrder">Purchase Order</option>
+                    <option value="CreditCard">Credit Card</option>
+                    <option value="BudgetAccount">Spending Account</option>
+                    <option value="PayPalExpressCheckout">Pay Pal Express Checkout</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderSavedCCInput">Saved Credit Card ID</label>
+                <input id="orderSavedCCInput" type="text" class="form-control" ng-model="orderEdit.order.SavedCreditCardID"/>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="orderCommentsInput">Order Comments:</label>
+                <textarea id="orderCommentsInput" type="text" step="any" class="form-control" ng-model="orderEdit.order.Comments"></textarea>
+            </div>
+        </div>
+        <h4>
+            Line Items
+        </h4>
+        <ul class="list-group display-table-line form-group">
+            <li class="list-group-item">
+                <p>ID</p>
+                <p>Quantity</p>
+                <p>Price (ea)</p>
+            </li>
+            <div ordercloud-infinite-scroll servicename="Orders" listobject="orderEdit.list">
+                <li class="list-group-item" ng-repeat="li in orderEdit.list.Items track by $index" ng-click="orderEdit.goToProduct(li)">
+                    <p>{{li.ID}}</p>
+                    <input type="number" name="{{'Quantity' + $index}}" ng-model="li.Quantity" class="form-control" />
+                    <input type="number" name="{{'UnitPrice' + $index}}" ng-model="li.UnitPrice" class="form-control" />
+                    <i class="fa fa-trash fa-2x text-danger" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="$event.stopPropagation(); orderEdit.deleteLineItem(li)"></i>
+                </li>
+            </div>
+        </ul>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="OrderEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^.orders">Cancel</button>
+            <button type="button" class="btn btn-default" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="orderEdit.Delete()"><i class="fa fa-trash"></i></button>
+        </div>
+    </form>
+</article>
