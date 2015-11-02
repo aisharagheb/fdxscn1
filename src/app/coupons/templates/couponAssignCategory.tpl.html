@@ -1,24 +1,43 @@
-<article>
-    <h3 class="page-title">
+<article class="container-fluid">
+    <h3 class="page-header">
         Category Assignments for {{couponAssignCat.Coupon.Label}}
     </h3>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="Coupons" listobject="couponAssignCat.CategoryList" ng-form="assignmentsTable" disable-dynamic-validation>
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
 
-    <h4>Assign Categories</h4>
-    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
-        <li class="list-group-item">
-            <p>Assign</p>
-            <p>ID</p>
-            <p>Name</p>
-        </li>
-        <div ordercloud-infinite-scroll pagingfunction="couponAssignCat.pagingFunction()">
-            <li class="list-group-item" ng-repeat="category in couponAssignCat.CategoryList.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
-                <input ng-change="couponAssignCat.resetSelection($index, assignmentsTable)" name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="category.selected">
-                <p>{{category.ID}}</p>
-                <p>{{category.Name}}</p>
-            </li>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                    <th>
+                        <div>Name</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="category in couponAssignCat.CategoryList.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                    <td>
+                        <input ng-change="couponAssignCat.resetSelection($index, assignmentsTable)" name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="category.selected">
+                    </td>
+                    <td>
+                        <p>{{category.ID}}</p>
+                    </td>
+                    <td>
+                        <p>{{category.Name}}</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </ul>
-
+    </section>
     <div class="form-group">
         <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
         <button type="button" class="btn btn-primary" ng-click="couponAssignCat.saveAssignment(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>

@@ -1,33 +1,40 @@
-<article>
-    <h3 class="page-title">
-        Party Assignments for {{costCenterAssign.costCenter.Name}}
+<article class="container-fluid">
+    <h3 class="page-header">
+        Assignments for {{costCenterAssign.costCenter.CostCenterName}}
     </h3>
-    <div class="panel panel-default">
-        <label class="panel-body">
-            <input type="checkbox" ng-model="costCenterAssign.assignBuyer">
-            Assign {{costCenterAssign.costCenter.Name}} to {{costCenterAssign.buyer.Name}}
-        </label>
-    </div>
-    <h4>Assign User Groups</h4>
-    <fieldset ng-disabled="costCenterAssign.assignBuyer">
-        <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
-            <li class="list-group-item">
-                <p>Assign</p>
-                <p>ID</p>
-                <p>Name</p>
-            </li>
-            <div ng-disabled="costCenterAssign.assignBuyer" ordercloud-infinite-scroll servicename="CostCenters" listObject="costCenterAssign.assignedUserGroups" usergrouplist="costCenterAssign.userGroups" selectedid="CostCenterID">
-                <li class="list-group-item" ng-repeat="group in costCenterAssign.userGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
-                    <input name="{{'assignCheckbox' + $index}}" ng-change="costCenterAssign.resetSelections($index, costCenterAssign.assignedUserGroups, costCenterAssign.userGroups, assignmentsTable)" type="checkbox" ng-model="group.selected">
-                    <p>{{group.ID}}</p>
-                    <p>{{group.Name}}</p>
-                </li>
-            </div>
-        </ul>
-    </fieldset>
-
-    <div class="form-group">
-        <button type="button" class="btn btn-default" ui-sref="^.costCenters"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" class="btn btn-primary" ng-click="costCenterAssign.saveAssignments('CostCenters', costCenterAssign.costCenter.ID, costCenterAssign.assignBuyer, costCenterAssign.userGroups, costCenterAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
-    </div>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" listobject="costCenterAssign.list" ng-form="assignmentsTable" disable-dynamic-validation>
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                    <th>
+                        <div>Name</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="group in costCenterAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                    <td class="text-center">
+                        <input name="{{'assignCheckbox' + $index}}"  type="checkbox" ng-model="group.selected">
+                    </td>
+                    <td>
+                        {{group.ID}}
+                    </td>
+                    <td>{{group.Name}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <button type="button" class="btn btn-default" ui-sref="^.costCenters"><i class="fa fa-arrow-left"></i> Back</button>
+    <button type="button" ng-disabled="costCenterAssign.canSubmit(assignmentsTable) || assignmentsTable.$pristine" class="btn btn-primary" ng-click="costCenterAssign.saveAssignments(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
 </article>

@@ -22,7 +22,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="group in categoryAssign.list.Items track by $index">
+                <tr ng-repeat="group in categoryAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
                     <td class="text-center">
                         <input name="{{'assignCheckbox' + $index}}"  type="checkbox" ng-model="group.selected">
                     </td>

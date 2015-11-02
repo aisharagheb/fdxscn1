@@ -1,5 +1,5 @@
-<article>
-    <h3 class="page-title">
+<article class="container-fluid">
+    <h3 class="page-header">
         <b>New Shipment</b>
     </h3>
     <form name="ShipmentCreateForm" ng-submit="shipmentCreate.Submit()">
@@ -36,7 +36,7 @@
                     <li class="list-group-item">
                         <p>ID</p>
                     </li>
-                    <div ordercloud-infinite-scroll servicename="Orders" listobject="shipmentCreate.list">
+                    <div>
                         <li class="list-group-item" ng-repeat="order in shipmentCreate.list.Items track by $index" ng-click="shipmentCreate.goToLineItems(order)">
                             <p>{{order.ID}}</p>
                         </li>

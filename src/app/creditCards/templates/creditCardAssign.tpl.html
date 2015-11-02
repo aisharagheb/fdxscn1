@@ -1,24 +1,40 @@
-<article>
-    <h3 class="page-title">
-        User Group Assignments for {{creditCardAssign.creditCard.ID}}
+<article class="container-fluid">
+    <h3 class="page-header">
+        Assignments for {{creditCardAssign.creditCard.CreditCardName}}
     </h3>
-    <h4>Assign User Groups</h4>
-    <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
-        <li class="list-group-item">
-            <p>Assign</p>
-            <p>ID</p>
-            <p>Name</p>
-        </li>
-        <div ordercloud-infinite-scroll servicename="CreditCards" listObject="creditCardAssign.assignedUserGroups" usergrouplist="creditCardAssign.userGroups" selectedid="CreditCardID">
-            <li class="list-group-item" ng-repeat="group in creditCardAssign.userGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
-                <input name="{{'assignCheckbox' + $index}}" ng-change="creditCardAssign.resetSelections($index, creditCardAssign.assignedUserGroups, creditCardAssign.userGroups, assignmentsTable)" type="checkbox" ng-model="group.selected">
-                <p>{{group.ID}}</p>
-                <p>{{group.Name}}</p>
-            </li>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" listobject="creditCardAssign.list" ng-form="assignmentsTable" disable-dynamic-validation>
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                    <th>
+                        <div>Name</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="group in creditCardAssign.list.Items track by $index">
+                    <td class="text-center">
+                        <input name="{{'assignCheckbox' + $index}}"  type="checkbox" ng-model="group.selected">
+                    </td>
+                    <td>
+                        {{group.ID}}
+                    </td>
+                    <td>{{group.Name}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </ul>
-    <div class="form-group">
-        <button type="button" class="btn btn-default" ui-sref="^.creditCards"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" class="btn btn-primary" ng-click="creditCardAssign.saveAssignments('CreditCards', creditCardAssign.creditCard.ID, creditCardAssign.assignBuyer, creditCardAssign.userGroups, creditCardAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
-    </div>
+    </section>
+    <button type="button" class="btn btn-default" ui-sref="^.creditCards"><i class="fa fa-arrow-left"></i> Back</button>
+    <button type="button" class="btn btn-primary" ng-click="creditCardAssign.saveAssignments('CreditCards', creditCardAssign.creditCard.ID, creditCardAssign.assignBuyer, creditCardAssign.userGroups, creditCardAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
 </article>

@@ -1,5 +1,5 @@
-<article>
-    <h3 class="page-title">
+<article class="container-fluid">
+    <h3 class="page-header">
         Party Assignments for {{couponAssign.coupon.Label}}
     </h3>
     <div class="panel panel-default">
@@ -8,7 +8,6 @@
             Assign {{couponAssign.coupon.Label}} to {{couponAssign.buyer.Name}}
         </label>
     </div>
-    
     <h4>Assign User Groups</h4>
     <fieldset ng-disabled="couponAssign.assignBuyer">
         <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
@@ -26,7 +25,6 @@
             </div>
         </ul>
     </fieldset>
-
     <div class="form-group">
         <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
         <button type="button" class="btn btn-primary" ng-click="couponAssign.saveAssignments('Coupons', couponAssign.coupon.ID, couponAssign.assignBuyer, couponAssign.userGroups, couponAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>

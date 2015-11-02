@@ -1,20 +1,38 @@
-<article>
-    <ordercloud-select-buyer></ordercloud-select-buyer>
-    <div class="row">
-        <h3 class="page-title col-sm-8">
-            Approval Rules
-        </h3>
-        <order-cloud-search servicename="ApprovalRules" controlleras="approvalRules"></order-cloud-search>
-    </div>
-    <ul class="list-group display-table">
-        <li class="list-group-item">
-            <p>ID</p>
-        </li>
-        <div ordercloud-infinite-scroll servicename="ApprovalRules" listobject="approvalRules.list">
-            <li ui-sref="^.approvalRuleEdit({approvalRuleid:approvalRule.ID})" class="list-group-item" ng-repeat="approvalRule in approvalRules.list.Items">
-                <p>{{approvalRule.ID}}</p>
-            </li>
+<article class="container-fluid">
+    <h3 class="page-header">
+        Approval Rules
+    </h3>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="ApprovalRules" listobject="approvalRules.list">
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="approvalRule in approvalRules.list.Items track by $index">
+                    <td>
+                        <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
+                            <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                            <ul uib-dropdown-menu role="menu">
+                                <li role="menuitem"><a ui-sref="^.approvalRuleEdit({approvalRuleid:approvalRule.ID})">Edit Approval Rule</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>{{approvalRule.ID}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </ul>
+    </section>
     <button type="button" class="btn btn-primary" ui-sref="^.approvalRuleCreate"><i class="fa fa-plus-circle"></i> Create New</button>
 </article>

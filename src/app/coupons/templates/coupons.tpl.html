@@ -1,29 +1,45 @@
-<article>
-    <ordercloud-select-buyer></ordercloud-select-buyer>
-    <h3 class="page-title">
+<article class="container-fluid">
+    <h3 class="page-header">
         Coupons
     </h3>
-    <ul class="list-group display-table-multiple-assignment">
-        <div class="title-row">
-            <li class="list-group-item">
-                <div>ID</div>
-                <div>Label</div>
-            </li>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="Coupons" listobject="coupons.list">
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                    <th>
+                        <div>Name</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="coupon in coupons.list.Items track by $index">
+                    <td>
+                        <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
+                            <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                            <ul uib-dropdown-menu role="menu">
+                                <li role="menuitem"><a ng-click="coupons.goToEdit(coupon.ID)">Edit Coupon</a></li>
+                                <li role="menuitem"><a ui-sref="^.couponAssignParty({couponid: coupon.ID})">Party Assignments</a></li>
+                                <li role="menuitem"><a ui-sref="^.couponAssignProduct({couponid: coupon.ID})">Product Assignments</a></li>
+                                <li role="menuitem"><a ui-sref="^.couponAssignCategory({couponid: coupon.ID})">Category Assignments</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>{{coupon.ID}}</td>
+                    <td>{{coupon.Label}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <div ordercloud-infinite-scroll servicename="Coupons" listobject="coupons.list">
-            <li ng-click="coupons.goToEdit(coupon.ID)" class="list-group-item" ng-repeat="coupon in coupons.list.Items track by $index">
-                <div>{{coupon.ID}}</div>
-                <div>{{coupon.Label}}</div>
-                <div class="btn-group" uib-dropdown dropdown-append-to-body="true">
-                    <button id="{{'dropdown-button-' + $index}}" type="button" ng-click="$event.stopPropagation()" class="btn btn-primary" uib-dropdown-toggle>Assignments <span class="caret"></span></button>
-                    <ul aria-labelledby="{{'dropdown-button-' + $index}}" uib-dropdown-menu role="menu">
-                        <li role="menuitem"><a ui-sref="^.couponAssignParty({couponid: coupon.ID})">Party Assignment</a></li>
-                        <li role="menuitem"><a ui-sref="^.couponAssignProduct({couponid: coupon.ID})">Product Assignment</a></li>
-                        <li role="menuitem"><a ui-sref="^.couponAssignCategory({couponid: coupon.ID})">Category Assignment</a></li>
-                    </ul>
-                </div>
-            </li>
-        </div>
-    </ul>
+    </section>
     <button type="button" class="btn btn-primary" ui-sref="^.couponCreate"><i class="fa fa-plus-circle"></i> Create New</button>
 </article>
