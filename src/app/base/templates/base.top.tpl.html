@@ -6,7 +6,7 @@
         <a class="navbar-brand" ng-click="baseTop.toggleMenu()"><i class="fa fa-bars"></i></a>
     </div>
 
-    <div class="collapse navbar-collapse" collapse="navbarCollapsed">
+    <div class="collapse navbar-collapse" uib-collapse="navbarCollapsed">
         <ul class="nav navbar-nav">
             <li ui-sref-active="active"><a ui-sref="base.home"><i class="fa fa-home"></i> Home</a></li>
             <li ng-repeat="item in baseTop.navItems" ui-sref-active="active"><a ui-sref="{{item.StateRef}}">{{item.Display}}</a></li>
