@@ -10,24 +10,43 @@
     </div>
     <h4>Assign User Groups</h4>
     <fieldset ng-disabled="couponAssign.assignBuyer">
-        <ul class="list-group assignments-table" ng-form="assignmentsTable" disable-dynamic-validation>
-            <li class="list-group-item">
-                <p>Assign</p>
-                <p>ID</p>
-                <p>Name</p>
-            </li>
-            <div ng-disabled="couponAssign.assignBuyer" ordercloud-infinite-scroll servicename="Coupons" listobject="couponAssign.assignedUserGroups" usergrouplist="couponAssign.userGroups" selectedid="CouponID">
-                <li class="list-group-item" ng-repeat="group in couponAssign.userGroups.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
-                    <input name="{{'assignCheckbox' + $index}}" ng-change="couponAssign.resetSelections($index, couponAssign.assignedUserGroups, couponAssign.userGroups, assignmentsTable)" type="checkbox" ng-model="group.selected">
-                    <p>{{group.ID}}</p>
-                    <p>{{group.Name}}</p>
-                </li>
+        <section class="table-fixed-header">
+            <div class="table-header-bg"></div>
+            <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" usergrouplist="couponAssign.userGroups" listobject="couponAssign.assignedUserGroups" selectedid="CreditCardID" ng-form="assignmentsTable" disable-dynamic-validation>
+                <table class="table table-hover">
+                    <colgroup>
+                        <col class="action-column"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <div>ID</div>
+                        </th>
+                        <th>
+                            <div>Name</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="group in couponAssign.userGroups.Items track by $index">
+                        <td class="text-center">
+                            <input name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="group.selected">
+                        </td>
+                        <td>
+                            {{group.ID}}
+                        </td>
+                        <td>{{group.Name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-        </ul>
+        </section>
     </fieldset>
     <div class="form-group">
         <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" class="btn btn-primary" ng-click="couponAssign.saveAssignments('Coupons', couponAssign.coupon.ID, couponAssign.assignBuyer, couponAssign.userGroups, couponAssign.assignedUserGroups, assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
+        <button type="button" class="btn btn-primary" ng-click="couponAssign.saveAssignments(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
         <button type="button" class="btn btn-primary" ui-sref="^.couponAssignProduct({couponid: couponAssign.coupon.ID})">Assign Products</button>
         <button type="button" class="btn btn-primary" ui-sref="^.couponAssignCategory({couponid: couponAssign.coupon.ID})">Assign Categories</button>
     </div>

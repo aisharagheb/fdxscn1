@@ -160,14 +160,35 @@ function CouponCreateController($state, Coupons) {
     }
 }
 
-function CouponAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCoupon, Assignments) {
+function CouponAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCoupon, Coupons) {
     var vm = this;
     vm.coupon = SelectedCoupon;
     vm.buyer = Buyer;
     vm.userGroups = UserGroupList;
     vm.assignedUserGroups = AssignedUserGroups;
-    vm.resetSelections = Assignments.resetSelections;
-    vm.saveAssignments = Assignments.saveAssignments;
+    vm.saveAssignments = saveAssignments;
+
+    function saveAssignments(form) {
+        var assignmentObject = {};
+        angular.forEach(vm.userGroups.Items, function(group, index) {
+            if (form['assignCheckbox' + index].$dirty) {
+                if (group.selected) {
+                    assignmentObject = {UserID: null, UserGroupID: group.ID, CouponID: vm.coupon.ID};
+                    Coupons.SaveAssignment(assignmentObject);
+                    vm.assignedUserGroups.Items.push(assignmentObject);
+                }
+                else {
+                    angular.forEach(vm.assignedUserGroups.Items, function(assignment, index) {
+                        if (assignment.UserGroupID === group.ID) {
+                            Coupons.DeleteAssignment(vm.coupon.ID, null, group.ID);
+                            vm.assignedUserGroups.Items.splice(index, 1);
+                            index = index - 1;
+                        }
+                    })
+                }
+            }
+        });
+    }
 }
 
 function CouponAssignProductController(ProductList, ProductAssignments, SelectedCoupon, Coupons, Products) {

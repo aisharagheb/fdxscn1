@@ -119,13 +119,34 @@ function CreditCardCreateController($state, CreditCards) {
     }
 }
 
-function CreditCardAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCreditCard, Assignments) {
+function CreditCardAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCreditCard, CreditCards) {
     var vm = this;
     vm.buyer = Buyer;
     vm.assignBuyer = false;
     vm.userGroups = UserGroupList;
     vm.assignedUserGroups = AssignedUserGroups;
     vm.creditCard = SelectedCreditCard;
-    vm.resetSelections = Assignments.resetSelections;
-    vm.saveAssignments = Assignments.saveAssignments;
+    vm.saveAssignments = saveAssignments;
+
+    function saveAssignments(form) {
+        var assignmentObject = {};
+        angular.forEach(vm.userGroups.Items, function(group, index) {
+            if (form['assignCheckbox' + index].$dirty) {
+                if (group.selected) {
+                    assignmentObject = {UserID: null, UserGroupID: group.ID, CreditCardID: vm.creditCard.ID};
+                    CreditCards.SaveAssignment(assignmentObject);
+                    vm.assignedUserGroups.Items.push(assignmentObject);
+                }
+                else {
+                    angular.forEach(vm.assignedUserGroups.Items, function(assignment, index) {
+                        if (assignment.UserGroupID === group.ID) {
+                            CreditCards.DeleteAssignment(vm.creditCard.ID, null, group.ID);
+                            vm.assignedUserGroups.Items.splice(index, 1);
+                            index = index - 1;
+                        }
+                    })
+                }
+            }
+        });
+    }
 }

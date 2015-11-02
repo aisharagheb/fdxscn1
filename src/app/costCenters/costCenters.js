@@ -105,13 +105,34 @@ function CostCenterCreateController($state, CostCenters) {
     }
 }
 
-function CostCenterAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCostCenter, Assignments) {
+function CostCenterAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCostCenter, CostCenters) {
     var vm = this;
     vm.buyer = Buyer;
     vm.assignBuyer = false;
     vm.userGroups = UserGroupList;
     vm.assignedUserGroups = AssignedUserGroups;
     vm.costCenter = SelectedCostCenter;
-    vm.resetSelections = Assignments.resetSelections;
-    vm.saveAssignments = Assignments.saveAssignments;
+    vm.saveAssignments = saveAssignments;
+
+    function saveAssignments(form) {
+        var assignmentObject = {};
+        angular.forEach(vm.userGroups.Items, function(group, index) {
+            if (form['assignCheckbox' + index].$dirty) {
+                if (group.selected) {
+                    assignmentObject = {UserID: null, UserGroupID: group.ID, CostCenterID: vm.costCenter.ID};
+                    CostCenters.SaveAssignment(assignmentObject);
+                    vm.assignedUserGroups.Items.push(assignmentObject);
+                }
+                else {
+                    angular.forEach(vm.assignedUserGroups.Items, function(assignment, index) {
+                        if (assignment.UserGroupID === group.ID) {
+                            CostCenters.DeleteAssignment(vm.costCenter.ID, null, group.ID);
+                            vm.assignedUserGroups.Items.splice(index, 1);
+                            index = index - 1;
+                        }
+                    })
+                }
+            }
+        });
+    }
 }
