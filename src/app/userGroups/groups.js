@@ -74,7 +74,7 @@ function UserGroupsController( UserGroupList, $state) {
 function UserGroupEditController( $state, SelectedUserGroup, UserGroups ) {
     var vm = this,
         groupID = SelectedUserGroup.ID;
-    vm.userGroupName = SelectedUserGroup.UserGroup;
+    vm.userGroupName = SelectedUserGroup.Name;
     vm.userGroup = SelectedUserGroup;
 
     vm.Submit = function() {

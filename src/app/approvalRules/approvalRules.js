@@ -48,7 +48,7 @@ function ApprovalRulesController( ApprovalRuleList ) {
 function ApprovalRuleEditController( $state, SelectedApprovalRule, ApprovalRules ) {
     var vm = this,
         approvalRuleID = SelectedApprovalRule.ID;
-    vm.approvalRuleName = SelectedApprovalRule.ApprovalRuleName;
+    vm.approvalRuleID = SelectedApprovalRule.ID;
     vm.approvalRule = SelectedApprovalRule;
 
     vm.Submit = function() {

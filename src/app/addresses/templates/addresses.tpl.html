@@ -2,7 +2,10 @@
     <h3 class="page-header">
         Addresses
     </h3>
-    <section class="table-fixed-header">
+    <div class="well well-lg text-center" ng-if="!addresses.list.Items.length">
+        <b>The selected buyer does not have any addresses.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="addresses.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Addresses" listobject="addresses.list">
             <table class="table table-hover">

@@ -120,7 +120,7 @@ function CouponsController( $state, CouponList ) {
 function CouponEditController( $state, SelectedCoupon, Coupons ) {
     var vm = this,
         couponid = SelectedCoupon.ID;
-    vm.couponName = SelectedCoupon.CouponName;
+    vm.couponName = SelectedCoupon.Label;
     vm.coupon = SelectedCoupon;
 
     vm.Submit = function() {

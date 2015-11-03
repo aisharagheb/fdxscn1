@@ -44,6 +44,7 @@ function OrderEditController( $state, SelectedOrder, LineItemList, Orders, LineI
     var vm = this,
         orderid = SelectedOrder.ID;
     vm.order = SelectedOrder;
+    vm.orderID = SelectedOrder.ID;
     vm.list = LineItemList;
 
     vm.deleteLineItem = function(lineitem) {
@@ -51,7 +52,7 @@ function OrderEditController( $state, SelectedOrder, LineItemList, Orders, LineI
             .then(function() {
                 $state.go($state.current, {}, {reload: true});
             });
-    }
+    };
 
     vm.goToProduct = function(lineitem) {
         $state.go('base.productEdit', {'productid': lineitem.ProductID});

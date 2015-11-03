@@ -78,8 +78,8 @@ function PagingFunctionsFactory($injector, UserGroups) {
         page += 1;
         if (page <= componentObject.Meta.TotalPages && componentService) {
             var args = [];
-            if (nonBuyerSpecific.indexOf(component) > -1) {
-                args = [null, page, componentObject.Meta.PageSize];
+            if (component === 'Orders') {
+                args = ['incoming', null, null, null, page, componentObject.Meta.PageSize];
             }
             else {
                 args = [ null, page, componentObject.Meta.PageSize];
@@ -101,13 +101,7 @@ function PagingFunctionsFactory($injector, UserGroups) {
                     UserGroupList.Meta = data.Meta;
                     UserGroupList.Items = [].concat(UserGroupList.Items, data.Items);
                     if (page <= componentObject.Meta.TotalPages) {
-                        var args = [];
-                        if (nonBuyerSpecific.indexOf(component) > -1) {
-                            args = [selectedID, null, null, page, UserGroupList.Meta.PageSize];
-                        }
-                        else {
-                            args = [selectedID, null, null, page, UserGroupList.Meta.PageSize];
-                        }
+                        var args = [selectedID, null, null, page, UserGroupList.Meta.PageSize];
                         componentService.ListAssignments.apply(this, args)
                             .then(function(data) {
                                 componentObject.Meta = data.Meta;

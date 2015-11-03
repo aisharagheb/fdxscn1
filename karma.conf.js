@@ -16,13 +16,14 @@ module.exports = function(config) {
 		// list of files / patterns to load in the browser
 		files: [].concat(
 			mainBowerFiles({filter: '**/*.js'}),
-			'./src/**/app.js',
-			'./src/**/*.js'
+			'./build/**/app.js',
+			'./build/**/*.js'
 		),
 
 
 		// list of files to exclude
 		exclude: [
+            './src/**/*.test.js'
 		],
 
 

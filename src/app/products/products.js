@@ -47,6 +47,9 @@ function ProductsConfig($stateProvider) {
             controller: 'ProductAssignmentsCtrl',
             controllerAs: 'productAssignments',
             resolve: {
+                SelectedProduct: function($stateParams, Products) {
+                    return Products.Get($stateParams.productid);
+                },
                 Assignments: function($stateParams, Products) {
                     return Products.ListAssignments($stateParams.productid);
                 }
@@ -105,8 +108,8 @@ function ProductsController(ProductList, $state) {
 
 function ProductEditController($state, SelectedProduct, Products) {
     var vm = this,
-        productid = SelectedProduct.ID;
-    vm.productName = SelectedProduct.ProductName;
+        productid = angular.copy(SelectedProduct.ID);
+    vm.productName = angular.copy(SelectedProduct.Name);
     vm.product = SelectedProduct;
 
     vm.Submit = function () {
@@ -136,10 +139,11 @@ function ProductCreateController($state, Products) {
     }
 }
 
-function ProductAssignmentsController($stateParams, $state, Assignments, Products) {
+function ProductAssignmentsController($stateParams, $state, SelectedProduct, Assignments, Products) {
     var vm = this;
     vm.list = Assignments.Items;
     vm.productID = $stateParams.productid;
+    vm.productName = angular.copy(SelectedProduct.Name);
 
     vm.delete = function(scope) {
         Products.DeleteAssignment($stateParams.productid, null, scope.assignment.UserGroupID).then(function() {

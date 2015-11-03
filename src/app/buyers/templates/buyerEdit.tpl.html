@@ -1,9 +1,9 @@
 <article class="container-fluid">
-    <h3>
-        <b>Edit Buyer</b>
+    <h3 class="page-header">
+        <b>Edit Buyer:</b> {{buyerEdit.buyerName}}
     </h3>
 
-    <form ng-submit="buyer.Submit()" name="BuyerEditForm">
+    <form ng-submit="buyerEdit.Submit()" name="BuyerEditForm">
         <div class="row">
             <div class="form-group col-md-6">
                 <label for="buyer_id">ID</label>
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-primary" ng-click="buyerEdit.Submit();" type="button" ng-disabled="BuyerEditForm.$invalid">Save</button>
+            <button class="btn btn-primary" type="submit" ng-disabled="BuyerEditForm.$invalid">Save</button>
             <button class="btn btn-default" ui-sref="^.buyers" type="button">Cancel</button>
             <!--<button class="btn btn-primary" ng-click="buyerEdit.Delete();" type="button"><i class="fa fa-trash text-danger"></i> Delete</button>-->
         </div>

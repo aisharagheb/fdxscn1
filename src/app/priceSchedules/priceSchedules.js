@@ -47,8 +47,8 @@ function PriceSchedulesController( PriceScheduleList ) {
 
 function PriceScheduleEditController( $state, SelectedPriceSchedule, PriceSchedules, PriceBreak ) {
     var vm = this,
-        priceScheduleid = SelectedPriceSchedule.ID;
-    vm.priceScheduleName = SelectedPriceSchedule.PriceScheduleName;
+        priceScheduleid = angular.copy(SelectedPriceSchedule.ID);
+    vm.priceScheduleName = angular.copy(SelectedPriceSchedule.Name);
     vm.priceSchedule = SelectedPriceSchedule;
 
     vm.addPriceBreak = function() {

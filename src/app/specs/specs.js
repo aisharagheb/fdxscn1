@@ -72,8 +72,8 @@ function SpecsController( SpecList, $state ) {
 
 function SpecEditController( $state, SelectedSpec, Specs ) {
     var vm = this,
-        specid = SelectedSpec.ID;
-    vm.specName = SelectedSpec.SpecName;
+        specid = angular.copy(SelectedSpec.ID);
+    vm.specName = angular.copy(SelectedSpec.Name);
     vm.spec = SelectedSpec;
     if(vm.spec.MarkupType != null) {
         vm.associateMU = true;
@@ -88,11 +88,11 @@ function SpecEditController( $state, SelectedSpec, Specs ) {
         vm.spec.Options.push({Value: vm.selectionValue, Markup: vm.selectionMarkup, ListOrder: vm.selectionListOrder})
         vm.selectionValue = null;
         vm.selectionMarkup = null;
-    }
+    };
 
     vm.deleteSelectionOption = function($index) {
         vm.spec.Options.splice($index, 1);
-    }
+    };
 
     vm.Submit = function() {
         Specs.Update(specid, vm.spec)
@@ -119,11 +119,11 @@ function SpecCreateController($state, Specs) {
         vm.spec.Options.push({Value: vm.selectionValue, Markup: vm.selectionMarkup, ListOrder: vm.selectionListOrder})
         vm.selectionValue = null;
         vm.selectionMarkup = null;
-    }
+    };
 
     vm.deleteSelectionOption = function($index) {
         vm.spec.Options.splice($index, 1);
-    }
+    };
 
     vm.Submit = function() {
         Specs.Create(vm.spec)

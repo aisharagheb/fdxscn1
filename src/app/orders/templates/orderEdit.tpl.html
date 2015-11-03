@@ -1,6 +1,6 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        <b>Edit {{orderEdit.order.Type}} Order</b>
+        <b>Edit {{orderEdit.order.Type}} Order:</b> {{orderEdit.orderID}}
     </h3>
     <form name="EditForm" ng-submit="orderEdit.Submit()">
         <div class="row">
@@ -54,24 +54,56 @@
                 <textarea id="orderCommentsInput" type="text" step="any" class="form-control" ng-model="orderEdit.order.Comments"></textarea>
             </div>
         </div>
-        <h4>
-            Line Items
-        </h4>
-        <ul class="list-group display-table-line form-group">
-            <li class="list-group-item">
-                <p>ID</p>
-                <p>Quantity</p>
-                <p>Price (ea)</p>
-            </li>
-            <div ordercloud-infinite-scroll servicename="Orders" listobject="orderEdit.list">
-                <li class="list-group-item" ng-repeat="li in orderEdit.list.Items track by $index" ng-click="orderEdit.goToProduct(li)">
-                    <p>{{li.ID}}</p>
-                    <input type="number" name="{{'Quantity' + $index}}" ng-model="li.Quantity" class="form-control" />
-                    <input type="number" name="{{'UnitPrice' + $index}}" ng-model="li.UnitPrice" class="form-control" />
-                    <i class="fa fa-trash text-danger fa-2x text-danger" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="$event.stopPropagation(); orderEdit.deleteLineItem(li)"></i>
-                </li>
-            </div>
-        </ul>
+        <div ng-if="orderEdit.list.Items.length">
+            <h4>
+                Line Items
+            </h4>
+            <section class="table-fixed-header">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="orderEdit.list">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <div>ID</div>
+                            </th>
+                            <th>
+                                <div>Product ID</div>
+                            </th>
+                            <th>
+                                <div>Unit Price</div>
+                            </th>
+                            <th>
+                                <div>Quantity</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="li in orderEdit.list.Items track by $index">
+                            <td>
+                                <i class="fa fa-trash text-danger fa-2x text-danger" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="$event.stopPropagation(); orderEdit.deleteLineItem(li)"></i>
+                            </td>
+                            <td>
+                                {{li.ID}}
+                            </td>
+                            <td>
+                                <a href="" ng-click="orderEdit.goToProduct(li)">{{li.ProductID}}</a>
+                            </td>
+                            <td><input type="number" name="{{'Quantity' + $index}}" ng-model="li.Quantity" class="form-control" /></td>
+                            <td><input type="number" name="{{'UnitPrice' + $index}}" ng-model="li.UnitPrice" class="form-control" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <div class="well well-lg text-center">
+            <b>This order does not have any line items</b>
+        </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="OrderEditForm.$invalid">Save</button>
             <button type="button" class="btn btn-default" ui-sref="^.orders">Cancel</button>

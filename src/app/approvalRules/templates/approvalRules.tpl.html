@@ -2,7 +2,10 @@
     <h3 class="page-header">
         Approval Rules
     </h3>
-    <section class="table-fixed-header">
+    <div class="well well-lg text-center" ng-if="!approvalRules.list.Items.length">
+        <b>The selected buyer does not have any approval rules.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="approvalRules.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="ApprovalRules" listobject="approvalRules.list">
             <table class="table table-hover">

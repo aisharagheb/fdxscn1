@@ -28,8 +28,10 @@ function AddressesConfig( $stateProvider ) {
 			controller:'AddressEditCtrl',
 			controllerAs: 'addressEdit',
 			resolve: {
-				SelectedAddress: function($stateParams, Addresses) {
-					return Addresses.Get($stateParams.addressid);
+				SelectedAddress: function($stateParams, $state, Addresses) {
+					return Addresses.Get($stateParams.addressid).catch(function() {
+                        $state.go('^.addresses');
+                    });
 				}
 			}
 		})
@@ -51,8 +53,10 @@ function AddressesConfig( $stateProvider ) {
                 Assignments: function($stateParams, Addresses) {
                     return Addresses.ListAssignments($stateParams.addressid);
                 },
-                SelectedAddress: function($stateParams, Addresses) {
-                    return Addresses.Get($stateParams.addressid);
+                SelectedAddress: function($stateParams, $state, Addresses) {
+                    return Addresses.Get($stateParams.addressid).catch(function() {
+                        $state.go('^.addresses');
+                    });
                 }
             }
         })
