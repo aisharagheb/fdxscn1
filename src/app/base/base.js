@@ -14,8 +14,7 @@ function BaseConfig( $stateProvider ) {
 			abstract: true,
 			templateUrl:'base/templates/base.tpl.html',
 			data:{
-				limitAccess: true //Whether or not to require authentication on this state, this also affects any child states.
-				/*TODO: make the '$stateChangeStart event' in _app.js accept a function so users can control the redirect from here.*/
+				limitAccess: true
 			},
             views: {
                 '': {
@@ -76,7 +75,8 @@ function BaseController() {
 function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, ComponentList) {
     var vm = this,
         page = 1;
-    vm.navItems = ComponentList.buyerSpecific;
+    vm.catalogItems = ComponentList.nonSpecific;
+    vm.organizationItems = ComponentList.buyerSpecific;
     vm.buyer = Buyer;
     vm.isCollapsed = true;
     vm.buyerList = BuyerList;
@@ -97,11 +97,6 @@ function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, ComponentList) {
     };
 }
 
-function BaseTopController(ComponentList) {
+function BaseTopController() {
     var vm = this;
-    vm.navItems = ComponentList.nonSpecific;
-    vm.StateList = [];
-    vm.toggleMenu = function() {
-        angular.element(document.querySelector('#wrapper')).toggleClass('toggled');
-    }
 }

@@ -8,7 +8,7 @@ function orderCloudSearch () {
     return {
         scope: {
             servicename: "@",
-            controlleras: "=",
+            controlleras: "="
         },
         restrict: 'E',
         templateUrl: 'common/search/templates/search.tpl.html',
@@ -27,7 +27,7 @@ function orderCloudSearchCtrl($scope, $injector, $state) {
                 $scope.controlleras.list = data;
             });
         $scope.SearchView = true;
-    }
+    };
 
     $scope.stateReload = function() {
         $state.go($state.current, {}, {reload: true});

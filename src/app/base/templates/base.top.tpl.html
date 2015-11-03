@@ -1,18 +1,21 @@
 <div class="container-fluid">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" ng-click="navbarCollapsed = !navbarCollapsed" aria-expanded="false">
-            <span class="caret"></span>
-        </button>
-        <a class="navbar-brand" ng-click="baseTop.toggleMenu()"><i class="fa fa-bars"></i></a>
+    <ul class="nav navbar-nav navbar-left">
+        <li><a ng-click="application.toggleLeftNav()"><i class="fa fa-bars"></i></a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href=""><i class="fa fa-user"></i></a></li>
+    </ul>
+    <div>
+        <a href="" ui-sref="base.home"><ordercloud-logo data-width="60px" data-height="50px" data-color="#333" data-icon="true"></ordercloud-logo></a>
     </div>
 
-    <div class="collapse navbar-collapse" uib-collapse="navbarCollapsed">
+<!--    <div class="collapse navbar-collapse" uib-collapse="navbarCollapsed">
         <ul class="nav navbar-nav">
             <li ui-sref-active="active"><a ui-sref="base.home"><i class="fa fa-home"></i> Home</a></li>
             <li ng-repeat="item in baseTop.navItems" ui-sref-active="active"><a ui-sref="{{item.StateRef}}">{{item.Display}}</a></li>
         </ul>
         <ul class="nav navbar-nav pull-right">
-            <li class="pull-right"><a href=""><i class="fa fa-power-off"></i> Logout</a></li>
+            <li><a href=""><i class="fa fa-power-off"></i> Logout</a></li>
         </ul>
-    </div>
+    </div>-->
 </div>

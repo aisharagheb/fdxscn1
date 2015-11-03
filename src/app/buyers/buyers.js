@@ -14,6 +14,9 @@ function BuyerConfig( $stateProvider ) {
             templateUrl: 'buyers/templates/buyers.tpl.html',
             controller: 'BuyerCtrl',
             controllerAs: 'buyer',
+            data: {
+                componentName: 'Buyers'
+            },
             resolve: {
                 BuyerList: function(Buyers) {
                     return Buyers.List();
