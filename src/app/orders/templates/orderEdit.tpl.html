@@ -68,14 +68,14 @@
                     <p>{{li.ID}}</p>
                     <input type="number" name="{{'Quantity' + $index}}" ng-model="li.Quantity" class="form-control" />
                     <input type="number" name="{{'UnitPrice' + $index}}" ng-model="li.UnitPrice" class="form-control" />
-                    <i class="fa fa-trash fa-2x text-danger" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="$event.stopPropagation(); orderEdit.deleteLineItem(li)"></i>
+                    <i class="fa fa-trash text-danger fa-2x text-danger" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="$event.stopPropagation(); orderEdit.deleteLineItem(li)"></i>
                 </li>
             </div>
         </ul>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="OrderEditForm.$invalid">Save</button>
             <button type="button" class="btn btn-default" ui-sref="^.orders">Cancel</button>
-            <button type="button" class="btn btn-default" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="orderEdit.Delete()"><i class="fa fa-trash"></i></button>
+            <button type="button" class="btn btn-default" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="orderEdit.Delete()"><i class="fa fa-trash text-danger"></i></button>
         </div>
     </form>
 </article>

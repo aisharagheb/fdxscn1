@@ -27,7 +27,7 @@
 				<tbody>
 				<tr ng-repeat="assignment in productAssignments.list">
 					<td>
-						<button type="button" class="btn btn-default btn-block" uib-tooltip="Delete Assignment" tooltip-placement="right" ng-click="productAssignments.delete(this)"><span class="text-danger"><i class="fa fa-trash"></i></span></button>
+						<button type="button" class="btn btn-default btn-block" uib-tooltip="Delete Assignment" tooltip-placement="right" ng-click="productAssignments.delete(this)"><span class="text-danger"><i class="fa fa-trash text-danger"></i></span></button>
 					</td>
 					<td>{{assignment.UserID || assignment.UserGroupID || assignment.BuyerID}} <small class="text-muted" ng-if="!assignment.UserID && !assignment.UserGroupID">(Buyer)</small></td>
 					<td>{{assignment.StandardPriceScheduleID}}  <span class="text-muted" ng-if="!assignment.StandardPriceScheduleID">None</span></td>
@@ -37,5 +37,5 @@
 			</table>
 		</div>
 	</section>
-	<button class="btn btn-success" ui-sref="base.productCreateAssignment({productid:productAssignments.productID})"><i class="fa fa-plus-circle"></i> New Assignment</button>
+	<button class="btn btn-default" ui-sref="base.productCreateAssignment({productid:productAssignments.productID})"><i class="fa fa-plus-circle"></i> New Assignment</button>
 </article>
