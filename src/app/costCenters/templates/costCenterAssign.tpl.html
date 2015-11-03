@@ -2,7 +2,11 @@
     <h3 class="page-header">
         Assignments for {{costCenterAssign.costCenterName}}
     </h3>
-    <section class="table-fixed-header">
+    <div class="well well-lg text-center" ng-if="!costCenterAssign.list.Items.length">
+        <b>The selected buyer does not have any user groups, </b>
+        <a type="button" ui-sref="^.groupCreate">create one now</a>
+    </div>
+    <section class="table-fixed-header" ng-if="costCenterAssign.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" usergrouplist="costCenterAssign.userGroups" listobject="costCenterAssign.assignedUserGroups" selectedid="CostCenterID" ng-form="assignmentsTable" disable-dynamic-validation>
             <table class="table table-hover">

@@ -28,8 +28,10 @@ function CostCentersConfig( $stateProvider ) {
             controller:'CostCenterEditCtrl',
             controllerAs: 'costCenterEdit',
             resolve: {
-                SelectedCostCenter: function($stateParams, CostCenters) {
-                    return CostCenters.Get($stateParams.costCenterid);
+                SelectedCostCenter: function($stateParams, $state, CostCenters) {
+                    return CostCenters.Get($stateParams.costCenterid).catch(function() {
+                        $state.go('^.costCenters');
+                    });
                 }
             }
         })
@@ -54,8 +56,10 @@ function CostCentersConfig( $stateProvider ) {
                 AssignedUserGroups: function($stateParams, CostCenters) {
                     return CostCenters.ListAssignments($stateParams.costCenterid);
                 },
-                SelectedCostCenter: function($stateParams, CostCenters) {
-                    return CostCenters.Get($stateParams.costCenterid);
+                SelectedCostCenter: function($stateParams, $state, CostCenters) {
+                    return CostCenters.Get($stateParams.costCenterid).catch(function() {
+                        $state.go('^.costCenters');
+                    });
                 }
             }
         })
