@@ -2,7 +2,10 @@
     <h3 class="page-header">
         Buyers
     </h3>
-    <section class="table-fixed-header">
+    <div class="well well-lg text-center" ng-if="!buyers.list.Items.length">
+        <b>No buyers have been created yet.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="buyers.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Buyers" listobject="buyers.list">
             <table class="table table-hover">
