@@ -15,11 +15,12 @@
 	</div>-->
     <nav>
         <h4>Organization</h4>
-        <form name="ActiveBuyerForm">
+        <ordercloud-select-buyer></ordercloud-select-buyer>
+        <!--<form name="ActiveBuyerForm">
             <div class="form-group">
                 <select name="BuyerSelection" class="form-control" ng-model="application.selectedBuyer" ng-options="buyer as buyer.Name for buyer in baseLeft.buyerList.Items"></select>
             </div>
-        </form>
+        </form>-->
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" ng-repeat="item in baseLeft.organizationItems" ui-sref-active="active">
                 <a href="" ui-sref="{{item.StateRef}}">{{item.Display}}</a>

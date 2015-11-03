@@ -66,9 +66,43 @@
 
 #BaseLeft {
   padding: @padding-base-horizontal;
+  width: @dashboard-leftnav-width;
   white-space: nowrap;
 }
 
-.navbar-left {
-  margin-left:-15px;
+.navbar-flex {
+  #BaseTop {
+    background-color:@navbar-default-bg;
+    border-bottom:1px solid @navbar-default-border;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items:center;
+    margin-bottom:@navbar-margin-bottom;
+    > div {
+      max-height:@navbar-height;
+      &.link {
+        flex:0 1 auto;
+        > a {
+          display:block;
+          line-height:@navbar-height - 20px;
+          padding:@nav-link-padding;
+          color:@navbar-default-link-color;
+          &:hover {
+            background-color:@navbar-default-link-hover-bg;
+            color:@navbar-default-link-hover-color;
+          }
+          &.active,
+          &:active,
+          &:focus {
+            background-color:@navbar-default-link-active-bg;
+            color:@navbar-default-link-active-color;
+          }
+        }
+      }
+      &.logo {
+        flex:1 0 auto;
+      }
+    }
+  }
 }

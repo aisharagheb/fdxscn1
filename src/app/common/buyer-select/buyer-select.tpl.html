@@ -1,19 +1,49 @@
-<div class="select-buyer-button row" ng-if="selectBuyer.BuyerList.Items.length > 1">
-    <div class="col-xs-12" uib-dropdown dropdown-append-to-body="true">
-        <button id="toggle-dropdown" class="btn btn-default form-control" uib-dropdown-toggle>Selected Buyer: {{selectBuyer.selectedBuyer.Name}}</button>
-        <div class="container uib-dropdown-menu">
-            <ul class="buyer-list-menu list-group display-table" role="menu" aria-label="toggle-dropdown">
-                <li class="list-group-item">
-                    <p>ID</p>
-                    <p>Name</p>
-                </li>
-                <div ordercloud-infinite-scroll pagingfunction="selectBuyer.PagingFunction()">
-                    <li class="list-group-item" role="menuitem" ng-repeat="buyer in selectBuyer.BuyerList.Items" ng-click="selectBuyer.ChangeBuyer(buyer)">
-                        <p>{{buyer.ID}}</p>
-                        <p>{{buyer.Name}}</p>
-                    </li>
+<div>
+    <div uib-dropdown dropdown-append-to-body="true" ng-if="selectBuyer.BuyerList.Items.length > 1">
+        <button class="btn btn-default btn-block btn-select-buyer" uib-dropdown-toggle>
+            <span class="text-muted"><small>Selected Buyer:</small></span>
+            <span class="buyer-name"><b>{{selectBuyer.selectedBuyer.Name}}</b></span>
+        </button>
+        <div class="buyer-list-menu" uib-dropdown-menu role="menu">
+            <section class="table-fixed-header">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll pagingfunction="selectBuyer.PagingFunction()">
+                    <table class="table table-hover">
+                        <colgroup>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>
+                                <div>ID</div>
+                            </th>
+                            <th>
+                                <div>Name</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr role="menuitem" ng-repeat="buyer in selectBuyer.BuyerList.Items" ng-click="selectBuyer.ChangeBuyer(buyer)">
+                            <td>{{buyer.ID}}</td>
+                            <td>{{buyer.Name}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </ul>
+            </section>
+            <!--<li class="list-group-item">
+                <p>ID</p>
+                <p>Name</p>
+            </li>
+            <div ordercloud-infinite-scroll pagingfunction="selectBuyer.PagingFunction()">
+                <li class="list-group-item" role="menuitem" ng-repeat="buyer in selectBuyer.BuyerList.Items" ng-click="selectBuyer.ChangeBuyer(buyer)">
+                    <p>{{buyer.ID}}</p>
+                    <p>{{buyer.Name}}</p>
+                </li>
+            </div>-->
         </div>
     </div>
+    <button class="btn btn-default btn-block btn-select-buyer" ng-if="selectBuyer.BuyerList.Items.length == 1">
+        <span class="text-muted"><small>Active Buyer:</small></span>
+        <span class="buyer-name"><b>{{selectBuyer.selectedBuyer.Name}}</b></span>
+    </button>
 </div>

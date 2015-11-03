@@ -34,11 +34,8 @@ function BaseConfig( $stateProvider ) {
                 }
             },
             resolve: {
-                Buyer: function(BuyerID, Buyers) {
-                    return Buyers.Get(BuyerID.Get());
-                },
-                BuyerList: function(Buyers) {
-                    return Buyers.List();
+                CurrentUser: function(Me) {
+                    return Me.Get();
                 },
                 ComponentList: function($state, $q) {
                     var deferred = $q.defer();
@@ -68,33 +65,16 @@ function BaseConfig( $stateProvider ) {
 		});
 }
 
-function BaseController() {
+function BaseController( CurrentUser ) {
 	var vm = this;
+    vm.currentUser = CurrentUser;
 }
 
-function BaseLeftController(Buyer, BuyerList, Buyers, BuyerID, ComponentList) {
-    var vm = this,
-        page = 1;
+function BaseLeftController(ComponentList) {
+    var vm = this;
     vm.catalogItems = ComponentList.nonSpecific;
     vm.organizationItems = ComponentList.buyerSpecific;
-    vm.buyer = Buyer;
     vm.isCollapsed = true;
-    vm.buyerList = BuyerList;
-    vm.changeBuyer = function(buyer) {
-        vm.buyer = buyer;
-        BuyerID.Set(buyer.ID);
-        vm.isCollapsed = true;
-    };
-    vm.PagingFunction = function() {
-        page += 1;
-        if (page <= vm.buyerList.Meta.TotalPages) {
-            Buyers.List(null, page)
-                .then(function(data) {
-                    vm.buyerList.Meta = data.Meta;
-                    vm.buyerList.Items = [].concat(vm.buyerList.Items, data.Items);
-                });
-        }
-    };
 }
 
 function BaseTopController() {

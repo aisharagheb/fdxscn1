@@ -1,5 +1,4 @@
-angular.module('ordercloud-buyer-select', []);
-angular.module('ordercloud-buyer-select')
+angular.module('ordercloud-buyer-select', [])
 
     .directive('ordercloudSelectBuyer', SelectBuyerDirective)
     .controller('SelectBuyerCtrl', SelectBuyerController)
@@ -19,21 +18,25 @@ function SelectBuyerDirective() {
 function SelectBuyerController($state, Buyers, BuyerID) {
     var vm = this,
         page = 1;
+
     Buyers.List().then(function(data) {
         vm.BuyerList = data;
     });
-    vm.ChangeBuyer = ChangeBuyer;
-    vm.PagingFunction = PagingFunction;
+
     Buyers.Get(BuyerID.Get()).then(function(data) {
         vm.selectedBuyer = data;
     });
 
-    function ChangeBuyer(buyer) {
-        BuyerID.Set(buyer.ID);
-        $state.reload($state.current);
-    }
+    vm.ChangeBuyer = function(buyer) {
+        Buyers.Get(buyer.ID).then(function(data) {
+            vm.selectedBuyer = data;
+            BuyerID.Set(data.ID);
+            //console.dir($state.current);
+            $state.reload($state.current);
+        });
+    };
 
-    function PagingFunction() {
+    vm.PagingFunction = function() {
         page += 1;
         if (page <= vm.BuyerList.Meta.TotalPages) {
             Buyers.List(null, page)

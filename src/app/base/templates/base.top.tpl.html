@@ -1,21 +1,23 @@
-<div class="container-fluid">
-    <ul class="nav navbar-nav navbar-left">
-        <li><a ng-click="application.toggleLeftNav()"><i class="fa fa-bars"></i></a></li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href=""><i class="fa fa-user"></i></a></li>
-    </ul>
-    <div>
+<div id="BaseTop">
+    <div class="link">
+        <a ng-click="application.toggleLeftNav()"><i class="fa fa-bars"></i></a>
+    </div>
+    <div class="logo">
         <a href="" ui-sref="base.home"><ordercloud-logo data-width="60px" data-height="50px" data-color="#333" data-icon="true"></ordercloud-logo></a>
     </div>
-
-<!--    <div class="collapse navbar-collapse" uib-collapse="navbarCollapsed">
-        <ul class="nav navbar-nav">
-            <li ui-sref-active="active"><a ui-sref="base.home"><i class="fa fa-home"></i> Home</a></li>
-            <li ng-repeat="item in baseTop.navItems" ui-sref-active="active"><a ui-sref="{{item.StateRef}}">{{item.Display}}</a></li>
+    <div class="link" uib-dropdown>
+        <a href uib-dropdown-toggle>
+            <i class="fa fa-user"></i>
+        </a>
+        <ul class="dropdown-menu-right" uib-dropdown-menu>
+            <li class="dropdown-header">{{base.currentUser.FirstName + ' ' + base.currentUser.LastName}}</li>
+            <li>
+                <a href="">Account</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a ng-click="application.logout()">Logout</a>
+            </li>
         </ul>
-        <ul class="nav navbar-nav pull-right">
-            <li><a href=""><i class="fa fa-power-off"></i> Logout</a></li>
-        </ul>
-    </div>-->
+    </div>
 </div>
