@@ -8,7 +8,8 @@ angular.module( 'orderCloud', [
 	'ui.bootstrap',
 	'orderCloud.sdk',
 	'toastr',
-    'ordercloud-infinite-scroll'
+    'ordercloud-infinite-scroll',
+	'ordercloud-buyer-select'
 ])
 
 	.run( SetBuyerID )
@@ -76,7 +77,7 @@ function ExceptionHandler($injector) {
 	}
 }
 
-function AppCtrl( $state, Credentials, Users ) {
+function AppCtrl( $state, Credentials ) {
 	var vm = this;
 	vm.showLeftNav = true;
 	vm.toggleLeftNav = function() {
