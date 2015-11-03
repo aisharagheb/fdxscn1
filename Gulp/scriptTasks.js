@@ -33,7 +33,7 @@ gulp.task('b_c:js_bower', function() {
 
 gulp.task('b_m:js', function() {
     return gulp
-        .src(['./src/**/*.js', '!./src/**/*spec.js'])
+        .src(['./src/**/*.js', '!**/*spec.js', '!**/*.test.js'])
         .pipe(ngAnnotate())
         .pipe(wrap({
             header: "(function ( window, angular, undefined ) {\n 'use strict';\n",
@@ -67,13 +67,16 @@ gulp.task('b_c:templateCache', function() {
 
 gulp.task('c_m:js', function() {
     return gulp
-        .src([config.build + 'vendor/angular.js',
+        .src([
+            config.build + 'vendor/angular.js',
             config.build + 'vendor/**/*.js',
             config.build + 'src/templates-app.js',
             config.build + 'src/app/app.js',
             config.build + 'src/app/**/*.module.js',
             config.build + 'src/**/*.js',
-            '!' + config.build + 'src/**/*.spec.js'])
+            '!' + config.build + 'src/**/*.spec.js',
+            '!' + config.build + 'src/**/*.test.js'
+        ])
         .pipe(concat('app.js'))
         .pipe(uglify({}))
         //TODO: gulp-header doesn't work with gulp-4.0
