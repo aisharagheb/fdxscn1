@@ -78,6 +78,10 @@ function ExceptionHandler($injector) {
 
 function AppCtrl( $state, Credentials, Users ) {
 	var vm = this;
+	vm.showLeftNav = true;
+	vm.toggleLeftNav = function() {
+		vm.showLeftNav = !vm.showLeftNav;
+	};
 	vm.logout = function() {
 		Credentials.Delete();
 		$state.go('login');
