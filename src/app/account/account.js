@@ -2,7 +2,8 @@ angular.module( 'orderCloud' )
 
 	.config( AccountConfig )
 	.controller( 'AccountCtrl', AccountController )
-	.factory( 'ChangePasswordService', ChangePasswordService )
+	.factory( 'AccountService', AccountService )
+	.controller( 'ConfirmPasswordCtrl', ConfirmPasswordController )
 	.controller( 'ChangePasswordCtrl', ChangePasswordController )
 
 ;
@@ -33,33 +34,50 @@ function AccountConfig( $stateProvider ) {
 		})
 }
 
-function AccountController( $exceptionHandler, toastr, Profile, AdminUsers ) {
-	var vm = this;
-	vm.profile = angular.copy(Profile);
-	var currentProfile = Profile;
-
-	vm.update = function() {
-		AdminUsers.Update(currentProfile.ID, vm.profile)
-			.then(function(data) {
-				vm.profile = angular.copy(data);
-				currentProfile = data;
-				toastr.success('Account changes were saved.', 'Success!');
-			})
-			.catch(function(ex) {
-				$exceptionHandler(ex)
-			})
-	};
-
-	vm.resetForm = function(form) {
-		vm.profile = currentProfile;
-		form.$setPristine(true);
-	};
-}
-
-function ChangePasswordService( $q, Credentials, AdminUsers ) {
+function AccountService( $q, $uibModal, Credentials, AdminUsers ) {
 	var service = {
+		Update: _update,
 		ChangePassword: _changePassword
 	};
+
+	function _update(currentProfile, newProfile) {
+		var deferred = $q.defer();
+
+		function updateUser() {
+			AdminUsers.Update(currentProfile.ID, newProfile)
+				.then(function(data) {
+					deferred.resolve(data);
+				})
+				.catch(function(ex) {
+					deferred.reject(ex);
+				})
+		}
+
+		var modalInstance = $uibModal.open({
+			animation: true,
+			templateUrl: 'account/templates/confirmPassword.modal.tpl.html',
+			controller: 'ConfirmPasswordCtrl',
+			controllerAs: 'confirmPassword',
+			size: 'sm'
+		});
+
+		modalInstance.result.then(function(password) {
+			var checkPasswordCredentials = {
+				Username: currentProfile.Username,
+				Password: password
+			};
+			Credentials.Get(checkPasswordCredentials).then(
+				function() {
+					updateUser();
+				}).catch(function( ex ) {
+					deferred.reject(ex);
+				});
+		}, function() {
+			deferred.reject();
+		});
+
+		return deferred.promise;
+	}
 
 	function _changePassword(currentUser) {
 		var deferred = $q.defer();
@@ -90,12 +108,48 @@ function ChangePasswordService( $q, Credentials, AdminUsers ) {
 	return service;
 }
 
-function ChangePasswordController( $state, $exceptionHandler, toastr, ChangePasswordService, CurrentUser ) {
+function AccountController( $exceptionHandler, toastr, Profile, AccountService ) {
+	var vm = this;
+	vm.profile = angular.copy(Profile);
+	var currentProfile = Profile;
+
+	vm.update = function() {
+		AccountService.Update(currentProfile, vm.profile)
+			.then(function(data) {
+				vm.profile = angular.copy(data);
+				currentProfile = data;
+				toastr.success('Account changes were saved.', 'Success!');
+			})
+			.catch(function(ex) {
+				vm.profile = currentProfile;
+				$exceptionHandler(ex)
+			})
+	};
+
+	vm.resetForm = function(form) {
+		vm.profile = currentProfile;
+		form.$setPristine(true);
+	};
+}
+
+function ConfirmPasswordController( $uibModalInstance ) {
+	var vm = this;
+
+	vm.submit = function() {
+		$uibModalInstance.close(vm.password);
+	};
+
+	vm.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+}
+
+function ChangePasswordController( $state, $exceptionHandler, toastr, AccountService, CurrentUser ) {
 	var vm = this;
 	vm.currentUser = CurrentUser;
 
 	vm.changePassword = function() {
-		ChangePasswordService.ChangePassword(vm.currentUser)
+		AccountService.ChangePassword(vm.currentUser)
 			.then(function() {
 				toastr.success('Password successfully changed', 'Success!');
 				$state.go('base.account');
