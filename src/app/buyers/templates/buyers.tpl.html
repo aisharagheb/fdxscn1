@@ -2,19 +2,42 @@
     <h3 class="page-header">
         Buyers
     </h3>
-    <ul class="list-group display-table buyers-list">
-        <li class="list-group-item">
-            <p>ID</p>
-            <p>Name</p>
-        </li>
-        <div ordercloud-infinite-scroll pagingfunction="buyer.PagingFunction()">
-            <li class="list-group-item" ng-repeat="buy in buyer.Buyers.Items track by $index" ui-sref="^.buyerEdit({buyerid: buy.ID})" ng-class="{'selected': buyer.SelectedBuyer.ID === buy.ID}">
-                <p>{{buy.ID}}</p>
-                <p>{{buy.Name}}</p>
-                <!--<button ng-click="$event.stopProgagation(); buyer.goToEdit(buy.ID)" class="btn btn-primary">Edit</button>-->
-            </li>
+    <section class="table-fixed-header">
+        <div class="table-header-bg"></div>
+        <div class="table-container" ordercloud-infinite-scroll servicename="Buyers" listobject="buyers.list">
+            <table class="table table-hover">
+                <colgroup>
+                    <col class="action-column">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <div>ID</div>
+                    </th>
+                    <th>
+                        <div>Name</div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="buyer in buyers.list.Items track by $index">
+                    <td>
+                        <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
+                            <button class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                            <ul uib-dropdown-menu role="menu">
+                                <li role="menuitem"><a ui-sref="^.buyerEdit">Edit Buyer</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td>{{buyer.ID}}</td>
+                    <td>{{buyer.Name}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </ul>
+    </section>
     <button type="button" class="btn btn-success" ui-sref="^.buyerCreate"><i class="fa fa-plus-circle"></i> Create New</button>
     <ui-view></ui-view>
 </article>

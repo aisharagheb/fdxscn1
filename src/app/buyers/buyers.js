@@ -13,7 +13,7 @@ function BuyerConfig( $stateProvider ) {
             url: '/buyers',
             templateUrl: 'buyers/templates/buyers.tpl.html',
             controller: 'BuyerCtrl',
-            controllerAs: 'buyer',
+            controllerAs: 'buyers',
             data: {
                 componentName: 'Buyers'
             },
@@ -45,7 +45,7 @@ function BuyerConfig( $stateProvider ) {
 function BuyerController(BuyerList, Buyers) {
     var vm = this,
         page = 1;
-    vm.Buyers = BuyerList;
+    vm.list = BuyerList;
     vm.PagingFunction = PagingFunction;
 
     function PagingFunction() {
