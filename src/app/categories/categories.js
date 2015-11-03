@@ -39,8 +39,10 @@ function CategoriesConfig( $stateProvider ) {
             controller:'CategoryEditCtrl',
             controllerAs: 'categoryEdit',
             resolve: {
-                SelectedCategory: function($stateParams, Categories) {
-                    return Categories.Get($stateParams.categoryid);
+                SelectedCategory: function($stateParams, $state, Categories) {
+                    return Categories.Get($stateParams.categoryid).catch(function() {
+                        $state.go('^.categories');
+                    });
                 }
             }
         })
@@ -62,8 +64,10 @@ function CategoriesConfig( $stateProvider ) {
                 AssignedUserGroups: function($stateParams, Categories) {
                     return Categories.ListAssignments($stateParams.categoryid);
                 },
-                SelectedCategory: function($stateParams, Categories) {
-                    return Categories.Get($stateParams.categoryid);
+                SelectedCategory: function($stateParams, $state, Categories) {
+                    return Categories.Get($stateParams.categoryid).catch(function() {
+                        $state.go('^.categories');
+                    });
                 }
             }
         })
@@ -79,8 +83,10 @@ function CategoriesConfig( $stateProvider ) {
                 ProductAssignments: function(Categories, $stateParams) {
                     return Categories.ListProductAssignments($stateParams.categoryid);
                 },
-                SelectedCategory: function($stateParams, Categories) {
-                    return Categories.Get($stateParams.categoryid);
+                SelectedCategory: function($stateParams, $state, Categories) {
+                    return Categories.Get($stateParams.categoryid).catch(function() {
+                        $state.go('^.categories');
+                    });
                 }
             }
         });

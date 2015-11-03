@@ -27,8 +27,10 @@ function ApprovalRulesConfig( $stateProvider ) {
             controller:'ApprovalRuleEditCtrl',
             controllerAs: 'approvalRuleEdit',
             resolve: {
-                SelectedApprovalRule: function( $stateParams, ApprovalRules) {
-                    return ApprovalRules.Get($stateParams.approvalRuleid);
+                SelectedApprovalRule: function( $stateParams, $state, ApprovalRules) {
+                    return ApprovalRules.Get($stateParams.approvalRuleid).catch(function() {
+                        $state.go('^.approvalRules');
+                    });
                 }
             }
         })
