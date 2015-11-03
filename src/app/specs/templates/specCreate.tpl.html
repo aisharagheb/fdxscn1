@@ -107,7 +107,7 @@
                         <input id="specMarkupInput" type="number" step="any" class="form-control" ng-disabled="!specCreate.associateMU" ng-model="specCreate.selectionMarkup"/>
                     </div>
                     <div class="col-sm-3 form-group">
-                        <button type="button" class="btn btn-success form-control" ng-disabled="!specCreate.selectionValue" ng-click="specCreate.addSelectionValue()">Add</button>
+                        <button type="button" class="btn btn-default form-control" ng-disabled="!specCreate.selectionValue" ng-click="specCreate.addSelectionValue()">Add</button>
                     </div>
                 </div>
                 <div class="row">
@@ -131,7 +131,7 @@
                                     <!--</label>-->
                                 </div>
                                 <div class="col-sm-1">
-                                    <a class="fa fa-trash-o" ng-click="specCreate.deleteSelectionOption(specCreate.spec, $index)"></a>
+                                    <a class="fa fa-trash text-danger-o" ng-click="specCreate.deleteSelectionOption(specCreate.spec, $index)"></a>
                                 </div>
                             </li>
                         </ul>

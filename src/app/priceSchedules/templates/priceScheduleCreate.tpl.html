@@ -75,7 +75,7 @@
                 <input id="priceSchedulePBPInput" type="number" step="any" class="form-control" ng-model="priceScheduleCreate.price"/>
             </div>
             <div class="col-sm-2 form-group">
-                <button type="button" class="btn btn-success form-control" ng-disabled="!priceScheduleCreate.price || !priceScheduleCreate.quantity" ng-click="priceScheduleCreate.addPriceBreak()">Add</button>
+                <button type="button" class="btn btn-default form-control" ng-disabled="!priceScheduleCreate.price || !priceScheduleCreate.quantity" ng-click="priceScheduleCreate.addPriceBreak()">Add</button>
             </div>
         </div>
         <div class="row">
@@ -90,7 +90,7 @@
                                 {{pricebreak.Price * pricebreak.Quantity | currency}}
                             </div>
                             <div class="col-sm-3 col-sm-offset-3">
-                                <a class="fa fa-trash-o" ng-click="priceScheduleCreate.deletePriceBreak(priceScheduleCreate.priceSchedule, $index)"></a>
+                                <a class="fa fa-trash text-danger-o" ng-click="priceScheduleCreate.deletePriceBreak(priceScheduleCreate.priceSchedule, $index)"></a>
                             </div>
                         </div>
                     </li>

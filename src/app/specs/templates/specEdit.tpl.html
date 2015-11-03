@@ -107,7 +107,7 @@
                         <input id="specMarkupInput" type="number" step="any" class="form-control" ng-disabled="!specEdit.associateMU" ng-model="specEdit.selectionMarkup"/>
                     </div>
                     <div class="col-sm-3 form-group">
-                        <button type="button" class="btn btn-success form-control" ng-disabled="!specEdit.selectionValue" ng-click="specEdit.addSelectionValue()">Add</button>
+                        <button type="button" class="btn btn-default form-control" ng-disabled="!specEdit.selectionValue" ng-click="specEdit.addSelectionValue()">Add</button>
                     </div>
                 </div>
                 <div class="row">
@@ -131,7 +131,7 @@
                                     <!--</label>-->
                                 </div>
                                 <div class="col-sm-1">
-                                    <a class="fa fa-trash-o" ng-click="specEdit.deleteSelectionOption(specEdit.spec, $index)"></a>
+                                    <a class="fa fa-trash text-danger-o" ng-click="specEdit.deleteSelectionOption(specEdit.spec, $index)"></a>
                                 </div>
                             </li>
                         </ul>
@@ -219,7 +219,7 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="SpecEditForm.$invalid">Save</button>
             <button type="button" class="btn btn-default" ui-sref="^.specs">Cancel</button>
-            <button type="button" class="btn btn-default" ng-click="specEdit.Delete()"><i class="fa fa-trash"></i></button>
+            <button type="button" class="btn btn-default" ng-click="specEdit.Delete()"><i class="fa fa-trash text-danger"></i></button>
         </div>
     </form>
 </article>

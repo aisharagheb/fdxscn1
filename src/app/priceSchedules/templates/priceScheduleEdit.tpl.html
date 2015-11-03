@@ -75,7 +75,7 @@
                 <input id="priceSchedulePBPInput" type="number" step="any" class="form-control" ng-model="priceScheduleEdit.price"/>
             </div>
             <div class="col-sm-2 form-group">
-                <button type="button" class="btn btn-success form-control" ng-disabled="!priceScheduleEdit.price || !priceScheduleEdit.quantity" ng-click="priceScheduleEdit.addPriceBreak()">Add</button>
+                <button type="button" class="btn btn-default form-control" ng-disabled="!priceScheduleEdit.price || !priceScheduleEdit.quantity" ng-click="priceScheduleEdit.addPriceBreak()">Add</button>
             </div>
         </div>
         <div class="row">
@@ -90,7 +90,7 @@
                                 {{pricebreak.Price * pricebreak.Quantity | currency}}
                             </div>
                             <div class="col-sm-3 col-sm-offset-3">
-                                <a class="fa fa-trash-o" ng-click="priceScheduleEdit.deletePriceBreak(priceScheduleEdit.priceSchedule, $index)"></a>
+                                <a class="fa fa-trash text-danger-o" ng-click="priceScheduleEdit.deletePriceBreak(priceScheduleEdit.priceSchedule, $index)"></a>
                             </div>
                         </div>
                     </li>
@@ -100,7 +100,7 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="PriceScheduleEditForm.$invalid || !priceScheduleEdit.priceSchedule.PriceBreaks.length">Save</button>
             <button type="button" class="btn btn-default" ui-sref="^.priceSchedules">Cancel</button>
-            <button type="button" class="btn btn-default" ng-click="priceScheduleEdit.Delete()"><i class="fa fa-trash"></i></button>
+            <button type="button" class="btn btn-default" ng-click="priceScheduleEdit.Delete()"><i class="fa fa-trash text-danger"></i></button>
         </div>
     </form>
 </article>

@@ -24,7 +24,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="product in couponAssignProd.ProductList.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
-                    <td>
+                    <td class="text-center">
                         <input ng-change="couponAssignProd.resetSelection($index, assignmentsTable)" name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="product.selected">
                     </td>
                     <td>
@@ -40,8 +40,8 @@
     </section>
     <div class="form-group">
         <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" class="btn btn-primary" ng-click="couponAssignProd.saveAssignment(assignmentsTable)"><i class="fa fa-save"></i> Update Assignments</button>
-        <button type="button" class="btn btn-primary" ui-sref="^.couponAssignParty({couponid: couponAssignProd.Coupon.ID})">Assign Parties</button>
-        <button type="button" class="btn btn-primary" ui-sref="^.couponAssignCategory({couponid: couponAssignProd.Coupon.ID})">Assign Categories</button>
+        <button type="button" class="btn btn-primary" ng-click="couponAssignProd.saveAssignment(assignmentsTable)">Update Product Assignments</button>
+        <button type="button" class="btn btn-default" ui-sref="^.couponAssignParty({couponid: couponAssignProd.Coupon.ID})">Assign Parties</button>
+        <button type="button" class="btn btn-default" ui-sref="^.couponAssignCategory({couponid: couponAssignProd.Coupon.ID})">Assign Categories</button>
     </div>
 </article>
