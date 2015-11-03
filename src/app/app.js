@@ -77,8 +77,9 @@ function ExceptionHandler($injector) {
 	}
 }
 
-function AppCtrl( $state, Credentials ) {
+function AppCtrl( $state, appname, Credentials ) {
 	var vm = this;
+	vm.name = appname;
 	vm.showLeftNav = true;
 	vm.toggleLeftNav = function() {
 		vm.showLeftNav = !vm.showLeftNav;
