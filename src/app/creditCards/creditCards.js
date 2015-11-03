@@ -76,7 +76,7 @@ function CreditCardsController( CreditCardList, $state ) {
 function CreditCardEditController( $state, SelectedCreditCard, CreditCards ) {
     var vm = this,
         creditcardid = SelectedCreditCard.ID;
-    vm.creditCardName = SelectedCreditCard.CreditCardName;
+    vm.creditCardName = SelectedCreditCard.ID;
     vm.creditCard = SelectedCreditCard;
     if(vm.creditCard.ExpirationDate != null){
         vm.creditCard.ExpirationDate = new Date(vm.creditCard.ExpirationDate);

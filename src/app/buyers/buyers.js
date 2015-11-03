@@ -63,6 +63,7 @@ function BuyerController(BuyerList, Buyers) {
 function BuyerEditController($state, Buyer, Buyers) {
     var vm = this;
     vm.buyer = Buyer;
+    vm.buyerName = Buyer.Name;
     vm.Submit = saveBuyer;
 
     function saveBuyer() {

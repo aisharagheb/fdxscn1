@@ -101,7 +101,7 @@ function CategoriesController( CategoryList, $state ) {
 function CategoryEditController( $state, SelectedCategory, Categories ) {
     var vm = this,
         categoryID = SelectedCategory.ID;
-    vm.categoryName = SelectedCategory.CategoryName;
+    vm.categoryName = SelectedCategory.Name;
     vm.category = SelectedCategory;
 
     vm.Submit = function() {

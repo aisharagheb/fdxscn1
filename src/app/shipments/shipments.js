@@ -63,7 +63,7 @@ function ShipmentsController( ShipmentList, $state ) {
 function ShipmentEditController( $state, SelectedShipment, Shipments, OrderList, LineItems ) {
     var vm = this,
         shipmentid = SelectedShipment.ID;
-    vm.ShipmentName = SelectedShipment.ShipmentName;
+    vm.ShipmentID = SelectedShipment.ID;
     vm.shipment = SelectedShipment;
     vm.list = OrderList;
     vm.OrderSelected = false;

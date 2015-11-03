@@ -71,7 +71,7 @@ function SpendingAccountsController( $state, SpendingAccountList, SpendingAccoun
 function SpendingAccountEditController( $state, SelectedSpendingAccount, SpendingAccounts ) {
     var vm = this,
         spendingaccountid = SelectedSpendingAccount.ID;
-    vm.spendingAccountName = SelectedSpendingAccount.SpendingAccountName;
+    vm.spendingAccountName = SelectedSpendingAccount.Name;
     vm.spendingAccount = SelectedSpendingAccount;
 
     vm.Submit = function() {

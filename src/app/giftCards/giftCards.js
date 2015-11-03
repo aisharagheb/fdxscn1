@@ -60,6 +60,7 @@ function GiftCardEditController ( SelectedGiftCard, GiftCardFactory ) {
     vm.format = GiftCardFactory.dateFormat;
     vm.open1 = vm.open2 = false;
     vm.giftCard = SelectedGiftCard;
+    vm.giftCardName = SelectedGiftCard.Name;
     vm.Update = GiftCardFactory.Update;
     vm.Delete = GiftCardFactory.Delete;
 }

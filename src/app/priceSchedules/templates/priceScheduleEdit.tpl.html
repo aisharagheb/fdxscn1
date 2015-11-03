@@ -1,6 +1,6 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        <b>Edit Price Schedule</b>
+        <b>Edit Price Schedule:</b> {{priceScheduleEdit.priceScheduleName}}
     </h3>
     <form name="PriceScheduleEditForm" ng-submit="priceScheduleEdit.Submit()">
         <div class="row">
@@ -75,7 +75,8 @@
                 <input id="priceSchedulePBPInput" type="number" step="any" class="form-control" ng-model="priceScheduleEdit.price"/>
             </div>
             <div class="col-sm-2 form-group">
-                <button type="button" class="btn btn-default form-control" ng-disabled="!priceScheduleEdit.price || !priceScheduleEdit.quantity" ng-click="priceScheduleEdit.addPriceBreak()">Add</button>
+                <label class="invisible hidden-xs">Add</label><br/>
+                <button type="button" class="btn btn-default" ng-disabled="!priceScheduleEdit.price || !priceScheduleEdit.quantity" ng-click="priceScheduleEdit.addPriceBreak()">Add</button>
             </div>
         </div>
         <div class="row">

@@ -1,6 +1,6 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        <b>New Gift Cards</b>
+        <b>New Gift Card</b>
     </h3>
     <form name="GiftCardCreateForm" ng-submit="giftCardCreate.Submit(giftCardCreate.giftcard)">
         <div class="row">
@@ -19,7 +19,7 @@
                 <input id="giftcardStartDate" type="text" ng-click="open1 = !open1" is-open="open1" uib-datepicker-popup="{{giftCardCreate.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardCreate.giftcard.StartDate">
             </div>
             <div class="form-group col-md-6">
-                <label for="giftcardExpirationDate">ExpirationDate</label>
+                <label for="giftcardExpirationDate">Expiration Date</label>
                 <input id="giftcardExpirationDate" type="text" ng-click="open2 = !open2" is-open="open2" min-date="giftCardCreate.giftcard.StartDate" ng-disabled="!giftCardCreate.giftcard.StartDate" uib-datepicker-popup="{{giftCardCreate.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardCreate.giftcard.ExpirationDate">
             </div>
         </div>

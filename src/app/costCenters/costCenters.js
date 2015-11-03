@@ -75,7 +75,7 @@ function CostCentersController( $state, CostCenterList ) {
 function CostCenterEditController( $state, SelectedCostCenter, CostCenters ) {
     var vm = this,
         costCenterid = SelectedCostCenter.ID;
-    vm.costCenterName = SelectedCostCenter.CostCenterName;
+    vm.costCenterName = SelectedCostCenter.Name;
     vm.costCenter = SelectedCostCenter;
 
     vm.Submit = function() {
@@ -112,6 +112,7 @@ function CostCenterAssignController(Buyer, UserGroupList, AssignedUserGroups, Se
     vm.userGroups = UserGroupList;
     vm.assignedUserGroups = AssignedUserGroups;
     vm.costCenter = SelectedCostCenter;
+    vm.costCenterName = SelectedCostCenter.Name;
     vm.saveAssignments = saveAssignments;
 
     function saveAssignments(form) {

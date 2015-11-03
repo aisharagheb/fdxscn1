@@ -48,7 +48,7 @@ function UsersController( UserList ) {
 function UserEditController(  $state, SelectedUser, Users ) {
     var vm = this,
         userid = SelectedUser.ID;
-    vm.userName = SelectedUser.UserName;
+    vm.userName = SelectedUser.Username;
     vm.user = SelectedUser;
     if(vm.user.TermsAccepted != null) {
         vm.TermsAccepted = true;
