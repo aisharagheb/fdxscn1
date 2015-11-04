@@ -62,10 +62,12 @@ function AddressesConfig( $stateProvider ) {
         })
 }
 
-function AddressesController( AddressList, $state ) {
+function AddressesController( AddressList, $state, TrackSearch ) {
 	var vm = this;
 	vm.list = AddressList;
-
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
     vm.goToEdit = function(id) {
         $state.go('^.addressEdit', {'addressid': id});
     };
