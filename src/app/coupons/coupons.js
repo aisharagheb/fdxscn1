@@ -106,14 +106,11 @@ function CouponsConfig( $stateProvider ) {
         });
 }
 
-function CouponsController( $state, CouponList ) {
+function CouponsController( CouponList, TrackSearch ) {
     var vm = this;
     vm.list = CouponList;
-    vm.goToEdit = function(id) {
-        $state.go('^.couponEdit', {'couponid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.couponAssignParty', {'couponid': id});
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
     };
 }
 

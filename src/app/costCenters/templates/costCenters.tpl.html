@@ -2,8 +2,10 @@
     <h3 class="page-header">
         Cost Centers
     </h3>
+    <ordercloud-search servicename="CostCenters" controlleras="costCenters"></ordercloud-search>
     <div class="well well-lg text-center" ng-if="!costCenters.list.Items.length">
-        <b>The selected buyer does not have any cost centers.</b>
+        <b ng-if="!costCenters.searching()">The selected buyer does not have any cost centers.</b>
+        <b ng-if="costCenters.searching()"><i class="fa fa-search"></i> No cost centers match your search.</b>
     </div>
     <section class="table-fixed-header" ng-if="costCenters.list.Items.length">
         <div class="table-header-bg"></div>

@@ -33,10 +33,19 @@ function ordercloudSearchCtrl($timeout, $scope, $injector, TrackSearch) {
             searching = $timeout(function() {
                 n == '' ? n = null : angular.noop();
                 TrackSearch.SetTerm(n);
-                Service.List(n)
-                    .then(function (data){
-                        $scope.controlleras.list = data;
-                    });
+                if($scope.servicename === 'Orders') {
+                    Service.List('incoming',n)
+                        .then(function (data){
+                            $scope.controlleras.list = data;
+                        });
+                }
+                else {
+                    Service.List(n)
+                        .then(function (data){
+                            $scope.controlleras.list = data;
+                        });
+                }
+
             }, 300);
         }
     });

@@ -2,8 +2,10 @@
     <h3 class="page-header">
         Approval Rules
     </h3>
+    <ordercloud-search servicename="ApprovalRules" controlleras="approvalRules"></ordercloud-search>
     <div class="well well-lg text-center" ng-if="!approvalRules.list.Items.length">
-        <b>The selected buyer does not have any approval rules.</b>
+        <b ng-if="!approvalRules.searching()">The selected buyer does not have any approval rules.</b>
+        <b ng-if="approvalRules.searching()"><i class="fa fa-search"></i> No approval rules match your search.</b>
     </div>
     <section class="table-fixed-header" ng-if="approvalRules.list.Items.length">
         <div class="table-header-bg"></div>

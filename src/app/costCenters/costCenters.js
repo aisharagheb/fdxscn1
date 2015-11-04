@@ -65,15 +65,13 @@ function CostCentersConfig( $stateProvider ) {
         })
 }
 
-function CostCentersController( $state, CostCenterList ) {
+function CostCentersController( CostCenterList, TrackSearch ) {
     var vm = this;
     vm.list = CostCenterList;
-    vm.goToEdit = function(id) {
-        $state.go('^.costCenterEdit', {'costCenterid': id});
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
     };
-    vm.goToAssignments = function(id) {
-        $state.go('^.costCenterAssign', {'costCenterid': id});
-    };
+
 }
 
 function CostCenterEditController( $exceptionHandler, $state, SelectedCostCenter, CostCenters ) {

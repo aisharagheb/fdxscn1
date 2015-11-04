@@ -92,9 +92,12 @@ function CategoriesConfig( $stateProvider ) {
         });
 }
 
-function CategoriesController( CategoryList ) {
+function CategoriesController( CategoryList, TrackSearch ) {
     var vm = this;
     vm.list = CategoryList;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 }
 
 function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Categories ) {

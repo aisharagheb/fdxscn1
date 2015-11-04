@@ -42,9 +42,12 @@ function ApprovalRulesConfig( $stateProvider ) {
         })
 }
 
-function ApprovalRulesController( ApprovalRuleList ) {
+function ApprovalRulesController( ApprovalRuleList, TrackSearch ) {
     var vm = this;
     vm.list = ApprovalRuleList;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 }
 
 function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApprovalRule, ApprovalRules ) {

@@ -2,8 +2,10 @@
     <h3 class="page-header">
         Categories
     </h3>
+    <ordercloud-search servicename="Categories" controlleras="categories"></ordercloud-search>
     <div class="well well-lg text-center" ng-if="!categories.list.Items.length">
-        <b>The selected buyer does not have any categories.</b>
+        <b ng-if="!categories.searching()">The selected buyer does not have any categories.</b>
+        <b ng-if="categories.searching()"><i class="fa fa-search"></i> No categories match your search.</b>
     </div>
     <section class="table-fixed-header" ng-if="categories.list.Items.length">
         <div class="table-header-bg"></div>
