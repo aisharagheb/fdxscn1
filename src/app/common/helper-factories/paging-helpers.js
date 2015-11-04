@@ -11,6 +11,7 @@ function PagingHelpers($q, $injector, Assignments) {
     };
 
     function setSelected(ListArray, AssignmentsArray, ID_Name) {
+        if (!ListArray || !AssignmentsArray || !ID_Name) return;
         var assigned = Assignments.getAssigned(AssignmentsArray, ID_Name);
         angular.forEach(ListArray, function(item) {
             if (assigned.indexOf(item.ID) > -1) {

@@ -9,8 +9,8 @@ function AssignmentHelpers($q, Underscore, $state) {
         getAssigned: getAssigned,
         //getSelected: getSelected,
         //getUnselected: getUnselected,
-        //getToAssign: getToAssign,
-        //getToDelete: getToDelete,
+        getToAssign: getToAssign,
+        getToDelete: getToDelete,
         saveAssignments: saveAssignments
     };
 

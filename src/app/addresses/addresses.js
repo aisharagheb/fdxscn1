@@ -48,9 +48,9 @@ function AddressesConfig( $stateProvider ) {
             controllerAs: 'addressAssign',
             resolve: {
                 UserGroupList: function(UserGroups) {
-                    return UserGroups.List(null, 1, 20);
+                    return UserGroups.List();
                 },
-                Assignments: function($stateParams, Addresses) {
+                AssignmentsList: function($stateParams, Addresses) {
                     return Addresses.ListAssignments($stateParams.addressid);
                 },
                 SelectedAddress: function($stateParams, $state, Addresses) {
@@ -62,7 +62,7 @@ function AddressesConfig( $stateProvider ) {
         })
 }
 
-function AddressesController( AddressList, $state, TrackSearch ) {
+function AddressesController( AddressList, TrackSearch ) {
 	var vm = this;
 	vm.list = AddressList;
     vm.searching = function() {
@@ -112,102 +112,95 @@ function AddressCreateController($exceptionHandler, $state, Addresses) {
 	};
 }
 
-function AddressAssignController(UserGroupList, Assignments, Addresses, SelectedAddress) {
+function AddressAssignController($q, $state, Assignments, Underscore, AssignmentsList, UserGroupList, Addresses, UserGroups, SelectedAddress) {
     var vm = this;
     vm.list = UserGroupList;
-    vm.assignments = Assignments.Items;
-    vm.address = SelectedAddress;
-    setSelected(Assignments, UserGroupList);
+    vm.AddressAssignments = AssignmentsList;
+    vm.Address = SelectedAddress;
 
-    vm.canSubmit = function(form) {
-        var disabledvalue = false;
-        angular.forEach(vm.list.Items, function(group, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (group.selected && (group.IsShipping != true && group.IsBilling != true)){
-                    disabledvalue = true;
-                }
+    function setSelected() {
+        var assigned = Assignments.getAssigned(vm.AddressAssignments.Items, 'UserGroupID');
+        angular.forEach(vm.list.Items, function(item) {
+            if (assigned.indexOf(item.ID) > -1) {
+                item.selected = true;
+                var assignmentItem = Underscore.where(vm.AddressAssignments.Items, {UserGroupID: item.ID})[0];
+                item.IsShipping = assignmentItem.IsShipping;
+                item.IsBilling = assignmentItem.IsBilling;
             }
         });
-        return disabledvalue;
+    }
+    setSelected();
+
+    function AssignmentFunc() {
+        return Addresses.ListAssignments(vm.Address.ID, null, vm.AddressAssignments.Meta.PageSize);
     }
     
-    vm.saveAssignments = function (form) {
-        angular.forEach(UserGroupList.Items, function (userGroup, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if(userGroup.selected && (!userGroup.IsBilling && !userGroup.IsShipping)) {
-                    form.$valid = false;
-                }
-                if (userGroup.selected && (userGroup.IsBilling || userGroup.IsShipping)) {
-                    var toSave = true;
-                    angular.forEach(Assignments.Items, function (assignedUserGroup) {
-                        if (assignedUserGroup.UserGroupID === userGroup.ID) {
-                            toSave = false;
-                        }
-                    });
-                    if (toSave) {
-                        Addresses.SaveAssignment({UserGroupID: userGroup.ID, AddressID: SelectedAddress.ID, IsShipping: userGroup.IsShipping, IsBilling: userGroup.IsBilling});
-                    }
-                }
-                else {
-                    angular.forEach(Assignments.Items, function (assignedUserGroup, index) {
-                        if (assignedUserGroup.UserGroupID === userGroup.ID) {
-                            Addresses.DeleteAssignment(SelectedAddress.ID, null,  userGroup.ID);
-                            Assignments.Items.splice(index, 1);
-                            userGroup.IsShipping = false;
-                            userGroup.IsBilling = false;
-                            index = index - 1;
-                        }
-                    });
-                }
+    vm.saveAssignments = SaveAssignments;
+    vm.pagingFunction = PagingFunction;
+
+    function PagingFunction() {
+        if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
+            var queue = [];
+            var dfd = $q.defer();
+            queue.push(UserGroups.List(null, vm.list.Meta.Page + 1, vm.list.Meta.PageSize));
+            if (AssignmentFunc !== undefined) {
+                queue.push(AssignmentFunc());
             }
-        });
-        angular.forEach(Assignments.Items, function (assignedUserGroup, index) {
-            if (!assignedUserGroup.UserGroupID) {
-                Addresses.DeleteAssignment(SelectedAddress.ID, null, assignedUserGroup.ID);
-                Assignments.Items.splice(index, 1);
-                assignedUserGroup.IsShipping = false;
-                assignedUserGroup.IsBilling = false;
-                index = index - 1;
-            }
-        });
-        form.$setPristine(true);
-        setSelected(Assignments, UserGroupList);
-    }
-    
-    function setSelected(Assignments, UserGroupList) {
-        angular.forEach(UserGroupList.Items, function (userGroup) {
-            angular.forEach(Assignments.Items, function (assignedUserGroup) {
-                if (assignedUserGroup.UserGroupID === userGroup.ID) {
-                    userGroup.selected = true;
-                    if (assignedUserGroup.IsShipping){
-                        userGroup.IsShipping = true;
-                    }
-                    if (assignedUserGroup.IsBilling){
-                        userGroup.IsBilling = true;
-                    }
+            $q.all(queue).then(function(results) {
+                dfd.resolve();
+                vm.list.Meta = results[0].Meta;
+                vm.list.Items = [].concat(vm.list.Items, results[0].Items);
+                if (results[1]) {
+                    vm.AddressAssignments.Meta = results[1].Meta;
+                    vm.AddressAssignments.Items = [].concat(vm.AddressAssignments.Items, results[1].Items);
+                }
+                if (AssignmentFunc !== undefined) {
+                    setSelected();
                 }
             });
-        });
+            return dfd.promise;
+        }
+        else return null;
     }
-    
-    vm.resetSelections = function(index, form) {
-        var matched = false;
-        angular.forEach(Assignments.Items, function(assignedUserGroup) {
-            if (assignedUserGroup.UserGroupID === UserGroupList.Items[index].ID) {
-                matched = true;
+
+    function SaveAssignments() {
+        var assigned = Underscore.pluck(vm.AddressAssignments.Items, 'UserGroupID');
+        var selected = Underscore.pluck(Underscore.where(vm.list.Items, {selected: true}), 'ID');
+        var toAdd = Assignments.getToAssign(vm.list.Items, vm.AddressAssignments.Items, 'UserGroupID');
+        var toUpdate = Underscore.intersection(selected, assigned);
+        var toDelete = Assignments.getToDelete(vm.list.Items, vm.AddressAssignments.Items, 'UserGroupID');
+        var queue = [];
+        var dfd = $q.defer();
+        angular.forEach(vm.list.Items, function(Item) {
+            if ((Item.IsShipping || Item.IsBilling) && toAdd.indexOf(Item.ID) > -1) {
+                queue.push(Addresses.SaveAssignment({
+                    UserID: null,
+                    UserGroupID: Item.ID,
+                    AddressID: vm.Address.ID,
+                    IsShipping: Item.IsShipping,
+                    IsBilling: Item.IsBilling
+                }));
+            }
+            else if (toUpdate.indexOf(Item.ID) > -1) {
+                var AssignmentObject = Underscore.where(vm.AddressAssignments.Items, {UserGroupID: Item.ID})[0]; //Should be only one
+                if (AssignmentObject.IsShipping !== Item.IsShipping || AssignmentObject.IsBilling !== Item.IsBilling) {
+                    queue.push(Addresses.SaveAssignment({
+                        UserID: null,
+                        UserGroupID: Item.ID,
+                        AddressID: vm.Address.ID,
+                        IsShipping: Item.IsShipping,
+                        IsBilling: Item.IsBilling
+                    }));
+                }
             }
         });
-        if (matched && UserGroupList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-            UserGroupList.Items[index].IsShipping = false;
-            UserGroupList.Items[index].IsBilling = false;
-            setSelected(Assignments, UserGroupList);
-        }
-        else if (!matched && !UserGroupList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-            UserGroupList.Items[index].IsShipping = false;
-            UserGroupList.Items[index].IsBilling = false;
-            setSelected(Assignments, UserGroupList);
-        }
+        angular.forEach(toDelete, function(ItemID) {
+            queue.push(Addresses.DeleteAssignment(vm.Address.ID, null, ItemID));
+        });
+        $q.all(queue).then(function() {
+            dfd.resolve();
+            $state.reload($state.current);
+        });
+        return dfd.promise;
     }
 }
