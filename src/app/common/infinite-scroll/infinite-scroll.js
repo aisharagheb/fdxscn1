@@ -1,4 +1,4 @@
-angular.module('ordercloud-infinite-scroll', []);
+angular.module('ordercloud-infinite-scroll', ['ordercloud-search']);
 angular.module('ordercloud-infinite-scroll')
 
     .directive( 'ordercloudInfiniteScroll', InfiniteScrollDirective )
@@ -52,7 +52,7 @@ function InfiniteScrollController($scope, PagingFunctions) {
     }
 }
 
-function PagingFunctionsFactory($injector, UserGroups) {
+function PagingFunctionsFactory($injector, UserGroups, TrackSearch) {
     var page = 1,
         pageSize = 20,
         nonBuyerSpecific = [
@@ -70,19 +70,19 @@ function PagingFunctionsFactory($injector, UserGroups) {
     return service;
 
     function initPaging() {
-        page = 1;
+        TrackSearch.SetTerm(null);
     }
 
     function componentPaging(component, componentObject) {
         var componentService = $injector.get(component);
-        page += 1;
-        if (page <= componentObject.Meta.TotalPages && componentService) {
+        //page += 1;
+        if (componentObject.Meta.Page + 1 <= componentObject.Meta.TotalPages && componentService) {
             var args = [];
             if (component === 'Orders') {
-                args = ['incoming', null, null, null, page, componentObject.Meta.PageSize];
+                args = ['incoming', TrackSearch.GetTerm(), null, null, componentObject.Meta.Page + 1, componentObject.Meta.PageSize];
             }
             else {
-                args = [ null, page, componentObject.Meta.PageSize];
+                args = [ TrackSearch.GetTerm(), componentObject.Meta.Page + 1, componentObject.Meta.PageSize];
             }
             componentService.List.apply(this, args)
                 .then(function(data) {
