@@ -2,13 +2,12 @@
     <h3 class="page-header">
         Products
     </h3>
-<!--    <div class="row">
-        <h3 class="page-title col-sm-8">
-            Products
-        </h3>
-        <order-cloud-search servicename="Products" controlleras="products"></order-cloud-search>
-    </div>-->
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="Products" controlleras="products"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!products.list.Items.length">
+        <b ng-if="!products.searching()">The selected buyer does not have any products.</b>
+        <b ng-if="products.searching()"><i class="fa fa-search"></i> No products match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="products.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Products" listobject="products.list">
             <table class="table table-hover">

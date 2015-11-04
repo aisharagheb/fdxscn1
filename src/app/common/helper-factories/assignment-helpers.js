@@ -6,7 +6,7 @@ angular.module('ordercloud-assignment-helpers', [])
 
 function AssignmentHelpers($q, Underscore, $state) {
     return {
-        //getAssigned: getAssigned,
+        getAssigned: getAssigned,
         //getSelected: getSelected,
         //getUnselected: getUnselected,
         //getToAssign: getToAssign,
@@ -44,15 +44,15 @@ function AssignmentHelpers($q, Underscore, $state) {
         var queue = [];
         var dfd = $q.defer();
         angular.forEach(toAssign, function(ItemID) {
-            console.log(ItemID);
             queue.push(SaveFunc(ItemID));
         });
         angular.forEach(toDelete, function(ItemID) {
             queue.push(DeleteFunc(ItemID));
         });
         $q.all(queue).then(function() {
-            dfd.resolve();
-            $state.reload($state.current);
+            dfd.resolve(dfd.promise, function() {
+                $state.reload($state.current);
+            });
         });
         return dfd.promise;
     }

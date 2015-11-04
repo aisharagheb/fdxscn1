@@ -2,7 +2,12 @@
     <h3 class="page-header">
         Coupons
     </h3>
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="Coupons" controlleras="coupons"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!coupons.list.Items.length">
+        <b ng-if="!coupons.searching()">The selected buyer does not have any coupons.</b>
+        <b ng-if="coupons.searching()"><i class="fa fa-search"></i> No coupons match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="coupons.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Coupons" listobject="coupons.list">
             <table class="table table-hover">

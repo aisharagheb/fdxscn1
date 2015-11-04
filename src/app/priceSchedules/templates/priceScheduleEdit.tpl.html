@@ -79,23 +79,39 @@
                 <button type="button" class="btn btn-default" ng-disabled="!priceScheduleEdit.price || !priceScheduleEdit.quantity" ng-click="priceScheduleEdit.addPriceBreak()">Add</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-4 col-sm-offset-6">
-                <ul class="list-group">
-                    <li ng-repeat="pricebreak in priceScheduleEdit.priceSchedule.PriceBreaks track by $index" class="list-group-item price-break">
-                        <div class="col-sm-6">
-                            {{pricebreak.Quantity}}
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="col-sm-6">
-                                {{pricebreak.Price * pricebreak.Quantity | currency}}
-                            </div>
-                            <div class="col-sm-3 col-sm-offset-3">
-                                <a class="fa fa-trash text-danger-o" ng-click="priceScheduleEdit.deletePriceBreak(priceScheduleEdit.priceSchedule, $index)"></a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+        <div class="row" ng-if="priceScheduleEdit.priceSchedule.PriceBreaks.length">
+            <div class="col-sm-6 col-sm-offset-6">
+                <section class="table-fixed-header">
+                    <div class="table-header-bg"></div>
+                    <div class="table-container">
+                        <table class="table table-hover">
+                            <colgroup>
+                                <col class="action-column"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                </th>
+                                <th>
+                                    <div>Quantity</div>
+                                </th>
+                                <th>
+                                    <div>Price</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="pricebreak in priceScheduleEdit.priceSchedule.PriceBreaks track by $index">
+                                <td class="text-center">
+                                    <a class="fa fa-trash text-danger" ng-click="priceScheduleEdit.deletePriceBreak(priceScheduleEdit.priceSchedule, $index)"></a>
+                                </td>
+                                <td>{{pricebreak.Quantity}}</td>
+                                <td>{{pricebreak.Price * pricebreak.Quantity | currency}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
         </div>
         <div class="form-group">

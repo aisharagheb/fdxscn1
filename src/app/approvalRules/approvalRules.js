@@ -42,16 +42,21 @@ function ApprovalRulesConfig( $stateProvider ) {
         })
 }
 
-function ApprovalRulesController( ApprovalRuleList ) {
+function ApprovalRulesController( ApprovalRuleList, TrackSearch ) {
     var vm = this;
     vm.list = ApprovalRuleList;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 }
 
-function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApprovalRule, ApprovalRules ) {
+function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApprovalRule, ApprovalRules, BuyerID ) {
     var vm = this,
         approvalRuleID = SelectedApprovalRule.ID;
     vm.approvalRuleID = SelectedApprovalRule.ID;
     vm.approvalRule = SelectedApprovalRule;
+    vm.approvalRule.ApprovingAssignment.BuyerID = BuyerID.Get();
+    vm.approvalRule.SubmittingAssignment.BuyerID = BuyerID.Get();
 
     vm.Submit = function() {
         ApprovalRules.Update(approvalRuleID, vm.approvalRule)
@@ -74,9 +79,15 @@ function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApproval
     }
 }
 
-function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRules) {
+function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRules, BuyerID) {
     var vm = this;
     vm.approvalRule = {};
+    vm.approvalRule.ApprovingAssignment = {
+        BuyerID: BuyerID.Get()
+    }
+    vm.approvalRule.SubmittingAssignment = {
+        BuyerID: BuyerID.Get()
+    }
 
     vm.Submit = function() {
         ApprovalRules.Create(vm.approvalRule)

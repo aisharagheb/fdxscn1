@@ -2,7 +2,12 @@
     <h3 class="page-header">
         Admin Users
     </h3>
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="AdminUsers" controlleras="adminUsers"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!adminUsers.list.Items.length">
+        <b ng-if="!adminUsers.searching()">The selected buyer does not have any admin users.</b>
+        <b ng-if="adminUsers.searching()"><i class="fa fa-search"></i> No admin users match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="adminUsers.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="AdminUsers" listobject="adminUsers.list">
             <table class="table table-hover">

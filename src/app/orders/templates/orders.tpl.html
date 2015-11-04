@@ -2,7 +2,12 @@
     <h3 class="page-header">
         Orders
     </h3>
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="Orders" controlleras="orders"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!orders.list.Items.length">
+        <b ng-if="!orders.searching()">The selected buyer does not have any orders.</b>
+        <b ng-if="orders.searching()"><i class="fa fa-search"></i> No orders match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="orders.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="orders.list">
             <table class="table table-hover">

@@ -68,12 +68,6 @@ function AddressesController( AddressList, $state, TrackSearch ) {
     vm.searching = function() {
         return TrackSearch.GetTerm() ? true : false;
     };
-    vm.goToEdit = function(id) {
-        $state.go('^.addressEdit', {'addressid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.addressAssign', {'addressid': id});
-    };
 }
 
 function AddressEditController( $exceptionHandler, $state, SelectedAddress, Addresses ) {
@@ -118,7 +112,7 @@ function AddressCreateController($exceptionHandler, $state, Addresses) {
 	};
 }
 
-function AddressAssignController(UserGroupList, Assignments, Addresses, SelectedAddress, buyerid) {
+function AddressAssignController(UserGroupList, Assignments, Addresses, SelectedAddress) {
     var vm = this;
     vm.list = UserGroupList;
     vm.assignments = Assignments.Items;

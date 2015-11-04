@@ -94,15 +94,12 @@ function ProductsConfig($stateProvider) {
         })
 }
 
-function ProductsController(ProductList, $state) {
+function ProductsController(ProductList, TrackSearch) {
     var vm = this,
         page = 1;
     vm.list = ProductList;
-    vm.goToEdit = function(id) {
-        $state.go('^.productEdit', {'productid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.productAssign', {'productid': id});
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
     };
 }
 

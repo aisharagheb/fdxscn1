@@ -2,7 +2,12 @@
     <h3 class="page-header">
         Users
     </h3>
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="Users" controlleras="users"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!users.list.Items.length">
+        <b ng-if="!users.searching()">The selected buyer does not have any users.</b>
+        <b ng-if="users.searching()"><i class="fa fa-search"></i> No users match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="users.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Users" listobject="users.list">
             <table class="table table-hover">

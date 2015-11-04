@@ -27,66 +27,106 @@
                 <input id="costInput" type="number" step="any" class="form-control" ng-model="shipmentEdit.shipment.Cost"/>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <h4>
-                    Select Order to View Line Items
-                </h4>
-                <ul class="list-group display-table-line form-group">
-                    <li class="list-group-item">
-                        <p>ID</p>
-                    </li>
-                    <div>
-                        <li class="list-group-item" ng-repeat="order in shipmentEdit.list.Items track by $index" ng-click="shipmentEdit.goToLineItems(order)">
-                            <p>{{order.ID}}</p>
-                        </li>
-                    </div>
-                </ul>
-            </div>
-            <div class=" col-sm-6" ng-hide="!shipmentEdit.OrderSelected">
-                <h4>
-                    Select Line Items
-                </h4>
-                <ul class="list-group display-table-line-ship form-group">
-                    <li class="list-group-item">
-                        <p></p>
-                        <p>ID</p>
-                        <p>Quantity Requested</p>
-                        <p>Quantity To Ship</p>
-                    </li>
-                    <div ordercloud-infinite-scroll servicename="LineItems" listobject="shipmentEdit.listli">
-                        <li class="list-group-item" ng-repeat="li in shipmentEdit.listli.Items track by $index" ng-class="{'list-item-disabled': li.disabled}">
-                            <input ng-disabled="li.disabled" type="checkbox" ng-model="li.addToShipment">
-                            <p>{{li.ID}}</p>
-                            <p>{{li.Quantity}}</p>
-                            <input ng-disabled="li.disabled" type="number" class="form-control" ng-model="li.QuantityShipped"/>
-                        </li>
-                    </div>
-                </ul>
-            </div>
+        <div uib-collapse="shipmentEdit.OrderSelected">
+            <h4>
+                <b>Select Order</b>
+            </h4>
+            <section class="table-fixed-header" ng-if="shipmentEdit.list.Items.length">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="shipmentEdit.list">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>
+                                <div>Order ID</div>
+                            </th>
+                            <th>
+                                <div>Date Shipped</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="order in shipmentEdit.list.Items track by $index" ng-click="shipmentEdit.goToLineItems(order)">
+                            <td>{{order.ID}}</td>
+                            <td>{{order.DateCreated | date}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <h4>
-                    Line Items on this Shipment
-                </h4>
-                <ul class="list-group display-table-line-ship form-group">
-                    <li class="list-group-item">
-                        <p></p>
-                        <p>ID</p>
-                        <p></p>
-                        <p>Quantity Shipped</p>
-                    </li>
-                    <div>
-                        <li class="list-group-item" ng-repeat="li in shipmentEdit.shipment.Items track by $index">
-                            <a class="fa fa-minus-circle text-danger" ng-click="shipmentEdit.deleteLineItem($index)"></a>
-                            <p>{{li.LineItemId}}</p>
-                            <p></p>
-                            <input ng-disabled="li.disabled" type="number" class="form-control lineitem" ng-model="li.QuantityShipped"/>
-                        </li>
-                    </div>
-                </ul>
-            </div>
+        <div uib-collapse="!shipmentEdit.OrderSelected">
+            <h4>
+                <b>Select Line Items</b>
+            </h4>
+            <section class="table-fixed-header" ng-if="shipmentEdit.listli.Items.length">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll servicename="LineItems" listobject="shipmentEdit.listli">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <div>Line Item ID</div>
+                            </th>
+                            <th>
+                                <div>Requested</div>
+                            </th>
+                            <th>
+                                <div>Shipped</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="li in shipmentEdit.listli.Items track by $index" ng-class="{'list-item-disabled': li.disabled}">
+                            <td class="text-center"><input type="checkbox" ng-model="li.addToShipment"></td>
+                            <td>{{li.ID}}</td>
+                            <td>{{li.Quantity}}</td>
+                            <td class="text-center"><input type="number" ng-disabled="li.disabled" class="form-control" ng-model="li.QuantityShipped"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <div ng-hide="!shipmentEdit.shipment.Items.length">
+            <h4>
+                <b>Line Items on this Shipment</b>
+            </h4>
+            <section class="table-fixed-header">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="shipmentEdit.shipment">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <div>Line Item ID</div>
+                            </th>
+                            <th>
+                                <div>Shipped</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="li in shipmentEdit.shipment.Items track by $index">
+                            <td><a class="fa fa-minus-circle text-danger" ng-click="shipmentEdit.deleteLineItem($index)"></a></td>
+                            <td>{{li.LineItemId}}</td>
+                            <td class="text-center"><input type="number" class="form-control" ng-model="li.QuantityShipped"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="ShipmentEditForm.$invalid">Save</button>

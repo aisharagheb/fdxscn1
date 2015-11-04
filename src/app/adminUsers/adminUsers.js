@@ -40,9 +40,12 @@ function AdminUsersConfig( $stateProvider ) {
         })
 }
 
-function AdminUsersController( AdminUsersList ) {
+function AdminUsersController( AdminUsersList, TrackSearch ) {
     var vm = this;
     vm.list = AdminUsersList;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 }
 
 function AdminUserEditController( $exceptionHandler, $state, SelectedAdminUser, AdminUsers ) {

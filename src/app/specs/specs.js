@@ -58,16 +58,9 @@ function SpecsConfig( $stateProvider ) {
         })
 }
 
-function SpecsController( SpecList, $state ) {
+function SpecsController( SpecList ) {
     var vm = this;
     vm.list = SpecList;
-
-    vm.goToEdit = function(id) {
-        $state.go('^.specEdit', {'specid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.specAssign', {'specid': id});
-    };
 }
 
 function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {

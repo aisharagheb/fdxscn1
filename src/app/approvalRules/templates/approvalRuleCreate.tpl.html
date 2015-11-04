@@ -67,26 +67,18 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-sm-4">
-                <label>Apply Rule to these submitters:</label>
-                <input type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.SubmittingAssignment.BuyerID" placeholder="Buyer ID" required/>
+            <div class="form-group col-sm-3">
+                <label for="submittingUserGroup">Apply rule to following submitter(s):</label>
+                <input id="submittingUserGroup" type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.SubmittingAssignment.UserGroupID" placeholder="User Group ID"/>
             </div>
-            <div class="form-group col-sm-4 no-padding">
-                <input type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.SubmittingAssignment.UserGroupID" placeholder="User Group ID"/>
-            </div>
-            <div class="form-group col-sm-4 no-padding">
+            <div class="form-group col-sm-3 no-padding">
                 <input type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.SubmittingAssignment.UserID" placeholder="User ID"/>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-4">
-                <label>Apply Rule to these approvers:</label>
-                <input type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.ApprovingAssignment.BuyerID" placeholder="Buyer ID" required/>
+            <div class="form-group col-sm-3">
+                <label for="approvingUserGroup">Apply rule to the following approver(s):</label>
+                <input id="approvingUserGroup" type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.ApprovingAssignment.UserGroupID" placeholder="User Group ID"/>
             </div>
-            <div class="form-group col-sm-4 no-padding">
-                <input type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.ApprovingAssignment.UserGroupID" placeholder="User Group ID"/>
-            </div>
-            <div class="form-group col-sm-4 no-padding">
+            <div class="form-group col-sm-3 no-padding">
                 <input type="text" class="form-control" ng-model="approvalRuleCreate.approvalRule.ApprovingAssignment.UserID" placeholder="User ID"/>
             </div>
         </div>
