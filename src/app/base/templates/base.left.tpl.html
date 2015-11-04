@@ -6,7 +6,7 @@
             </li>
         </ul>
     </nav>
-    <nav>
+    <nav ng-if="baseLeft.catalogItems.length">
         <h4>Catalog</h4>
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" ng-repeat="item in baseLeft.catalogItems" ui-sref-active="active">
@@ -14,20 +14,9 @@
             </li>
         </ul>
     </nav>
-    <!--    <span style="white-space: normal" id="buyer-dropdown" ng-click="baseLeft.isCollapsed = !baseLeft.isCollapsed">
-		{{baseLeft.buyer.Name}} <i class="fa fa-caret-down"></i>
-	</span>
-	<div ordercloud-infinite-scroll pagingfunction="baseLeft.PagingFunction()" uib-collapse="baseLeft.isCollapsed" class="list-group infinite-scroll-window" role="menu" aria-labelledby="buyer-dropdown">
-		<a ng-repeat="buyer in baseLeft.buyerList.Items" class="list-group-item" ng-click="baseLeft.changeBuyer(buyer)" href>{{buyer.Name}}</a>
-	</div>-->
-    <nav>
+    <nav ng-if="baseLeft.organizationItems.length">
         <h4>Organization</h4>
         <ordercloud-select-buyer></ordercloud-select-buyer>
-        <!--<form name="ActiveBuyerForm">
-            <div class="form-group">
-                <select name="BuyerSelection" class="form-control" ng-model="application.selectedBuyer" ng-options="buyer as buyer.Name for buyer in baseLeft.buyerList.Items"></select>
-            </div>
-        </form>-->
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" ng-repeat="item in baseLeft.organizationItems" ui-sref-active="active">
                 <a href="" ui-sref="{{item.StateRef}}">{{item.Display}}</a>
