@@ -47,7 +47,7 @@ function ApprovalRulesController( ApprovalRuleList ) {
     vm.list = ApprovalRuleList;
 }
 
-function ApprovalRuleEditController( $state, SelectedApprovalRule, ApprovalRules ) {
+function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApprovalRule, ApprovalRules ) {
     var vm = this,
         approvalRuleID = SelectedApprovalRule.ID;
     vm.approvalRuleID = SelectedApprovalRule.ID;
@@ -57,6 +57,9 @@ function ApprovalRuleEditController( $state, SelectedApprovalRule, ApprovalRules
         ApprovalRules.Update(approvalRuleID, vm.approvalRule)
             .then(function() {
                 $state.go('^.approvalRules')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     };
 
@@ -64,11 +67,14 @@ function ApprovalRuleEditController( $state, SelectedApprovalRule, ApprovalRules
         ApprovalRules.Delete(SelectedApprovalRule.ID)
             .then(function() {
                 $state.go('^.approvalRules')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }
 
-function ApprovalRuleCreateController($state, ApprovalRules) {
+function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRules) {
     var vm = this;
     vm.approvalRule = {};
 
@@ -76,6 +82,9 @@ function ApprovalRuleCreateController($state, ApprovalRules) {
         ApprovalRules.Create(vm.approvalRule)
             .then(function() {
                 $state.go('^.approvalRules')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }

@@ -104,7 +104,7 @@ function CategoriesController( CategoryList, $state ) {
     };
 }
 
-function CategoryEditController( $state, SelectedCategory, Categories ) {
+function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Categories ) {
     var vm = this,
         categoryID = SelectedCategory.ID;
     vm.categoryName = SelectedCategory.Name;
@@ -113,19 +113,25 @@ function CategoryEditController( $state, SelectedCategory, Categories ) {
     vm.Submit = function() {
         Categories.Update(categoryID, vm.category)
             .then(function() {
-            $state.go('^.categories')
-        });
+                $state.go('^.categories')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
     };
 
     vm.Delete = function() {
         Categories.Delete(SelectedCategory.ID)
             .then(function() {
                 $state.go('^.categories')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }
 
-function CategoryCreateController($state, Categories) {
+function CategoryCreateController($exceptionHandler,$state, Categories) {
     var vm = this;
     vm.category = {};
 
@@ -133,6 +139,9 @@ function CategoryCreateController($state, Categories) {
         Categories.Create(vm.category)
             .then(function() {
                 $state.go('^.categories')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }

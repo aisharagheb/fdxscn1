@@ -59,7 +59,7 @@ function UserGroupsConfig( $stateProvider ) {
         })
 }
 
-function UserGroupsController( UserGroupList, $state) {
+function UserGroupsController( UserGroupList, $state ) {
     var vm = this;
     vm.list = UserGroupList;
 
@@ -71,7 +71,7 @@ function UserGroupsController( UserGroupList, $state) {
     };
 }
 
-function UserGroupEditController( $state, SelectedUserGroup, UserGroups ) {
+function UserGroupEditController( $exceptionHandler, $state, SelectedUserGroup, UserGroups ) {
     var vm = this,
         groupID = SelectedUserGroup.ID;
     vm.userGroupName = SelectedUserGroup.Name;
@@ -81,6 +81,9 @@ function UserGroupEditController( $state, SelectedUserGroup, UserGroups ) {
         UserGroups.Update(groupID, vm.userGroup)
             .then(function() {
                 $state.go('^.groups')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -88,22 +91,28 @@ function UserGroupEditController( $state, SelectedUserGroup, UserGroups ) {
         UserGroups.Delete(SelectedUserGroup.ID)
             .then(function() {
                 $state.go('^.groups')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function UserGroupCreateController($state, UserGroups) {
+function UserGroupCreateController( $exceptionHandler, $state, UserGroups ) {
     var vm = this;
 
     vm.Submit = function() {
         UserGroups.Create(vm.userGroup)
             .then(function() {
                 $state.go('^.groups')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function UserGroupAssignController( UserList, Assignments, SelectedUserGroup, UserGroups) {
+function UserGroupAssignController( UserList, Assignments, SelectedUserGroup, UserGroups ) {
     var vm = this;
     vm.list = UserList;
     vm.assignments = Assignments.Items;

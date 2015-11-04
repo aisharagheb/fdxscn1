@@ -73,7 +73,7 @@ function CreditCardsController( CreditCardList, $state ) {
     };
 }
 
-function CreditCardEditController( $state, SelectedCreditCard, CreditCards ) {
+function CreditCardEditController( $exceptionHandler, $state, SelectedCreditCard, CreditCards ) {
     var vm = this,
         creditcardid = SelectedCreditCard.ID;
     vm.creditCardName = SelectedCreditCard.ID;
@@ -91,6 +91,9 @@ function CreditCardEditController( $state, SelectedCreditCard, CreditCards ) {
         CreditCards.Update(creditcardid, vm.creditCard)
             .then(function() {
                 $state.go('^.creditCards')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     };
 
@@ -98,11 +101,14 @@ function CreditCardEditController( $state, SelectedCreditCard, CreditCards ) {
         CreditCards.Delete(SelectedCreditCard.ID)
             .then(function() {
                 $state.go('^.creditCards')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }
 
-function CreditCardCreateController($state, CreditCards) {
+function CreditCardCreateController( $exceptionHandler, $state, CreditCards) {
     var vm = this;
     vm.creditCard = {};
     //TODO: stop faking the token
@@ -115,6 +121,9 @@ function CreditCardCreateController($state, CreditCards) {
         CreditCards.Create(vm.creditCard)
             .then(function() {
                 $state.go('^.creditCards')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }

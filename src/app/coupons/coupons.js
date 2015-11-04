@@ -117,7 +117,7 @@ function CouponsController( $state, CouponList ) {
     };
 }
 
-function CouponEditController( $state, SelectedCoupon, Coupons ) {
+function CouponEditController( $exceptionHandler, $state, SelectedCoupon, Coupons ) {
     var vm = this,
         couponid = SelectedCoupon.ID;
     vm.couponName = SelectedCoupon.Label;
@@ -127,6 +127,9 @@ function CouponEditController( $state, SelectedCoupon, Coupons ) {
         Coupons.Update(couponid, vm.coupon)
             .then(function() {
                 $state.go('^.coupons')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     };
 
@@ -134,11 +137,14 @@ function CouponEditController( $state, SelectedCoupon, Coupons ) {
         Coupons.Delete(SelectedCoupon.ID)
             .then(function() {
                 $state.go('^.coupons')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }
 
-function CouponCreateController($state, Coupons) {
+function CouponCreateController( $exceptionHandler, $state, Coupons) {
     var vm = this;
     vm.coupon = {};
 
@@ -156,6 +162,9 @@ function CouponCreateController($state, Coupons) {
         Coupons.Create(vm.coupon)
             .then(function() {
                 $state.go('^.coupons')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }

@@ -40,7 +40,7 @@ function OrdersController( OrderList ) {
     vm.list = OrderList;
 }
 
-function OrderEditController( $state, SelectedOrder, LineItemList, Orders, LineItems, $scope ) {
+function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItemList, Orders, LineItems, $scope ) {
     var vm = this,
         orderid = SelectedOrder.ID;
     vm.order = SelectedOrder;
@@ -51,6 +51,9 @@ function OrderEditController( $state, SelectedOrder, LineItemList, Orders, LineI
         LineItems.Delete(orderid, lineitem.ID)
             .then(function() {
                 $state.go($state.current, {}, {reload: true});
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -68,6 +71,9 @@ function OrderEditController( $state, SelectedOrder, LineItemList, Orders, LineI
         Orders.Update(orderid, vm.order)
             .then(function() {
                 $state.go('^.orders');
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -75,6 +81,9 @@ function OrderEditController( $state, SelectedOrder, LineItemList, Orders, LineI
         Orders.Delete(orderid)
             .then(function() {
                 $state.go('^.orders');
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }

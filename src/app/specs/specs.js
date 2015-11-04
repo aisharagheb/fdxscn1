@@ -70,19 +70,18 @@ function SpecsController( SpecList, $state ) {
     };
 }
 
-function SpecEditController( $state, SelectedSpec, Specs ) {
+function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     var vm = this,
         specid = angular.copy(SelectedSpec.ID);
     vm.specName = angular.copy(SelectedSpec.Name);
     vm.spec = SelectedSpec;
+
     if(vm.spec.MarkupType != null) {
         vm.associateMU = true;
     }
     if(vm.spec.ControlType == 'Selection') {
         vm.spec.IsRadioButtons = vm.spec.IsRadioButtons.toString();
     }
-
-
 
     vm.addSelectionValue = function() {
         vm.spec.Options.push({Value: vm.selectionValue, Markup: vm.selectionMarkup, ListOrder: vm.selectionListOrder})
@@ -98,6 +97,9 @@ function SpecEditController( $state, SelectedSpec, Specs ) {
         Specs.Update(specid, vm.spec)
             .then(function() {
                 $state.go('^.specs')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -105,15 +107,17 @@ function SpecEditController( $state, SelectedSpec, Specs ) {
         Specs.Delete(specid)
             .then(function() {
                 $state.go('^.specs')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function SpecCreateController($state, Specs) {
+function SpecCreateController( $exceptionHandler, $state, Specs) {
     var vm = this;
     vm.spec = {};
     vm.spec.Options = new Array;
-
 
     vm.addSelectionValue = function() {
         vm.spec.Options.push({Value: vm.selectionValue, Markup: vm.selectionMarkup, ListOrder: vm.selectionListOrder})
@@ -129,6 +133,9 @@ function SpecCreateController($state, Specs) {
         Specs.Create(vm.spec)
             .then(function() {
                 $state.go('^.specs')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }

@@ -74,7 +74,7 @@ function AddressesController( AddressList, $state ) {
     };
 }
 
-function AddressEditController( $state, SelectedAddress, Addresses ) {
+function AddressEditController( $exceptionHandler, $state, SelectedAddress, Addresses ) {
 	var vm = this,
         addressID = SelectedAddress.ID;
 	vm.addressName = SelectedAddress.AddressName;
@@ -84,18 +84,24 @@ function AddressEditController( $state, SelectedAddress, Addresses ) {
 		Addresses.Update(addressID, vm.address)
 			.then(function() {
 				$state.go('^.addresses');
-			});
+			})
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
 	};
 
 	vm.Delete = function() {
 		Addresses.Delete(SelectedAddress.ID, false)
 			.then(function() {
 				$state.go('^.addresses')
-			});
+			})
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
 	};
 }
 
-function AddressCreateController($state, Addresses) {
+function AddressCreateController($exceptionHandler, $state, Addresses) {
 	var vm = this;
 	vm.address = {};
 
@@ -103,7 +109,10 @@ function AddressCreateController($state, Addresses) {
 		Addresses.Create(vm.address)
 			.then(function() {
 				$state.go('^.addresses')
-			});
+			})
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
 	};
 }
 

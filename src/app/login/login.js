@@ -76,12 +76,10 @@ function LoginController( $state, $stateParams, $exceptionHandler, LoginService,
 		vm.form = form;
 	};
 
-	vm.submit = function( ) {
+	vm.submit = function() {
 		Credentials.Get( vm.credentials ).then(
 			function() {
 				$state.go( 'base.home' );
-			}).catch(function(ex) {
-				$exceptionHandler(ex);
 			});
 	};
 

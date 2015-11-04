@@ -45,7 +45,7 @@ function PriceSchedulesController( PriceScheduleList ) {
     vm.list = PriceScheduleList;
 }
 
-function PriceScheduleEditController( $state, SelectedPriceSchedule, PriceSchedules, PriceBreak ) {
+function PriceScheduleEditController( $exceptionHandler, $state, SelectedPriceSchedule, PriceSchedules, PriceBreak ) {
     var vm = this,
         priceScheduleid = angular.copy(SelectedPriceSchedule.ID);
     vm.priceScheduleName = angular.copy(SelectedPriceSchedule.Name);
@@ -55,7 +55,7 @@ function PriceScheduleEditController( $state, SelectedPriceSchedule, PriceSchedu
         PriceBreak.addPriceBreak(vm.priceSchedule, vm.price, vm.quantity);
         vm.quantity = null;
         vm.price = null;
-    }
+    };
 
     vm.deletePriceBreak = PriceBreak.deletePriceBreak;
 
@@ -65,6 +65,9 @@ function PriceScheduleEditController( $state, SelectedPriceSchedule, PriceSchedu
         PriceSchedules.Update(priceScheduleid, vm.priceSchedule)
             .then(function() {
                 $state.go('^.priceSchedules')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -72,11 +75,14 @@ function PriceScheduleEditController( $state, SelectedPriceSchedule, PriceSchedu
         PriceSchedules.Delete(priceScheduleid)
             .then(function() {
                 $state.go('^.priceSchedules')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function PriceScheduleCreateController( $state, PriceSchedules, PriceBreak) {
+function PriceScheduleCreateController( $exceptionHandler, $state, PriceSchedules, PriceBreak) {
     var vm = this;
     vm.priceSchedule = {};
     vm.priceSchedule.RestrictedQuantity = false;
@@ -96,6 +102,9 @@ function PriceScheduleCreateController( $state, PriceSchedules, PriceBreak) {
         PriceSchedules.Create(vm.priceSchedule)
             .then(function() {
                 $state.go('^.priceSchedules')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
