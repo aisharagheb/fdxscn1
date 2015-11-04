@@ -39,7 +39,7 @@ function SelectBuyerController($state, Buyers, BuyerID) {
     vm.PagingFunction = function() {
         page += 1;
         if (page <= vm.BuyerList.Meta.TotalPages) {
-            Buyers.List(null, page)
+            Buyers.List(null, page, vm.BuyerList.Meta.PageSize)
                 .then(function(data) {
                     vm.BuyerList.Meta = data.Meta;
                     vm.BuyerList.Items = [].concat(vm.BuyerList.Items, data.Items);
