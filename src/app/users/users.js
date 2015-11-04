@@ -45,7 +45,7 @@ function UsersController( UserList ) {
     vm.list = UserList;
 }
 
-function UserEditController(  $state, SelectedUser, Users ) {
+function UserEditController( $exceptionHandler, $state, SelectedUser, Users ) {
     var vm = this,
         userid = SelectedUser.ID;
     vm.userName = SelectedUser.Username;
@@ -60,6 +60,9 @@ function UserEditController(  $state, SelectedUser, Users ) {
         Users.Update(userid, vm.user)
             .then(function() {
                 $state.go('^.users')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -67,11 +70,14 @@ function UserEditController(  $state, SelectedUser, Users ) {
         Users.Delete(userid)
             .then(function() {
                 $state.go('^.users')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function UserCreateController( $state, Users) {
+function UserCreateController( $exceptionHandler, $state, Users ) {
     var vm = this;
     vm.user = {Email:"", Password:""};
     vm.Submit = function() {
@@ -80,6 +86,9 @@ function UserCreateController( $state, Users) {
         Users.Create( vm.user)
             .then(function() {
                 $state.go('^.users')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }

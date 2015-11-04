@@ -62,13 +62,12 @@ function SpendingAccountsConfig( $stateProvider ) {
         })
 }
 
-function SpendingAccountsController( $state, SpendingAccountList, SpendingAccounts ) {
-    var vm = this,
-        page = 1;
+function SpendingAccountsController( SpendingAccountList ) {
+    var vm = this;
     vm.list = SpendingAccountList;
 }
 
-function SpendingAccountEditController( $state, SelectedSpendingAccount, SpendingAccounts ) {
+function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpendingAccount, SpendingAccounts ) {
     var vm = this,
         spendingaccountid = SelectedSpendingAccount.ID;
     vm.spendingAccountName = SelectedSpendingAccount.Name;
@@ -78,6 +77,9 @@ function SpendingAccountEditController( $state, SelectedSpendingAccount, Spendin
         SpendingAccounts.Update(spendingaccountid, vm.spendingAccount)
             .then(function() {
                 $state.go('^.spendingAccounts')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -85,11 +87,14 @@ function SpendingAccountEditController( $state, SelectedSpendingAccount, Spendin
         SpendingAccounts.Delete(spendingaccountid)
             .then(function() {
                 $state.go('^.spendingAccounts')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function SpendingAccountCreateController($state, SpendingAccounts) {
+function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAccounts ) {
     var vm = this;
     vm.spendingAccount = {};
 
@@ -97,11 +102,14 @@ function SpendingAccountCreateController($state, SpendingAccounts) {
         SpendingAccounts.Create(vm.spendingAccount)
             .then(function() {
                 $state.go('^.spendingAccounts')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function SpendingAccountAssignController($scope, Buyer, UserGroups, UserGroupList, AssignedUserGroups, SelectedSpendingAccount, SpendingAccounts) {
+function SpendingAccountAssignController( $scope, Buyer, UserGroups, UserGroupList, AssignedUserGroups, SelectedSpendingAccount, SpendingAccounts ) {
     var vm = this,
         page = 1;
     vm.buyer = Buyer;
@@ -209,22 +217,3 @@ function SpendingAccountAssignController($scope, Buyer, UserGroups, UserGroupLis
         }
     }
 }
-
-//function InfiniteScrollDirective() {
-//    return {
-//        restrict: 'A',
-//        scope: {
-//            pagingfunction: '&',
-//            threshold: '@'
-//        },
-//        link: function(scope, element, attrs) {
-//            var threshold = scope.threshold || 0;
-//            var ele = element[0];
-//            element.bind('scroll', function () {
-//                if (ele.scrollTop + ele.offsetHeight + threshold >= ele.scrollHeight) {
-//                    scope.pagingfunction();
-//                }
-//            });
-//        }
-//    }
-//}
