@@ -92,16 +92,9 @@ function CategoriesConfig( $stateProvider ) {
         });
 }
 
-function CategoriesController( CategoryList, $state ) {
+function CategoriesController( CategoryList ) {
     var vm = this;
     vm.list = CategoryList;
-
-    vm.goToEdit = function(id) {
-        $state.go('^.categoryEdit', {'categoryid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.categoryAssign', {'categoryid': id});
-    };
 }
 
 function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Categories ) {
@@ -147,136 +140,84 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
 }
 
 function CategoryTreeController() {
-    var vm = this;
+    //var vm = this;
 }
 
-function CategoryAssignController(UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
+function CategoryAssignController($q, UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
     var vm = this;
     vm.Category = SelectedCategory;
     vm.list = UserGroupList;
     vm.AssignedUserGroups = AssignedUserGroups;
     vm.saveAssignments = SaveAssignment;
-    vm.resetSelections = ResetSelections;
 
-    function SetSelected() {
-        angular.forEach(vm.list.Items, function(group) {
-            angular.forEach(vm.AssignedUserGroups.Items, function(assignment) {
-                if (group.ID === assignment.UserGroupID) {
-                    group.selected = true;
-                }
-            });
+    function SaveAssignment() {
+        var assigned = Underscore.pluck(vm.AssignedUserGroups.Items, 'UserGroupID');
+        var selected = Underscore.pluck(Underscore.where(vm.list.Items, {selected: true}), 'ID');
+        var unselected = Underscore.pluck(Underscore.filter(vm.list.Items, function(item) {
+            return !item.selected;
+        }), 'ID');
+        var toAssign = Underscore.difference(selected, assigned);
+        var toDelete = Underscore.intersection(unselected, assigned);
+        var queue = [];
+        var dfd = $q.defer();
+        angular.forEach(toAssign, function(UserGroupID) {
+            queue.push(Categories.SaveAssignment({
+                UserGroupID:UserGroupID,
+                CategoryID:vm.Category.ID
+            }));
         });
-    }
-    SetSelected();
-
-    function SaveAssignment(form) {
-        var assignmentObject = {};
-        angular.forEach(vm.list.Items, function(group, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (group.selected) {
-                    assignmentObject = {UserID: null, UserGroupID: group.ID, CategoryID: vm.Category.ID};
-                    Categories.SaveAssignment(assignmentObject);
-                    vm.AssignedUserGroups.Items.push(assignmentObject);
-                }
-                else {
-                    angular.forEach(vm.AssignedUserGroups.Items, function(assignment, index) {
-                        if (assignment.UserGroupID === group.ID) {
-                            Categories.DeleteAssignment(vm.Category.ID, null, group.ID);
-                            vm.AssignedUserGroups.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    });
-                }
-            }
+        angular.forEach(toDelete, function(UserGroupID) {
+            queue.push(Categories.DeleteAssignment(vm.Category.ID, null, UserGroupID));
         });
-        form.$setPristine(true);
-        SetSelected();
-    }
-
-    function ResetSelections(form, index) {
-        var matched = false;
-        angular.forEach(vm.AssignedUserGroups.Items, function(assignment) {
-            if (assignment.UserGroupID === vm.list.Items[index].ID) {
-                matched = true
-            }
+        $q.all(queue).then(function() {
+            dfd.resolve();
+            $state.reload($state.current)
         });
-        if (matched && vm.list.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !vm.list.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
+        return dfd.promise;
     }
 }
 
-function CategoryAssignProductController(ProductList, ProductAssignments, SelectedCategory, Categories, Products) {
+function CategoryAssignProductController(Underscore, Assignments, ProductList, ProductAssignments, SelectedCategory, Categories, Products) {
     var vm = this,
         page = 1;
     vm.Category = SelectedCategory;
     vm.list = ProductList;
     vm.ProductAssignments = ProductAssignments;
     vm.SaveAssignment = SaveAssignment;
-    vm.ResetSelection = ResetAssignment;
     vm.PagingFunction = PagingFunction;
 
     function SetSelected() {
-        angular.forEach(vm.list.Items, function(product) {
-            angular.forEach(vm.ProductAssignments.Items, function(assignment) {
-                if (product.ID === assignment.ProductID) {
-                    product.selected = true;
-                }
-            });
+        var assigned = Underscore.pluck(vm.ProductAssignments.Items, 'ProductID');
+        angular.forEach(vm.list.Items, function(item) {
+            if (assigned.indexOf(item.ID) > -1) {
+                item.selected = true;
+            }
         });
     }
     SetSelected();
 
-    function SaveAssignment(form) {
-        var assignmentObject = {};
-        angular.forEach(vm.list.Items, function(product, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (product.selected) {
-                    assignmentObject = {CategoryID: vm.Category.ID, ProductID: product.ID, ListOrder: null};
-                    Categories.SaveProductAssignments(assignmentObject);
-                    vm.ProductAssignments.Items.push(assignmentObject);
-                }
-                else {
-                    angular.forEach(vm.ProductAssignments.Items, function(assignment, index) {
-                        if (assignment.ProductID === product.ID) {
-                            Categories.DeleteProductAssignments(vm.Category.ID, product.ID);
-                            vm.ProductAssignments.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    });
-                }
-            }
+    function SaveFunc(ItemID) {
+        return Categories.SaveProductAssignments({
+            CategoryID: vm.Category.ID,
+            ProductID: ItemID
         });
-        form.$setPristine(true);
     }
-
-    function ResetAssignment(form, index) {
-        var matched = false;
-        angular.forEach(vm.ProductAssignments.Items, function(assignment) {
-            if (assignment.ProductID === vm.list.Items[index].ID) {
-                matched = true
-            }
-        });
-        if (matched && vm.list.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !vm.list.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
+    function DeleteFunc(ItemID) {
+        return Categories.DeleteProductAssignments(vm.Category.ID, ItemID);
+    }
+    function SaveAssignment() {
+        return Assignments.saveAssignments(vm.list.Items, vm.ProductAssignments.Items, SaveFunc, DeleteFunc, 'ProductID');
     }
 
     function PagingFunction() {
         page += 1;
         if (page <= vm.list.Meta.TotalPages) {
-            Products.List(null, page)
+            Products.List(null, page, vm.list.Meta.PageSize)
                 .then(function(data) {
                     vm.list.Meta = data.Meta;
                     vm.list.Items = [].concat(vm.list.Items, data.Items);
                     if (page <= vm.ProductAssignments.Meta.TotalPages) {
-                        Categories.ListProductAssignments(vm.Category.ID, null, page)
+                        Categories.ListProductAssignments(vm.Category.ID, null, vm.ProductAssignments.Meta.PageSize)
                             .then(function(data) {
                                 vm.ProductAssignments.Meta = data.Meta;
                                 vm.ProductAssignments.List = [].concat(vm.ProductAssignments.Items, data.Items);

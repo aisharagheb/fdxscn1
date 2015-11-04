@@ -10,7 +10,8 @@ angular.module( 'orderCloud', [
 	'toastr',
     'ordercloud-infinite-scroll',
 	'ordercloud-buyer-select',
-    'ordercloud-search'
+    'ordercloud-search',
+    'ordercloud-assignment-helpers'
 ])
 
 	.run( SetBuyerID )

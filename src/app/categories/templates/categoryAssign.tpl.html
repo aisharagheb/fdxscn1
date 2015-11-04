@@ -8,7 +8,7 @@
     </div>
     <section class="table-fixed-header" ng-if="categoryAssign.list.Items.length">
         <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" listobject="categoryAssign.list" ng-form="assignmentsTable" disable-dynamic-validation>
+        <div class="table-container" ordercloud-infinite-scroll servicename="Categories" usergrouplist="categoryAssign.list" listobject="categoryAssign.AssignedUserGroups" selectedid="CategoryID" disable-dynamic-validation>
             <table class="table table-hover">
                 <colgroup>
                     <col class="action-column"/>
@@ -26,9 +26,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="group in categoryAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <tr ng-repeat="group in categoryAssign.list.Items track by $index">
                     <td class="text-center">
-                        <input name="{{'assignCheckbox' + $index}}"  type="checkbox" ng-model="group.selected">
+                        <input name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="group.selected">
                     </td>
                     <td>{{group.ID}}</td>
                     <td>{{group.Name}}</td>
@@ -39,7 +39,7 @@
     </section>
     <div class="form-group">
         <button type="button" ui-sref="^.categories" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" ng-click="categoryAssign.saveAssignments(assignmentsTable)" class="btn btn-primary">Update Category Assignments</button>
+        <button type="button" ng-click="categoryAssign.saveAssignments()" class="btn btn-primary">Update Category Assignments</button>
         <button type="button" ui-sref="^.categoryAssignProduct({categoryid: categoryAssign.Category.ID})" class="btn btn-default">Assign Products</button>
     </div>
 </article>
