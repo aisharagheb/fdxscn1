@@ -1,7 +1,10 @@
 <article class="container-fluid">
-    <h3 class="page-header">
-        Addresses
-    </h3>
+    <div class="row">
+        <h3 class="page-header col-sm-8">
+            Addresses
+        </h3>
+        <ordercloud-search servicename="Addresses" controlleras="addresses"></ordercloud-search>
+    </div>
     <div class="well well-lg text-center" ng-if="!addresses.list.Items.length">
         <b>The selected buyer does not have any addresses.</b>
     </div>

@@ -1,10 +1,11 @@
-angular.module( 'orderCloud' )
+angular.module('ordercloud-search', []);
+angular.module('ordercloud-search')
 
-    .directive( 'orderCloudSearch', orderCloudSearch)
-    .controller( 'orderCloudSearchCtrl', orderCloudSearchCtrl)
+    .directive( 'ordercloudSearch', ordercloudSearch)
+    .controller( 'ordercloudSearchCtrl', ordercloudSearchCtrl)
 ;
 
-function orderCloudSearch () {
+function ordercloudSearch () {
     return {
         scope: {
             servicename: "@",
@@ -12,13 +13,13 @@ function orderCloudSearch () {
         },
         restrict: 'E',
         templateUrl: 'common/search/templates/search.tpl.html',
-        controller: 'orderCloudSearchCtrl',
+        controller: 'ordercloudSearchCtrl',
         controllerAs: 'ocSearch',
         replace: true
     }
 }
 
-function orderCloudSearchCtrl($scope, $injector, $state) {
+function ordercloudSearchCtrl($scope, $injector, $state) {
     var Service = $injector.get($scope.servicename);
     $scope.SearchView = false;
     $scope.getSearchResults = function(searchTerm){
