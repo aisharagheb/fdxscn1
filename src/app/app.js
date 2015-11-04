@@ -11,7 +11,8 @@ angular.module( 'orderCloud', [
     'ordercloud-infinite-scroll',
 	'ordercloud-buyer-select',
     'ordercloud-search',
-    'ordercloud-assignment-helpers'
+    'ordercloud-assignment-helpers',
+    'ordercloud-paging-helpers'
 ])
 
 	.run( SetBuyerID )
