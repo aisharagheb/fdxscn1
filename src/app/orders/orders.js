@@ -35,9 +35,12 @@ function OrdersConfig( $stateProvider ) {
         });
 }
 
-function OrdersController( OrderList ) {
+function OrdersController( OrderList, TrackSearch ) {
     var vm = this;
     vm.list = OrderList;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 }
 
 function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItemList, Orders, LineItems, $scope ) {

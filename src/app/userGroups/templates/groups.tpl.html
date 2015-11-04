@@ -2,7 +2,12 @@
     <h3 class="page-header">
         User Groups
     </h3>
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="UserGroups" controlleras="userGroups"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!userGroups.list.Items.length">
+        <b ng-if="!userGroups.searching()">The selected buyer does not have any user groups.</b>
+        <b ng-if="userGroups.searching()"><i class="fa fa-search"></i> No user groups match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="userGroups.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" listobject="userGroups.list">
             <table class="table table-hover">

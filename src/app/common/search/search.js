@@ -34,7 +34,7 @@ function ordercloudSearchCtrl($timeout, $scope, $injector, TrackSearch) {
                 n == '' ? n = null : angular.noop();
                 TrackSearch.SetTerm(n);
                 if($scope.servicename === 'Orders') {
-                    Service.List('incoming',n)
+                    Service.List('incoming',null, null, n)
                         .then(function (data){
                             $scope.controlleras.list = data;
                         });

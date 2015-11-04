@@ -48,16 +48,9 @@ function ShipmentsConfig( $stateProvider ) {
         })
 }
 
-function ShipmentsController( ShipmentList, $state ) {
+function ShipmentsController( ShipmentList ) {
     var vm = this;
     vm.list = ShipmentList;
-
-    vm.goToEdit = function(id) {
-        $state.go('^.shipmentEdit', {'shipmentid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.shipmentAssign', {'shipmentid': id});
-    };
 }
 
 function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Shipments, OrderList, LineItems ) {

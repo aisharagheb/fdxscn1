@@ -61,16 +61,9 @@ function CreditCardsConfig( $stateProvider ) {
         })
 }
 
-function CreditCardsController( CreditCardList, $state ) {
+function CreditCardsController( CreditCardList ) {
     var vm = this;
     vm.list = CreditCardList;
-
-    vm.goToEdit = function(id) {
-        $state.go('^.creditCardEdit', {'creditCardid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.creditCardAssign', {'creditCardid': id});
-    };
 }
 
 function CreditCardEditController( $exceptionHandler, $state, SelectedCreditCard, CreditCards ) {

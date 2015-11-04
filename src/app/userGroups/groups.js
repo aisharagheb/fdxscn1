@@ -59,15 +59,11 @@ function UserGroupsConfig( $stateProvider ) {
         })
 }
 
-function UserGroupsController( UserGroupList, $state ) {
+function UserGroupsController( UserGroupList, TrackSearch ) {
     var vm = this;
     vm.list = UserGroupList;
-
-    vm.goToEdit = function(id) {
-        $state.go('^.groupEdit', {'userGroupid': id});
-    };
-    vm.goToAssignments = function(id) {
-        $state.go('^.groupAssign', {'userGroupid': id});
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
     };
 }
 
