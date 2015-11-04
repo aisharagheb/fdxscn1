@@ -60,7 +60,7 @@ function ShipmentsController( ShipmentList, $state ) {
     };
 }
 
-function ShipmentEditController( $state, SelectedShipment, Shipments, OrderList, LineItems ) {
+function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Shipments, OrderList, LineItems ) {
     var vm = this,
         shipmentid = SelectedShipment.ID;
     vm.ShipmentID = SelectedShipment.ID;
@@ -104,6 +104,9 @@ function ShipmentEditController( $state, SelectedShipment, Shipments, OrderList,
         Shipments.Update(shipmentid, vm.shipment)
             .then(function() {
                 $state.go('^.shipments');
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -111,11 +114,14 @@ function ShipmentEditController( $state, SelectedShipment, Shipments, OrderList,
         Shipments.Delete(shipmentid, false)
             .then(function() {
                 $state.go('^.shipments')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 }
 
-function ShipmentCreateController($state, Shipments, OrderList, LineItems) {
+function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderList, LineItems) {
     var vm = this;
     vm.shipment = {};
     vm.list = OrderList;
@@ -127,9 +133,12 @@ function ShipmentCreateController($state, Shipments, OrderList, LineItems) {
         LineItems.List(order.ID, 1, 20)
             .then(function(data){
                 vm.listli = data;
+                vm.OrderSelected = true;
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
-        vm.OrderSelected = true;
-    }
+    };
 
     vm.Submit = function() {
         angular.forEach(vm.listli.Items, function(li) {
@@ -140,6 +149,9 @@ function ShipmentCreateController($state, Shipments, OrderList, LineItems) {
         Shipments.Create(vm.shipment)
             .then(function() {
                 $state.go('^.shipments')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 }

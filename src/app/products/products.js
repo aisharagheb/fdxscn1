@@ -106,7 +106,7 @@ function ProductsController(ProductList, $state) {
     };
 }
 
-function ProductEditController($state, SelectedProduct, Products) {
+function ProductEditController($exceptionHandler, $state, SelectedProduct, Products) {
     var vm = this,
         productid = angular.copy(SelectedProduct.ID);
     vm.productName = angular.copy(SelectedProduct.Name);
@@ -116,6 +116,9 @@ function ProductEditController($state, SelectedProduct, Products) {
         Products.Update(productid, vm.product)
             .then(function () {
                 $state.go('^.products')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     };
 
@@ -123,11 +126,14 @@ function ProductEditController($state, SelectedProduct, Products) {
         Products.Delete(productid)
             .then(function () {
                 $state.go('^.products')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function ProductCreateController($state, Products) {
+function ProductCreateController($exceptionHandler, $state, Products) {
     var vm = this;
     vm.product = {};
 
@@ -135,20 +141,27 @@ function ProductCreateController($state, Products) {
         Products.Create(vm.product)
             .then(function () {
                 $state.go('^.products')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
             });
     }
 }
 
-function ProductAssignmentsController($stateParams, $state, SelectedProduct, Assignments, Products) {
+function ProductAssignmentsController($exceptionHandler, $stateParams, $state, SelectedProduct, Assignments, Products) {
     var vm = this;
     vm.list = Assignments.Items;
     vm.productID = $stateParams.productid;
     vm.productName = angular.copy(SelectedProduct.Name);
 
     vm.delete = function(scope) {
-        Products.DeleteAssignment($stateParams.productid, null, scope.assignment.UserGroupID).then(function() {
-            $state.reload();
-        })
+        Products.DeleteAssignment($stateParams.productid, null, scope.assignment.UserGroupID)
+            .then(function() {
+                $state.reload();
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex)
+            })
     }
 
 
@@ -312,7 +325,7 @@ function ProductAssignController(buyerid, UserGroups, UserGroupList, PriceSchedu
         }
     }
 
-    vm.deleteAssignment = function (assignment, psType) {
+    vm.deleteAssignment = function ($exceptionHandler, assignment, psType) {
         if (psType == null) {
             Products.DeleteAssignment(vm.product.ID, null, assignment.UserGroupID)
                 .then(reload);
@@ -326,7 +339,10 @@ function ProductAssignController(buyerid, UserGroups, UserGroupList, PriceSchedu
                 assignment.ReplenishmentPriceScheduleID = null;
             }
             Products.SaveAssignment(assignment)
-                .then(reload);
+                .then(reload)
+                .catch(function(ex) {
+                    $exceptionHandler(ex)
+                });
         }
     }
 
