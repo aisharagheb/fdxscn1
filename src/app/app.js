@@ -15,8 +15,7 @@ angular.module( 'orderCloud', [
 	.run( SetBuyerID )
 	.run( Security )
 	.config( Routing )
-	//.config( ErrorHandling )
-	.factory('$exceptionHandler', ExceptionHandler)
+	.config( ErrorHandling )
 	.controller( 'AppCtrl', AppCtrl )
 
 	//Constants needed for the OrderCloud AngularJS SDK
@@ -65,16 +64,15 @@ function Routing( $urlRouterProvider, $urlMatcherFactoryProvider ) {
 	//TODO: For HTML5 mode to work we need to always return index.html as the entry point on the serverside
 }
 
-function ExceptionHandler($injector) {
-	return function( ex, cause ) {
-		var toastr = $injector.get('toastr');
-		if (ex.data) {
-			var msg = ex.data.error || ex.data.Errors[0].Message;
-			toastr.error(msg, 'Error');
-		} else if (ex.message) {
-			toastr.error(ex.message, 'Error');
-		}
-	}
+function ErrorHandling( $provide ) {
+	$provide.decorator('$exceptionHandler', handler);
+
+	function handler( $delegate, $injector ) {
+		return function( ex, cause ) {
+			$delegate(ex, cause);
+			$injector.get('toastr').error(ex.data ? (ex.data.error || ex.data.Errors[0].Message) : ex.message, 'Error');
+		};
+	};
 }
 
 function AppCtrl( $state, appname, Credentials ) {
