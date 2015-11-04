@@ -80,8 +80,6 @@ function LoginController( $state, $stateParams, $exceptionHandler, LoginService,
 		Credentials.Get( vm.cffredentials ).then(
 			function() {
 				$state.go( 'base.home' );
-			}).catch(function(ex) {
-				$exceptionHandler(ex);
 			});
 	};
 

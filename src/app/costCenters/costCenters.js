@@ -76,7 +76,7 @@ function CostCentersController( $state, CostCenterList ) {
     };
 }
 
-function CostCenterEditController( $state, SelectedCostCenter, CostCenters ) {
+function CostCenterEditController( $exceptionHandler, $state, SelectedCostCenter, CostCenters ) {
     var vm = this,
         costCenterid = SelectedCostCenter.ID;
     vm.costCenterName = SelectedCostCenter.Name;
@@ -86,6 +86,9 @@ function CostCenterEditController( $state, SelectedCostCenter, CostCenters ) {
         CostCenters.Update(costCenterid, vm.costCenter)
             .then(function() {
                 $state.go('^.costCenters')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     };
 
@@ -93,11 +96,14 @@ function CostCenterEditController( $state, SelectedCostCenter, CostCenters ) {
         CostCenters.Delete(SelectedCostCenter.ID)
             .then(function() {
                 $state.go('^.costCenters')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }
 
-function CostCenterCreateController($state, CostCenters) {
+function CostCenterCreateController( $exceptionHandler,$state, CostCenters) {
     var vm = this;
     vm.costCenter = {};
 
@@ -105,6 +111,9 @@ function CostCenterCreateController($state, CostCenters) {
         CostCenters.Create(vm.costCenter)
             .then(function() {
                 $state.go('^.costCenters')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
             });
     }
 }

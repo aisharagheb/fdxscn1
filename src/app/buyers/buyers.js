@@ -60,27 +60,35 @@ function BuyerController(BuyerList, Buyers) {
     }
 }
 
-function BuyerEditController($state, Buyer, Buyers) {
+function BuyerEditController($exceptionHandler, $state, Buyer, Buyers) {
     var vm = this;
     vm.buyer = Buyer;
     vm.buyerName = Buyer.Name;
     vm.Submit = saveBuyer;
 
     function saveBuyer() {
-        Buyers.Update(vm.buyer).then(function() {
-            $state.go('^.buyers');
-        });
+        Buyers.Update(vm.buyer)
+            .then(function() {
+                $state.go('^.buyers');
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
     }
 }
 
-function BuyerCreateController($state, Buyers) {
+function BuyerCreateController($exceptionHandler, $state, Buyers) {
     var vm = this;
 
     vm.Submit = BuyerCreate;
 
     function BuyerCreate() {
-        Buyers.Create(vm.buyer).then(function() {
-            $state.go('^.buyers');
-        });
+        Buyers.Create(vm.buyer)
+            .then(function() {
+                $state.go('^.buyers');
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
     }
 }

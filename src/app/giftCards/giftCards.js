@@ -65,7 +65,7 @@ function GiftCardEditController ( SelectedGiftCard, GiftCardFactory ) {
     vm.Delete = GiftCardFactory.Delete;
 }
 
-function GiftCardFactory ( $state, GiftCards ) {
+function GiftCardFactory ( $exceptionHandler, $state, GiftCards ) {
     return {
         dateFormat: 'MM/dd/yyyy',
         autoGenDefault: true,
@@ -82,6 +82,9 @@ function GiftCardFactory ( $state, GiftCards ) {
             GiftCards.Create(giftCard)
                 .then(function() {
                     $state.go('^.giftCards')
+                })
+                .catch(function(ex) {
+                    $exceptionHandler(ex);
                 });
         },
         Update: function(giftCard) {
@@ -89,6 +92,9 @@ function GiftCardFactory ( $state, GiftCards ) {
                 GiftCards.Update(giftCard.ID, giftCard)
                     .then(function() {
                         $state.go('^.giftCards')
+                    })
+                    .catch(function(ex) {
+                        $exceptionHandler(ex);
                     });
             }
         },
@@ -96,6 +102,9 @@ function GiftCardFactory ( $state, GiftCards ) {
             GiftCards.Delete(giftCard.ID)
                 .then(function() {
                     $state.go('^.giftCards')
+                })
+                .catch(function(ex) {
+                    $exceptionHandler(ex);
                 });
         }
     }
