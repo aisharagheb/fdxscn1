@@ -73,7 +73,7 @@ function AccountService( $q, $uibModal, Credentials, AdminUsers ) {
 					deferred.reject(ex);
 				});
 		}, function() {
-			deferred.reject();
+			angular.noop();
 		});
 
 		return deferred.promise;
