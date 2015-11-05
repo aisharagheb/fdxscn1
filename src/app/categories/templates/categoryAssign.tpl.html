@@ -28,7 +28,7 @@
                 <tbody>
                 <tr ng-repeat="group in categoryAssign.list.Items track by $index">
                     <td class="text-center">
-                        <input name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="group.selected">
+                        <input name="{{'category_assign_' + $index}}" type="checkbox" ng-model="group.selected">
                     </td>
                     <td>{{group.ID}}</td>
                     <td>{{group.Name}}</td>
