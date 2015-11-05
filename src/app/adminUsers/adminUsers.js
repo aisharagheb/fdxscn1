@@ -15,23 +15,23 @@ function AdminUsersConfig( $stateProvider ) {
             controller:'AdminUsersCtrl',
             controllerAs: 'adminUsers',
             resolve: {
-                AdminUsersList: function( AdminUsers) {
+                AdminUsersList: function(AdminUsers) {
                     return AdminUsers.List(null, 1, 5);
                 }
             }
         })
-        .state( 'base.adminUsersEdit', {
+        .state( 'base.adminUserEdit', {
             url: '/adminUsers/:adminuserid/edit',
             templateUrl:'adminUsers/templates/adminUserEdit.tpl.html',
             controller:'AdminUserEditCtrl',
             controllerAs: 'adminUserEdit',
             resolve: {
-                SelectedAdminUser: function( $stateParams, AdminUsers) {
-                    return AdminUsers.Get( $stateParams.adminuserid);
+                SelectedAdminUser: function($stateParams, AdminUsers) {
+                    return AdminUsers.Get($stateParams.adminuserid);
                 }
             }
         })
-        .state( 'base.adminUsersCreate', {
+        .state( 'base.adminUserCreate', {
             url: '/adminUsers/create',
             templateUrl:'adminUsers/templates/adminUserCreate.tpl.html',
             controller:'AdminUserCreateCtrl',
@@ -49,7 +49,7 @@ function AdminUsersController( AdminUsersList, TrackSearch ) {
 
 function AdminUserEditController( $exceptionHandler, $state, SelectedAdminUser, AdminUsers ) {
     var vm = this,
-        adminUserId = SelectedAdminUser.ID;
+        adminuserid = SelectedAdminUser.ID;
     vm.adminUserName = SelectedAdminUser.Username;
     vm.adminUser = SelectedAdminUser;
     if(vm.adminUser.TermsAccepted != null) {

@@ -6,38 +6,38 @@
         <div class="row">
             <div class="col-sm-6 form-group">
                 <label for="userIDInput">User ID</label>
-                <input id="userIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="userCreate.user.ID"/>
+                <input id="userIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="userCreate.adminUser.ID"/>
             </div>
             <div class="form-group col-sm-6">
                 <label for="userNameInput">User Name</label>
-                <input id="userNameInput" type="text" class="form-control" ng-model="userCreate.user.Username" required/>
+                <input id="userNameInput" type="text" class="form-control" ng-model="userCreate.adminUser.Username" required/>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 form-group">
                 <label for="userFirstNameInput">First Name</label>
-                <input id="userFirstNameInput" type="text" class="form-control" ng-model="userCreate.user.FirstName" required/>
+                <input id="userFirstNameInput" type="text" class="form-control" ng-model="userCreate.adminUser.FirstName" required/>
             </div>
             <div class="col-sm-6 form-group">
                 <label for="userLastNameInput">Last Name</label>
-                <input id="userLastNameInput" type="text" class="form-control" ng-model="userCreate.user.LastName" required/>
+                <input id="userLastNameInput" type="text" class="form-control" ng-model="userCreate.adminUser.LastName" required/>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-sm-6">
                 <!-- TODO: make phonefield -->
                 <label for="userPhoneNumberInput">Phone Number</label>
-                <input id="userPhoneNumberInput" type="text" class="form-control" ng-model="userCreate.user.Phone" />
+                <input id="userPhoneNumberInput" type="text" class="form-control" ng-model="userCreate.adminUser.Phone" />
             </div>
             <div class="form-group col-sm-6">
                 <label for="userEmailAddressInput">Email Address</label>
-                <input id="userEmailAddressInput" type="text" class="form-control" ng-model="userCreate.user.Email" required/>
+                <input id="userEmailAddressInput" type="text" class="form-control" ng-model="userCreate.adminUser.Email" required/>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 form-group">
                 <label for="userPasswordInput">Password</label>
-                <input id="userPasswordInput" type="password" class="form-control" ng-model="userCreate.user.Password" required/>
+                <input id="userPasswordInput" type="password" class="form-control" ng-model="userCreate.adminUser.Password" required/>
             </div>
         </div>
         <div class="row">
@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-sm-6 form-group">
                 <label for="userActiveCheckbox">
-                <input id="userActiveCheckbox" type="checkbox" ng-model="userCreate.user.Active"/>
+                <input id="userActiveCheckbox" type="checkbox" ng-model="userCreate.adminUser.Active"/>
                 Active</label>
             </div>
         </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="UserCreateForm.$invalid">Save</button>
-            <button type="button" class="btn btn-default" ui-sref="^.users">Cancel</button>
+            <button type="button" class="btn btn-default" ui-sref="^.adminUsers">Cancel</button>
         </div>
     </form>
 </article>
