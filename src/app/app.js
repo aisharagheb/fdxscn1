@@ -12,7 +12,8 @@ angular.module( 'orderCloud', [
 	'ordercloud-buyer-select',
     'ordercloud-search',
     'ordercloud-assignment-helpers',
-    'ordercloud-paging-helpers'
+    'ordercloud-paging-helpers',
+    'ordercloud-auto-id'
 ])
 
 	.run( SetBuyerID )

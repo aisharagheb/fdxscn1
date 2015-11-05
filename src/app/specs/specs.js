@@ -69,20 +69,24 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     vm.specName = angular.copy(SelectedSpec.Name);
     vm.spec = SelectedSpec;
 
-    if(vm.spec.MarkupType != null) {
-        vm.associateMU = true;
-    }
-    if(vm.spec.ControlType == 'Selection') {
-        vm.spec.IsRadioButtons = vm.spec.IsRadioButtons.toString();
-    }
-
-    vm.addSelectionValue = function() {
-        vm.spec.Options.push({Value: vm.selectionValue, Markup: vm.selectionMarkup, ListOrder: vm.selectionListOrder})
-        vm.selectionValue = null;
-        vm.selectionMarkup = null;
+    vm.addSpecOpt = function() {
+        vm.spec.Options.push({ID: vm.SpecOptID, Value: vm.SpecOptValue, PriceMarkup: vm.SpecOptMarkup, PriceMarkupType: vm.SpecOptMarkupType, IsOpenText: vm.SpecOptOpen, ListOrder: vm.SpecOptListOrder});
+        if (vm.SpecOptDefault) {
+            vm.spec.DefaultOptionID = vm.SpecOptID;
+        }
+        vm.SpecOptID = null;
+        vm.SpecOptValue = null;
+        vm.SpecOptMarkup = null;
+        vm.SpecOptMarkupType = null;
+        vm.SpecOptOpen = false;
+        vm.SpecOptListOrder = null;
+        vm.SpecOptDefault = false;
     };
 
-    vm.deleteSelectionOption = function($index) {
+    vm.deleteSpecOpt = function($index) {
+        if (vm.spec.DefaultOptionID == vm.spec.Options[$index].ID) {
+            vm.spec.DefaultOptionID = null;
+        }
         vm.spec.Options.splice($index, 1);
     };
 
@@ -112,13 +116,24 @@ function SpecCreateController( $exceptionHandler, $state, Specs) {
     vm.spec = {};
     vm.spec.Options = new Array;
 
-    vm.addSelectionValue = function() {
-        vm.spec.Options.push({Value: vm.selectionValue, Markup: vm.selectionMarkup, ListOrder: vm.selectionListOrder})
-        vm.selectionValue = null;
-        vm.selectionMarkup = null;
+    vm.addSpecOpt = function() {
+        vm.spec.Options.push({ID: vm.SpecOptID, Value: vm.SpecOptValue, PriceMarkup: vm.SpecOptMarkup, PriceMarkupType: vm.SpecOptMarkupType, IsOpenText: vm.SpecOptOpen, ListOrder: vm.SpecOptListOrder});
+        if (vm.SpecOptDefault) {
+            vm.spec.DefaultOptionID = vm.SpecOptID;
+        }
+        vm.SpecOptID = null;
+        vm.SpecOptValue = null;
+        vm.SpecOptMarkup = null;
+        vm.SpecOptMarkupType = null;
+        vm.SpecOptOpen = false;
+        vm.SpecOptListOrder = null;
+        vm.SpecOptDefault = false;
     };
 
-    vm.deleteSelectionOption = function($index) {
+    vm.deleteSpecOpt = function($index) {
+        if (vm.spec.DefaultOptionID == vm.spec.Options[$index].ID) {
+            vm.spec.DefaultOptionID = null;
+        }
         vm.spec.Options.splice($index, 1);
     };
 
