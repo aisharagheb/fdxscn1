@@ -21,7 +21,7 @@ function InfiniteScrollDirective($injector, Paging) {
             var ele = element[0];
             element.bind('scroll', function () {
                 if (ele.scrollTop + ele.offsetHeight + threshold >= ele.scrollHeight) {
-                    if (scope.controlleras.pagingfunction !== undefined) {
+                    if (scope.controlleras && scope.controlleras.pagingfunction !== undefined) {
                         scope.controlleras.pagingfunction();
                     }
                     else if (scope.servicename && scope.controlleras && scope.controlleras.list) {
