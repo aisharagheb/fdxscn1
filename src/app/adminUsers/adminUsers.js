@@ -14,7 +14,6 @@ function AdminUsersConfig( $stateProvider ) {
             templateUrl:'adminUsers/templates/adminUsers.tpl.html',
             controller:'AdminUsersCtrl',
             controllerAs: 'adminUsers',
-            data: {componentName: 'Admin Users'},
             resolve: {
                 AdminUsersList: function( AdminUsers) {
                     return AdminUsers.List(null, 1, 5);
