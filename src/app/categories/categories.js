@@ -146,12 +146,13 @@ function CategoryTreeController() {
     //var vm = this;
 }
 
-function CategoryAssignController(Assignments, UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
+function CategoryAssignController(Assignments, Paging, UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
     var vm = this;
     vm.Category = SelectedCategory;
     vm.list = UserGroupList;
-    vm.AssignedUserGroups = AssignedUserGroups;
+    vm.assignments = AssignedUserGroups;
     vm.saveAssignments = SaveAssignment;
+    vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
         Categories.SaveAssignment({
@@ -166,7 +167,15 @@ function CategoryAssignController(Assignments, UserGroupList, AssignedUserGroups
     }
 
     function SaveAssignment() {
-        return Assignments.saveAssignments(vm.list.Items, vm.AssignedUserGroups.Items, SaveFunc, DeleteFunc);
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc);
+    }
+
+    function AssignmentFunc() {
+        return Categories.ListAssignments(vm.Category.ID, null, vm.assignments.Meta.PageSize);
+    }
+
+    function PagingFunction() {
+        return Paging.paging(vm.list, 'UserGroups', vm.assignments, AssignmentFunc);
     }
 }
 
@@ -174,9 +183,9 @@ function CategoryAssignProductController(Assignments, Paging, ProductList, Produ
     var vm = this;
     vm.Category = SelectedCategory;
     vm.list = ProductList;
-    vm.ProductAssignments = ProductAssignments;
+    vm.assignments = ProductAssignments;
     vm.SaveAssignment = SaveAssignment;
-    vm.PagingFunction = PagingFunction;
+    vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
         return Categories.SaveProductAssignments({
@@ -184,18 +193,20 @@ function CategoryAssignProductController(Assignments, Paging, ProductList, Produ
             ProductID: ItemID
         });
     }
+
     function DeleteFunc(ItemID) {
         return Categories.DeleteProductAssignments(vm.Category.ID, ItemID);
     }
+
     function SaveAssignment() {
-        return Assignments.saveAssignments(vm.list.Items, vm.ProductAssignments.Items, SaveFunc, DeleteFunc, 'ProductID');
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'ProductID');
     }
 
     function AssignmentFunc() {
-        return Categories.ListProductAssignments(vm.Category.ID, null, vm.ProductAssignments.Meta.PageSize);
+        return Categories.ListProductAssignments(vm.Category.ID, null, vm.assignments.Meta.PageSize);
     }
 
     function PagingFunction() {
-        return Paging.paging(vm.list, 'Products', vm.ProductAssignments, AssignmentFunc, 'ProductID');
+        return Paging.paging(vm.list, 'Products', vm.assignments, AssignmentFunc);
     }
 }
