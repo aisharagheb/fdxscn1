@@ -1,214 +1,134 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        <b>Edit Spec:</b> {{specEdit.specName}}
+        <b>Edit Spec</b>
     </h3>
     <form name="SpecEditForm" ng-submit="specEdit.Submit()">
         <div class="row">
             <div class="form-group col-sm-6">
                 <label for="specIDInput">Spec ID</label>
-                <input id="specIDInput" type="text" class="form-control" ng-model="specEdit.spec.ID" ng-required="true"/>
+                <input id="specIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="specEdit.spec.ID"/>
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-3">
                 <label for="specNameInput">Spec Name</label>
                 <input id="specNameInput" type="text" class="form-control" ng-model="specEdit.spec.Name" ng-required="true"/>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 form-group">
-                <label for="specTypeInput">Spec Type</label>
-                <select id="specTypeInput" class="form-control" ng-model="specEdit.spec.ControlType" ng-required="true">
-                    <option value="Text">Text</option>
-                    <option value="Selection">Selection</option>
-                    <option value="File">File</option>
-                </select>
+            <div class="col-sm-3 form-group">
+                <label for="specDefaultInput">Default Value</label>
+                <input id="specDefaultInput" type="text" class="form-control" ng-model="specEdit.spec.DefaultValue"/>
             </div>
         </div>
-        <div ng-if="specEdit.spec.ControlType == 'Text'" class="panel panel-default col-sm-12">
+        <h4>
+            <b>Add Spec Options</b>
+        </h4>
+        <div class="panel panel-default col-sm-12">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-3 form-group">
-                        <label for="specDefaultInput">Default Value</label>
-                        <input id="specDefaultInput" type="text" class="form-control" ng-model="specEdit.spec.DefaultValue"/>
+                    <div class="form-group col-sm-6">
+                        <label for="specOptIDInput">Spec Option ID</label>
+                        <input id="specOptIDInput" type="text" class="form-control" ng-model="specEdit.SpecOptID"/>
                     </div>
-                    <div class="form-group col-sm-3">
-                        <label for="specLinesInput">Lines</label>
-                        <input id="specLinesInput" type="number" class="form-control" ng-model="specEdit.spec.Lines"/>
-                    </div>
-                    <div class="form-group col-sm-3">
-                        <label for="specWidthInput">Width</label>
-                        <input id="specWidthInput" type="number" class="form-control" ng-model="specEdit.spec.Width"/>
-                    </div>
-                    <div class="form-group col-sm-3">
-                        <label for="specMaxLengthInput">Max Length</label>
-                        <input id="specMaxLengthInput" type="number" class="form-control" ng-model="specEdit.spec.MaxLength"/>
+                    <div class="form-group col-sm-6">
+                        <label for="specOptListOrderInput">List Order</label>
+                        <input id="specOptListOrderInput" type="text" class="form-control" ng-model="specEdit.SpecOptListOrder"/>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-sm-4">
-                        <label for="specToolbarInput">
-                            <input id="specToolbarInput" type="checkbox" ng-model="specEdit.spec.Toolbar"/>
-                            Include Toolbar
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default col-sm-12" ng-if="specEdit.spec.ControlType === 'Selection'">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="form-group col-sm-3">
-                        <label for="specRadioInput">Selection Type</label>
-                        <select id="specRadioInput" class="form-control" ng-model="specEdit.spec.IsRadioButtons">
-                            <option value="false">Drop-down list</option>
-                            <option value="true">Radio Buttons</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-3">
-                        <label>Options</label>
-                        <div>
-                            <label for="specDefineInput">
-                                <input id="specDefineInput" type="checkbox" ng-model="specEdit.spec.DefinesVariant"/>
-                                Spec defines variant
-                            </label>
-                        </div>
-                        <div>
-                            <label for="specMarkupsInput">
-                                <input id="specMarkupsInput" type="checkbox" ng-model="specEdit.associateMU"/>
-                                Associate price markups with options
-                            </label>
-                        </div>
-                        <div>
-                            <label for="specAllowOtherInput">
-                                <input id="specAllowOtherInput" type="checkbox" ng-model="specEdit.spec.AllowOtherValue"/>
-                                Include an open-ended "Other" option
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-3" ng-if="specEdit.associateMU">
+                    <div class="form-group col-sm-6">
                         <label for="specMUTypeInput">Markup Type</label>
-                        <select id="specMUTypeInput" class="form-control" ng-model="specEdit.spec.MarkupType">
+                        <select id="specMUTypeInput" class="form-control" ng-model="specEdit.SpecOptMarkupType">
+                            <option value="None">None</option>
                             <option value="AmountPerQuantity">Fixed amount per unit</option>
                             <option value="AmountTotal">Fixed amount per line</option>
                             <option value="Percentage">Percentage of line total</option>
                         </select>
                     </div>
-                    <div class="form-group col-sm-3" ng-if="specEdit.spec.AllowOtherValue && specEdit.associateMU">
-                        <label for="specOtherMUInput">"Other" option markup:</label>
-                        <input id="specOtherMUInput" type="number" step="any" class="form-control" ng-model="specEdit.spec.OtherValueMarkup"/>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-3 form-group">
                         <label for="specValueInput">Value</label>
-                        <input id="specValueInput" type="text" class="form-control" ng-model="specEdit.selectionValue"/>
+                        <input id="specValueInput" type="number" class="form-control" ng-model="specEdit.SpecOptValue"/>
                     </div>
                     <div class="col-sm-3 form-group">
                         <label for="specMarkupInput">Markup</label>
-                        <input id="specMarkupInput" type="number" step="any" class="form-control" ng-disabled="!specEdit.associateMU" ng-model="specEdit.selectionMarkup"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <button type="button" class="btn btn-default form-control" ng-disabled="!specEdit.selectionValue" ng-click="specEdit.addSelectionValue()">Add</button>
+                        <input id="specMarkupInput" type="number" step="any" class="form-control" ng-disabled="!specEdit.SpecOptMarkupType || specEdit.SpecOptMarkupType =='None'" ng-model="specEdit.SpecOptMarkup"/>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-9">
-                        <div class="list-group-item-heading row" ng-if="specEdit.spec.Options.length">
-                            <div class="col-sm-3 col-sm-offset-6 text-right">
-                                <!--Make Default-->
-                            </div>
-                        </div>
-                        <ul class="list-group">
-                            <li ng-repeat="option in specEdit.spec.Options track by $index" class="list-group-item spec-option">
-                                <div class="col-sm-4">
-                                    <p>{{option.Value}}</p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <p ng-if="specEdit.associateMU">{{option.Markup}}</p>
-                                </div>
-                                <div class="col-sm-3">
-                                    <!--<label>-->
-                                    <!--<input type="checkbox" name="selectionDefault" ng-model="specEdit.spec.DefaultOptionID">-->
-                                    <!--</label>-->
-                                </div>
-                                <div class="col-sm-1">
-                                    <a class="fa fa-trash text-danger-o" ng-click="specEdit.deleteSelectionOption(specEdit.spec, $index)"></a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default col-sm-12" ng-if="specEdit.spec.ControlType === 'File'">
-            <div class="panel-body">
                 <div class="row">
                     <div class="form-group col-sm-6">
-                        <label for="specFileTypeInput">File Type</label>
-                        <select id="specFileTypeInput" class="form-control" ng-model="specEdit.spec.FileType">
-                            <option value="Image">Image</option>
-                            <option value="PDF">PDF</option>
-                            <option value="DataSource">Data Source</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        <label for="specAllowedExtInput">Allowed Extensions</label>
-                        <input id="specAllowedExtInput" type="text" class="form-control" ng-model="specEdit.spec.AllowedExt"/>
+                        <label for="specOptIsOpenInput">
+                            <input id="specOptIsOpenInput" type="checkbox" ng-model="specEdit.SpecOptOpen"/>
+                            Is Open Text
+                        </label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 form-group">
-                        <label for="specMinSInput">Minimum Size</label>
-                        <input id="specMinSInput" type="number" class="form-control" ng-model="specEdit.spec.MinSize"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specMaxSInput">Maximum Size</label>
-                        <input id="specMaxSInput" type="number" class="form-control" ng-model="specEdit.spec.MaxSize"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specMinDPIInput">Minimum DPI</label>
-                        <input id="specMinDPIInput" type="number" class="form-control" ng-model="specEdit.spec.MinDPI"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specMaxDPIInput">Maximum DPI</label>
-                        <input id="specMaxDPIInput" type="number" class="form-control" ng-model="specEdit.spec.MaxDPI"/>
+                    <div class="form-group col-sm-6">
+                        <label for="specOptDefaultInput">
+                            <input id="specOptDefaultInput" type="checkbox" ng-model="specEdit.SpecOptDefault"/>
+                            Set as default Spec Option
+                        </label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-3 form-group">
-                        <label for="specMinHInput">Minimum Height</label>
-                        <input id="specMinHInput" type="number" class="form-control" ng-model="specEdit.spec.MinHeight"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specMaxHInput">Maximum Height</label>
-                        <input id="specMaxHInput" type="number" class="form-control" ng-model="specEdit.spec.MaxHeight"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specMinWInput">Minimum Width</label>
-                        <input id="specMinWInput" type="number" class="form-control" ng-model="specEdit.spec.MinWidth"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specMaxWInput">Maximum Width</label>
-                        <input id="specMaxWInput" type="number" class="form-control" ng-model="specEdit.spec.MaxWidth"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3 form-group">
-                        <label for="specPrevRedInput">Preview Reduction</label>
-                        <input id="specPrevRedInput" type="number" class="form-control" ng-model="specEdit.spec.PreviewReduction"/>
-                    </div>
-                    <div class="col-sm-3 form-group">
-                        <label for="specUploadInstInput">Upload Instructions</label>
-                        <textarea id="specUploadInstInput" type="text" class="form-control" ng-model="specEdit.spec.UploadInstructions"></textarea>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                        <label for="specFileIDInput">Default File ID</label>
-                        <input id="specFileIDInput" type="text" class="form-control" ng-model="specEdit.spec.DefaultFileID"/>
+                    <div class="col-sm-2 form-group">
+                        <button type="button" class="btn btn-primary form-control" ng-click="specEdit.addSpecOpt()">Add Spec Option</button>
                     </div>
                 </div>
             </div>
         </div>
+        <div ng-if="specEdit.spec.Options.length">
+            <h4>
+                <b>Spec Options</b>
+            </h4>
+            <section class="table-fixed-header">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll servicename="Specs" listobject="specEdit.spec.Options">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                                <div>ID</div>
+                            </th>
+                            <th>
+                                <div>Value</div>
+                            </th>
+                            <th>
+                                <div>Markup Type</div>
+                            </th>
+                            <th>
+                                <div>Markup</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="specOpts in specEdit.spec.Options track by $index">
+                            <td class="text-center"><a class="fa fa-trash text-danger" ng-click="specEdit.deleteSpecOpt($index)"></a></td>
+                            <td>{{specOpts.ID}}</td>
+                            <td>{{specOpts.Value}}</td>
+                            <td>{{specOpts.PriceMarkupType}}</td>
+                            <td>{{specOpts.PriceMarkup}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
         <div class="row">
+            <div class="form-group col-sm-12">
+                <label for="specDefineInput">
+                    <input id="specDefineInput" type="checkbox" ng-model="specEdit.spec.DefinesVariant"/>
+                    Spec defines variant
+                </label>
+            </div>
+            <div class="form-group col-sm-12">
+                <label for="specAllowOtherInput">
+                    <input id="specAllowOtherInput" type="checkbox" ng-model="specEdit.spec.AllowOpenText"/>
+                    Allow Open Text
+                </label>
+            </div>
             <div class="form-group col-sm-12">
                 <label for="specRequiredInput">
                     <input id="specRequiredInput" type="checkbox" ng-model="specEdit.spec.Required"/>
@@ -219,7 +139,6 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="SpecEditForm.$invalid">Save</button>
             <button type="button" class="btn btn-default" ui-sref="^.specs">Cancel</button>
-            <button type="button" class="btn btn-default" ng-click="specEdit.Delete()"><i class="fa fa-trash text-danger"></i></button>
         </div>
     </form>
 </article>

@@ -112,31 +112,37 @@ function AddressCreateController($exceptionHandler, $state, Addresses) {
 	};
 }
 
-function AddressAssignController($q, $state, Assignments, Underscore, AssignmentsList, UserGroupList, Addresses, UserGroups, SelectedAddress) {
+function AddressAssignController($q, $scope, $state, Assignments, Underscore, AssignmentsList, UserGroupList, Addresses, UserGroups, SelectedAddress) {
     var vm = this;
     vm.list = UserGroupList;
-    vm.AddressAssignments = AssignmentsList;
+    vm.assignments = AssignmentsList;
     vm.Address = SelectedAddress;
 
+    $scope.$watchCollection(function() {
+        return vm.list;
+    }, function() {
+        setSelected();
+    });
+
+    vm.setSelected = setSelected;
     function setSelected() {
-        var assigned = Assignments.getAssigned(vm.AddressAssignments.Items, 'UserGroupID');
+        var assigned = Assignments.getAssigned(vm.assignments.Items, 'UserGroupID');
         angular.forEach(vm.list.Items, function(item) {
             if (assigned.indexOf(item.ID) > -1) {
                 item.selected = true;
-                var assignmentItem = Underscore.where(vm.AddressAssignments.Items, {UserGroupID: item.ID})[0];
+                var assignmentItem = Underscore.where(vm.assignments.Items, {UserGroupID: item.ID})[0];
                 item.IsShipping = assignmentItem.IsShipping;
                 item.IsBilling = assignmentItem.IsBilling;
             }
         });
     }
-    setSelected();
 
     function AssignmentFunc() {
-        return Addresses.ListAssignments(vm.Address.ID, null, vm.AddressAssignments.Meta.PageSize);
+        return Addresses.ListAssignments(vm.Address.ID, null, vm.assignments.Meta.PageSize);
     }
     
     vm.saveAssignments = SaveAssignments;
-    vm.pagingFunction = PagingFunction;
+    vm.pagingfunction = PagingFunction;
 
     function PagingFunction() {
         if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
@@ -151,8 +157,8 @@ function AddressAssignController($q, $state, Assignments, Underscore, Assignment
                 vm.list.Meta = results[0].Meta;
                 vm.list.Items = [].concat(vm.list.Items, results[0].Items);
                 if (results[1]) {
-                    vm.AddressAssignments.Meta = results[1].Meta;
-                    vm.AddressAssignments.Items = [].concat(vm.AddressAssignments.Items, results[1].Items);
+                    vm.assignments.Meta = results[1].Meta;
+                    vm.assignments.Items = [].concat(vm.assignments.Items, results[1].Items);
                 }
                 if (AssignmentFunc !== undefined) {
                     setSelected();
@@ -164,11 +170,11 @@ function AddressAssignController($q, $state, Assignments, Underscore, Assignment
     }
 
     function SaveAssignments() {
-        var assigned = Underscore.pluck(vm.AddressAssignments.Items, 'UserGroupID');
+        var assigned = Underscore.pluck(vm.assignments.Items, 'UserGroupID');
         var selected = Underscore.pluck(Underscore.where(vm.list.Items, {selected: true}), 'ID');
-        var toAdd = Assignments.getToAssign(vm.list.Items, vm.AddressAssignments.Items, 'UserGroupID');
+        var toAdd = Assignments.getToAssign(vm.list.Items, vm.assignments.Items, 'UserGroupID');
         var toUpdate = Underscore.intersection(selected, assigned);
-        var toDelete = Assignments.getToDelete(vm.list.Items, vm.AddressAssignments.Items, 'UserGroupID');
+        var toDelete = Assignments.getToDelete(vm.list.Items, vm.assignments.Items, 'UserGroupID');
         var queue = [];
         var dfd = $q.defer();
         angular.forEach(vm.list.Items, function(Item) {
@@ -182,7 +188,7 @@ function AddressAssignController($q, $state, Assignments, Underscore, Assignment
                 }));
             }
             else if (toUpdate.indexOf(Item.ID) > -1) {
-                var AssignmentObject = Underscore.where(vm.AddressAssignments.Items, {UserGroupID: Item.ID})[0]; //Should be only one
+                var AssignmentObject = Underscore.where(vm.assignments.Items, {UserGroupID: Item.ID})[0]; //Should be only one
                 if (AssignmentObject.IsShipping !== Item.IsShipping || AssignmentObject.IsBilling !== Item.IsBilling) {
                     queue.push(Addresses.SaveAssignment({
                         UserID: null,

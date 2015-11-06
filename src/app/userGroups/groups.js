@@ -49,7 +49,7 @@ function UserGroupsConfig( $stateProvider ) {
                 UserList: function (Users) {
                     return Users.List(null, 1, 20);
                 },
-                Assignments: function ($stateParams, UserGroups) {
+                AssignedUsers: function ($stateParams, UserGroups) {
                     return UserGroups.ListMemberAssignments(null, $stateParams.userGroupid);
                 },
                 SelectedUserGroup: function($stateParams, UserGroups) {
@@ -108,72 +108,34 @@ function UserGroupCreateController( $exceptionHandler, $state, UserGroups ) {
     }
 }
 
-function UserGroupAssignController( UserList, Assignments, SelectedUserGroup, UserGroups ) {
+function UserGroupAssignController(Assignments, Paging, UserList, AssignedUsers, SelectedUserGroup, UserGroups) {
     var vm = this;
+    vm.UserGroup = SelectedUserGroup;
     vm.list = UserList;
-    vm.assignments = Assignments.Items;
-    vm.group = SelectedUserGroup;
-    setSelected(Assignments, UserList);
+    vm.assignments = AssignedUsers;
+    vm.saveAssignments = SaveAssignment;
+    vm.pagingfunction = PagingFunction;
 
-    vm.saveAssignments = function (form) {
-        angular.forEach(UserList.Items, function (user, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (user.selected) {
-                    var toSave = true;
-                    angular.forEach(Assignments.Items, function (assignedUser) {
-                        if (assignedUser.UserID === user.ID) {
-                            toSave = false;
-                        }
-                    });
-                    if (toSave) {
-                        UserGroups.SaveMemberAssignment({UserGroupID: SelectedUserGroup.ID, UserID: user.ID});
-
-                    }
-                }
-                else {
-                    angular.forEach(Assignments.Items, function (assignedUser, index) {
-                        if (assignedUser.UserID === user.ID) {
-                            UserGroups.DeleteMemberAssignment(SelectedUserGroup.ID, user.ID);
-                            Assignments.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    });
-                }
-            }
-        });
-        angular.forEach(Assignments.Items, function (assignedUser, index) {
-            if (!assignedUser.UserID) {
-                UserGroups.DeleteMemberAssignment(SelectedUserGroup.ID, assignedUser.ID);
-                Assignments.Items.splice(index, 1);
-                index = index - 1;
-            }
-        });
-        form.$setPristine(true);
-        setSelected(Assignments, UserList);
-    }
-
-    function setSelected(Assignments, UserList) {
-        angular.forEach(UserList.Items, function (user) {
-            angular.forEach(Assignments.Items, function (assignedUser) {
-                if (assignedUser.UserID === user.ID) {
-                    user.selected = true;
-                }
-            });
+    function SaveFunc(ItemID) {
+        return UserGroups.SaveMemberAssignment({
+            UserID: ItemID,
+            UserGroupID: vm.UserGroup.ID
         });
     }
 
-     vm.resetSelections = function(index, form) {
-        var matched = false;
-        angular.forEach(Assignments.Items, function(assignedUser) {
-            if (assignedUser.UserID === UserList.Items[index].ID) {
-                matched = true;
-            }
-        });
-        if (matched && UserList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !UserList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
+    function DeleteFunc(ItemID) {
+        return UserGroups.DeleteMemberAssignment(vm.UserGroup.ID, ItemID);
+    }
+
+    function SaveAssignment() {
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'UserID');
+    }
+
+    function AssignmentFunc() {
+        return UserGroups.ListAssignments(vm.UserGroup.ID, null, vm.assignments.Meta.PageSize, 'UserID');
+    }
+
+    function PagingFunction() {
+        return Paging.paging(vm.list, 'Users', vm.assignments, AssignmentFunc);
     }
 }

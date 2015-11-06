@@ -5,29 +5,27 @@ angular.module('ordercloud-infinite-scroll')
     .controller( 'InfiniteScrollCtrl', InfiniteScrollController )
 ;
 
-function InfiniteScrollDirective(Paging) {
+function InfiniteScrollDirective($injector, Paging) {
     return {
         restrict: 'A',
         scope: {
-            pagingfunction: '&',
             servicename: '@',
-            currentid: '@',
-            listobjects: '=',
-            threshold: '@',
-            assignmentobjects: '='
+            controlleras: '=',
+            idname: '@',
+            threshold: '@'
         },
         controller: 'InfiniteScrollCtrl',
         controllerAs: 'InfiniteScroll',
-        link: function(scope, element) {
+        link: function(scope, element, attr) {
             var threshold = scope.threshold || 0;
             var ele = element[0];
             element.bind('scroll', function () {
                 if (ele.scrollTop + ele.offsetHeight + threshold >= ele.scrollHeight) {
-                    if (scope.servicename && scope.listobjects) {
-                        Paging.paging(scope.listobjects, scope.servicename);
+                    if (scope.controlleras && scope.controlleras.pagingfunction !== undefined) {
+                        scope.controlleras.pagingfunction();
                     }
-                    else if (scope.pagingfunction != undefined && typeof(scope.pagingfunction) == 'function') {
-                        scope.pagingfunction();
+                    else if (scope.servicename && scope.controlleras && scope.controlleras.list) {
+                        Paging.paging(scope.controlleras.list, scope.servicename);
                     }
                     /* Else display a console error */
                     else {
@@ -41,5 +39,13 @@ function InfiniteScrollDirective(Paging) {
 
 function InfiniteScrollController($scope, Paging, TrackSearch) {
     TrackSearch.SetTerm(null);
-    Paging.setSelected($scope.listobjects === undefined ? [] : $scope.listobjects.Items, $scope.assignmentobjects === undefined ? [] : $scope.assignmentobjects.Items, 'UserGroupID');
+    $scope.$watchCollection(function() {
+        if ($scope.controlleras && $scope.controlleras.list) {
+            return $scope.controlleras.list;
+        }
+    }, function() {
+        if ($scope.controlleras && $scope.controlleras.assignments && $scope.controlleras.list && $scope.idname) {
+            Paging.setSelected($scope.controlleras.list.Items, $scope.controlleras.assignments.Items, $scope.idname);
+        }
+    });
 }
