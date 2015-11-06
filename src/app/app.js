@@ -42,9 +42,7 @@ angular.module( 'orderCloud', [
 ;
 
 function SetBuyerID( BuyerID, buyerid ) {
-    if (!BuyerID.Get()) {
-        BuyerID.Set(buyerid);
-    }
+	BuyerID.Get() ? angular.noop() : BuyerID.Set(buyerid);
 }
 
 function Security( $rootScope, $state, Auth ) {
