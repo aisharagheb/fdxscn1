@@ -1,10 +1,10 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        Assignments for {{userGroupAssign.group.Name}}
+        Assignments for {{userGroupAssign.UserGroup.Name}}
     </h3>
     <section class="table-fixed-header">
         <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="Users" listobject="userGroupAssign.list" ng-form="assignmentsTable" disable-dynamic-validation>
+        <div class="table-container" ordercloud-infinite-scroll servicename="UserGroups" controlleras="userGroupAssign" idname="UserID" disable-dynamic-validation>
             <table class="table table-hover">
                 <colgroup>
                     <col class="action-column"/>
@@ -22,9 +22,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="user in userGroupAssign.list.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <tr ng-repeat="user in userGroupAssign.list.Items track by $index">
                     <td class="text-center">
-                        <input name="{{'assignCheckbox' + $index}}"  type="checkbox" ng-model="user.selected">
+                        <input name="{{'userGroup_assign_' + $index}}"  type="checkbox" ng-model="user.selected">
                     </td>
                     <td>
                         {{user.ID}}
@@ -36,5 +36,5 @@
         </div>
     </section>
     <button type="button" class="btn btn-default" ui-sref="^.groups"><i class="fa fa-arrow-left"></i> Back</button>
-    <button type="button" ng-disabled="userGroupAssign.canSubmit(assignmentsTable) || assignmentsTable.$pristine" class="btn btn-primary" ng-click="userGroupAssign.saveAssignments(assignmentsTable)">Update Assignments</button>
+    <button type="button" class="btn btn-primary" ng-click="userGroupAssign.saveAssignments()">Update Assignments</button>
 </article>

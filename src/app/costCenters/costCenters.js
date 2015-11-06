@@ -125,7 +125,7 @@ function CostCenterAssignController(Assignments, Paging, UserGroupList, Assigned
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
-        CostCenters.SaveAssignment({
+        return CostCenters.SaveAssignment({
             UserID: null,
             UserGroupID: ItemID,
             CostCenterID: vm.CostCenter.ID
@@ -133,7 +133,7 @@ function CostCenterAssignController(Assignments, Paging, UserGroupList, Assigned
     }
 
     function DeleteFunc(ItemID) {
-        CostCenters.DeleteAssignment(vm.CostCenter.ID, null, ItemID);
+        return CostCenters.DeleteAssignment(vm.CostCenter.ID, null, ItemID);
     }
 
     function SaveAssignment() {
