@@ -32,11 +32,23 @@
             </div>
             <div class="form-group col-sm-3">
                 <label for="costCenterInput">Cost Center ID</label>
-                <input id="costCenterInput" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.CostCenterID"/>
+                <input
+                        id="costCenterInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="approvalRuleEdit.approvalRule.CostCenterID"
+                        uib-typeahead="costCenter.ID as costCenter.Name for costCenter in approvalRuleEdit.costCenterIDTypeAhead($viewValue)"
+                />
             </div>
             <div class="form-group col-sm-3">
                 <label for="categoryInput">Category ID</label>
-                <input id="categoryInput" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.CategoryID"/>
+                <input
+                        id="categoryInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="approvalRuleEdit.approvalRule.CategoryID"
+                        uib-typeahead="category.ID as category.Name for category in approvalRuleEdit.categoryIDTypeAhead($viewValue)"
+                />
             </div>
         </div>
         <div class="row">
@@ -69,17 +81,42 @@
         <div class="row">
             <div class="form-group col-sm-3">
                 <label for="submittingUserGroup">Apply rule to following submitter(s):</label>
-                <input id="submittingUserGroup" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.UserGroupID" placeholder="User Group ID"/>
+                <input
+                        id="submittingUserGroup"
+                        type="text" class="form-control"
+                        ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.UserGroupID"
+                        placeholder="User Group ID"
+                        uib-typeahead="userGroup.ID as userGroup.Name for userGroup in approvalRuleEdit.userGroupIDTypeAhead($viewValue)"
+                />
             </div>
             <div class="form-group col-sm-3 no-padding">
-                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.UserID" placeholder="User ID"/>
+                <input
+                        type="text"
+                        class="form-control"
+                        ng-model="approvalRuleEdit.approvalRule.SubmittingAssignment.UserID"
+                        placeholder="User ID"
+                        uib-typeahead="user.ID as (user.FirstName + ' ' + user.LastName + ' (' + user.Username + ')') for user in approvalRuleEdit.userIDTypeAhead($viewValue)"
+                />
             </div>
             <div class="form-group col-sm-3">
                 <label for="approvingUserGroup">Apply rule to the following approver(s):</label>
-                <input id="approvingUserGroup" type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.UserGroupID" placeholder="User Group ID"/>
+                <input
+                        id="approvingUserGroup"
+                        type="text"
+                        class="form-control"
+                        ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.UserGroupID"
+                        placeholder="User Group ID"
+                        uib-typeahead="userGroup.ID as userGroup.Name for userGroup in approvalRuleEdit.userGroupIDTypeAhead($viewValue)"
+                />
             </div>
             <div class="form-group col-sm-3 no-padding">
-                <input type="text" class="form-control" ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.UserID" placeholder="User ID"/>
+                <input
+                        type="text"
+                        class="form-control"
+                        ng-model="approvalRuleEdit.approvalRule.ApprovingAssignment.UserID"
+                        placeholder="User ID"
+                        uib-typeahead="user.ID as (user.FirstName + ' ' + user.LastName + ' (' + user.Username + ')') for user in approvalRuleEdit.userIDTypeAhead($viewValue)"
+                />
             </div>
         </div>
         <div class="row">

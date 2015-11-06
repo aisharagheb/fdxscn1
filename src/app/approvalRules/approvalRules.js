@@ -4,6 +4,7 @@ angular.module( 'orderCloud' )
     .controller( 'ApprovalRulesCtrl', ApprovalRulesController )
     .controller( 'ApprovalRuleEditCtrl', ApprovalRuleEditController )
     .controller( 'ApprovalRuleCreateCtrl', ApprovalRuleCreateController )
+    .factory( 'ApprovalRuleFactory', ApprovalRuleTypeFactory )
 
 ;
 
@@ -50,7 +51,7 @@ function ApprovalRulesController( ApprovalRuleList, TrackSearch ) {
     };
 }
 
-function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApprovalRule, ApprovalRules, BuyerID ) {
+function ApprovalRuleEditController( $exceptionHandler, $state, ApprovalRuleFactory, SelectedApprovalRule, ApprovalRules, BuyerID ) {
     var vm = this,
         approvalRuleID = SelectedApprovalRule.ID;
     vm.approvalRuleID = SelectedApprovalRule.ID;
@@ -77,17 +78,22 @@ function ApprovalRuleEditController( $exceptionHandler, $state, SelectedApproval
                 $exceptionHandler(ex);
             });
     }
+
+    vm.userIDTypeAhead = ApprovalRuleFactory.UserList;
+    vm.userGroupIDTypeAhead = ApprovalRuleFactory.UserGroupList;
+    vm.costCenterIDTypeAhead = ApprovalRuleFactory.CostCenterList;
+    vm.categoryIDTypeAhead = ApprovalRuleFactory.CategoryList;
 }
 
-function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRules, BuyerID) {
+function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRuleFactory, ApprovalRules, BuyerID) {
     var vm = this;
     vm.approvalRule = {};
     vm.approvalRule.ApprovingAssignment = {
         BuyerID: BuyerID.Get()
-    }
+    };
     vm.approvalRule.SubmittingAssignment = {
         BuyerID: BuyerID.Get()
-    }
+    };
 
     vm.Submit = function() {
         ApprovalRules.Create(vm.approvalRule)
@@ -97,5 +103,44 @@ function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRules, 
             .catch(function(ex) {
                 $exceptionHandler(ex);
             });
+    };
+
+    vm.userIDTypeAhead = ApprovalRuleFactory.UserList;
+    vm.userGroupIDTypeAhead = ApprovalRuleFactory.UserGroupList;
+    vm.costCenterIDTypeAhead = ApprovalRuleFactory.CostCenterList;
+    vm.categoryIDTypeAhead = ApprovalRuleFactory.CategoryList;
+}
+
+function ApprovalRuleTypeFactory(Users, UserGroups, CostCenters, Categories) {
+    return {
+        UserList: UserList,
+        UserGroupList: UserGroupList,
+        CostCenterList: CostCenterList,
+        CategoryList: CategoryList
+    };
+
+    function UserList(term) {
+        return Users.List(term).then(function(data) {
+            return data.Items;
+        });
+    }
+
+    function UserGroupList(term) {
+        return UserGroups.List(term).then(function(data) {
+            return data.Items;
+        });
+    }
+
+    function CostCenterList(term) {
+        return CostCenters.List(term).then(function(data) {
+            return data.Items;
+        })
+    }
+
+    function CategoryList(term) {
+        return Categories.List(term).then(function(data) {
+            return data.Items;
+        })
     }
 }
+
