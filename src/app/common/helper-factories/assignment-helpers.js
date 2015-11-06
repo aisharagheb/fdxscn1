@@ -50,9 +50,9 @@ function AssignmentHelpers($q, Underscore, $state) {
             queue.push(DeleteFunc(ItemID));
         });
         $q.all(queue).then(function() {
-            dfd.resolve(dfd.promise, function() {
-                $state.reload($state.current);
-            });
+            dfd.resolve();
+        }).then(function() {
+            $state.reload($state.current);
         });
         return dfd.promise;
     }
