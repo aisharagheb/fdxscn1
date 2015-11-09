@@ -36,7 +36,7 @@ function SelectBuyerController($state, Buyers, BuyerID) {
         });
     };
 
-    vm.PagingFunction = function() {
+    vm.pagingfunction = function() {
         page += 1;
         if (page <= vm.BuyerList.Meta.TotalPages) {
             Buyers.List(null, page, vm.BuyerList.Meta.PageSize)
