@@ -4,6 +4,7 @@ angular.module( 'orderCloud', [
 	'ngAnimate',
 	'ngMessages',
 	'ngTouch',
+    'ui.tree',
 	'ui.router',
 	'ui.bootstrap',
 	'orderCloud.sdk',

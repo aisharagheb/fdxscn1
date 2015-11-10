@@ -1,3 +1,14 @@
+var browsers = {
+    firfox: {
+        name: 'Firefox',
+        browserName: 'firefox'
+    },
+    chrome: {
+        name: 'Chrome',
+        browserName: 'chrome'
+    }
+};
+
 
 // An example configuration file.
 exports.config = {
@@ -5,9 +16,10 @@ exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
 
     // Capabilities to be passed to the webdriver instance.
-    capabilities: {
-        'browserName': 'chrome'
-    },
+    multiCapabilities: [
+        browsers.firfox,
+        browsers.chrome
+    ],
 
     // Spec patterns are relative to the configuration file location passed
     // to protractor (in this example conf.js).

@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var inject = require('gulp-inject');
 var del = require('del');
-var vinylPaths = require('vinyl-paths');
 var pkg = require('../package.json');
 var currVersion = pkg.name + "-" + pkg.version;
 

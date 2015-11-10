@@ -45,6 +45,7 @@ gulp.task('protractor', function () {
         .src(config.src + '**/*.test.js')
         .pipe(protractor({
             configFile: './protractor.config.js',
+            args: ['--baseUrl', 'http://localhost:3333'],
             autoStartStopServer: true,
             debug: true
         }))

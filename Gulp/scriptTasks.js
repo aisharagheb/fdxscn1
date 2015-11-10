@@ -7,7 +7,6 @@ var filter = require('gulp-filter');
 var wrap = require('gulp-wrapper');
 var templatecache = require('gulp-angular-templatecache');
 var del = require('del');
-var vinylPaths = require('vinyl-paths');
 var ngAnnotate = require('gulp-ng-annotate');
 
 

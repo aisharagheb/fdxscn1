@@ -1,5 +1,5 @@
-# OrderCloud Seed - AngularJS
-A seed project for custom Four51 Solutions built on AngularJS
+# OrderCloud-Components - AngularJS
+A project for building and testing components
 ***
 
 ## Get started

@@ -8,7 +8,6 @@ var minify = require('gulp-minify-css');
 var mainBowerFiles = require('main-bower-files');
 var concat = require('gulp-concat');
 var del = require('del');
-var vinylPaths = require('vinyl-paths');
 var plumber = require('gulp-plumber');
 var lessImport = require('gulp-less-import');
 var replace = require('gulp-replace');
@@ -110,9 +109,7 @@ gulp.task('c_m:css', function() {
 });
 
 gulp.task('c_c:css', function() {
-    return gulp
-        .src(config.compile + '**/*.css', {read:false})
-        .pipe(vinylPaths(del));
+    return del([config.compile + '**/*.css']);
 });
 
 gulp.task('c_m:assets', function() {
@@ -126,9 +123,7 @@ gulp.task('c_m:assets', function() {
 });
 
 gulp.task('c_c:assets', function() {
-    return gulp
-        .src([config.compile + 'assets/**/*', '!' + config.compile + 'assets/**/*.css'], {read:false})
-        .pipe(vinylPaths(del));
+    return del([config.compile + 'assets/**/*', '!' + config.compile + 'assets/**/*.css']);
 });
 
 //Master Asset Tasks
