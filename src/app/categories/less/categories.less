@@ -1,0 +1,39 @@
+/* --- Tree --- */
+.tree-node {
+  background: @brand-primary;
+  color: white;
+  &.inactive-node {
+    background-color:lighten(@gray-light, 15);
+  }
+}
+.tree-node-content {
+  padding:0.3em;
+  margin-bottom: 10px;
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  p:first-child {
+    padding-left:10px;
+  }
+  p {
+    flex-grow: 1;
+  }
+  .fa-folder,
+  .fa-folder-open {
+    padding:10px;
+    width:50px;
+    text-align:center;
+  }
+}
+.tree-handle {
+  padding: 10px;
+  background: #428bca;
+  color: #FFF;
+  margin-right: 10px;
+}
+
+.angular-ui-tree-placeholder {
+  background: fade(@brand-info, 15) ;
+  border: 2px dashed @brand-info;
+}

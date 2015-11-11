@@ -7,6 +7,9 @@ angular.module( 'orderCloud' )
     .controller( 'CategoryTreeCtrl', CategoryTreeController )
     .controller( 'CategoryAssignCtrl', CategoryAssignController )
     .controller( 'CategoryAssignProductCtrl', CategoryAssignProductController )
+    .factory( 'CategoryTreeService', CategoryTreeService )
+    .directive( 'categoryNode', CategoryNode )
+    .directive( 'categoryTree', CategoryTree )
 
 ;
 
@@ -20,7 +23,7 @@ function CategoriesConfig( $stateProvider ) {
             data: {componentName: 'Categories'},
             resolve: {
                 CategoryList: function(Categories) {
-                    return Categories.List();
+                    return Categories.List(null, 'all');
                 }
             }
         })
@@ -28,9 +31,14 @@ function CategoriesConfig( $stateProvider ) {
             url: '/categorytree',
             templateUrl: 'categories/templates/categoryTree.tpl.html',
             controller: 'CategoryTreeCtrl',
-            controllerAs: 'CatTree',
+            controllerAs: 'categoryTree',
             resolve: {
-
+                Catalog: function(Categories) {
+                    return Categories.List('all', null, 1, 100);
+                },
+                Tree: function(CategoryTreeService) {
+                    return CategoryTreeService.GetCategoryTree();
+                }
             }
         })
         .state( 'base.categoryEdit', {
@@ -132,6 +140,9 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
     vm.category = {};
 
     vm.Submit = function() {
+        if (vm.category.ParentID === '') {
+            vm.category.ParentID = null;
+        }
         Categories.Create(vm.category)
             .then(function() {
                 $state.go('^.categories')
@@ -142,8 +153,20 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
     }
 }
 
-function CategoryTreeController() {
-    //var vm = this;
+function CategoryTreeController(Catalog, Tree, CategoryTreeService) {
+    var vm = this;
+    vm.catalog = Catalog;
+    vm.tree = Tree;
+
+    vm.toggle = function(scope) {
+        scope.toggle();
+    };
+
+    vm.treeOptions = {
+        dropped: function(event) {
+            CategoryTreeService.UpdateCategoryNode(event);
+        }
+    };
 }
 
 function CategoryAssignController(Assignments, Paging, UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
@@ -208,5 +231,132 @@ function CategoryAssignProductController(Assignments, Paging, ProductList, Produ
 
     function PagingFunction() {
         return Paging.paging(vm.list, 'Products', vm.assignments, AssignmentFunc);
+    }
+}
+
+function CategoryTree() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            tree: '='
+        },
+        template: "<ul><category-node ng-repeat='node in tree' node='node'></category-node></ul>"
+    };
+}
+
+function CategoryNode($compile) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            node: '='
+        },
+        template: '<li><a ui-sref="base.adminCategories.edit({id:node.ID})" ng-bind-html="node.Name"></a></li>',
+        link: function(scope, element) {
+            if (angular.isArray(scope.node.children)) {
+                element.append("<category-tree tree='node.children' />");
+                $compile(element.contents())(scope);
+            }
+        }
+    };
+}
+
+function CategoryTreeService($q, Underscore, Categories) {
+    return {
+        GetCategoryTree: tree,
+        UpdateCategoryNode: update
+    };
+
+    function tree() {
+        var tree = [];
+        var deferred = $q.defer();
+        Categories.List(null, 'all', 1, 100).then(function(list) {
+            angular.forEach(Underscore.where(list.Items, { ParentID: null}), function(node) {
+                tree.push(getnode(node));
+            });
+
+            function getnode(node) {
+                var children = Underscore.where(list.Items, { ParentID: node.ID});
+                if (children.length > 0) {
+                    node.children = children;
+                    angular.forEach(children, function(child) {
+                        return getnode(child);
+                    });
+                } else {
+                    node.children = [];
+                }
+                return node;
+            }
+
+            deferred.resolve(tree);
+        });
+        return deferred.promise;
+    }
+
+    function update(event) {
+        var sourceParentNodeList = event.source.nodesScope.$modelValue,
+            destParentNodeList = event.dest.nodesScope.$modelValue,
+            masterDeferred = $q.defer();
+
+        updateNodeList(destParentNodeList).then(function() {
+            if (sourceParentNodeList != destParentNodeList) {
+                if (sourceParentNodeList.length) {
+                    updateNodeList(sourceParentNodeList).then(function() {
+                        updateParentID().then(function() {
+                            masterDeferred.resolve();
+                        });
+                    });
+                } else {
+                    updateParentID().then(function() {
+                        masterDeferred.resolve();
+                    });
+                }
+            }
+        });
+
+        function updateNodeList(nodeList) {
+            var deferred = $q.defer(),
+                nodeQueue = [];
+            angular.forEach(nodeList,function(cat, index) {
+                nodeQueue.push((function() {
+                    return Categories.Patch(cat.ID, {ListOrder: index});
+                }));
+            });
+
+            var queueIndex = 0;
+            function run(i) {
+                nodeQueue[i]().then(function() {
+                    queueIndex++;
+                    if (queueIndex < nodeQueue.length) {
+                        run(queueIndex);
+                    } else {
+                        deferred.resolve();
+                    }
+                });
+            }
+            run(queueIndex);
+
+            return deferred.promise;
+        }
+
+        function updateParentID() {
+            var deferred = $q.defer(),
+                parentID;
+
+            if (event.dest.nodesScope.node) {
+                parentID = event.dest.nodesScope.node.ID;
+            } else {
+                parentID = null;
+            }
+            event.source.nodeScope.node.ParentID = parentID;
+            Categories.Update(event.source.nodeScope.node.ID, event.source.nodeScope.node)
+                .then(function() {
+                    deferred.resolve();
+                });
+            return deferred.promise;
+        }
+
+        return masterDeferred.promise;
     }
 }
