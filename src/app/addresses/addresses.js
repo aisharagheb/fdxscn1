@@ -79,7 +79,7 @@ function AddressEditController( $exceptionHandler, $state, SelectedAddress, Addr
 	vm.Submit = function() {
 		Addresses.Update(addressID, vm.address)
 			.then(function() {
-				$state.go('^.addresses');
+				$state.go('base.addresses');
 			})
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -89,7 +89,7 @@ function AddressEditController( $exceptionHandler, $state, SelectedAddress, Addr
 	vm.Delete = function() {
 		Addresses.Delete(SelectedAddress.ID, false)
 			.then(function() {
-				$state.go('^.addresses')
+				$state.go('base.addresses')
 			})
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -104,7 +104,7 @@ function AddressCreateController($exceptionHandler, $state, Addresses) {
 	vm.Submit = function() {
 		Addresses.Create(vm.address)
 			.then(function() {
-				$state.go('^.addresses')
+				$state.go('base.addresses')
 			})
             .catch(function(ex) {
                 $exceptionHandler(ex);
