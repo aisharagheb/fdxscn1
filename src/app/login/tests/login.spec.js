@@ -1,38 +1,41 @@
-describe('Component: Login ::', function() {
+describe('Component: Login,', function() {
     var scope,
         q,
-        ctrl,
-        factory;
+        loginFactory;
     beforeEach(module('orderCloud'));
     beforeEach(module('orderCloud.sdk'));
-    beforeEach(inject(function($q, $rootScope, LoginService, $controller, $state, Credentials) {
+    beforeEach(inject(function($q, $rootScope, LoginService) {
         q = $q;
         scope = $rootScope.$new();
-        factory = LoginService;
-        ctrl = $controller('LoginCtrl', {
-            $scope: scope,
-            LoginService: LoginService,
-            Credentials: Credentials
-        });
-        spyOn($state, 'go').and.callThrough();
-        spyOn(Credentials, 'Get').and.callThrough();
+        loginFactory = LoginService;
     }));
 
-    describe('Factory: LoginService ::', function() {
+    describe('Factory: LoginService,', function() {
 
     });
 
-    describe('Controller: LoginCtrl ::', function() {
+    describe('Controller: LoginCtrl,', function() {
+        var loginCtrl;
+        beforeEach(inject(function($controller, $state, Credentials, LoginService) {
+            loginCtrl = $controller('LoginCtrl', {
+                $scope: scope,
+                LoginService: LoginService,
+                Credentials: Credentials
+            });
+            spyOn($state, 'go').and.callThrough();
+            spyOn(Credentials, 'Get').and.callThrough();
+        }));
+
         describe('form', function() {
             it ('should initialize to login', function() {
-                expect(ctrl.form).toBe('login');
+                expect(loginCtrl.form).toBe('login');
             });
         });
 
         describe('setForm', function() {
             it ('should change the value of form to the passed in value', function() {
-                ctrl.setForm('reset');
-                expect(ctrl.form).toBe('reset');
+                loginCtrl.setForm('reset');
+                expect(loginCtrl.form).toBe('reset');
             });
         });
 
@@ -42,8 +45,8 @@ describe('Component: Login ::', function() {
                 Password: 'notarealpassword'
             };
             beforeEach(function() {
-                ctrl.credentials = creds;
-                ctrl.submit();
+                loginCtrl.credentials = creds;
+                loginCtrl.submit();
             });
             it ('should call the Credentials Get method with credentials', inject(function(Credentials) {
                 expect(Credentials.Get).toHaveBeenCalledWith(creds);
@@ -56,23 +59,23 @@ describe('Component: Login ::', function() {
         describe('forgotPassword', function() {
             var email = 'test@test.com';
             beforeEach(function() {
-                ctrl.credentials = {
+                loginCtrl.credentials = {
                     Email: email
                 };
                 var deferred = q.defer();
                 deferred.resolve(true);
-                spyOn(factory, 'SendVerificationCode').and.returnValue(deferred.promise);
-                ctrl.forgotPassword();
+                spyOn(loginFactory, 'SendVerificationCode').and.returnValue(deferred.promise);
+                loginCtrl.forgotPassword();
                 scope.$digest();
             });
             it ('should call the LoginService SendVerificationCode with the email', function() {
-                expect(factory.SendVerificationCode).toHaveBeenCalledWith(email);
+                expect(loginFactory.SendVerificationCode).toHaveBeenCalledWith(email);
             });
             it ('should set the form to verificationCodeSuccess', function() {
-                expect(ctrl.form).toBe('verificationCodeSuccess');
+                expect(loginCtrl.form).toBe('verificationCodeSuccess');
             });
             it ('should set credentials.Email back to null', function() {
-                expect(ctrl.credentials.Email).toBe(null);
+                expect(loginCtrl.credentials.Email).toBe(null);
             });
         });
 
