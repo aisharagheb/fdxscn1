@@ -143,7 +143,6 @@ function DevLoginController(DevLoginService, $state, Auth) {
     vm.submit = function() {
         DevLoginService.LogInDev(vm.credentials).then(
             function(data) {
-                console.log(data);
                 Auth.SetToken(data.Items[0].access_token);
                 $state.go('base.home');
             }
