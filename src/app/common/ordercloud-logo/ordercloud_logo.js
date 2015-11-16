@@ -3,7 +3,7 @@ angular.module('orderCloud')
 ;
 
 function ordercloudLogo() {
-	var obj = {
+	return {
 		templateUrl: 'common/ordercloud-logo/ordercloud-logo.tpl.html',
 		replace:true,
 		link: function(scope, element, attrs) {
@@ -15,5 +15,4 @@ function ordercloudLogo() {
 			};
 		}
 	};
-	return obj;
 }
