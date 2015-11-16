@@ -59,7 +59,7 @@ function UserEditController( $exceptionHandler, $state, SelectedUser, Users ) {
         vm.user.TermsAccepted = today;
         Users.Update(userid, vm.user)
             .then(function() {
-                $state.go('^.users')
+                $state.go('base.users')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -69,7 +69,7 @@ function UserEditController( $exceptionHandler, $state, SelectedUser, Users ) {
     vm.Delete = function() {
         Users.Delete(userid)
             .then(function() {
-                $state.go('^.users')
+                $state.go('base.users')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -85,7 +85,7 @@ function UserCreateController( $exceptionHandler, $state, Users ) {
         vm.user.TermsAccepted = today;
         Users.Create( vm.user)
             .then(function() {
-                $state.go('^.users')
+                $state.go('base.users')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
