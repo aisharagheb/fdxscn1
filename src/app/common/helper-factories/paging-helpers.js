@@ -26,7 +26,7 @@ function PagingHelpers($q, $injector, Assignments) {
             var queue = [];
             var dfd = $q.defer();
             queue.push(Service.List(null, ListObject.Meta.Page + 1, ListObject.Meta.PageSize));
-            if (AssignmentFunc !== undefined) {
+            if (AssignmentFunc !== undefined && (AssignmentObjects.Meta.Page < AssignmentObjects.Meta.TotalPages)) {
                 queue.push(AssignmentFunc());
             }
             $q.all(queue).then(function(results) {

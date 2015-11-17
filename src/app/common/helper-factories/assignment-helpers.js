@@ -7,8 +7,8 @@ angular.module('ordercloud-assignment-helpers', [])
 function AssignmentHelpers($q, Underscore, $state) {
     return {
         getAssigned: getAssigned,
-        //getSelected: getSelected,
-        //getUnselected: getUnselected,
+        getSelected: getSelected,
+        getUnselected: getUnselected,
         getToAssign: getToAssign,
         getToDelete: getToDelete,
         saveAssignments: saveAssignments
