@@ -22,32 +22,54 @@ describe('Component: Addresses,', function() {
         };
     }));
 
-    describe('Controller: AddressCreateCtrl,', function() {
-        var addressCreateCtrl;
-        beforeEach(inject(function($state, $controller, Addresses) {
-            addressCreateCtrl = $controller('AddressCreateCtrl', {
-                $scope: scope,
-                Addresses: Addresses
-            });
-            spyOn($state, 'go').and.returnValue(true);
+    describe('State: Base.addresses,', function() {
+        var state;
+        beforeEach(inject(function($state, Addresses) {
+            state = $state.get('base.addresses');
+            spyOn(Addresses, 'List').and.returnValue(null);
         }));
+        it('should resolve AddressList', inject(function ($injector, Addresses) {
+            $injector.invoke(state.resolve.AddressList);
+            expect(Addresses.List).toHaveBeenCalled();
+        }));
+    });
 
-        describe('Submit', function() {
-            beforeEach(inject(function(Addresses) {
-                addressCreateCtrl.address = address;
-                var defer = q.defer();
-                defer.resolve(address);
-                spyOn(Addresses, 'Create').and.returnValue(defer.promise);
-                addressCreateCtrl.Submit();
-                scope.$digest();
-            }));
-            it ('should call the Addresses Create method', inject(function(Addresses) {
-                expect(Addresses.Create).toHaveBeenCalledWith(address);
-            }));
-            it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.addresses');
-            }));
-        });
+    describe('State: Base.addressEdit,', function() {
+        var state;
+        beforeEach(inject(function($state, Addresses) {
+            state = $state.get('base.addressEdit');
+            var defer = q.defer();
+            defer.resolve();
+            spyOn(Addresses, 'Get').and.returnValue(defer.promise);
+        }));
+        it('should resolve SelectedAddress', inject(function ($injector, $stateParams, Addresses) {
+            $injector.invoke(state.resolve.SelectedAddress);
+            expect(Addresses.Get).toHaveBeenCalledWith($stateParams.addressid);
+        }));
+    });
+
+    describe('State: Base.addressAssign,', function() {
+        var state;
+        beforeEach(inject(function($state, Addresses, UserGroups) {
+            state = $state.get('base.addressAssign');
+            spyOn(UserGroups, 'List').and.returnValue(null);
+            spyOn(Addresses, 'ListAssignments').and.returnValue(null);
+            var defer = q.defer();
+            defer.resolve();
+            spyOn(Addresses, 'Get').and.returnValue(defer.promise);
+        }));
+        it('should resolve UserGroupList', inject(function ($injector, UserGroups) {
+            $injector.invoke(state.resolve.UserGroupList);
+            expect(UserGroups.List).toHaveBeenCalled();
+        }));
+        it('should resolve AssignmentsList', inject(function ($injector, $stateParams, Addresses) {
+            $injector.invoke(state.resolve.AssignmentsList);
+            expect(Addresses.ListAssignments).toHaveBeenCalledWith($stateParams.addressid);
+        }));
+        it('should resolve SelectedAddress', inject(function ($injector, $stateParams, Addresses) {
+            $injector.invoke(state.resolve.SelectedAddress);
+            expect(Addresses.Get).toHaveBeenCalledWith($stateParams.addressid);
+        }));
     });
 
     describe('Controller: AddressEditCtrl,', function() {
@@ -89,6 +111,34 @@ describe('Component: Addresses,', function() {
             }));
             it ('should call the Addresses Delete method', inject(function(Addresses) {
                 expect(Addresses.Delete).toHaveBeenCalledWith(address.ID, false);
+            }));
+            it ('should enter the addresses state', inject(function($state) {
+                expect($state.go).toHaveBeenCalledWith('base.addresses');
+            }));
+        });
+    });
+
+    describe('Controller: AddressCreateCtrl,', function() {
+        var addressCreateCtrl;
+        beforeEach(inject(function($state, $controller, Addresses) {
+            addressCreateCtrl = $controller('AddressCreateCtrl', {
+                $scope: scope,
+                Addresses: Addresses
+            });
+            spyOn($state, 'go').and.returnValue(true);
+        }));
+
+        describe('Submit', function() {
+            beforeEach(inject(function(Addresses) {
+                addressCreateCtrl.address = address;
+                var defer = q.defer();
+                defer.resolve(address);
+                spyOn(Addresses, 'Create').and.returnValue(defer.promise);
+                addressCreateCtrl.Submit();
+                scope.$digest();
+            }));
+            it ('should call the Addresses Create method', inject(function(Addresses) {
+                expect(Addresses.Create).toHaveBeenCalledWith(address);
             }));
             it ('should enter the addresses state', inject(function($state) {
                 expect($state.go).toHaveBeenCalledWith('base.addresses');
