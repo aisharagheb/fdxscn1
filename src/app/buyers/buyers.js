@@ -29,7 +29,7 @@ function BuyerConfig( $stateProvider ) {
             controller: 'BuyerEditCtrl',
             controllerAs: 'buyerEdit',
             resolve: {
-                Buyer: function($stateParams, Buyers) {
+                SelectedBuyer: function($stateParams, Buyers) {
                     return Buyers.Get($stateParams.buyerid);
                 }
             }
@@ -60,16 +60,15 @@ function BuyerController(BuyerList, Buyers) {
     }
 }
 
-function BuyerEditController($exceptionHandler, $state, Buyer, Buyers) {
+function BuyerEditController($exceptionHandler, $state, SelectedBuyer, Buyers) {
     var vm = this;
-    vm.buyer = Buyer;
-    vm.buyerName = Buyer.Name;
-    vm.Submit = saveBuyer;
+    vm.buyer = SelectedBuyer;
+    vm.buyerName = SelectedBuyer.Name;
 
-    function saveBuyer() {
+    vm.Submit = function() {
         Buyers.Update(vm.buyer)
             .then(function() {
-                $state.go('^.buyers');
+                $state.go('base.buyers');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -80,12 +79,10 @@ function BuyerEditController($exceptionHandler, $state, Buyer, Buyers) {
 function BuyerCreateController($exceptionHandler, $state, Buyers) {
     var vm = this;
 
-    vm.Submit = BuyerCreate;
-
-    function BuyerCreate() {
+    vm.Submit = function () {
         Buyers.Create(vm.buyer)
             .then(function() {
-                $state.go('^.buyers');
+                $state.go('base.buyers');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
