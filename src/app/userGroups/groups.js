@@ -50,7 +50,7 @@ function UserGroupsConfig( $stateProvider ) {
                     return Users.List(null, 1, 20);
                 },
                 AssignedUsers: function ($stateParams, UserGroups) {
-                    return UserGroups.ListMemberAssignments(null, $stateParams.userGroupid);
+                    return UserGroups.ListUserAssignments($stateParams.userGroupid);
                 },
                 SelectedUserGroup: function($stateParams, UserGroups) {
                     return UserGroups.Get($stateParams.userGroupid);
@@ -76,7 +76,7 @@ function UserGroupEditController( $exceptionHandler, $state, SelectedUserGroup, 
     vm.Submit = function() {
         UserGroups.Update(groupID, vm.userGroup)
             .then(function() {
-                $state.go('^.groups')
+                $state.go('base.groups')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -86,7 +86,7 @@ function UserGroupEditController( $exceptionHandler, $state, SelectedUserGroup, 
     vm.Delete = function() {
         UserGroups.Delete(SelectedUserGroup.ID)
             .then(function() {
-                $state.go('^.groups')
+                $state.go('base.groups')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -100,7 +100,7 @@ function UserGroupCreateController( $exceptionHandler, $state, UserGroups ) {
     vm.Submit = function() {
         UserGroups.Create(vm.userGroup)
             .then(function() {
-                $state.go('^.groups')
+                $state.go('base.groups')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -117,14 +117,14 @@ function UserGroupAssignController(Assignments, Paging, UserList, AssignedUsers,
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
-        return UserGroups.SaveMemberAssignment({
+        return UserGroups.SaveUserAssignment({
             UserID: ItemID,
             UserGroupID: vm.UserGroup.ID
         });
     }
 
     function DeleteFunc(ItemID) {
-        return UserGroups.DeleteMemberAssignment(vm.UserGroup.ID, ItemID);
+        return UserGroups.DeleteUserAssignment(vm.UserGroup.ID, ItemID);
     }
 
     function SaveAssignment() {
@@ -132,7 +132,7 @@ function UserGroupAssignController(Assignments, Paging, UserList, AssignedUsers,
     }
 
     function AssignmentFunc() {
-        return UserGroups.ListAssignments(vm.UserGroup.ID, null, vm.assignments.Meta.PageSize, 'UserID');
+        return UserGroups.ListUserAssignments(vm.UserGroup.ID, null, vm.assignments.Meta.PageSize, 'UserID');
     }
 
     function PagingFunction() {
