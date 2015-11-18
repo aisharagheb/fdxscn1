@@ -7,11 +7,10 @@ var portNumber = 12000;  //used for localhost
 
 var protractor = require('gulp-angular-protractor');
 
-
-
 if (appName) {
     appName = appName.toLowerCase();
 }
+
 if (portNumber) {
     if (isNaN(portNumber)) {
         portNumber = null;
@@ -42,10 +41,10 @@ gulp.task('testServe', function() {
 
 gulp.task('protractor', function () {
     return gulp
-        .src(config.src + '**/*.test.js')
+        .src(config.src + '**/login.test.js', config.src + '**/*.test.js')
         .pipe(protractor({
             configFile: './protractor.config.js',
-            args: ['--baseUrl', 'http://localhost:3333'],
+            args: ['--baseUrl', 'http://localhost:8000'],
             autoStartStopServer: true,
             debug: true
         }))

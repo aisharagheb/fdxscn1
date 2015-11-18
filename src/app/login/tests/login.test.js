@@ -1,3 +1,5 @@
+/* This test will have to be run first so the user is logged in */
+
 function LoginPage() {
     this.login_button = element(by.id('submit_login'));
     this.username_field = element(by.id('Username'));

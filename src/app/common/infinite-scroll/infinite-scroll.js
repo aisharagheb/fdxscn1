@@ -5,7 +5,7 @@ angular.module('ordercloud-infinite-scroll')
     .controller( 'InfiniteScrollCtrl', InfiniteScrollController )
 ;
 
-function InfiniteScrollDirective($injector, Paging) {
+function InfiniteScrollDirective(Paging) {
     return {
         restrict: 'A',
         scope: {
@@ -16,7 +16,7 @@ function InfiniteScrollDirective($injector, Paging) {
         },
         controller: 'InfiniteScrollCtrl',
         controllerAs: 'InfiniteScroll',
-        link: function(scope, element, attr) {
+        link: function(scope, element) {
             var threshold = scope.threshold || 0;
             var ele = element[0];
             element.bind('scroll', function () {
