@@ -10,7 +10,7 @@ describe('Component: Buyers,', function() {
         buyer = {
             ID: "TestBuyer123456789",
             Name: "TestBuyerTest",
-            Active: "True"
+            Active: true
         };
     }));
 
