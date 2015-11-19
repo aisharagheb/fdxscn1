@@ -6,7 +6,6 @@ angular.module('orderCloud')
     .controller('ProductCreateCtrl', ProductCreateController)
     .controller('ProductAssignmentsCtrl', ProductAssignmentsController)
     .controller('ProductCreateAssignmentCtrl', ProductCreateAssignmentController)
-    .controller('ProductAssignCtrl', ProductAssignController)
 
 ;
 
@@ -68,35 +67,11 @@ function ProductsConfig($stateProvider) {
                     return PriceSchedules.List(1, 20);
                 }
             }
-        })
-        .state('base.productAssign', {
-            url: '/products/:productid/assign',
-            templateUrl: 'products/templates/productAssign.tpl.html',
-            controller: 'ProductAssignCtrl',
-            controllerAs: 'productAssign',
-            resolve: {
-                Buyer: function (Buyers) {
-                    return Buyers.Get();
-                },
-                UserGroupList: function (UserGroups) {
-                    return UserGroups.List(null, 1, 20);
-                },
-                PriceScheduleList: function (PriceSchedules) {
-                    return PriceSchedules.List(1, 20);
-                },
-                Assignments: function ($stateParams, Products) {
-                    return Products.ListAssignments($stateParams.productid);
-                },
-                SelectedProduct: function ($stateParams, Products) {
-                    return Products.Get($stateParams.productid);
-                }
-            }
-        })
+        });
 }
 
 function ProductsController(ProductList, TrackSearch) {
-    var vm = this,
-        page = 1;
+    var vm = this;
     vm.list = ProductList;
     vm.searching = function() {
         return TrackSearch.GetTerm() ? true : false;
@@ -164,12 +139,11 @@ function ProductAssignmentsController($exceptionHandler, $stateParams, $state, S
 
 }
 
-function ProductCreateAssignmentController($scope, $q, $timeout, $stateParams, $state, Underscore, UserGroups, UserGroupList, PriceScheduleList, Products, BuyerID) {
+function ProductCreateAssignmentController($q, $stateParams, $state, Underscore, UserGroupList, PriceScheduleList, Products, BuyerID) {
     var vm = this;
-    vm.userGroups = UserGroupList;
+    vm.list = UserGroupList;
     vm.priceSchedules = PriceScheduleList.Items;
     vm.assignBuyer = false;
-    vm.groupSearchTerm = null;
     vm.model = {
         ProductID:$stateParams.productid,
         BuyerID: BuyerID.Get(),
@@ -177,24 +151,6 @@ function ProductCreateAssignmentController($scope, $q, $timeout, $stateParams, $
         StandardPriceScheduleID: null,
         ReplenishmentPriceScheduleID: null
     };
-
-    var searching;
-    $scope.$watch(function() {
-        return vm.groupSearchTerm
-    }, function(n,o) {
-        if (!n || n.length < 3 || n == o) {
-            vm.userGroups = UserGroupList;
-            if (searching) $timeout.cancel(searching);
-        } else {
-            if (searching) $timeout.cancel(searching);
-            searching = $timeout(function() {
-                UserGroups.List(vm.groupSearchTerm, 1, 20).then(function(data) {
-                    vm.userGroups = data;
-                })
-            }, 300);
-        }
-
-    });
 
     vm.toggleReplenishmentPS = function(id) {
         vm.model.ReplenishmentPriceScheduleID == id ? vm.model.ReplenishmentPriceScheduleID = null : vm.model.ReplenishmentPriceScheduleID = id;
@@ -205,14 +161,14 @@ function ProductCreateAssignmentController($scope, $q, $timeout, $stateParams, $
     };
 
     vm.submit = function() {
-        if (!(vm.model.StandardPriceScheduleID || vm.model.ReplenishmentPriceScheduleID) || (!vm.assignBuyer && !Underscore.where(vm.userGroups.Items, {selected:true}).length)) return;
+        if (!(vm.model.StandardPriceScheduleID || vm.model.ReplenishmentPriceScheduleID) || (!vm.assignBuyer && !Underscore.where(vm.list.Items, {selected:true}).length)) return;
         if (vm.assignBuyer) {
             Products.SaveAssignment(vm.model).then(function() {
                 $state.go('base.productAssignments', {productid:$stateParams.productid});
             })
         } else {
             var assignmentQueue = [];
-            angular.forEach(Underscore.where(vm.userGroups.Items, {selected:true}), function(group) {
+            angular.forEach(Underscore.where(vm.list.Items, {selected:true}), function(group) {
                 assignmentQueue.push((function() {
                     var df = $q.defer();
                     var assignment = angular.copy(vm.model);
@@ -228,141 +184,5 @@ function ProductCreateAssignmentController($scope, $q, $timeout, $stateParams, $
             })
         }
     };
-}
-
-function ProductAssignController(buyerid, UserGroups, UserGroupList, PriceScheduleList, Assignments, SelectedProduct, Products, Buyer, $state) {
-    var vm = this,
-        page = 1;
-    vm.buyer = Buyer;
-    vm.userGroups = UserGroupList.Items;
-    vm.Standard_PS_ID = null;
-    vm.Replenishment_PS_ID = null;
-    vm.priceSchedules = PriceScheduleList.Items;
-    vm.assignments = Assignments.Items;
-    vm.product = SelectedProduct;
-    vm.pagingFunction = pagingFunction;
-    vm.stepOne = true;
-    vm.stepTwo = false;
-    vm.toOne = function () {
-        vm.stepTwo = false;
-        vm.stepOne = true;
-    };
-    vm.toTwo = function () {
-        vm.stepTwo = true;
-        vm.stepOne = false;
-    };
-
-    var reload = (function () {
-        $state.go($state.current, {}, {reload: true});
-    });
-
-    vm.selectPriceSchedule = function(priceSchedule) {
-        if (priceSchedule.selected && priceSchedule.ID !== vm.Standard_PS_ID && priceSchedule.ID !== vm.Replenishment_PS_ID) {
-            if (priceSchedule.OrderType === 'Standard') {
-                vm.Standard_PS_ID = priceSchedule.ID;
-            }
-            else if (priceSchedule.OrderType === 'Replenishment') {
-                vm.Replenishment_PS_ID = priceSchedule.ID;
-            }
-        }
-        else {
-            if (priceSchedule.ID === vm.Standard_PS_ID) {
-                vm.Standard_PS_ID = null;
-                priceSchedule.selected = false;
-            }
-            else if (priceSchedule.ID === vm.Replenishment_PS_ID) {
-                vm.Replenishment_PS_ID = null;
-                priceSchedule.selected = false;
-            }
-        }
-    }
-
-    function checkSelectedPSIDs(party_type, party_id) {
-        if (vm.Standard_PS_ID === null || vm.Replenishment_PS_ID === null) {
-            angular.forEach(vm.assignments, function(assignment) {
-                if (party_type === 'UserGroup' && party_id === assignment.UserGroupID) {
-                    updateIDs(assignment);
-                }
-                if (party_type === 'Buyer' && party_id === assignment.BuyerID) {
-                    updateIDs(assignment);
-                }
-            });
-        }
-        var assignmentObject = {
-            ProductID: vm.product.ID,
-            ReplenishmentPriceScheduleID: vm.Replenishment_PS_ID,
-            StandardPriceScheduleID: vm.Standard_PS_ID,
-            BuyerID: buyerid
-        };
-        if (party_type === 'UserGroup') {
-            assignmentObject.UserGroupID = party_id;
-        }
-        Products.SaveAssignment(assignmentObject).then(reload);
-    }
-
-    function updateIDs(assignment) {
-        if (assignment.StandardPriceScheduleID === null && vm.Replenishment_PS_ID === null) {
-            vm.Replenishment_PS_ID = assignment.ReplenishmentPriceScheduleID;
-        }
-        else if (assignment.ReplenishmentPriceScheduleID === null && vm.Standard_PS_ID === null) {
-            vm.Standard_PS_ID = assignment.StandardPriceScheduleID;
-        }
-    }
-
-    vm.saveAssignments = function() {
-        if (vm.assignBuyer) {
-            checkSelectedPSIDs('Buyer', buyerid);
-        }
-        else {
-            angular.forEach(vm.userGroups, function(group) {
-                if (group.selected) {
-                    checkSelectedPSIDs('UserGroup', group.ID);
-                }
-            });
-        }
-    }
-
-    vm.deleteAssignment = function ($exceptionHandler, assignment, psType) {
-        if (psType == null) {
-            Products.DeleteAssignment(vm.product.ID, null, assignment.UserGroupID)
-                .then(reload);
-        }
-        else {
-            if (psType === 'Standard') {
-                assignment.StandardPriceScheduleID = null;
-
-            }
-            else if (psType === 'Replenishment') {
-                assignment.ReplenishmentPriceScheduleID = null;
-            }
-            Products.SaveAssignment(assignment)
-                .then(reload)
-                .catch(function(ex) {
-                    $exceptionHandler(ex)
-                });
-        }
-    }
-
-
-    function pagingFunction() {
-        page += 1;
-        if (page <= UserGroupList.Meta.TotalPages) {
-            UserGroups.List(null, page, 20)
-                .then(function (groups) {
-                    if (groups.Items && groups.Items.length > 0) {
-                        vm.userGroups = [].concat(vm.userGroups, groups.Items)
-                    }
-                });
-        }
-        if (page <= PriceScheduleList.Meta.TotalPages) {
-            PriceScheduleList.List(null, null, page, 20)
-                .then(function (ps) {
-                    if (ps.Items && groups.ps.length > 0) {
-                        vm.priceSchedules = [].concat(vm.priceSchedules, ps.Items)
-                    }
-                });
-        }
-    }
-
 }
 
