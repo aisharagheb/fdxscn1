@@ -4,7 +4,7 @@
     </h3>
     <section class="table-fixed-header">
         <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="Coupons" listobject="couponAssignProd.ProductList" ng-form="assignmentsTable" disable-dynamic-validation>
+        <div class="table-container" ordercloud-infinite-scroll servicename="Products" idname="ProductID" controlleras="couponAssignProd" disable-dynamic-validation>
             <table class="table table-hover">
                 <colgroup>
                     <col class="action-column"/>
@@ -23,9 +23,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="product in couponAssignProd.ProductList.Items track by $index" ng-class="{'dirty': assignmentsTable['assignCheckbox' + $index].$dirty}">
+                <tr ng-repeat="product in couponAssignProd.list.Items track by $index">
                     <td class="text-center">
-                        <input ng-change="couponAssignProd.resetSelection($index, assignmentsTable)" name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="product.selected">
+                        <input name="{{'assignCheckbox' + $index}}" type="checkbox" ng-model="product.selected">
                     </td>
                     <td>
                         <p>{{product.ID}}</p>
@@ -40,8 +40,8 @@
     </section>
     <div class="form-group">
         <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" class="btn btn-primary" ng-click="couponAssignProd.saveAssignment(assignmentsTable)">Update Product Assignments</button>
-        <button type="button" class="btn btn-default" ui-sref="^.couponAssignParty({couponid: couponAssignProd.Coupon.ID})">Assign Parties</button>
-        <button type="button" class="btn btn-default" ui-sref="^.couponAssignCategory({couponid: couponAssignProd.Coupon.ID})">Assign Categories</button>
+        <button type="button" class="btn btn-primary" ng-click="couponAssignProd.saveAssignment()">Update Product Assignments</button>
+        <button type="button" class="btn btn-default" ui-sref="^.couponAssignParty({couponid: couponAssignProd.coupon.ID})">Assign Parties</button>
+        <button type="button" class="btn btn-default" ui-sref="^.couponAssignCategory({couponid: couponAssignProd.coupon.ID})">Assign Categories</button>
     </div>
 </article>

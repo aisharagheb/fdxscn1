@@ -80,7 +80,7 @@ function CouponsConfig( $stateProvider ) {
                     return Products.List();
                 },
                 ProductAssignments: function(Coupons, $stateParams) {
-                    return Coupons.ListAssignedProducts($stateParams.couponid)
+                    return Coupons.ListProductAssignments($stateParams.couponid);
                 },
                 SelectedCoupon: function($stateParams, Coupons) {
                     return Coupons.Get($stateParams.couponid);
@@ -97,7 +97,7 @@ function CouponsConfig( $stateProvider ) {
                     return Categories.List();
                 },
                 CategoryAssignments: function(Coupons, $stateParams) {
-                    return Coupons.ListAssignedCategories($stateParams.couponid);
+                    return Coupons.ListCategoryAssignments($stateParams.couponid);
                 },
                 SelectedCoupon: function($stateParams, Coupons) {
                     return Coupons.Get($stateParams.couponid);
@@ -166,193 +166,100 @@ function CouponCreateController( $exceptionHandler, $state, Coupons) {
     }
 }
 
-function CouponAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCoupon, Coupons) {
+function CouponAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCoupon, Coupons, Assignments, Paging) {
     var vm = this;
     vm.coupon = SelectedCoupon;
     vm.buyer = Buyer;
-    vm.userGroups = UserGroupList;
-    vm.assignedUserGroups = AssignedUserGroups;
+    vm.list = UserGroupList;
+    vm.assignments = AssignedUserGroups;
     vm.saveAssignments = saveAssignments;
+    vm.pagingfunction = PagingFunction;
 
-    function saveAssignments(form) {
-        var assignmentObject = {};
-        angular.forEach(vm.userGroups.Items, function(group, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (group.selected) {
-                    assignmentObject = {UserID: null, UserGroupID: group.ID, CouponID: vm.coupon.ID};
-                    Coupons.SaveAssignment(assignmentObject);
-                    vm.assignedUserGroups.Items.push(assignmentObject);
-                }
-                else {
-                    angular.forEach(vm.assignedUserGroups.Items, function(assignment, index) {
-                        if (assignment.UserGroupID === group.ID) {
-                            Coupons.DeleteAssignment(vm.coupon.ID, null, group.ID);
-                            vm.assignedUserGroups.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    })
-                }
-            }
+    function SaveFunc(ItemID) {
+        return Coupons.SaveAssignment({
+            UserID: null,
+            UserGroupID: ItemID,
+            CouponID: vm.coupon.ID
         });
     }
-}
 
-function CouponAssignProductController(ProductList, ProductAssignments, SelectedCoupon, Coupons, Products) {
-    var vm = this,
-        page = 1;
-    vm.ProductList = ProductList;
-    vm.ProductAssignments = ProductAssignments;
-    vm.Coupon = SelectedCoupon;
-    vm.saveAssignment = SaveAssignment;
-    vm.resetSelection = ResetSelection;
-    vm.pagingFunction = PagingFunction;
-
-    function SetSelected() {
-        angular.forEach(vm.ProductList.Items, function(product) {
-            angular.forEach(vm.ProductAssignments.Items, function(assignment) {
-                if (product.ID === assignment.ID) {
-                    product.selected = true;
-                }
-            });
-        });
-    }
-    SetSelected();
-
-    function SaveAssignment(form) {
-        angular.forEach(vm.ProductList.Items, function(product, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (product.selected) {
-                    Coupons.SaveProductAssignment(vm.Coupon.ID, product.ID);
-                    vm.ProductAssignments.Items.push(product);
-                }
-                else {
-                    angular.forEach(vm.ProductAssignments.Items, function(assignment, index) {
-                        if (assignment.ID === product.ID) {
-                            Coupons.DeleteProductAssignment(vm.Coupon.ID, product.ID);
-                            vm.ProductAssignments.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    });
-                }
-            }
-        });
-        form.$setPristine(true);
+    function DeleteFunc(ItemID) {
+        return Coupons.DeleteAssignment(vm.coupon.ID, null, ItemID);
     }
 
-    function ResetSelection(index, form) {
-        var matched = false;
-        angular.forEach(vm.ProductAssignments.Items, function(assignment) {
-            if (assignment.ID === vm.ProductList.Items[index].ID) {
-                matched = true
-            }
-        });
-        if (matched && vm.ProductList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !vm.ProductList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
+    function saveAssignments() {
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'UserGroupID');
+    }
+
+    function AssignmentFunc() {
+        return Coupons.ListAssignments(vm.coupon.ID, null, vm.assignments.Meta.Page + 1, vm.assignments.Meta.PageSize);
     }
 
     function PagingFunction() {
-        page += 1;
-        if (page <= vm.ProductList.Meta.TotalPages) {
-            Products.List(null, page)
-                .then(function(data) {
-                    vm.ProductList.Meta = data.Meta;
-                    vm.ProductList.Items = [].concat(vm.ProductList.Items, data.Items);
-                    if (page <= vm.ProductAssignments.Meta.TotalPages) {
-                        Coupons.ListProductAssignments(vm.Coupon.ID, page)
-                            .then(function(data) {
-                                vm.ProductAssignments.Meta = data.Meta;
-                                vm.ProductAssignments.List = [].concat(vm.ProductAssignments.Items, data.Items);
-                                SetSelected();
-                            });
-                    }
-                    else {
-                        SetSelected();
-                    }
-                });
-        }
+        return Paging.paging(vm.list, 'UserGroups', vm.assignments, AssignmentFunc);
     }
 }
 
-function CouponAssignCategoryController(CategoryList, CategoryAssignments, SelectedCoupon, Coupons, Categories) {
-    var vm = this,
-        page = 1;
-    vm.CategoryList = CategoryList;
-    vm.CategoryAssignments = CategoryAssignments;
-    vm.Coupon = SelectedCoupon;
+function CouponAssignProductController(ProductList, ProductAssignments, SelectedCoupon, Coupons, Assignments, Paging) {
+    var vm = this;
+    vm.list = ProductList;
+    vm.assignments = ProductAssignments;
+    vm.coupon = SelectedCoupon;
     vm.saveAssignment = SaveAssignment;
-    vm.resetSelection = ResetSelection;
-    vm.pagingFunction = PagingFunction;
+    vm.pagingfunction = PagingFunction;
 
-    function SetSelected() {
-        angular.forEach(vm.CategoryList.Items, function(category) {
-            angular.forEach(vm.CategoryAssignments.Items, function(assignment) {
-                if (category.ID === assignment.ID) {
-                    category.selected = true;
-                }
-            });
+    function SaveFunc(ItemID) {
+        return Coupons.SaveProductAssignment({
+            CouponID: vm.coupon.ID,
+            ProductID: ItemID
         });
     }
-    SetSelected();
 
-    function SaveAssignment(form) {
-        angular.forEach(vm.CategoryList.Items, function(category, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (category.selected) {
-                    Coupons.AssignCategory(vm.Coupon.ID, category.ID);
-                    vm.CategoryAssignments.Items.push(category);
-                }
-                else {
-                    angular.forEach(vm.CategoryAssignments.Items, function(assignment, index) {
-                        if (assignment.ID === category.ID) {
-                            Coupons.DeleteCategoryAssignment(vm.Coupon.ID, category.ID);
-                            vm.CategoryAssignments.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    });
-                }
-            }
-        });
-        form.$setPristine(form);
+    function DeleteFunc(ItemID) {
+        return Coupons.DeleteProductAssignment(vm.coupon.ID, ItemID);
     }
 
-    function ResetSelection(index, form) {
-        var matched = false;
-        angular.forEach(vm.CategoryAssignments.Items, function(assignment) {
-            if (assignment.ID === vm.CategoryList.Items[index].ID) {
-                matched = true
-            }
-        });
-        if (matched && vm.CategoryList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !vm.CategoryList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
+    function SaveAssignment() {
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'ProductID');
+    }
+
+    function AssignmentFunc() {
+        return Coupons.ListProductAssignments(vm.coupon.ID, null, vm.assignments.Meta.Page + 1, vm.assignments.Meta.PageSize);
     }
 
     function PagingFunction() {
-        page += 1;
-        if (page <= vm.CategoryList.Meta.TotalPages) {
-            Categories.List(null, page)
-                .then(function(data) {
-                    vm.CategoryList.Meta = data.Meta;
-                    vm.CategoryList.Items = [].concat(vm.CategoryList.Items, data.Items);
-                    if (page <= vm.CategoryAssignments.Meta.TotalPages) {
-                        Coupons.ListAssignedCategories(vm.Coupon.ID, page)
-                            .then(function(data) {
-                                vm.CategoryAssignments.Meta = data.Meta;
-                                vm.CategoryAssignments.List = [].concat(vm.CategoryAssignments.Items, data.Items);
-                                SetSelected();
-                            });
-                    }
-                    else {
-                        SetSelected();
-                    }
-                });
-        }
+        return Paging.paging(vm.list, 'Products', vm.assignments, AssignmentFunc);
+    }
+}
+
+function CouponAssignCategoryController(CategoryList, CategoryAssignments, SelectedCoupon, Coupons, Assignments, Paging) {
+    var vm = this;
+    vm.list = CategoryList;
+    vm.assignments = CategoryAssignments;
+    vm.coupon = SelectedCoupon;
+    vm.saveAssignment = SaveAssignment;
+    vm.pagingfunction = PagingFunction;
+
+    function SaveFunc(ItemID) {
+        return Coupons.SaveCategoryAssignment({
+            CouponID: vm.coupon.ID,
+            CategoryID: ItemID
+        });
+    }
+
+    function DeleteFunc(ItemID) {
+        return Coupons.DeleteCategoryAssignment(vm.coupon.ID, ItemID);
+    }
+
+    function SaveAssignment() {
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'CategoryID');
+    }
+
+    function AssignmentFunc() {
+        return Coupons.ListCategoryAssignments(vm.coupon.ID, null, vm.assignments.Meta.Page + 1, vm.assignments.Meta.PageSize);
+    }
+
+    function PagingFunction() {
+        return Paging.paging(vm.list, 'Categories', vm.assignments, AssignmentFunc);
     }
 }
