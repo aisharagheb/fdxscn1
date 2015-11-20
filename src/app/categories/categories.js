@@ -117,7 +117,7 @@ function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Ca
     vm.Submit = function() {
         Categories.Update(categoryID, vm.category)
             .then(function() {
-                $state.go('^.categories')
+                $state.go('base.categories')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -127,7 +127,7 @@ function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Ca
     vm.Delete = function() {
         Categories.Delete(SelectedCategory.ID)
             .then(function() {
-                $state.go('^.categories')
+                $state.go('base.categories')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -145,7 +145,7 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
         }
         Categories.Create(vm.category)
             .then(function() {
-                $state.go('^.categories')
+                $state.go('base.categories')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -207,7 +207,7 @@ function CategoryAssignProductController(Assignments, Paging, ProductList, Produ
     vm.Category = SelectedCategory;
     vm.list = ProductList;
     vm.assignments = ProductAssignments;
-    vm.SaveAssignment = SaveAssignment;
+    vm.saveAssignments = SaveAssignment;
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
