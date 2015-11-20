@@ -121,34 +121,37 @@ function CreditCardCreateController( $exceptionHandler, $state, CreditCards) {
     }
 }
 
-function CreditCardAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCreditCard, CreditCards) {
+function CreditCardAssignController(Buyer, UserGroupList, AssignedUserGroups, SelectedCreditCard, CreditCards, Assignments, Paging) {
     var vm = this;
     vm.buyer = Buyer;
     vm.assignBuyer = false;
-    vm.userGroups = UserGroupList;
-    vm.assignedUserGroups = AssignedUserGroups;
+    vm.list = UserGroupList;
+    vm.assignments = AssignedUserGroups;
     vm.creditCard = SelectedCreditCard;
-    vm.saveAssignments = saveAssignments;
+    vm.saveAssignments = SaveAssignments;
+    vm.pagingfunction = PagingFunction;
 
-    function saveAssignments(form) {
-        var assignmentObject = {};
-        angular.forEach(vm.userGroups.Items, function(group, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (group.selected) {
-                    assignmentObject = {UserID: null, UserGroupID: group.ID, CreditCardID: vm.creditCard.ID};
-                    CreditCards.SaveAssignment(assignmentObject);
-                    vm.assignedUserGroups.Items.push(assignmentObject);
-                }
-                else {
-                    angular.forEach(vm.assignedUserGroups.Items, function(assignment, index) {
-                        if (assignment.UserGroupID === group.ID) {
-                            CreditCards.DeleteAssignment(vm.creditCard.ID, null, group.ID);
-                            vm.assignedUserGroups.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    })
-                }
-            }
+    function SaveFunc(ItemID) {
+        return CreditCards.SaveAssignment({
+            CreditCardID: vm.creditCard.ID,
+            UserID: null,
+            UserGroupID: ItemID
         });
+    }
+
+    function DeleteFunc(ItemID) {
+        return CreditCards.DeleteAssignment(vm.creditCard.ID, null, ItemID);
+    }
+
+    function SaveAssignments() {
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'UserGroupID');
+    }
+
+    function AssignFunc() {
+        return CreditCards.ListAssignments(vm.creditCard.ID, null, null, null, vm.assignments.Meta.Page + 1, vm.assignments.Meta.PageSize);
+    }
+
+    function PagingFunction() {
+        return Paging.paging(vm.list, 'UserGroups', vm.assignments, AssignFunc);
     }
 }
