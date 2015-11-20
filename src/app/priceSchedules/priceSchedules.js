@@ -64,7 +64,7 @@ function PriceScheduleEditController( $exceptionHandler, $state, SelectedPriceSc
         vm.priceSchedule = PriceBreak.setMinMax(vm.priceSchedule);
         PriceSchedules.Update(priceScheduleid, vm.priceSchedule)
             .then(function() {
-                $state.go('^.priceSchedules')
+                $state.go('base.priceSchedules')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -74,7 +74,7 @@ function PriceScheduleEditController( $exceptionHandler, $state, SelectedPriceSc
     vm.Delete = function() {
         PriceSchedules.Delete(priceScheduleid)
             .then(function() {
-                $state.go('^.priceSchedules')
+                $state.go('base.priceSchedules')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -101,7 +101,7 @@ function PriceScheduleCreateController( $exceptionHandler, $state, PriceSchedule
         vm.priceSchedule = PriceBreak.setMinMax(vm.priceSchedule);
         PriceSchedules.Create(vm.priceSchedule)
             .then(function() {
-                $state.go('^.priceSchedules')
+                $state.go('base.priceSchedules')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
