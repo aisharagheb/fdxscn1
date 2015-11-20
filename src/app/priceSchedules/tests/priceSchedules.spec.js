@@ -65,8 +65,12 @@ describe('Component: PriceSchedules,', function() {
         }));
 
         describe('addPriceBreak', function() {
+            var quantity;
+            var price;
             beforeEach(inject(function(PriceBreak) {
                 priceScheduleEditCtrl.priceSchedule = priceSchedule;
+                priceScheduleEditCtrl.quantity = quantity;
+                priceScheduleEditCtrl.quantity = price;
                 var defer = q.defer();
                 defer.resolve(priceSchedule);
                 spyOn(PriceBreak, 'addPriceBreak').and.returnValue(defer.promise);
@@ -74,7 +78,7 @@ describe('Component: PriceSchedules,', function() {
                 scope.$digest();
             }));
             it ('should call the PriceBreak addPriceBreak method', inject(function(PriceBreak) {
-                expect(PriceBreak.addPriceBreak).toHaveBeenCalled();
+                expect(PriceBreak.addPriceBreak).toHaveBeenCalledWith(priceSchedule, price, quantity);
             }));
         });
 
@@ -124,8 +128,12 @@ describe('Component: PriceSchedules,', function() {
         }));
 
         describe('addPriceBreak', function() {
+            var quantity;
+            var price;
             beforeEach(inject(function(PriceBreak) {
                 priceScheduleCreateCtrl.priceSchedule = priceSchedule;
+                priceScheduleCreateCtrl.quantity = quantity;
+                priceScheduleCreateCtrl.quantity = price;
                 var defer = q.defer();
                 defer.resolve(priceSchedule);
                 spyOn(PriceBreak, 'addPriceBreak').and.returnValue(defer.promise);
@@ -133,7 +141,7 @@ describe('Component: PriceSchedules,', function() {
                 scope.$digest();
             }));
             it ('should call the PriceBreak addPriceBreak method', inject(function(PriceBreak) {
-                expect(PriceBreak.addPriceBreak).toHaveBeenCalled();
+                expect(PriceBreak.addPriceBreak).toHaveBeenCalledWith(priceSchedule, price, quantity);
             }));
         });
 
