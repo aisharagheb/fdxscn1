@@ -123,7 +123,7 @@ function CouponEditController( $exceptionHandler, $state, SelectedCoupon, Coupon
     vm.Submit = function() {
         Coupons.Update(couponid, vm.coupon)
             .then(function() {
-                $state.go('^.coupons')
+                $state.go('base.coupons')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -133,7 +133,7 @@ function CouponEditController( $exceptionHandler, $state, SelectedCoupon, Coupon
     vm.Delete = function() {
         Coupons.Delete(SelectedCoupon.ID)
             .then(function() {
-                $state.go('^.coupons')
+                $state.go('base.coupons')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -158,7 +158,7 @@ function CouponCreateController( $exceptionHandler, $state, Coupons) {
     vm.Submit = function() {
         Coupons.Create(vm.coupon)
             .then(function() {
-                $state.go('^.coupons')
+                $state.go('base.coupons')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -205,7 +205,7 @@ function CouponAssignProductController(ProductList, ProductAssignments, Selected
     vm.list = ProductList;
     vm.assignments = ProductAssignments;
     vm.coupon = SelectedCoupon;
-    vm.saveAssignment = SaveAssignment;
+    vm.saveAssignments = SaveAssignment;
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
@@ -237,7 +237,7 @@ function CouponAssignCategoryController(CategoryList, CategoryAssignments, Selec
     vm.list = CategoryList;
     vm.assignments = CategoryAssignments;
     vm.coupon = SelectedCoupon;
-    vm.saveAssignment = SaveAssignment;
+    vm.saveAssignments = SaveAssignment;
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
