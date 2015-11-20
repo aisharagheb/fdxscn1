@@ -42,22 +42,9 @@ function BuyerConfig( $stateProvider ) {
         });
 }
 
-function BuyerController(BuyerList, Buyers) {
-    var vm = this,
-        page = 1;
+function BuyerController(BuyerList) {
+    var vm = this;
     vm.list = BuyerList;
-    vm.PagingFunction = PagingFunction;
-
-    function PagingFunction() {
-        page += 1;
-        if (page <= vm.Buyers.Meta.TotalPages) {
-            Buyers.List(null, page)
-                .then(function(data) {
-                    vm.Buyers.Meta = data.Meta;
-                    vm.Buyers.Items = [].concat(vm.Buyers.Items, data.Items);
-                });
-        }
-    }
 }
 
 function BuyerEditController($exceptionHandler, $state, SelectedBuyer, Buyers) {

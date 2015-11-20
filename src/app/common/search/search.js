@@ -22,7 +22,8 @@ function ordercloudSearch () {
 
 function ordercloudSearchCtrl($timeout, $scope, $injector, TrackSearch) {
     $scope.searchTerm = null;
-    $scope.placeholder = "Search " + $scope.servicename + '...';
+    var var_name = $scope.servicename.replace(/([a-z])([A-Z])/g, '$1 $2');
+    $scope.placeholder = "Search " + var_name + '...';
     var Service = $injector.get($scope.servicename);
     var searching;
     $scope.$watch('searchTerm', function(n,o) {
