@@ -9,7 +9,7 @@ function SelectBuyerDirective() {
     return {
         scope: {},
         restrict: 'E',
-        templateUrl: 'common/buyer-select/buyer-select.tpl.html',
+        templateUrl: 'common/buyer-select/templates/buyer-select.tpl.html',
         controller: 'SelectBuyerCtrl',
         controllerAs: 'selectBuyer'
     }

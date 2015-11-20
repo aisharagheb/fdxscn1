@@ -4,7 +4,7 @@ angular.module('orderCloud')
 
 function ordercloudLogo() {
 	return {
-		templateUrl: 'common/ordercloud-logo/ordercloud-logo.tpl.html',
+		templateUrl: 'common/ordercloud-logo/templates/ordercloud-logo.tpl.html',
 		replace:true,
 		link: function(scope, element, attrs) {
 			scope.OrderCloudLogo = {
