@@ -83,7 +83,7 @@ function CostCenterEditController( $exceptionHandler, $state, SelectedCostCenter
     vm.Submit = function() {
         CostCenters.Update(costCenterid, vm.costCenter)
             .then(function() {
-                $state.go('^.costCenters')
+                $state.go('base.costCenters')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -93,7 +93,7 @@ function CostCenterEditController( $exceptionHandler, $state, SelectedCostCenter
     vm.Delete = function() {
         CostCenters.Delete(SelectedCostCenter.ID)
             .then(function() {
-                $state.go('^.costCenters')
+                $state.go('base.costCenters')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -108,7 +108,7 @@ function CostCenterCreateController( $exceptionHandler,$state, CostCenters) {
     vm.Submit = function() {
         CostCenters.Create(vm.costCenter)
             .then(function() {
-                $state.go('^.costCenters')
+                $state.go('base.costCenters')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
