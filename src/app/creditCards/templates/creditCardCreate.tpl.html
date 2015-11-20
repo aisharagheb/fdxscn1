@@ -9,8 +9,8 @@
                 <input id="creditCardIDInput" ordercloud-auto-id type="text" class="form-control" ng-model="creditCardCreate.creditCard.ID"/>
             </div>
             <div class="col-sm-6 form-group">
-                <label for="creditCardNumberInput">Account Number</label>
-                <input id="creditCardNumberInput" type="text" class="form-control" ng-model="creditCardCreate.creditCard.AccountNumber" minlength="4" maxlength="6" ng-pattern="/^[0-9]+$/" ng-pattern-err-type="number" required/>
+                <label for="creditCardNumberInput">Partial Account Number</label>
+                <input id="creditCardNumberInput" type="text" class="form-control" ng-model="creditCardCreate.creditCard.PartialAccountNumber" minlength="4" maxlength="5" ng-pattern="/^[0-9]+$/" ng-pattern-err-type="number" required/>
             </div>
         </div>
         <div class="row">

@@ -9,8 +9,8 @@
                 <input id="creditCardIDInput" type="text" class="form-control" ng-model="creditCardEdit.creditCard.ID" required/>
             </div>
             <div class="col-sm-6 form-group">
-                <label for="creditCardNumberInput">Account Number</label>
-                <input id="creditCardNumberInput" type="text" class="form-control" ng-model="creditCardEdit.creditCard.AccountNumber" minlength="4"  maxlength="6" ng-pattern="/^[0-9]+$/" required/>
+                <label for="creditCardNumberInput">Partial Account Number</label>
+                <input id="creditCardNumberInput" type="text" class="form-control" ng-model="creditCardEdit.creditCard.PartialAccountNumber" minlength="4"  maxlength="5" ng-pattern="/^[0-9]+$/" required/>
             </div>
         </div>
         <div class="row">

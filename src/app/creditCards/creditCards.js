@@ -83,7 +83,7 @@ function CreditCardEditController( $exceptionHandler, $state, SelectedCreditCard
         vm.creditCard.ExpirationDate = expiration;
         CreditCards.Update(creditcardid, vm.creditCard)
             .then(function() {
-                $state.go('^.creditCards')
+                $state.go('base.creditCards')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -93,7 +93,7 @@ function CreditCardEditController( $exceptionHandler, $state, SelectedCreditCard
     vm.Delete = function() {
         CreditCards.Delete(SelectedCreditCard.ID)
             .then(function() {
-                $state.go('^.creditCards')
+                $state.go('base.creditCards')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -113,7 +113,7 @@ function CreditCardCreateController( $exceptionHandler, $state, CreditCards) {
         vm.creditCard.ExpirationDate = expiration;
         CreditCards.Create(vm.creditCard)
             .then(function() {
-                $state.go('^.creditCards')
+                $state.go('base.creditCards')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
