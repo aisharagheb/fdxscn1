@@ -29,18 +29,15 @@ function OrdersConfig( $stateProvider ) {
                     return Orders.Get($stateParams.orderid);
                 },
                 LineItemList: function($stateParams, LineItems) {
-                    return LineItems.List($stateParams.orderid, 1, 20);
+                    return LineItems.List($stateParams.orderid);
                 }
             }
         });
 }
 
-function OrdersController( OrderList, TrackSearch ) {
+function OrdersController(OrderList) {
     var vm = this;
     vm.list = OrderList;
-    vm.searching = function() {
-        return TrackSearch.GetTerm() ? true : false;
-    };
 }
 
 function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItemList, Orders, LineItems, $scope ) {
@@ -49,6 +46,7 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItem
     vm.order = SelectedOrder;
     vm.orderID = SelectedOrder.ID;
     vm.list = LineItemList;
+    vm.pagingfunction = PagingFunction;
 
     vm.deleteLineItem = function(lineitem) {
         LineItems.Delete(orderid, lineitem.ID)
@@ -88,5 +86,16 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItem
             .catch(function(ex) {
                 $exceptionHandler(ex)
             });
+    };
+
+    function PagingFunction() {
+        if (vm.list.Meta.Page < vm.list.Meta.PageSize) {
+            LineItems.List(vm.order.ID, vm.list.Meta.Page + 1, vm.list.Meta.PageSize).then(
+                function(data) {
+                    vm.list.Meta = data.Meta;
+                    vm.list.Items = [].concat(vm.list.Items, data.Items);
+                }
+            )
+        }
     }
 }

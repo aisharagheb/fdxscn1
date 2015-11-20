@@ -60,7 +60,7 @@
             </h4>
             <section class="table-fixed-header">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="orderEdit.list">
+                <div class="table-container" ordercloud-infinite-scroll controlleras="orderEdit">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -84,7 +84,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="li in orderEdit.list.Items track by $index">
-                            <td>
+                            <td class="text-center">
                                 <i class="fa fa-trash text-danger fa-2x text-danger" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="$event.stopPropagation(); orderEdit.deleteLineItem(li)"></i>
                             </td>
                             <td>
