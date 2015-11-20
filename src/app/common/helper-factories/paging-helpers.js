@@ -25,7 +25,12 @@ function PagingHelpers($q, $injector, Assignments) {
         if (Service && ListObject.Meta.Page < ListObject.Meta.TotalPages) {
             var queue = [];
             var dfd = $q.defer();
-            queue.push(Service.List(null, ListObject.Meta.Page + 1, ListObject.Meta.PageSize));
+            if (ServiceName !== 'Orders') {
+                queue.push(Service.List(null, ListObject.Meta.Page + 1, ListObject.Meta.PageSize));
+            }
+            else {
+                queue.push(Service.List('incoming', null, null, null, ListObject.Meta.Page + 1, ListObject.Meta.PageSize));
+            }
             if (AssignmentFunc !== undefined && (AssignmentObjects.Meta.Page < AssignmentObjects.Meta.TotalPages)) {
                 queue.push(AssignmentFunc());
             }
