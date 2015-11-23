@@ -5,12 +5,12 @@
     <form name="ShipmentEditForm" ng-submit="shipmentEdit.Submit()">
         <div class="row">
             <div class="form-group col-sm-6">
-                <label for="shipmentIDInput">shipment ID</label>
+                <label for="shipmentIDInput">ID</label>
                 <input id="shipmentIDInput" type="text" class="form-control" ng-model="shipmentEdit.shipment.ID" ng-disabled="shipmentEdit.autoGen" ng-required="!shipmentEdit.autoGen">
             </div>
             <div class="form-group col-sm-6">
                 <label for="shipperInput">Shipper</label>
-                <input id="shipperInput" type="text" class="form-control" ng-model="shipmentEdit.shipment.Shipper" />
+                <input id="shipperInput" type="text" class="form-control" ng-model="shipmentEdit.shipment.Shipper"/>
             </div>
         </div>
         <div class="row">
@@ -31,9 +31,14 @@
             <h4>
                 <b>Select Order</b>
             </h4>
+            <ordercloud-search servicename="Orders" controlleras="shipmentEdit"></ordercloud-search>
+            <div class="well well-lg text-center" ng-if="!shipmentEdit.list.Items.length">
+                <b ng-if="!shipmentEdit.searching">The selected buyer does not have any orders.</b>
+                <b ng-if="shipmentEdit.searching"><i class="fa fa-search"></i> No orders match your search.</b>
+            </div>
             <section class="table-fixed-header" ng-if="shipmentEdit.list.Items.length">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="shipmentEdit.list">
+                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" controlleras="shipmentEdit">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -62,9 +67,12 @@
             <h4>
                 <b>Select Line Items</b>
             </h4>
-            <section class="table-fixed-header" ng-if="shipmentEdit.listli.Items.length">
+            <div class="well well-lg text-center" ng-if="!shipmentEdit.lineitems.list.Items.length">
+                <b>The selected order does not have any line items.</b>
+            </div>
+            <section class="table-fixed-header" ng-if="shipmentEdit.lineitems.list.Items.length">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="LineItems" listobject="shipmentEdit.listli">
+                <div class="table-container">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -84,7 +92,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="li in shipmentEdit.listli.Items track by $index" ng-class="{'list-item-disabled': li.disabled}">
+                        <tr ng-repeat="li in shipmentEdit.lineitems.list.Items track by $index" ng-class="{'list-item-disabled': li.disabled}">
                             <td class="text-center"><input type="checkbox" ng-model="li.addToShipment"></td>
                             <td>{{li.ID}}</td>
                             <td>{{li.Quantity}}</td>
@@ -94,6 +102,9 @@
                     </table>
                 </div>
             </section>
+        </div>
+        <div class="well well-lg text-center" ng-show="!shipmentEdit.shipment.Items.length">
+            <b>The selected shipment does not currently have any line items.</b>
         </div>
         <div ng-hide="!shipmentEdit.shipment.Items.length">
             <h4>
@@ -119,7 +130,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="li in shipmentEdit.shipment.Items track by $index">
-                            <td><a class="fa fa-minus-circle text-danger" ng-click="shipmentEdit.deleteLineItem($index)"></a></td>
+                            <td class="text-center"><a class="fa fa-trash text-danger" ng-click="shipmentEdit.deleteLineItem($index)"></a></td>
                             <td>{{li.LineItemId}}</td>
                             <td class="text-center"><input type="number" class="form-control" ng-model="li.QuantityShipped"/></td>
                         </tr>
@@ -130,6 +141,7 @@
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="ShipmentEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ng-click="shipmentEdit.unselectOrder()" ng-if="shipmentEdit.OrderSelected">Unselect Order</button>
             <button type="button" class="btn btn-default" ui-sref="^.shipments">Cancel</button>
             <button type="button" class="btn btn-default" ng-click="shipmentEdit.Delete()"><i class="fa fa-trash text-danger"></i></button>
         </div>

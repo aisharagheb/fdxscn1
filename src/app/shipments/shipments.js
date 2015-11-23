@@ -53,23 +53,27 @@ function ShipmentsController( ShipmentList ) {
     vm.list = ShipmentList;
 }
 
-function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Shipments, OrderList, LineItems ) {
+function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Shipments, OrderList, LineItems) {
     var vm = this,
         shipmentid = SelectedShipment.ID;
     vm.ShipmentID = SelectedShipment.ID;
     vm.shipment = SelectedShipment;
     vm.list = OrderList;
     vm.OrderSelected = false;
-    vm.listli = [];
+    vm.lineitems = {
+        pagingfunction: PagingFunction,
+        list: []
+    };
     if (vm.shipment.DateShipped != null){
         vm.shipment.DateShipped = new Date(vm.shipment.DateShipped);
     }
 
     vm.goToLineItems = function(order) {
-        LineItems.List(order.ID, 1, 20)
+        vm.OrderSelected = order.ID;
+        LineItems.List(vm.OrderSelected, 1, 20)
             .then(function(data){
-                vm.listli = data;
-                angular.forEach(vm.listli.Items, function(li) {
+                vm.lineitems.list = data;
+                angular.forEach(vm.lineitems.list.Items, function(li) {
                     angular.forEach(vm.shipment.Items, function(shipli) {
                         if (shipli.LineItemId === li.ID) {
                             li.addToShipment = true;
@@ -79,17 +83,21 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
                     });
                 });
             });
-        vm.OrderSelected = true;
-    }
+    };
+
+    vm.unselectOrder = function() {
+        vm.OrderSelected = false;
+        vm.lineitems.list = [];
+    };
 
     vm.deleteLineItem = function(index) {
         vm.shipment.Items.splice(index, 1);
-        vm.listli.Items[index].addToShipment = false;
-        vm.listli.Items[index].disabled = false;
-    }
+        vm.lineitems.list.Items[index].addToShipment = false;
+        vm.lineitems.list.Items[index].disabled = false;
+    };
 
     vm.Submit = function() {
-        angular.forEach(vm.listli.Items, function(li) {
+        angular.forEach(vm.lineitems.list.Items, function(li) {
             if (li.addToShipment && !li.disabled) {
                 vm.shipment.Items.push({OrderID: li.OrderID, LineItemId: li.ID, QuantityShipped: li.QuantityShipped});
             }
@@ -112,6 +120,10 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
                 $exceptionHandler(ex)
             });
     };
+
+    function PagingFunction() {
+        LineItems.List(vm.OrderSelected, vm.lineitems.list.Meta.Page + 1, vm.lineitems.list.Meta.PageSize);
+    }
 }
 
 function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderList, LineItems) {
@@ -120,12 +132,13 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
     vm.list = OrderList;
     vm.OrderSelected = false;
     vm.shipment.Items = [];
-    vm.listli = [];
+    vm.lineitems = {};
+    vm.lineitems.list = [];
 
     vm.goToLineItems = function(order) {
         LineItems.List(order.ID, 1, 20)
             .then(function(data){
-                vm.listli = data;
+                vm.lineitems.list = data;
                 vm.OrderSelected = true;
             })
             .catch(function(ex) {
@@ -134,7 +147,7 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
     };
 
     vm.Submit = function() {
-        angular.forEach(vm.listli.Items, function(li) {
+        angular.forEach(vm.lineitems.list.Items, function(li) {
             if(li.addToShipment){
                 vm.shipment.Items.push({OrderID: li.OrderID, LineItemId: li.ID, QuantityShipped: li.QuantityShipped});
             }
