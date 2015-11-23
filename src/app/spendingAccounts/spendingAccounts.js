@@ -4,8 +4,9 @@ angular.module( 'orderCloud' )
     .controller( 'SpendingAccountsCtrl', SpendingAccountsController )
     .controller( 'SpendingAccountEditCtrl', SpendingAccountEditController )
     .controller( 'SpendingAccountCreateCtrl', SpendingAccountCreateController )
-    .controller( 'SpendingAccountAssignCtrl', SpendingAccountAssignController )
-    //.directive( 'ordercloudInfiniteScroll', InfiniteScrollDirective )
+    .controller( 'SpendingAccountAssignGroupCtrl', SpendingAccountAssignGroupController )
+    .controller( 'SpendingAccountAssignUserCtrl', SpendingAccountAssignUserController )
+    .factory('SpendingAccountAssignment', SpendingAccountAssignment)
 
 ;
 
@@ -40,26 +41,40 @@ function SpendingAccountsConfig( $stateProvider ) {
             controller:'SpendingAccountCreateCtrl',
             controllerAs: 'spendingAccountCreate'
         })
-        .state( 'base.spendingAccountAssign', {
+        .state( 'base.spendingAccountAssignGroup', {
             url: '/spendingAccounts/:spendingAccountid/assign',
-            templateUrl: 'spendingAccounts/templates/spendingAccountAssign.tpl.html',
-            controller: 'SpendingAccountAssignCtrl',
-            controllerAs: 'spendingAccountAssign',
+            templateUrl: 'spendingAccounts/templates/spendingAccountAssignGroup.tpl.html',
+            controller: 'SpendingAccountAssignGroupCtrl',
+            controllerAs: 'spendingAccountAssignGroup',
             resolve: {
-                Buyer: function(Buyers) {
-                    return Buyers.Get();
-                },
                 UserGroupList: function(UserGroups) {
-                    return UserGroups.List(null, 1, 20);
+                    return UserGroups.List();
                 },
-                AssignedUserGroups: function($stateParams, SpendingAccounts) {
-                    return SpendingAccounts.ListAssignments($stateParams.spendingAccountid);
+                AssignmentList: function(SpendingAccounts) {
+                    return SpendingAccounts.ListAssignments();
                 },
-                SelectedSpendingAccount: function($stateParams, SpendingAccounts) {
+                SpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
                 }
             }
         })
+        .state( 'base.spendingAccountAssignUser', {
+            url: '/spendingAccounts/:spendingAccountid/assign/user',
+            templateUrl: 'spendingAccounts/templates/spendingAccountAssignUser.tpl.html',
+            controller: 'SpendingAccountAssignUserCtrl',
+            controllerAs: 'spendingAccountAssignUser',
+            resolve: {
+                UserList: function(Users) {
+                    return Users.List();
+                },
+                AssignmentList: function(SpendingAccounts) {
+                    return SpendingAccounts.ListAssignments();
+                },
+                SpendingAccount: function($stateParams, SpendingAccounts) {
+                    return SpendingAccounts.Get($stateParams.spendingAccountid);
+                }
+            }
+        });
 }
 
 function SpendingAccountsController( SpendingAccountList ) {
@@ -101,7 +116,7 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     vm.Submit = function() {
         SpendingAccounts.Create(vm.spendingAccount)
             .then(function() {
-                $state.go('^.spendingAccounts')
+                $state.go('^.spendingAccounts');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -109,111 +124,152 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     }
 }
 
-function SpendingAccountAssignController( $scope, Buyer, UserGroups, UserGroupList, AssignedUserGroups, SelectedSpendingAccount, SpendingAccounts ) {
-    var vm = this,
-        page = 1;
-    vm.buyer = Buyer;
-    vm.assignBuyer = false;
-    vm.scrollDisabled = false;
-    vm.userGroups = UserGroupList.Items;
-    vm.assignedUserGroups = AssignedUserGroups.Items;
-    vm.spendingAccount = SelectedSpendingAccount;
-    vm.resetSelections = resetSelections;
-    vm.pagingFunction = pagingFunction;
-    vm.saveAssignments = saveAssignments;
+function SpendingAccountAssignGroupController($scope, UserGroupList, AssignmentList, SpendingAccount, SpendingAccountAssignment) {
+    var vm = this;
+    vm.list = UserGroupList;
+    vm.assignments = AssignmentList;
+    vm.spendingAccount = SpendingAccount;
+    vm.pagingfunction = PagingFunction;
+    vm.saveAssignments = SaveAssignments;
 
-    function setSelected() {
-        angular.forEach(vm.userGroups, function(group) {
-            angular.forEach(vm.assignedUserGroups, function (assignedGroup) {
-                if (!assignedGroup.UserGroupID && !assignedGroup.UserID && assignedGroup.SpendingAccountID) {
-                    vm.assignBuyer = true;
-                }
-                if (assignedGroup.UserGroupID === group.ID) {
-                    group.selected = true;
-                }
-            });
-        });
+    $scope.$watchCollection(function() {
+        return vm.list;
+    }, function() {
+        SpendingAccountAssignment.setSelected(vm.list.Items, vm.assignments.Items);
+    });
+
+    function SaveAssignments() {
+        return SpendingAccountAssignment.saveAssignments(vm.spendingAccount.ID, vm.list.Items, vm.assignments.Items);
     }
-    setSelected();
 
-    function resetSelections(index) {
-        var matched = false;
-        angular.forEach(vm.assignedUserGroups, function(assignedGroup) {
-            if (assignedGroup.UserGroupID === vm.userGroups[index].ID) {
-                matched = true;
+    function PagingFunction() {
+        return SpendingAccountAssignment.paging(vm.spendingAccount.ID, vm.list, vm.assignments);
+    }
+}
+
+function SpendingAccountAssignUserController($scope, UserList, AssignmentList, SpendingAccount, SpendingAccountAssignment) {
+    var vm = this;
+    vm.list = UserList;
+    vm.assignments = AssignmentList;
+    vm.spendingAccount = SpendingAccount;
+    vm.pagingfunction = PagingFunction;
+    vm.saveAssignments = SaveAssignments;
+
+    $scope.$watchCollection(function() {
+        return vm.list;
+    }, function() {
+        SpendingAccountAssignment.setSelected(vm.list.Items, vm.assignments.Items, 'User');
+    });
+
+    function SaveAssignments() {
+        return SpendingAccountAssignment.saveAssignments(vm.spendingAccount.ID, vm.list.Items, vm.assignments.Items, 'User');
+    }
+
+    function PagingFunction() {
+        return SpendingAccountAssignment.paging(vm.spendingAccount.ID, vm.list, vm.assignments, 'User');
+    }
+}
+
+function SpendingAccountAssignment($q, $state, $injector, Underscore, Assignments, SpendingAccounts) {
+    return {
+        saveAssignments: SaveAssignments,
+        setSelected: SetSelected,
+        paging: Paging
+    };
+
+    function SaveAssignments(SpendingAccountID, List, AssignmentList, Party) {
+        var PartyID = (Party === 'User') ? 'UserID' : 'UserGroupID';
+        var assigned = Underscore.pluck(AssignmentList, PartyID);
+        var selected = Underscore.pluck(Underscore.where(List, {selected: true}), 'ID');
+        var toAdd = Assignments.getToAssign(List, AssignmentList, PartyID);
+        console.log(toAdd);
+        var toUpdate = Underscore.intersection(selected, assigned);
+        console.log(toUpdate);
+        var toDelete = Assignments.getToDelete(List, AssignmentList, PartyID);
+        var queue = [];
+        var dfd = $q.defer();
+        angular.forEach(List, function(item) {
+            if (toAdd.indexOf(item.ID) > -1) {
+                SaveAndUpdate(queue, SpendingAccountID, item, Party);
+            }
+            else if (toUpdate.indexOf(item.ID) > -1) {
+                var AssignmentObject;
+                if (Party === 'User') {
+                    AssignmentObject = Underscore.where(AssignmentList, {UserID: item.ID})[0]; //should be only one
+                }
+                else {
+                    AssignmentObject = Underscore.where(AssignmentList, {UserGroupID: item.ID})[0]; //should be only one
+                }
+                if (AssignmentObject.AllowExceed !== item.allowExceed) {
+                    console.log(item.ID);
+                    SaveAndUpdate(queue, SpendingAccountID, item, Party);
+                }
             }
         });
-        if (matched && vm.userGroups[index].selected) {
-            $scope.assignmentsTable['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !vm.userGroups[index].selected) {
-            $scope.assignmentsTable['assignCheckbox' + index].$setPristine(true);
-        }
+        angular.forEach(toDelete, function(itemID) {
+            if (Party === 'User') {
+                queue.push(SpendingAccounts.DeleteAssignment(SpendingAccountID, itemID, null));
+            }
+            else queue.push(SpendingAccounts.DeleteAssignment(SpendingAccountID, null, itemID));
+        });
+        $q.all(queue).then(function() {
+            dfd.resolve();
+            $state.reload($state.current);
+        });
+        return dfd.promise;
     }
 
-    function pagingFunction() {
-        page += 1;
-        if (page <= UserGroupList.Meta.TotalPages) {
-            UserGroups.List(null, page, 20)
-                .then(function(groups) {
-                    if (groups.Items && groups.Items.length > 0) {
-                        vm.userGroups = [].concat(vm.userGroups, groups.Items)
-                    }
-                    if (page <= AssignedUserGroups.Meta.TotalPages) {
-                        SpendingAccounts.ListAssignments(SelectedSpendingAccount.ID, null, null, page, 20).then(function(assignedGroups) {
-                            vm.assignedUserGroups = [].concat(vm.assignedUserGroups, assignedGroups.Items);
-                            setSelected();
-                        });
-                    }
-                    else {
-                        setSelected();
-                    }
-                });
+    function SaveAndUpdate(queue, SpendingAccountID, item, Party) {
+        var assignment = {
+            SpendingAccountID: SpendingAccountID,
+            UserID: null,
+            UserGroupID: null,
+            AllowExceed: item.allowExceed
+        };
+        if (Party === 'User') {
+            assignment.UserID = item.ID;
         }
+        else assignment.UserGroupID = item.ID;
+        queue.push(SpendingAccounts.SaveAssignment(assignment));
     }
 
-    function saveAssignments() {
-        if (vm.assignBuyer) {
-            SpendingAccounts.SaveAssignment({SpendingAccountID: vm.spendingAccount.ID});
-        }
-        else {
-            angular.forEach(vm.userGroups, function(group, index) {
-                if ($scope.assignmentsTable['assignCheckbox' + index].$dirty) {
-                    if (group.selected) {
-                        var toSave = true;
-                        angular.forEach(vm.assignedUserGroups, function(assignedGroup) {
-                            if (assignedGroup.UserGroupID === group.ID) {
-                                toSave = false;
-                            }
-                        });
-                        if (toSave) {
-                            SpendingAccounts.SaveAssignment({UserGroupID: group.ID, SpendingAccountID: vm.spendingAccount.ID});
-                            vm.assignedUserGroups.push({
-                                UserID: null,
-                                UserGroupID: group.ID,
-                                SpendingAccountID: vm.spendingAccount.ID
-                            });
-                        }
-                    }
-                    else {
-                        angular.forEach(vm.assignedUserGroups, function(assignedGroup, index) {
-                            if (assignedGroup.UserGroupID === group.ID) {
-                                SpendingAccounts.DeleteAssignment(vm.spendingAccount.ID, null, group.ID);
-                                vm.assignedUserGroups.splice(index, 1);
-                                index = index - 1;
-                            }
-                        });
-                    }
+    function SetSelected(List, AssignmentList, Party) {
+        var PartyID = (Party === 'User') ? 'UserID' : 'UserGroupID';
+        var assigned = Assignments.getAssigned(AssignmentList, PartyID);
+        var exceed = Underscore.pluck(Underscore.where(AssignmentList, {AllowExceed: true}), PartyID);
+        angular.forEach(List, function(item) {
+            if (assigned.indexOf(item.ID) > -1) {
+                item.selected = true;
+                if (exceed.indexOf(item.ID) > -1) {
+                    item.allowExceed = true;
                 }
-            });
-            angular.forEach(vm.assignedUserGroups, function(assignedGroup, index) {
-                if (!assignedGroup.UserGroupID && !assignedGroup.UserID && assignedGroup.SpendingAccountID) {
-                    SpendingAccounts.DeleteAssignment(vm.spendingAccount.ID, null, null);
-                    vm.assignedUserGroups.splice(index, 1);
-                    index = index - 1;
+            }
+        });
+    }
+
+    function Paging(SpendingAccountID, ListObjects, AssignmentObjects, Party) {
+        var ServiceName = (Party === 'User') ? 'Users' : 'UserGroups';
+        var Level = (Party === 'User') ? 'User' : 'Group';
+        var Service = $injector.get(ServiceName);
+        if (ListObjects.Meta.Page < ListObjects.Meta.TotalPages) {
+            var queue = [];
+            var dfd = $q.defer();
+            queue.push(Service.List(null, ListObjects.Meta.Page + 1, ListObjects.Meta.PageSize));
+            if (AssignmentObjects.Meta.Page < AssignmentObjects.Meta.TotalPages) {
+                queue.push(SpendingAccounts.ListAssignments(SpendingAccountID, null, null, Level, AssignmentObjects.Meta.Page + 1, AssignmentObjects.Meta.PageSize));
+            }
+            $q.all(queue).then(function(results) {
+                dfd.resolve();
+                ListObjects.Meta = results[0].Meta;
+                ListObjects.Items = [].concat(ListObjects.Items, results[0].Items);
+                if (results[1]) {
+                    AssignmentObjects.Meta = results[1].Meta;
+                    AssignmentObjects.Items = [].concat(AssignmentObjects.Items, results[1].Items);
                 }
+                SetSelected(ListObjects.Items, AssignmentObjects.Items, Party);
             });
-            $scope.assignmentsTable.$setPristine(true);
+            return dfd.promise;
         }
+        else return null;
     }
 }

@@ -10,97 +10,18 @@
             </div>
             <div class="form-group col-sm-6">
                 <label for="spendingAccountNameInput">Spending Account Name</label>
-                <input id="spendingAccountNameInput" type="text" class="form-control" ng-model="spendingAccountEdit.spendingAccount.SpendingAccountName"/>
+                <input id="spendingAccountNameInput" type="text" class="form-control" ng-model="spendingAccountEdit.spendingAccount.Name"/>
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-sm-6">
-                <label for="spendingAccountUserIDInput">Assigned User ID</label>
-                <input id="spendingAccountUserIDInput" type="text" class="form-control" ng-model="spendingAccountEdit.spendingAccount.AssignedUserID"/>
-            </div>
             <div class="form-group col-sm-6">
                 <label for="spendingAccountBalanceInput">Spending Account Balance</label>
                 <input id="spendingAccountBalanceInput" type="number" step="any" class="form-control" ng-model="spendingAccountEdit.spendingAccount.Balance"/>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-3">
-                <label for="spendingAccountExceedInput">
-                    <input id="spendingAccountExceedInput" type="checkbox" ng-model="spendingAccountEdit.spendingAccount.AllowExceed"/>
-                    Allow Exceed Balance
-                </label>
-            </div>
-        </div>
-        <div class="row panel panel-default" ng-if="spendingAccountEdit.spendingAccount.AllowExceed">
-            <div class="panel-body">
-                <div class="form-group col-sm-3">
-                    <label for="ActionOnExceedInput">Action on exceeding balance:</label>
-                    <select id="ActionOnExceedInput" class="form-control" ng-model="spendingAccountEdit.spendingAccount.ActionOnExceed">
-                        <option value="None">None</option>
-                        <option value="AddOrderApproval">Add Order Approval</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-3" ng-if="spendingAccountEdit.spendingAccount.ActionOnExceed == 'AddOrderApproval'">
-                    <label for="ExceedApprovalInput">Approver Type:</label>
-                    <select id="ExceedApprovalInput" class="form-control" ng-model="spendingAccountEdit.spendingAccount.ExceedApprovingPartyType">
-                        <option value="User">User</option>
-                        <option value="Group">Group</option>
-                        <option value="Company">Company</option>
-                    </select>
-                </div>
-                <div class="form-group col-sm-6" ng-if="spendingAccountEdit.spendingAccount.ActionOnExceed == 'AddOrderApproval'">
-                    <label for="spendingAccountApproverIDInput">Approver ID:</label>
-                    <input id="spendingAccountApproverIDInput" type="text" class="form-control" ng-model="spendingAccountEdit.spendingAccount.ExceedApprovingPartyID"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-3">
-                <label for="spendingAccountRenewInput">
-                    <input id="spendingAccountRenewInput" type="checkbox" ng-model="spendingAccountEdit.spendingAccount.AutoRenew"/>
-                    Auto Renew
-                </label>
-            </div>
-        </div>
-        <div class="row panel panel-default"  ng-if="spendingAccountEdit.spendingAccount.AutoRenew">
-            <div class="panel-body">
-                <div class="form-group col-sm-4">
-                    <label for="RenewAmountInput">Auto Renew Amount:</label>
-                    <input id="RenewAmountInput" class="form-control" type="number" ng-model="spendingAccountEdit.spendingAccount.AutoRenewAmount"/>
-                </div>
-                <div class="form-group col-sm-4">
-                    <label for="RenewFrequencyInput">Auto Renew Frequency (days):</label>
-                    <input id="RenewFrequencyInput" class="form-control" type="number" ng-model="spendingAccountEdit.spendingAccount.AutoRenewDays"/>
-                </div>
-                <div class="form-group col-sm-4">
-                    <label for="RenewalRolloverInput">
-                        <input id="RenewalRolloverInput" type="checkbox" ng-model="spendingAccountEdit.spendingAccount.AutoRenewRollOverBalance"/>
-                        Rollover Balance on Renewal
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-3">
+            <div class="form-group col-sm-6">
                 <label for="spendingAccountAllowInput">
                     <input id="spendingAccountAllowInput" type="checkbox" ng-model="spendingAccountEdit.spendingAccount.AllowAsPaymentMethod"/>
                     Allow as Payment Type
-                </label>
-            </div>
-        </div>
-        <div class="row panel panel-default" ng-if="spendingAccountEdit.spendingAccount.AllowAsPaymentMethod">
-            <div class="panel-body">
-                <div class="form-group col-sm-4">
-                    <label for="MaxInput">Max Percentage of Total:</label>
-                    <input id="MaxInput" class="form-control" type="number" ng-model="spendingAccountEdit.spendingAccount.MaxPercentOfTotal"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-12">
-                <label for="spendingAccountHideInput">
-                    <input id="spendingAccountHideInput" type="checkbox" ng-model="spendingAccountEdit.spendingAccount.HideWhenUnavailable"/>
-                    Hide When Unavailable
                 </label>
             </div>
         </div>

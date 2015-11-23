@@ -2,9 +2,14 @@
     <h3 class="page-header">
         Spending Accounts
     </h3>
-    <section class="table-fixed-header">
+    <ordercloud-search servicename="SpendingAccounts" controlleras="spendingAccounts"></ordercloud-search>
+    <div class="well well-lg text-center" ng-if="!spendingAccounts.list.Items.length">
+        <b ng-if="!spendingAccounts.searching()">The selected buyer does not have any users.</b>
+        <b ng-if="spendingAccounts.searching()"><i class="fa fa-search"></i> No users match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="spendingAccounts.list.Items.length">
         <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="SpendingAccounts" listobject="spendingAccounts.list">
+        <div class="table-container" ordercloud-infinite-scroll servicename="SpendingAccounts" controlleras="spendingAccounts">
             <table class="table table-hover">
                 <colgroup>
                     <col class="action-column"/>
@@ -27,7 +32,9 @@
                         <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
                             <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
                             <ul uib-dropdown-menu role="menu">
-                                <li role="menuitem"><a ui-sref="^.spendingAccountEdit({spendingAccountid:spendingAccount.ID})">Edit SpendingAccount</a></li>
+                                <li role="menuitem"><a ui-sref="^.spendingAccountEdit({spendingAccountid:spendingAccount.ID})">Edit Spending Account</a></li>
+                                <li role="menuitem"><a ui-sref="^.spendingAccountAssignGroup({spendingAccountid:spendingAccount.ID})">Group Assignments</a></li>
+                                <li role="menuitem"><a ui-sref="^.spendingAccountAssignUser({spendingAccountid:spendingAccount.ID})">User Assignments</a></li>
                             </ul>
                         </div>
                     </td>
