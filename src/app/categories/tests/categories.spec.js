@@ -10,7 +10,7 @@ describe('Component: Categories,', function() {
         category = {
             ID: "TestCategory123456789",
             Name: "TestCategoryTest",
-            Description: "Test Cost Center Description",
+            Description: "Test Category Description",
             ListOrder: 1,
             Active: true
         };

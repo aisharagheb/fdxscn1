@@ -87,7 +87,7 @@ function ProductEditController($exceptionHandler, $state, SelectedProduct, Produ
     vm.Submit = function () {
         Products.Update(productid, vm.product)
             .then(function () {
-                $state.go('^.products')
+                $state.go('base.products')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -97,7 +97,7 @@ function ProductEditController($exceptionHandler, $state, SelectedProduct, Produ
     vm.Delete = function () {
         Products.Delete(productid)
             .then(function () {
-                $state.go('^.products')
+                $state.go('base.products')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -112,7 +112,7 @@ function ProductCreateController($exceptionHandler, $state, Products) {
     vm.Submit = function () {
         Products.Create(vm.product)
             .then(function () {
-                $state.go('^.products')
+                $state.go('base.products')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -126,7 +126,7 @@ function ProductAssignmentsController($exceptionHandler, $stateParams, $state, S
     vm.productID = $stateParams.productid;
     vm.productName = angular.copy(SelectedProduct.Name);
 
-    vm.delete = function(scope) {
+    vm.Delete = function(scope) {
         Products.DeleteAssignment($stateParams.productid, null, scope.assignment.UserGroupID)
             .then(function() {
                 $state.reload();
