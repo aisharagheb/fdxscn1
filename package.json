@@ -9,6 +9,14 @@
     "type": "git",
     "url": "git@github.com:Four51/OrderCloud-Seed-AngularJS.git"
   },
+  "engines": {
+    "node": "4.1.0",
+    "npm": "2.14.3"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "vendor"
+  ],
   "scripts": {
     "preinstall": "npm install 'gulpjs/gulp-cli#4.0' -g",
     "postinstall": "bower install && gulp compile",
