@@ -23,24 +23,11 @@ angular.module( 'orderCloud', [
 	.config( ErrorHandling )
 	.controller( 'AppCtrl', AppCtrl )
 
-	//Constants needed for the OrderCloud AngularJS SDK
-	.constant('ocscope', 'FullAccess')
-	.constant('appname', 'OrderCloud Components Dev')
-
 	//Client ID for a Registered Distributor or Buyer Company
     .constant('clientid', '0e0450e6-27a0-4093-a6b3-d7cd9ebc2b8f') //DISTRIBUTOR - Four51 OrderCloud Components
     //.constant('clientid', 'f0976e5c-ed16-443a-98ad-d084c7010e05') //BUYER - Four51 OrderCloud Components Buyer
 
-	//Test Environment
-	.constant('authurl', 'https://testauth.ordercloud.io/oauth/token')
-	.constant('apiurl', 'https://testapi.ordercloud.io')
-
-    //Production Environment
-    //.constant('authurl', 'http://core.four51.com:11629/OAuth/Token')
-    //.constant('apiurl', 'http://core.four51.com:9002')
-
     .constant('buyerid', '451ORDERCLOUD')
-
 ;
 
 function SetBuyerID( BuyerID, buyerid ) {
@@ -75,7 +62,7 @@ function ErrorHandling( $provide ) {
 			$delegate(ex, cause);
 			$injector.get('toastr').error(ex.data ? (ex.data.error || (ex.data.Errors ? ex.data.Errors[0].Message : ex.data)) : ex.message, 'Error');
 		};
-	};
+	}
 }
 
 function AppCtrl( $state, appname, Credentials ) {

@@ -10,13 +10,16 @@
     "url": "git@github.com:Four51/OrderCloud-Seed-AngularJS.git"
   },
   "scripts": {
+    "preinstall": "npm install 'gulpjs/gulp-cli#4.0' -g",
+    "postinstall": "bower install && gulp compile",
+    "start": "node server.js",
     "test": "gulp test",
     "test-e2e": "protractor protractor.config.js"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "^2.8.0",
     "del": "^2.0.2",
+    "express": "^4.13.3",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "gulp-angular-protractor": "0.0.5",
     "gulp-angular-templatecache": "^1.7.0",
@@ -31,6 +34,7 @@
     "gulp-less-import": "^1.0.0",
     "gulp-minify-css": "^1.2.0",
     "gulp-ng-annotate": "^1.0.0",
+    "gulp-ng-constant": "^1.1.0",
     "gulp-plumber": "^1.0.1",
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^2.0.4",
@@ -44,5 +48,6 @@
     "main-bower-files": "^2.9.0",
     "phantomjs": "^1.9.18",
     "protractor": "^2.5.1"
-  }
+  },
+  "devDependencies": {}
 }

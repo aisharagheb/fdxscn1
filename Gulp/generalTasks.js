@@ -44,7 +44,7 @@ gulp.task('masterClean', function() {
 //Major Project Build Tasks
 gulp.task('build', gulp.series(
     'masterClean',
-    gulp.parallel('build:js_bower', 'build:js', 'build:templateCache', 'build:styles', 'build:assets'),
+    gulp.parallel('build:js_bower', 'build:js', 'b_m:configjs', 'build:templateCache', 'build:styles', 'build:assets'),
     'build:inject'));
 
 //Major Project Compile Tasks

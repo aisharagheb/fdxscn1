@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var ngConstant = require('gulp-ng-constant');
 //var header = require('gulp-header');
 var concat = require('gulp-concat');
 var mainBowerFiles = require('main-bower-files');
@@ -41,6 +42,19 @@ gulp.task('b_m:js', function() {
         .pipe(gulp.dest(config.build + 'src'));
 });
 
+gulp.task('b_m:configjs', function() {
+    return gulp.src('./src/app/app.config.json')
+        .pipe(ngConstant({
+            name:'orderCloud',
+            deps: false,
+            constants: {
+                authurl: process.env.authurl || 'https://testauth.ordercloud.io/oauth/token',
+                apiurl: process.env.apiurl || 'https://testapi.ordercloud.io',
+            }
+        }))
+        .pipe(gulp.dest(config.build + 'src/app'))
+});
+
 gulp.task('b_c:js', function() {
     return del([
         config.build + 'src/**/*.js',
@@ -77,7 +91,7 @@ gulp.task('c_m:js', function() {
             '!' + config.build + 'src/**/*.test.js'
         ])
         .pipe(concat('app.js'))
-        .pipe(uglify({}))
+        //.pipe(uglify({}))
         //TODO: gulp-header doesn't work with gulp-4.0
         //.pipe(header(banner, {pkg: pkg}))
         .pipe(gulp.dest(config.compile + 'assets'));
