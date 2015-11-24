@@ -22,12 +22,6 @@ angular.module( 'orderCloud', [
 	.config( Routing )
 	.config( ErrorHandling )
 	.controller( 'AppCtrl', AppCtrl )
-
-	//Client ID for a Registered Distributor or Buyer Company
-    .constant('clientid', '0e0450e6-27a0-4093-a6b3-d7cd9ebc2b8f') //DISTRIBUTOR - Four51 OrderCloud Components
-    //.constant('clientid', 'f0976e5c-ed16-443a-98ad-d084c7010e05') //BUYER - Four51 OrderCloud Components Buyer
-
-    .constant('buyerid', '451ORDERCLOUD')
 ;
 
 function SetBuyerID( BuyerID, buyerid ) {

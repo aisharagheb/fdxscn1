@@ -49,7 +49,7 @@ gulp.task('b_m:configjs', function() {
             deps: false,
             constants: {
                 authurl: process.env.authurl || 'https://testauth.ordercloud.io/oauth/token',
-                apiurl: process.env.apiurl || 'https://testapi.ordercloud.io',
+                apiurl: process.env.apiurl || 'https://testapi.ordercloud.io'
             }
         }))
         .pipe(gulp.dest(config.build + 'src/app'))
@@ -85,15 +85,11 @@ gulp.task('c_m:js', function() {
             config.build + 'vendor/**/*.js',
             config.build + 'src/templates-app.js',
             config.build + 'src/app/app.js',
-            config.build + 'src/app/**/*.module.js',
-            config.build + 'src/**/*.js',
-            '!' + config.build + 'src/**/*.spec.js',
-            '!' + config.build + 'src/**/*.test.js'
+            config.build + 'src/app/app.config.js',
+            config.build + 'src/**/*.js'
         ])
         .pipe(concat('app.js'))
-        //.pipe(uglify({}))
-        //TODO: gulp-header doesn't work with gulp-4.0
-        //.pipe(header(banner, {pkg: pkg}))
+        .pipe(uglify())
         .pipe(gulp.dest(config.compile + 'assets'));
 });
 
@@ -111,4 +107,4 @@ gulp.task('build:js_bower', gulp.series('b_c:js_bower', 'b_m:js_bower'));
 gulp.task('build:templateCache', gulp.series('b_c:templateCache', 'b_m:templateCache'));
 
 //Master Script Compile Tasks
-gulp.task('compile:js', gulp.series(gulp.parallel('c_c:js', 'build:js_bower', 'build:js', 'build:templateCache'), 'c_m:js'));
+gulp.task('compile:js', gulp.series('c_c:js', 'c_m:js'));
