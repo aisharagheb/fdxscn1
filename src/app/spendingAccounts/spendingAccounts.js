@@ -50,8 +50,8 @@ function SpendingAccountsConfig( $stateProvider ) {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List();
                 },
-                AssignmentList: function(SpendingAccounts) {
-                    return SpendingAccounts.ListAssignments();
+                AssignmentList: function($stateParams, SpendingAccounts) {
+                    return SpendingAccounts.ListAssignments($stateParams.spendingAccountid, null, null, 'Group');
                 },
                 SpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
@@ -67,8 +67,8 @@ function SpendingAccountsConfig( $stateProvider ) {
                 UserList: function(Users) {
                     return Users.List();
                 },
-                AssignmentList: function(SpendingAccounts) {
-                    return SpendingAccounts.ListAssignments();
+                AssignmentList: function($stateParams, SpendingAccounts) {
+                    return SpendingAccounts.ListAssignments($stateParams.spendingAccountid, null, null, 'User');
                 },
                 SpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
