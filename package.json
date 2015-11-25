@@ -18,7 +18,7 @@
     "vendor"
   ],
   "scripts": {
-    "preinstall": "npm install 'gulpjs/gulp-cli#4.0' -g",
+    "preinstall": "npm install gulpjs/gulp-cli#4.0 -g",
     "postinstall": "bower install && gulp compile",
     "start": "node server.js",
     "test": "gulp test",
