@@ -145,5 +145,208 @@ describe('Component: Addresses,', function() {
             }));
         });
     });
+
+    describe('Controller: AddressAssignCtrl,', function() {
+        var addressAssignCtrl;
+        beforeEach(inject(function($state, $controller, Addresses, UserGroups) {
+            addressAssignCtrl = $controller('AddressAssignCtrl', {
+                $scope: scope,
+                Addresses: Addresses,
+                AssignmentsList: [],
+                UserGroupList: [],
+                SelectedAddress: {}
+            });
+            spyOn($state, 'go').and.returnValue(true);
+        }));
+
+        describe('saveAssignments', function() {
+            describe('toAdd and toDelete', function() {
+                beforeEach(inject(function(Addresses) {
+                    var defer = q.defer();
+                    defer.resolve(null);
+                    spyOn(Addresses, 'SaveAssignment').and.returnValue(defer.promise);
+                    spyOn(Addresses, 'DeleteAssignment').and.returnValue(defer.promise);
+                    scope.$digest();
+                    addressAssignCtrl.assignments= {
+                        Meta: {},
+                        Items: [
+                            {
+                                IsShipping: true,
+                                IsBilling: true,
+                                UserGroupID: 'TestUserGroup12345'
+                            }
+                        ]
+                    };
+                    addressAssignCtrl.list = {
+                        Meta: {},
+                        Items: [
+                            {
+                                selected: true,
+                                IsShipping: true,
+                                IsBilling: true,
+                                ID: 'TestUserGroup123456789'
+                            },
+                            {
+                                selected: false,
+                                IsShipping: true,
+                                IsBilling: true,
+                                ID: 'TestUserGroup12345'
+                            }
+                        ]
+                    };
+                    addressAssignCtrl.Address = {
+                        ID: "TestAddress123456789"
+                    };
+                    addressAssignCtrl.saveAssignments();
+                }));
+                var assignment = {
+                    UserID: null,
+                    UserGroupID: "TestUserGroup123456789",
+                    AddressID: "TestAddress123456789",
+                    IsShipping: true,
+                    IsBilling: true
+                }
+                it ('should call the Addresses SaveAssignment method', inject(function(Addresses) {
+                    expect(Addresses.SaveAssignment).toHaveBeenCalledWith(assignment);
+                }));
+                it ('should call the Addresses DeleteAssignment method', inject(function(Addresses) {
+                    expect(Addresses.DeleteAssignment).toHaveBeenCalledWith(addressAssignCtrl.Address.ID, null, addressAssignCtrl.assignments.Items[0].UserGroupID);
+                }));
+            });
+            describe('toUpdate', function() {
+                beforeEach(inject(function(Addresses) {
+                    var defer = q.defer();
+                    defer.resolve(null);
+                    spyOn(Addresses, 'SaveAssignment').and.returnValue(defer.promise);
+                    scope.$digest();
+                    addressAssignCtrl.assignments= {
+                        Meta: {},
+                        Items: [
+                            {
+                                IsShipping: true,
+                                IsBilling: true,
+                                UserGroupID: 'TestUserGroup12345'
+                            }
+                        ]
+                    };
+                    addressAssignCtrl.list = {
+                        Meta: {},
+                        Items: [
+                            {
+                                selected: true,
+                                IsShipping: false,
+                                IsBilling: true,
+                                ID: 'TestUserGroup12345'
+                            }
+                        ]
+                    };
+                    addressAssignCtrl.Address = {
+                        ID: "TestAddress123456789"
+                    };
+                    addressAssignCtrl.saveAssignments();
+                }));
+                var assignment = {
+                    UserID: null,
+                    UserGroupID: "TestUserGroup12345",
+                    AddressID: "TestAddress123456789",
+                    IsShipping: false,
+                    IsBilling: true
+                }
+                it ('should call the Addresses SaveAssignment method', inject(function(Addresses) {
+                    expect(Addresses.SaveAssignment).toHaveBeenCalledWith(assignment);
+                }));
+            });
+        });
+        describe('pagingfunction', function() {
+            beforeEach(inject(function(UserGroups) {
+                var defer = q.defer();
+                defer.resolve(null);
+                spyOn(UserGroups, 'List').and.returnValue(defer.promise);
+                scope.$digest();
+                addressAssignCtrl.list = {
+                    Meta: {
+                        Page: 1,
+                        TotalPages: 2,
+                        PageSize: 20
+                    }
+                }
+                addressAssignCtrl.assignments = {
+                    Meta: {
+                        PageSize: 20
+                    }
+                }
+                addressAssignCtrl.pagingfunction();
+            }));
+            it ('should call the UserGroups List method', inject(function(UserGroups) {
+                expect(UserGroups.List).toHaveBeenCalledWith(null, addressAssignCtrl.list.Meta.Page +1, addressAssignCtrl.list.Meta.PageSize);
+            }));
+        });
+
+        describe('setSelected', function() {
+            var selectedCount = 0;
+            var isShippingCount = 0;
+            var isBillingCount = 0;
+            beforeEach(inject(function() {
+                addressAssignCtrl.list = {
+                    Meta: {},
+                    Items: [
+                        {
+                            ID: 'TestUserGroup12345'
+                        },
+                        {
+                            ID: 'TestUserGroup123456'
+                        },
+                        {
+                            ID: 'TestUserGroup1234567'
+                        },
+                        {
+                            ID: 'TestUserGroup12345678'
+                        }
+                    ]
+                }
+                addressAssignCtrl.assignments = {
+                    Meta: {},
+                    Items: [
+                        {
+                            IsShipping: true,
+                            IsBilling: true,
+                            UserGroupID: 'TestUserGroup12345'
+                        },
+                        {
+                            IsShipping: true,
+                            IsBilling: false,
+                            UserGroupID: 'TestUserGroup123456'
+                        },
+                        {
+                            IsShipping: false,
+                            IsBilling: true,
+                            UserGroupID: 'TestUserGroup1234567'
+                        }
+                    ]
+                }
+                addressAssignCtrl.setSelected();
+                angular.forEach(addressAssignCtrl.list.Items, function(item) {
+                    if (item.selected)
+                    {
+                        selectedCount++;
+                    }
+                    if (item.IsShipping)
+                    {
+                        isShippingCount++;
+                    }
+                    if (item.IsBilling)
+                    {
+                        isBillingCount++;
+                    }
+                });
+            }));
+            it ('should set correct number of list items to selected/isShipping/isBilling', inject(function() {
+                expect(selectedCount).toEqual(3);
+                expect(isShippingCount).toEqual(2);
+                expect(isBillingCount).toEqual(2);
+            }));
+
+        });
+    });
 });
 
