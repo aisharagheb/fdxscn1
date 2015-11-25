@@ -89,7 +89,7 @@ gulp.task('c_m:js', function() {
             config.build + 'src/**/*.js'
         ])
         .pipe(concat('app.js'))
-        .pipe(uglify())
+        .pipe(uglify({mangle: false}))
         .pipe(gulp.dest(config.compile + 'assets'));
 });
 
