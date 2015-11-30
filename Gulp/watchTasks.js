@@ -38,7 +38,7 @@ gulp.task('test', function(done) {
 
 gulp.task('watch:js', function() {
     console.log("running 'watch:js' task");
-    gulp.watch(config.app_files.js, gulp.series('build:js', 'build:assets', 'build:styles', 'build:inject', 'test', function() {browserSync.reload()}));
+    gulp.watch(config.app_files.js, gulp.series('build:js', 'b_m:configjs', 'build:assets', 'build:styles', 'build:inject', 'test', function() {browserSync.reload()}));
     gulp.watch(vendorJS, gulp.series('build:js_bower', 'build:inject', function() {browserSync.reload()}));
 });
 
