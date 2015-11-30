@@ -37,7 +37,7 @@ function BaseConfig( $stateProvider ) {
                 CurrentUser: function(Me) {
                     return Me.Get();
                 },
-                ComponentList: function($state, $q) {
+                ComponentList: function($state, $q, Underscore) {
                     var deferred = $q.defer();
                     var nonSpecific = ['Products', 'Specs', 'Price Schedules'];
                     var components = {
@@ -50,12 +50,14 @@ function BaseConfig( $stateProvider ) {
                             components.nonSpecific.push({
                                 Display: state.data.componentName,
                                 StateRef: state.name
-                            })
+                            });
                         } else {
-                            components.buyerSpecific.push({
-                                Display: state.data.componentName,
-                                StateRef: state.name
-                            })
+                            if (Underscore.findWhere(components.buyerSpecific, {Display: state.data.componentName}) == undefined) {
+                                components.buyerSpecific.push({
+                                    Display: state.data.componentName,
+                                    StateRef: state.name
+                                });
+                            }
                         }
                     });
                     deferred.resolve(components);
