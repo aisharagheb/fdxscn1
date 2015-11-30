@@ -84,6 +84,10 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <ordercloud-file-upload model="productCreate.product" keyname="image" label="Add Image"></ordercloud-file-upload>
+            <img ng-if="productCreate.product.xp.image" src="{{productCreate.product.xp.image.URL}}" alt="Product Image">
+        </div>
         <div class="row">
             <div class="form-group col-sm-12">
                 <label for="productActiveInput">
