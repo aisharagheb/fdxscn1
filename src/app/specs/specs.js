@@ -48,8 +48,8 @@ function SpecsConfig( $stateProvider ) {
                 ProductList: function (Products) {
                     return Products.List(null, 1, 20);
                 },
-                Assignments: function ($stateParams, Specs) {
-                    return Specs.ListAssignments($stateParams.specid);
+                ProductAssignments: function ($stateParams, Specs) {
+                    return Specs.ListProductAssignments($stateParams.specid);
                 },
                 SelectedSpec: function ($stateParams, Specs) {
                     return Specs.Get($stateParams.specid);
@@ -93,7 +93,7 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     vm.Submit = function() {
         Specs.Update(specid, vm.spec)
             .then(function() {
-                $state.go('^.specs')
+                $state.go('base.specs')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -103,7 +103,7 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     vm.Delete = function() {
         Specs.Delete(specid)
             .then(function() {
-                $state.go('^.specs')
+                $state.go('base.specs')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -140,78 +140,109 @@ function SpecCreateController( $exceptionHandler, $state, Specs) {
     vm.Submit = function() {
         Specs.Create(vm.spec)
             .then(function() {
-                $state.go('^.specs')
+                $state.go('base.specs')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
             });
     }
 }
-
-function SpecAssignController(ProductList, Assignments, SelectedSpec, Specs) {
+function SpecAssignController(Assignments, Paging, ProductList, ProductAssignments, SelectedSpec, Specs) {
     var vm = this;
+    vm.Spec = SelectedSpec;
     vm.list = ProductList;
-    vm.assignments = Assignments.Items;
-    vm.spec = SelectedSpec;
-    setSelected(Assignments, ProductList);
+    vm.assignments = ProductAssignments;
+    vm.saveAssignments = SaveAssignment;
+    vm.pagingfunction = PagingFunction;
 
-    vm.saveAssignments = function(form) {
-        angular.forEach(ProductList.Items, function(product, index) {
-            if (form['assignCheckbox' + index].$dirty) {
-                if (product.selected) {
-                    var toSave = true;
-                    angular.forEach(Assignments.Items, function(assignedProduct) {
-                        if (assignedProduct.ProductID === product.ID) {
-                            toSave = false;
-                        }
-                    });
-                    if (toSave) {
-                        Specs.SaveAssignment({SpecID: SelectedSpec.ID, ProductID: product.ID});
-
-                    }
-                }
-                else {
-                    angular.forEach(Assignments.Items, function(assignedProduct, index) {
-                        if (assignedProduct.ProductID === product.ID) {
-                            Specs.DeleteAssignment(SelectedSpec.ID, product.ID);
-                            Assignments.Items.splice(index, 1);
-                            index = index - 1;
-                        }
-                    });
-                }
-            }
-        });
-        angular.forEach(Assignments.Items, function(assignedProduct, index) {
-            if (!assignedProduct.ProductID) {
-                Specs.DeleteAssignment(SelectedSpec.ID, assignedProduct.ID);
-                Assignments.Items.splice(index, 1);
-                index = index - 1;
-            }
-        });form.$setPristine(true);
-        setSelected(Assignments, ProductList);
-    }
-
-    function setSelected(Assignments, ProductList) {
-        angular.forEach(ProductList.Items, function(product) {
-            angular.forEach(Assignments.Items, function(assignedProduct) {
-                if (assignedProduct.ProductID === product.ID) {
-                    product.selected = true;
-                }
-            });
+    function SaveFunc(ItemID) {
+        return Specs.SaveProductAssignment({
+            SpecID: vm.Spec.ID,
+            ProductID: ItemID
         });
     }
-    vm.resetSelections = function(index, form) {
-        var matched = false;
-        angular.forEach(Assignments.Items, function(assignedProduct) {
-            if (assignedProduct.ProductID === ProductList.Items[index].ID) {
-                matched = true;
-            }
-        });
-        if (matched && ProductList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
-        else if (!matched && !ProductList.Items[index].selected) {
-            form['assignCheckbox' + index].$setPristine(true);
-        }
+
+    function DeleteFunc(ItemID) {
+        return Specs.DeleteProductAssignment(vm.Spec.ID, null, ItemID);
+    }
+
+    function SaveAssignment() {
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc);
+    }
+
+    function AssignmentFunc() {
+        return Specs.ListProductAssignments(vm.Spec.ID, null, vm.assignments.Meta.PageSize);
+    }
+
+    function PagingFunction() {
+        return Paging.paging(vm.list, 'Products', vm.assignments, AssignmentFunc);
     }
 }
+
+//function SpecAssignController(ProductList, Assignments, SelectedSpec, Specs) {
+//    var vm = this;
+//    vm.list = ProductList;
+//    vm.assignments = Assignments.Items;
+//    vm.spec = SelectedSpec;
+//    setSelected(Assignments, ProductList);
+//
+//    vm.saveAssignments = function(form) {
+//        angular.forEach(ProductList.Items, function(product, index) {
+//            if (form['assignCheckbox' + index].$dirty) {
+//                if (product.selected) {
+//                    var toSave = true;
+//                    angular.forEach(Assignments.Items, function(assignedProduct) {
+//                        if (assignedProduct.ProductID === product.ID) {
+//                            toSave = false;
+//                        }
+//                    });
+//                    if (toSave) {
+//                        Specs.SaveAssignment({SpecID: SelectedSpec.ID, ProductID: product.ID});
+//
+//                    }
+//                }
+//                else {
+//                    angular.forEach(Assignments.Items, function(assignedProduct, index) {
+//                        if (assignedProduct.ProductID === product.ID) {
+//                            Specs.DeleteAssignment(SelectedSpec.ID, product.ID);
+//                            Assignments.Items.splice(index, 1);
+//                            index = index - 1;
+//                        }
+//                    });
+//                }
+//            }
+//        });
+//        angular.forEach(Assignments.Items, function(assignedProduct, index) {
+//            if (!assignedProduct.ProductID) {
+//                Specs.DeleteAssignment(SelectedSpec.ID, assignedProduct.ID);
+//                Assignments.Items.splice(index, 1);
+//                index = index - 1;
+//            }
+//        });form.$setPristine(true);
+//        setSelected(Assignments, ProductList);
+//    }
+//
+//    function setSelected(Assignments, ProductList) {
+//        angular.forEach(ProductList.Items, function(product) {
+//            angular.forEach(Assignments.Items, function(assignedProduct) {
+//                if (assignedProduct.ProductID === product.ID) {
+//                    product.selected = true;
+//                }
+//            });
+//        });
+//    }
+//    vm.resetSelections = function(index, form) {
+//        var matched = false;
+//        angular.forEach(Assignments.Items, function(assignedProduct) {
+//            if (assignedProduct.ProductID === ProductList.Items[index].ID) {
+//                matched = true;
+//            }
+//        });
+//        if (matched && ProductList.Items[index].selected) {
+//            form['assignCheckbox' + index].$setPristine(true);
+//        }
+//        else if (!matched && !ProductList.Items[index].selected) {
+//            form['assignCheckbox' + index].$setPristine(true);
+//        }
+//    }
+//}

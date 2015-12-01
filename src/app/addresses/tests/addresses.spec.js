@@ -148,7 +148,7 @@ describe('Component: Addresses,', function() {
 
     describe('Controller: AddressAssignCtrl,', function() {
         var addressAssignCtrl;
-        beforeEach(inject(function($state, $controller, Addresses, UserGroups) {
+        beforeEach(inject(function($state, $controller, Addresses) {
             addressAssignCtrl = $controller('AddressAssignCtrl', {
                 $scope: scope,
                 Addresses: Addresses,
