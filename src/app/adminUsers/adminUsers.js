@@ -16,7 +16,7 @@ function AdminUsersConfig( $stateProvider ) {
             controllerAs: 'adminUsers',
             resolve: {
                 AdminUsersList: function(AdminUsers) {
-                    return AdminUsers.List(null, 1, 5);
+                    return AdminUsers.List();
                 }
             }
         })
