@@ -211,14 +211,14 @@ function CategoryAssignProductController(Assignments, Paging, ProductList, Produ
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
-        return Categories.SaveProductAssignments({
+        return Categories.SaveProductAssignment({
             CategoryID: vm.Category.ID,
             ProductID: ItemID
         });
     }
 
     function DeleteFunc(ItemID) {
-        return Categories.DeleteProductAssignments(vm.Category.ID, ItemID);
+        return Categories.DeleteProductAssignment(vm.Category.ID, ItemID);
     }
 
     function SaveAssignment() {
