@@ -81,6 +81,8 @@ function AdminUserCreateController( $exceptionHandler, $state, AdminUsers ) {
     var vm = this;
     vm.adminUser = {Email:"", Password:""};
     vm.Submit = function() {
+        var today = new Date();
+        vm.adminUser.TermsAccepted = today;
         AdminUsers.Create( vm.adminUser)
             .then(function() {
                 $state.go('base.adminUsers')
