@@ -21,7 +21,7 @@ describe('Component: Specs,', function() {
                     ListOrder: 0,
                     IsOpenText: false,
                     PriceMarkupType: null,
-                    PriceMarkup: null,
+                    PriceMarkup: null
                 }
             ]
         };
@@ -88,6 +88,35 @@ describe('Component: Specs,', function() {
             spyOn($state, 'go').and.returnValue(true);
         }));
 
+        describe('addSpecOpt', function() {
+            beforeEach(inject(function() {
+                specEditCtrl.spec = spec;
+                specEditCtrl.SpecOptID = "TestSpecOpt987654321";
+                specEditCtrl.SpecOptValue = 1;
+                specEditCtrl.SpecOptMarkup = null;
+                specEditCtrl.SpecOptMarkupType = null;
+                specEditCtrl.SpecOptOpen = false;
+                specEditCtrl.SpecOptListOrder = 2;
+                specEditCtrl.SpecOptDefault = false;
+                specEditCtrl.addSpecOpt();
+            }));
+            it ('should push the option to the Spec Options array', inject(function() {
+                expect(spec.Options.length).toEqual(2);
+            }));
+        });
+
+        describe('deleteSpecOpt', function() {
+            beforeEach(inject(function() {
+                specEditCtrl.spec = spec;
+                spec.DefaultOptionID = null;
+                var index = 0;
+                specEditCtrl.deleteSpecOpt(index);
+            }));
+            it ('should splice the option from the Spec Options array', inject(function() {
+                expect(spec.Options.length).toEqual(0);
+            }));
+        });
+
         describe('Submit', function() {
             beforeEach(inject(function(Specs) {
                 specEditCtrl.spec = spec;
@@ -132,7 +161,33 @@ describe('Component: Specs,', function() {
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
-
+        describe('addSpecOpt', function() {
+            beforeEach(inject(function() {
+                specCreateCtrl.spec = spec;
+                specCreateCtrl.SpecOptID = "TestSpecOpt987654321";
+                specCreateCtrl.SpecOptValue = 1;
+                specCreateCtrl.SpecOptMarkup = null;
+                specCreateCtrl.SpecOptMarkupType = null;
+                specCreateCtrl.SpecOptOpen = false;
+                specCreateCtrl.SpecOptListOrder = 2;
+                specCreateCtrl.SpecOptDefault = false;
+                specCreateCtrl.addSpecOpt();
+            }));
+            it ('should push the option to the Spec Options array', inject(function() {
+                expect(spec.Options.length).toEqual(2);
+            }));
+        });
+        describe('deleteSpecOpt', function() {
+            beforeEach(inject(function() {
+                specCreateCtrl.spec = spec;
+                spec.DefaultOptionID = null;
+                var index = 0;
+                specCreateCtrl.deleteSpecOpt(index);
+            }));
+            it ('should splice the option from the Spec Options array', inject(function() {
+                expect(spec.Options.length).toEqual(0);
+            }));
+        });
         describe('Submit', function() {
             beforeEach(inject(function(Specs) {
                 specCreateCtrl.spec = spec;
