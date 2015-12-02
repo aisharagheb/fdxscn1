@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-sm-3 form-group">
                         <label for="specValueInput">Value</label>
-                        <input id="specValueInput" type="number" class="form-control" ng-model="specCreate.SpecOptValue"/>
+                        <input id="specValueInput" type="text" class="form-control" ng-model="specCreate.SpecOptValue"/>
                     </div>
                     <div class="col-sm-3 form-group">
                         <label for="specMarkupInput">Markup</label>
@@ -69,7 +69,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-2 form-group">
-                        <button type="button" class="btn btn-primary form-control" ng-click="specCreate.addSpecOpt()">Add Spec Option</button>
+                        <button type="button" class="btn btn-primary" ng-click="specCreate.addSpecOpt()" ng-disabled="specCreate.SpecOptID == null || specCreate.SpecOptValue == null">Add Spec Option</button>
                     </div>
                 </div>
             </div>
