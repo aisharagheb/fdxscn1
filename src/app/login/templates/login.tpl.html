@@ -19,7 +19,7 @@
 			<input type="text" class="form-control" id="Email" ng-model="login.credentials.Email" ng-required="true" />
 		</div>
 		<button type="submit" id="email_submit" class="btn btn-primary" ng-disabled="ForgotPasswordForm.$invalid">Submit</button>
-		<a class="btn btn-link" ng-click="login.setForm('login')">Back to Login</a>
+		<a id="back_to_login" class="btn btn-link" ng-click="login.setForm('login')">Back to Login</a>
 	</form>
 	<form class="panel-body" name="ResetPasswordForm" ng-submit="login.resetPassword()" ng-switch-when="reset">
 		<h1 class="text-center">Reset Password</h1>
@@ -44,6 +44,6 @@
 	<form class="panel-body" name="ResetSuccessForm" ng-switch-when="resetSuccess">
 		<h1 class="text-center">Reset Password</h1>
 		<div class="alert alert-info">Your password has been reset.</div>
-		<a class="btn btn-link" id="back_to_login" ng-click="login.setForm('login')">Back to Login</a>
+		<a class="btn btn-link" id="back_to_login2" ng-click="login.setForm('login')">Back to Login</a>
 	</form>
 </main>

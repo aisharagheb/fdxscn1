@@ -1,5 +1,4 @@
 function BasePage() {
-
     this.get = function() {
         browser.get('/#');
     };

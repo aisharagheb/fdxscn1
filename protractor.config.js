@@ -1,5 +1,5 @@
 var browsers = {
-    firfox: {
+    firefox: {
         name: 'Firefox',
         browserName: 'firefox'
     },
@@ -12,19 +12,22 @@ var browsers = {
 
 // An example configuration file.
 exports.config = {
+    baseUrl: 'http://localhost:8000',
+
     // The address of a running selenium server.
     seleniumAddress: 'http://localhost:4444/wd/hub',
 
     // Capabilities to be passed to the webdriver instance.
-    multiCapabilities: [
-        browsers.firfox,
-        browsers.chrome
-    ],
+    capabilities: browsers.chrome,
 
     // Spec patterns are relative to the configuration file location passed
     // to protractor (in this example conf.js).
     // They may include glob patterns.
-    //specs: ['./src/**/*.test.js'],
+    specs: [
+        './src/**/login.test.js',
+        './src/**/*.test.js',
+        './src/**/logout.test.js'
+    ],
 
     // Options to be passed to Jasmine-node.
     jasmineNodeOpts: {
