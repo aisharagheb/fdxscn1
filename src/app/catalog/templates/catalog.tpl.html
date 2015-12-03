@@ -1,0 +1,13 @@
+<article id="catalog-wrapper" class="container-fluid" ng-class="{'toggled':!catalog.showTree}">
+    <div id="catalog-aside" ui-view="left"></div>
+    <div id="catalog-view" class="col-md-9">
+        <div class="link">
+            <a ng-click="catalog.toggleTree()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <ui-view>
+            <ordercloud-category-list categorylist="catalog.categories.Items"></ordercloud-category-list>
+        </ui-view>
+    </div>
+</article>
