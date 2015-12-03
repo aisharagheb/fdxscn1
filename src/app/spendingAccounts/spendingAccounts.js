@@ -20,7 +20,7 @@ function SpendingAccountsConfig( $stateProvider ) {
             data: {componentName: 'Spending Accounts'},
             resolve: {
                 SpendingAccountList: function(SpendingAccounts) {
-                    return SpendingAccounts.List();
+                    return SpendingAccounts.List(null, null, null, null, null, {'RedemptionCode': '!*'});
                 }
             }
         })
