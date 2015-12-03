@@ -9,6 +9,7 @@ angular.module( 'orderCloud', [
 	'ui.bootstrap',
 	'orderCloud.sdk',
 	'toastr',
+    'jcs-autoValidate',
     'ordercloud-infinite-scroll',
 	'ordercloud-buyer-select',
     'ordercloud-search',
