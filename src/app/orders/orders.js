@@ -71,7 +71,7 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItem
         });
         Orders.Update(orderid, vm.order)
             .then(function() {
-                $state.go('^.orders');
+                $state.go('base.orders');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -81,7 +81,7 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItem
     vm.Delete = function() {
         Orders.Delete(orderid)
             .then(function() {
-                $state.go('^.orders');
+                $state.go('base.orders');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
