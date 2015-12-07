@@ -104,7 +104,7 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
         });
         Shipments.Update(shipmentid, vm.shipment)
             .then(function() {
-                $state.go('^.shipments');
+                $state.go('base.shipments');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -114,7 +114,7 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
     vm.Delete = function() {
         Shipments.Delete(shipmentid, false)
             .then(function() {
-                $state.go('^.shipments')
+                $state.go('base.shipments')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -154,7 +154,7 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
         });
         Shipments.Create(vm.shipment)
             .then(function() {
-                $state.go('^.shipments')
+                $state.go('base.shipments')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
