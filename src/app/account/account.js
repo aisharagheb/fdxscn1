@@ -2,9 +2,9 @@ angular.module( 'orderCloud' )
 
 	.config( AccountConfig )
 	.controller( 'AccountCtrl', AccountController )
-	.factory( 'AccountService', AccountService )
 	.controller( 'ConfirmPasswordCtrl', ConfirmPasswordController )
 	.controller( 'ChangePasswordCtrl', ChangePasswordController )
+    .factory( 'AccountService', AccountService )
 
 ;
 
@@ -32,80 +32,6 @@ function AccountConfig( $stateProvider ) {
 				}
 			}
 		})
-}
-
-function AccountService( $q, $uibModal, Credentials, AdminUsers ) {
-	var service = {
-		Update: _update,
-		ChangePassword: _changePassword
-	};
-
-	function _update(currentProfile, newProfile) {
-		var deferred = $q.defer();
-
-		function updateUser() {
-			AdminUsers.Update(currentProfile.ID, newProfile)
-				.then(function(data) {
-					deferred.resolve(data);
-				})
-				.catch(function(ex) {
-					deferred.reject(ex);
-				})
-		}
-
-		var modalInstance = $uibModal.open({
-			animation: true,
-			templateUrl: 'account/templates/confirmPassword.modal.tpl.html',
-			controller: 'ConfirmPasswordCtrl',
-			controllerAs: 'confirmPassword',
-			size: 'sm'
-		});
-
-		modalInstance.result.then(function(password) {
-			var checkPasswordCredentials = {
-				Username: currentProfile.Username,
-				Password: password
-			};
-			Credentials.Get(checkPasswordCredentials).then(
-				function() {
-					updateUser();
-				}).catch(function( ex ) {
-					deferred.reject(ex);
-				});
-		}, function() {
-			angular.noop();
-		});
-
-		return deferred.promise;
-	}
-
-	function _changePassword(currentUser) {
-		var deferred = $q.defer();
-
-		var checkPasswordCredentials = {
-			Username: currentUser.Username,
-			Password: currentUser.CurrentPassword
-		};
-
-		function changePassword() {
-			currentUser.Password = currentUser.NewPassword;
-			AdminUsers.Update(currentUser.ID, currentUser)
-				.then(function() {
-					deferred.resolve();
-				});
-		}
-
-		Credentials.Get(checkPasswordCredentials).then(
-			function() {
-				changePassword();
-			}).catch(function( ex ) {
-				deferred.reject(ex);
-			});
-
-		return deferred.promise;
-	}
-
-	return service;
 }
 
 function AccountController( $exceptionHandler, toastr, Profile, AccountService ) {
@@ -158,4 +84,78 @@ function ChangePasswordController( $state, $exceptionHandler, toastr, AccountSer
 				$exceptionHandler(ex)
 			});
 	};
+}
+
+function AccountService( $q, $uibModal, Credentials, AdminUsers ) {
+    var service = {
+        Update: _update,
+        ChangePassword: _changePassword
+    };
+
+    function _update(currentProfile, newProfile) {
+        var deferred = $q.defer();
+
+        function updateUser() {
+            AdminUsers.Update(currentProfile.ID, newProfile)
+                .then(function(data) {
+                    deferred.resolve(data);
+                })
+                .catch(function(ex) {
+                    deferred.reject(ex);
+                })
+        }
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'account/templates/confirmPassword.modal.tpl.html',
+            controller: 'ConfirmPasswordCtrl',
+            controllerAs: 'confirmPassword',
+            size: 'sm'
+        });
+
+        modalInstance.result.then(function(password) {
+            var checkPasswordCredentials = {
+                Username: currentProfile.Username,
+                Password: password
+            };
+            Credentials.Get(checkPasswordCredentials).then(
+                function() {
+                    updateUser();
+                }).catch(function( ex ) {
+                    deferred.reject(ex);
+                });
+        }, function() {
+            angular.noop();
+        });
+
+        return deferred.promise;
+    }
+
+    function _changePassword(currentUser) {
+        var deferred = $q.defer();
+
+        var checkPasswordCredentials = {
+            Username: currentUser.Username,
+            Password: currentUser.CurrentPassword
+        };
+
+        function changePassword() {
+            currentUser.Password = currentUser.NewPassword;
+            AdminUsers.Update(currentUser.ID, currentUser)
+                .then(function() {
+                    deferred.resolve();
+                });
+        }
+
+        Credentials.Get(checkPasswordCredentials).then(
+            function() {
+                changePassword();
+            }).catch(function( ex ) {
+                deferred.reject(ex);
+            });
+
+        return deferred.promise;
+    }
+
+    return service;
 }
