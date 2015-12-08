@@ -50,10 +50,10 @@ function SpendingAccountsConfig( $stateProvider ) {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List();
                 },
-                AssignmentList: function($stateParams, SpendingAccounts) {
+                AssignedUserGroups: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.ListAssignments($stateParams.spendingAccountid, null, null, 'Group');
                 },
-                SpendingAccount: function($stateParams, SpendingAccounts) {
+                SelectedSpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
                 }
             }
@@ -67,10 +67,10 @@ function SpendingAccountsConfig( $stateProvider ) {
                 UserList: function(Users) {
                     return Users.List();
                 },
-                AssignmentList: function($stateParams, SpendingAccounts) {
+                AssignedUsers: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.ListAssignments($stateParams.spendingAccountid, null, null, 'User');
                 },
-                SpendingAccount: function($stateParams, SpendingAccounts) {
+                SelectedSpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
                 }
             }
@@ -91,7 +91,7 @@ function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpend
     vm.Submit = function() {
         SpendingAccounts.Update(spendingaccountid, vm.spendingAccount)
             .then(function() {
-                $state.go('^.spendingAccounts')
+                $state.go('base.spendingAccounts')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -101,7 +101,7 @@ function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpend
     vm.Delete = function() {
         SpendingAccounts.Delete(spendingaccountid)
             .then(function() {
-                $state.go('^.spendingAccounts')
+                $state.go('base.spendingAccounts')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -116,7 +116,7 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     vm.Submit = function() {
         SpendingAccounts.Create(vm.spendingAccount)
             .then(function() {
-                $state.go('^.spendingAccounts');
+                $state.go('base.spendingAccounts');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -124,11 +124,11 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     }
 }
 
-function SpendingAccountAssignGroupController($scope, UserGroupList, AssignmentList, SpendingAccount, SpendingAccountAssignment) {
+function SpendingAccountAssignGroupController($scope, UserGroupList, AssignedUserGroups, SelectedSpendingAccount, SpendingAccountAssignment) {
     var vm = this;
     vm.list = UserGroupList;
-    vm.assignments = AssignmentList;
-    vm.spendingAccount = SpendingAccount;
+    vm.assignments = AssignedUserGroups;
+    vm.spendingAccount = SelectedSpendingAccount;
     vm.pagingfunction = PagingFunction;
     vm.saveAssignments = SaveAssignments;
 
@@ -147,11 +147,11 @@ function SpendingAccountAssignGroupController($scope, UserGroupList, AssignmentL
     }
 }
 
-function SpendingAccountAssignUserController($scope, UserList, AssignmentList, SpendingAccount, SpendingAccountAssignment) {
+function SpendingAccountAssignUserController($scope, UserList, AssignedUsers, SelectedSpendingAccount, SpendingAccountAssignment) {
     var vm = this;
     vm.list = UserList;
-    vm.assignments = AssignmentList;
-    vm.spendingAccount = SpendingAccount;
+    vm.assignments = AssignedUsers;
+    vm.spendingAccount = SelectedSpendingAccount;
     vm.pagingfunction = PagingFunction;
     vm.saveAssignments = SaveAssignments;
 
