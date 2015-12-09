@@ -121,7 +121,7 @@ function ordercloudFileUpload( $parse, Underscore, FileReader, FilesService ) {
                     var valid = true;
                     if (scope.extensions && fileName) {
                         var type = fileName.split('.').pop().toLowerCase();
-                        var allowed = Underscore.map(scope.extensions.split(','), function(ext) { return ext.replace(/ /g,'').toLowerCase() });
+                        var allowed = Underscore.map(scope.extensions.split(','), function(ext) { return ext.replace(/ /g,'').replace(/\./g,'').toLowerCase() });
                         valid = allowed.indexOf(type) != -1;
                     }
                     if (valid) {
