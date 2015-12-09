@@ -28,11 +28,7 @@
                 <label for="categoryOrderInput">List Order</label>
                     <input id="categoryOrderInput" type="number" class="form-control" ng-model="categoryEdit.category.ListOrder"/>
             </div>
-            <div class="col-sm-6" ng-if="categoryEdit.category.xp.image">
-                <img ng-src="{{categoryEdit.category.xp.image.URL}}" alt="Category Image">
-                <ordercloud-file-upload model="categoryEdit.category" keyname="image" label="Replace Image"></ordercloud-file-upload>
-            </div>
-            <div class="col-sm-6" ng-if="!categoryEdit.category.xp.image">
+            <div class="col-sm-6">
                 <ordercloud-file-upload model="categoryEdit.category" keyname="image" label="Add Image"></ordercloud-file-upload>
             </div>
         </div>

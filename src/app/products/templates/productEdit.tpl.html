@@ -84,12 +84,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6" ng-if="productEdit.product.xp.image">
-            <img ng-src="{{productEdit.product.xp.image.URL}}" alt="Product Image">
-            <ordercloud-file-upload model="productEdit.product" keyname="image" label="Replace Image"></ordercloud-file-upload>
-        </div>
-        <div class="col-sm-6" ng-if="!productEdit.product.xp.image">
-            <ordercloud-file-upload model="productEdit.product" keyname="image" label="Add Image"></ordercloud-file-upload>
+        <div class="col-sm-6">
+            <ordercloud-file-upload model="productEdit.product" keyname="image" label="Image"></ordercloud-file-upload>
         </div>
         <div class="row">
             <div class="form-group col-sm-12">

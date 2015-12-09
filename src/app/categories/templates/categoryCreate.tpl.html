@@ -29,10 +29,7 @@
                 <input id="categoryOrderInput" type="number" class="form-control" ng-model="categoryCreate.category.ListOrder"/>
             </div>
             <div class="col-sm-6">
-                <ordercloud-file-upload model="categoryCreate.category" keyname="image" label="Add Image"></ordercloud-file-upload>
-                <div ng-if="categoryCreate.category.xp.image">
-                    <img ng-src="{{categoryCreate.category.xp.image.URL}}" alt="Category Image">
-                </div>
+                <ordercloud-file-upload model="categoryCreate.category" keyname="image" label="Image"></ordercloud-file-upload>
             </div>
         </div>
         <div class="row">
