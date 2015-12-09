@@ -25,7 +25,7 @@
     "test-e2e": "protractor protractor.config.js"
   },
   "dependencies": {
-    "bower": "^1.4.2",
+    "bower": "^1.6.8",
     "browser-sync": "^2.8.0",
     "del": "^2.0.2",
     "express": "^4.13.3",
