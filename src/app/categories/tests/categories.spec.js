@@ -281,5 +281,25 @@ describe('Component: Categories,', function() {
             }));
         });
     });
+
+    describe('Factory: CategoryTreeService', function() {
+        var treeService;
+        beforeEach(inject(function(CategoryTreeService, Categories) {
+            treeService = CategoryTreeService;
+            var dfd = q.defer();
+            dfd.resolve({Items: [], Meta: {}});
+            spyOn(Categories, 'List').and.returnValue(dfd.promise);
+        }));
+
+        describe('GetCategoryTree', function(Categories) {
+            beforeEach(function() {
+                treeService.GetCategoryTree();
+            });
+
+            it ('should call Categories.List', inject(function(Categories) {
+                expect(Categories.List).toHaveBeenCalledWith(null, 'all', 1, 100);
+            }));
+        });
+    });
 });
 
