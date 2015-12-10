@@ -286,9 +286,9 @@ describe('Component: Categories', function() {
         var treeService;
         beforeEach(inject(function(CategoryTreeService, Categories) {
             treeService = CategoryTreeService;
-            var dfd = q.defer();
-            dfd.resolve({Items: [], Meta: {}});
-            spyOn(Categories, 'List').and.returnValue(dfd.promise);
+            var defer = q.defer();
+            defer.resolve({Items: [], Meta: {}});
+            spyOn(Categories, 'List').and.returnValue(defer.promise);
         }));
 
         describe('GetCategoryTree', function() {
@@ -296,7 +296,7 @@ describe('Component: Categories', function() {
                 treeService.GetCategoryTree();
             });
 
-            it ('should call Categories.List', inject(function(Categories) {
+            it ('should call the Categories List method', inject(function(Categories) {
                 expect(Categories.List).toHaveBeenCalledWith(null, 'all', 1, 100);
             }));
         });

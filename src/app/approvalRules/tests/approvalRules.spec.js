@@ -133,5 +133,59 @@ describe('Component: ApprovalRules', function() {
             }));
         });
     });
+    
+    describe('Factory: ApprovalRuleFactory', function() {
+        var approvalRuleService, term;
+        beforeEach(inject(function(ApprovalRuleFactory, Users, UserGroups, CostCenters, Categories) {
+            approvalRuleService = ApprovalRuleFactory;
+            var defer = q.defer();
+            defer.resolve(null);
+            spyOn(Users, 'List').and.returnValue(defer.promise);
+            spyOn(UserGroups, 'List').and.returnValue(defer.promise);
+            spyOn(CostCenters, 'List').and.returnValue(defer.promise);
+            spyOn(Categories, 'List').and.returnValue(defer.promise);
+        }));
+
+        describe('UserList', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.UserList(term);
+            });
+
+            it ('should call Users List method', inject(function(Users) {
+                expect(Users.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('UserGroups', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.UserGroupList(term);
+            });
+
+            it ('should call UserGroups List method', inject(function(UserGroups) {
+                expect(UserGroups.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('CostCenterList', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.CostCenterList(term);
+            });
+
+            it ('should call CostCenters List method', inject(function(CostCenters) {
+                expect(CostCenters.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('CategoryList', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.CategoryList(term);
+            });
+
+            it ('should call Users List method', inject(function(Categories) {
+                expect(Categories.List).toHaveBeenCalledWith(term);
+            }));
+        });
+    });
 });
 
