@@ -178,7 +178,7 @@ describe('Component: GiftCards', function() {
 
         describe('Submit', function() {
             beforeEach(inject(function(SpendingAccounts) {
-                giftCardCreateCtrl.giftCard = giftCard;
+                giftCardCreateCtrl.giftcard = giftCard;
                 var defer = q.defer();
                 defer.resolve(giftCard);
                 spyOn(SpendingAccounts, 'Create').and.returnValue(defer.promise);
@@ -186,12 +186,8 @@ describe('Component: GiftCards', function() {
                 scope.$digest();
             }));
             it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
-                expect(SpendingAccounts.Create).toHaveBeenCalled();
+                expect(SpendingAccounts.Create).toHaveBeenCalledWith(giftCardCreateCtrl.giftcard);
             }));
-            //TODO: figure out why this call isn't working
-            //it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
-            //    expect(SpendingAccounts.Create).toHaveBeenCalledWith(giftCardCreateCtrl.giftCard);
-            //}));
             it ('should enter the giftCards state', inject(function($state) {
                 expect($state.go).toHaveBeenCalledWith('base.giftCards');
             }));

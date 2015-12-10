@@ -156,12 +156,8 @@ describe('Component: SpendingAccounts', function() {
                 scope.$digest();
             }));
             it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
-                expect(SpendingAccounts.Create).toHaveBeenCalled();
+                expect(SpendingAccounts.Create).toHaveBeenCalledWith(spendingAccountCreateCtrl.spendingAccount);
             }));
-            //TODO: figure out why this call isn't working
-            //it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
-            //    expect(SpendingAccounts.Create).toHaveBeenCalledWith(spendingAccountCreateCtrl.spendingAccount);
-            //}));
             it ('should enter the spendingAccounts state', inject(function($state) {
                 expect($state.go).toHaveBeenCalledWith('base.spendingAccounts');
             }));
@@ -335,20 +331,6 @@ describe('Component: SpendingAccounts', function() {
                 expect(state.reload).toHaveBeenCalledWith(state.current);
             });
         });
-
-        //describe('setSelected', function(List) {
-        //
-        //});
-        //
-        //describe('paging', function() {
-        //    beforeEach(inject(function(SpendingAccounts) {
-        //        spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
-        //        spendingAccountAssignment.paging();
-        //    }));
-        //    it ('should call the SpendingAccounts ListAssignments method', inject(function(SpendingAccounts) {
-        //        expect(SpendingAccounts.ListAssignments).toHaveBeenCalled();
-        //    }));
-        //});
     });
 
 });
