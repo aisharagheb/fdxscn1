@@ -19,32 +19,6 @@ describe('Component: Account', function() {
         };
     }));
 
-    describe('State: Base.account', function() {
-        var state;
-        beforeEach(inject(function($state, Me) {
-            state = $state.get('base.account');
-            spyOn(Me, 'Get').and.returnValue(null);
-        }));
-        xit('should resolve Profile', inject(function ($injector, Me) {
-            $injector.invoke(state.resolve.Profile);
-            expect(Me.Get).toHaveBeenCalled();
-        }));
-    });
-
-    describe('State: Base.changePassword', function() {
-        var state;
-        beforeEach(inject(function($state, Me) {
-            state = $state.get('base.changePassword');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Me, 'Get').and.returnValue(defer.promise);
-        }));
-        xit('should resolve CurrentUser', inject(function ($injector, Me) {
-            $injector.invoke(state.resolve.CurrentUser);
-            expect(Me.Get).toHaveBeenCalled();
-        }));
-    });
-
     describe('Controller: AccountCtrl', function() {
         var accountCtrl, currentProfile;
         beforeEach(inject(function($state, $controller) {

@@ -276,5 +276,80 @@ describe('Component: SpendingAccounts', function() {
         });
     });
 
+    describe('Factory: SpendingAccountAssignment', function(){
+       var spendingAccountAssignment, sampleList, assignments;
+        beforeEach(inject(function(SpendingAccountAssignment, Assignments, $state){
+            spendingAccountAssignment = SpendingAccountAssignment;
+            sampleList = [{ID: 1, selected: true}, {ID: 2, selected: false}, {ID: 3}];
+            assignments = Assignments;
+            spyOn($state, 'reload').and.returnValue(true);
+        }));
+        it('getAssigned should return a list of IDs', function() {
+            var result = assignments.getAssigned(sampleList, 'ID');
+            expect(result).toEqual([1, 2, 3]);
+        });
+        it('getSelected should return a list of IDs that also have selected set to true', function() {
+            var result = assignments.getSelected(sampleList, 'ID');
+            expect(result).toEqual([1]);
+        });
+        it('getUnselected should return a list of IDs where selected is false or undefined', function() {
+            var result = assignments.getUnselected(sampleList, 'ID');
+            expect(result).toEqual([2, 3]);
+        });
+        it('getToAssign should return a list of IDs that are different between the two lists', function() {
+            var result = assignments.getToAssign(sampleList, [], 'ID');
+            expect(result).toEqual([1]);
+        });
+        it('getToDelete should return a list of IDs that are the same between the two lists', function() {
+            var result = assignments.getToDelete(sampleList, [{ID: 2}], 'ID');
+            expect(result).toEqual([2]);
+        });
+
+        describe('saveAssignments', function() {
+            var state,
+                saveFunc,
+                deleteFunc,
+                saveCount, deleteCount;
+            beforeEach(inject(function($state) {
+                state = $state;
+                saveCount = deleteCount = 0;
+                saveFunc = function() {
+                    saveCount++;
+                };
+                deleteFunc = function() {
+                    deleteCount++;
+                };
+                assignments.saveAssignments(
+                    [{ID: 1, selected: true}, {ID: 2, selected: true}, {ID: 3, selected: false}, {ID: 4, selected: false}],
+                    [{ID: 3}, {ID: 4}],
+                    saveFunc, deleteFunc, 'ID');
+                scope.$digest();
+            }));
+            it('should call the saveFunc twice', function() {
+                expect(saveCount).toBe(2);
+            });
+            it('should call the deleteFunc twice', function() {
+                expect(deleteCount).toBe(2);
+            });
+            it('should call the state reload function on the current state', function() {
+                expect(state.reload).toHaveBeenCalledWith(state.current);
+            });
+        });
+
+        //describe('setSelected', function(List) {
+        //
+        //});
+        //
+        //describe('paging', function() {
+        //    beforeEach(inject(function(SpendingAccounts) {
+        //        spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
+        //        spendingAccountAssignment.paging();
+        //    }));
+        //    it ('should call the SpendingAccounts ListAssignments method', inject(function(SpendingAccounts) {
+        //        expect(SpendingAccounts.ListAssignments).toHaveBeenCalled();
+        //    }));
+        //});
+    });
+
 });
 
