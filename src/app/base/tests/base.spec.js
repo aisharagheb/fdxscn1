@@ -1,4 +1,4 @@
-describe('Component: Base,', function() {
+describe('Component: Base', function() {
     var q,
         scope;
     beforeEach(module('orderCloud'));
@@ -8,7 +8,7 @@ describe('Component: Base,', function() {
         q = $q;
         scope = $rootScope.$new();
     }));
-    describe('State: Base,', function() {
+    describe('State: Base', function() {
         var state;
         beforeEach(inject(function($state, Me) {
             state = $state.get('base');
@@ -26,7 +26,7 @@ describe('Component: Base,', function() {
         }));
     });
 
-    describe('Controller: BaseCtrl,', function(){
+    describe('Controller: BaseCtrl', function(){
         var baseCtrl,
             fake_user = {
                 Username: 'notarealusername',
@@ -42,7 +42,7 @@ describe('Component: Base,', function() {
         });
     });
 
-    describe('Controller: BaseLeftCtrl,', function(){
+    describe('Controller: BaseLeftCtrl', function(){
         var baseLeftCtrl,
             fake_components = {
                 nonSpecific: ['test1', 'test2', 'test3'],
@@ -62,7 +62,7 @@ describe('Component: Base,', function() {
         });
     });
 
-    describe('Controller: BaseTopCtrl,', function(){
+    describe('Controller: BaseTopCtrl', function(){
         var baseTopCtrl;
         beforeEach(inject(function($controller) {
             baseTopCtrl = $controller('BaseTopCtrl', {});

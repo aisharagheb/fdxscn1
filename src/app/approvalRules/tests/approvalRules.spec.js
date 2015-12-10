@@ -1,4 +1,4 @@
-describe('Component: ApprovalRules,', function() {
+describe('Component: ApprovalRules', function() {
     var scope,
         q,
         approvalRule;
@@ -34,7 +34,7 @@ describe('Component: ApprovalRules,', function() {
         };
     }));
 
-    describe('State: Base.approvalRules,', function() {
+    describe('State: Base.approvalRules', function() {
         var state;
         beforeEach(inject(function($state, ApprovalRules) {
             state = $state.get('base.approvalRules');
@@ -46,7 +46,7 @@ describe('Component: ApprovalRules,', function() {
         }));
     });
 
-    describe('State: Base.approvalRuleEdit,', function() {
+    describe('State: Base.approvalRuleEdit', function() {
         var state;
         beforeEach(inject(function($state, ApprovalRules) {
             state = $state.get('base.approvalRuleEdit');
@@ -60,7 +60,7 @@ describe('Component: ApprovalRules,', function() {
         }));
     });
 
-    describe('Controller: ApprovalRuleEditCtrl,', function() {
+    describe('Controller: ApprovalRuleEditCtrl', function() {
         var approvalRuleEditCtrl;
         beforeEach(inject(function($state, $controller, ApprovalRules) {
             approvalRuleEditCtrl = $controller('ApprovalRuleEditCtrl', {
@@ -106,7 +106,7 @@ describe('Component: ApprovalRules,', function() {
         });
     });
 
-    describe('Controller: ApprovalRuleCreateCtrl,', function() {
+    describe('Controller: ApprovalRuleCreateCtrl', function() {
         var approvalRuleCreateCtrl;
         beforeEach(inject(function($state, $controller, ApprovalRules) {
             approvalRuleCreateCtrl = $controller('ApprovalRuleCreateCtrl', {

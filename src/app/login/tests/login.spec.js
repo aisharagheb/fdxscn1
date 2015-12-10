@@ -1,4 +1,4 @@
-xdescribe('Component: Login,', function() {
+xdescribe('Component: Login', function() {
     var scope,
         q,
         loginFactory,
@@ -16,7 +16,7 @@ xdescribe('Component: Login,', function() {
         devLoginFactory = DevLoginService;
     }));
 
-    describe('Factory: LoginService,', function() {
+    describe('Factory: LoginService', function() {
         var PasswordResetsFactory,
             client_id;
         beforeEach(inject(function(PasswordResets, clientid) {
@@ -60,7 +60,7 @@ xdescribe('Component: Login,', function() {
         });
     });
 
-    describe('Controller: LoginCtrl,', function() {
+    describe('Controller: LoginCtrl', function() {
         var loginCtrl;
         beforeEach(inject(function($controller, $state, Credentials, LoginService) {
             loginCtrl = $controller('LoginCtrl', {
@@ -68,7 +68,8 @@ xdescribe('Component: Login,', function() {
                 LoginService: LoginService,
                 Credentials: Credentials
             });
-            spyOn($state, 'go').and.returnValue(true);
+            spyOn($state, 'go').and.callThrough();
+            spyOn(Credentials, 'Get').and.callThrough();
         }));
 
         describe('form', function() {
@@ -85,14 +86,10 @@ xdescribe('Component: Login,', function() {
         });
 
         describe('submit', function() {
-            beforeEach(inject(function(Credentials) {
-                var deferred = q.defer();
-                deferred.resolve(true);
-                spyOn(Credentials, 'Get').and.returnValue(deferred.promise);
+            beforeEach(function() {
                 loginCtrl.credentials = credentials;
                 loginCtrl.submit();
-                scope.$digest();
-            }));
+            });
             it ('should call the Credentials Get method with credentials', inject(function(Credentials) {
                 expect(Credentials.Get).toHaveBeenCalledWith(credentials);
             }));
@@ -159,7 +156,7 @@ xdescribe('Component: Login,', function() {
         });
     });
 
-    describe('Factory: DevLoginService,', function() {
+    describe('Factory: DevLoginService', function() {
         describe('LogInDev', function() {
             beforeEach(function() {
                 devLoginFactory.LogInDev(credentials);
@@ -170,7 +167,7 @@ xdescribe('Component: Login,', function() {
         });
     });
 
-    describe('Controller: DevLoginCtrl,', function() {
+    describe('Controller: DevLoginCtrl', function() {
         var devLoginCtrl;
         beforeEach(inject(function($controller, DevLoginService, Auth) {
             devLoginCtrl = $controller('DevLoginCtrl', {

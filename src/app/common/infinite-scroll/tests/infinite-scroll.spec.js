@@ -1,4 +1,4 @@
-describe('Component: Infinite Scroll,', function() {
+describe('Component: Infinite Scroll', function() {
     var scope;
     beforeEach(module('orderCloud'));
     beforeEach(module('orderCloud.sdk'));
@@ -6,7 +6,7 @@ describe('Component: Infinite Scroll,', function() {
     beforeEach(inject(function($rootScope) {
         scope = $rootScope.$new();
     }));
-    describe('Directive: ordercloudInfiniteScroll,', function() {
+    describe('Directive: ordercloudInfiniteScroll', function() {
         var element;
         beforeEach(inject(function($compile, Paging) {
             scope.ctrl = {};

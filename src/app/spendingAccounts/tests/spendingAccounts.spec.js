@@ -1,4 +1,4 @@
-describe('Component: SpendingAccounts,', function() {
+describe('Component: SpendingAccounts', function() {
     var scope,
         q,
         spendingAccount;
@@ -18,7 +18,7 @@ describe('Component: SpendingAccounts,', function() {
         };
     }));
 
-    describe('State: Base.spendingAccounts,', function() {
+    describe('State: Base.spendingAccounts', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
             state = $state.get('base.spendingAccounts');
@@ -30,7 +30,7 @@ describe('Component: SpendingAccounts,', function() {
         }));
     });
 
-    describe('State: Base.spendingAccountEdit,', function() {
+    describe('State: Base.spendingAccountEdit', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
             state = $state.get('base.spendingAccountEdit');
@@ -44,7 +44,7 @@ describe('Component: SpendingAccounts,', function() {
         }));
     });
 
-    describe('State: Base.spendingAccountAssignGroup,', function() {
+    describe('State: Base.spendingAccountAssignGroup', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, UserGroups) {
             state = $state.get('base.spendingAccountAssignGroup');
@@ -68,7 +68,7 @@ describe('Component: SpendingAccounts,', function() {
         }));
     });
 
-    describe('State: Base.spendingAccountAssignUser,', function() {
+    describe('State: Base.spendingAccountAssignUser', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, Users) {
             state = $state.get('base.spendingAccountAssignUser');
@@ -92,7 +92,7 @@ describe('Component: SpendingAccounts,', function() {
         }));
     });
 
-    describe('Controller: SpendingAccountEditCtrl,', function() {
+    describe('Controller: SpendingAccountEditCtrl', function() {
         var spendingAccountEditCtrl;
         beforeEach(inject(function($state, $controller) {
             spendingAccountEditCtrl = $controller('SpendingAccountEditCtrl', {
@@ -137,7 +137,7 @@ describe('Component: SpendingAccounts,', function() {
         });
     });
 
-    describe('Controller: SpendingAccountCreateCtrl,', function() {
+    describe('Controller: SpendingAccountCreateCtrl', function() {
         var spendingAccountCreateCtrl;
         beforeEach(inject(function($state, $controller) {
             spendingAccountCreateCtrl = $controller('SpendingAccountCreateCtrl', {
@@ -168,7 +168,7 @@ describe('Component: SpendingAccounts,', function() {
         });
     });
 
-    describe('Controller: SpendingAccountAssignGroupCtrl,', function() {
+    describe('Controller: SpendingAccountAssignGroupCtrl', function() {
         var spendingAccountAssignGroupCtrl;
         beforeEach(inject(function($state, $controller, SpendingAccounts) {
             spendingAccountAssignGroupCtrl = $controller('SpendingAccountAssignGroupCtrl', {
@@ -222,7 +222,7 @@ describe('Component: SpendingAccounts,', function() {
         });
     });
 
-    describe('Controller: SpendingAccountAssignUserCtrl,', function() {
+    describe('Controller: SpendingAccountAssignUserCtrl', function() {
         var spendingAccountAssignUserCtrl;
         beforeEach(inject(function($state, $controller, SpendingAccounts) {
             spendingAccountAssignUserCtrl = $controller('SpendingAccountAssignUserCtrl', {

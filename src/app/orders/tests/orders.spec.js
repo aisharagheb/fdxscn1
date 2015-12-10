@@ -1,4 +1,4 @@
-describe('Component: Orders,', function() {
+describe('Component: Orders', function() {
     var scope,
         q,
         order;
@@ -22,7 +22,7 @@ describe('Component: Orders,', function() {
         };
     }));
 
-    describe('State: Base.orders,', function() {
+    describe('State: Base.orders', function() {
         var state;
         beforeEach(inject(function($state, Orders) {
             state = $state.get('base.orders');
@@ -34,7 +34,7 @@ describe('Component: Orders,', function() {
         }));
     });
 
-    describe('State: Base.orderEdit,', function() {
+    describe('State: Base.orderEdit', function() {
         var state;
         beforeEach(inject(function($state, Orders, LineItems) {
             state = $state.get('base.orderEdit');
@@ -54,7 +54,7 @@ describe('Component: Orders,', function() {
     });
     
 
-    describe('Controller: OrderEditCtrl,', function() {
+    describe('Controller: OrderEditCtrl', function() {
         var orderEditCtrl, lineItem;
         beforeEach(inject(function($state, $controller, Orders) {
             orderEditCtrl = $controller('OrderEditCtrl', {

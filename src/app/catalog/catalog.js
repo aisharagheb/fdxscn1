@@ -26,21 +26,20 @@ function CatalogConfig($stateProvider) {
                 }
             },
             resolve: {
-                Catalog: function(Me, ImpersonationService) {
-                    return Me.ListCategories(null, 1).then(
+                Catalog: function($q, Me, ImpersonationService) {
+                    var dfd = $q.defer();
+                    Me.ListCategories(null, 1).then(
                         function(response) {
-                            console.log('success hit');
-                            return response;
+                            dfd.resolve(response);
                         },
                         function(response) {
-                            console.log('error hit');
-                            ImpersonationService.impersonate(response);
-                            return Me.As().ListCategories(null, 1);
-                        }
-                    );
-                },
-                Tree: function() {
-                    return 'test_tree';
+                            ImpersonationService.impersonate(response).then(function() {
+                                var categories = Me.As().ListCategories(null, 1);
+                                console.log(categories);
+                                dfd.resolve(categories);
+                            });
+                    });
+                    return dfd.promise;
                 }
             }
         });
@@ -53,12 +52,11 @@ function CatalogController(Catalog) {
         vm.showTree = !vm.showTree;
     };
     vm.categories = Catalog;
-    console.log(Catalog);
 }
 
-function CatalogListController(Tree) {
+function CatalogListController(Catalog) {
     var vm = this;
-    vm.tree = Tree;
+    vm.tree = Catalog;
 }
 
 function CategoryListDirective() {

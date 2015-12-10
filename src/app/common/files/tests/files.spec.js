@@ -1,23 +1,23 @@
-describe('Component: Files,', function() {
+describe('Component: Files', function() {
     var scope;
     beforeEach(module('orderCloud'));
     beforeEach(module('orderCloud.sdk'));
     beforeEach(inject(function($rootScope) {
         scope = $rootScope.$new();
     }));
-    describe('Factory: FileReader,', function() {
+    describe('Factory: FileReader', function() {
         var fileReader;
         beforeEach(inject(function(FileReader) {
             fileReader = FileReader;
         }));
     });
-    describe('Factory: FileService,', function() {
+    describe('Factory: FileService', function() {
         var fileService;
         beforeEach(inject(function(FileService) {
             fileService = FileService;
         }));
     });
-    describe('Directive: ordercloudFileUpload,', function() {
+    describe('Directive: ordercloudFileUpload', function() {
         var element;
         beforeEach(inject(function($compile) {
             scope.model = {};

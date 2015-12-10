@@ -1,4 +1,4 @@
-describe('Component: Addresses,', function() {
+describe('Component: Addresses', function() {
     var scope,
         q,
         address;
@@ -22,7 +22,7 @@ describe('Component: Addresses,', function() {
         };
     }));
 
-    describe('State: Base.addresses,', function() {
+    describe('State: Base.addresses', function() {
         var state;
         beforeEach(inject(function($state, Addresses) {
             state = $state.get('base.addresses');
@@ -34,7 +34,7 @@ describe('Component: Addresses,', function() {
         }));
     });
 
-    describe('State: Base.addressEdit,', function() {
+    describe('State: Base.addressEdit', function() {
         var state;
         beforeEach(inject(function($state, Addresses) {
             state = $state.get('base.addressEdit');
@@ -48,7 +48,7 @@ describe('Component: Addresses,', function() {
         }));
     });
 
-    describe('State: Base.addressAssign,', function() {
+    describe('State: Base.addressAssign', function() {
         var state;
         beforeEach(inject(function($state, Addresses, UserGroups) {
             state = $state.get('base.addressAssign');
@@ -72,7 +72,7 @@ describe('Component: Addresses,', function() {
         }));
     });
 
-    describe('Controller: AddressEditCtrl,', function() {
+    describe('Controller: AddressEditCtrl', function() {
         var addressEditCtrl;
         beforeEach(inject(function($state, $controller, Addresses) {
             addressEditCtrl = $controller('AddressEditCtrl', {
@@ -118,7 +118,7 @@ describe('Component: Addresses,', function() {
         });
     });
 
-    describe('Controller: AddressCreateCtrl,', function() {
+    describe('Controller: AddressCreateCtrl', function() {
         var addressCreateCtrl;
         beforeEach(inject(function($state, $controller, Addresses) {
             addressCreateCtrl = $controller('AddressCreateCtrl', {
@@ -146,7 +146,7 @@ describe('Component: Addresses,', function() {
         });
     });
 
-    describe('Controller: AddressAssignCtrl,', function() {
+    describe('Controller: AddressAssignCtrl', function() {
         var addressAssignCtrl;
         beforeEach(inject(function($state, $controller, Addresses) {
             addressAssignCtrl = $controller('AddressAssignCtrl', {

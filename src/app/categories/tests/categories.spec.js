@@ -1,4 +1,4 @@
-describe('Component: Categories,', function() {
+describe('Component: Categories', function() {
     var scope,
         q,
         category;
@@ -16,7 +16,7 @@ describe('Component: Categories,', function() {
         };
     }));
 
-    describe('State: Base.categories,', function() {
+    describe('State: Base.categories', function() {
         var state;
         beforeEach(inject(function($state, Categories) {
             state = $state.get('base.categories');
@@ -28,7 +28,7 @@ describe('Component: Categories,', function() {
         }));
     });
 
-    describe('State: Base.categoryEdit,', function() {
+    describe('State: Base.categoryEdit', function() {
         var state;
         beforeEach(inject(function($state, Categories) {
             state = $state.get('base.categoryEdit');
@@ -42,7 +42,7 @@ describe('Component: Categories,', function() {
         }));
     });
 
-    describe('State: Base.categoryAssign,', function() {
+    describe('State: Base.categoryAssign', function() {
         var state;
         beforeEach(inject(function($state, Categories, UserGroups) {
             state = $state.get('base.categoryAssign');
@@ -66,7 +66,7 @@ describe('Component: Categories,', function() {
         }));
     });
 
-    describe('State: Base.categoryAssignProduct,', function() {
+    describe('State: Base.categoryAssignProduct', function() {
         var state;
         beforeEach(inject(function($state, Categories, Products) {
             state = $state.get('base.categoryAssignProduct');
@@ -90,7 +90,7 @@ describe('Component: Categories,', function() {
         }));
     });
 
-    describe('Controller: CategoryEditCtrl,', function() {
+    describe('Controller: CategoryEditCtrl', function() {
         var categoryEditCtrl;
         beforeEach(inject(function($state, $controller, Categories) {
             categoryEditCtrl = $controller('CategoryEditCtrl', {
@@ -136,7 +136,7 @@ describe('Component: Categories,', function() {
         });
     });
 
-    describe('Controller: CategoryCreateCtrl,', function() {
+    describe('Controller: CategoryCreateCtrl', function() {
         var categoryCreateCtrl;
         beforeEach(inject(function($state, $controller, Categories) {
             categoryCreateCtrl = $controller('CategoryCreateCtrl', {
@@ -206,7 +206,7 @@ describe('Component: Categories,', function() {
         });
     });
 
-    describe('Controller: CategoryAssignCtrl,', function() {
+    describe('Controller: CategoryAssignCtrl', function() {
         var categoryAssignCtrl;
         beforeEach(inject(function($state, $controller, Categories) {
             categoryAssignCtrl = $controller('CategoryAssignCtrl', {
@@ -244,7 +244,7 @@ describe('Component: Categories,', function() {
         });
     });
 
-    describe('Controller: CategoryAssignProductCtrl,', function() {
+    describe('Controller: CategoryAssignProductCtrl', function() {
         var categoryAssignProductCtrl;
         beforeEach(inject(function($state, $controller, Categories) {
             categoryAssignProductCtrl = $controller('CategoryAssignProductCtrl', {
@@ -278,6 +278,26 @@ describe('Component: Categories,', function() {
             }));
             it ('should call the Paging paging method', inject(function(Paging) {
                 expect(Paging.paging).toHaveBeenCalled();
+            }));
+        });
+    });
+
+    describe('Factory: CategoryTreeService', function() {
+        var treeService;
+        beforeEach(inject(function(CategoryTreeService, Categories) {
+            treeService = CategoryTreeService;
+            var dfd = q.defer();
+            dfd.resolve({Items: [], Meta: {}});
+            spyOn(Categories, 'List').and.returnValue(dfd.promise);
+        }));
+
+        describe('GetCategoryTree', function(Categories) {
+            beforeEach(function() {
+                treeService.GetCategoryTree();
+            });
+
+            it ('should call Categories.List', inject(function(Categories) {
+                expect(Categories.List).toHaveBeenCalledWith(null, 'all', 1, 100);
             }));
         });
     });

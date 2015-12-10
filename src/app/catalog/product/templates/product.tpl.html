@@ -1,1 +1,11 @@
-<h1>Product</h1>
+<h1>{{product.item.Name || product.item.ID}}</h1>
+<div class="col-md-6" ng-if="product.item.xp.image">
+    <!--PRODUCT IMAGE-->
+    <img ng-src="{{product.item.xp.image.URL}}" alt="Product Image">
+    <ordercloud-order-input product="product.item"></ordercloud-order-input>
+</div>
+<div ng-class="{'col-md-6': product.item.xp.image, 'col-md-12': !product.item.xp.image}">
+    <ui-view>
+        <!--PRODUCT INFO-->
+    </ui-view>
+</div>

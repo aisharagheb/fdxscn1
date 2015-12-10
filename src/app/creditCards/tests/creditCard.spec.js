@@ -1,4 +1,4 @@
-describe('Component: CreditCards,', function() {
+describe('Component: CreditCards', function() {
     var scope,
         q,
         creditCard;
@@ -17,7 +17,7 @@ describe('Component: CreditCards,', function() {
         };
     }));
 
-    describe('State: Base.creditCards,', function() {
+    describe('State: Base.creditCards', function() {
         var state;
         beforeEach(inject(function($state, CreditCards) {
             state = $state.get('base.creditCards');
@@ -29,7 +29,7 @@ describe('Component: CreditCards,', function() {
         }));
     });
 
-    describe('State: Base.creditCardEdit,', function() {
+    describe('State: Base.creditCardEdit', function() {
         var state;
         beforeEach(inject(function($state, CreditCards) {
             state = $state.get('base.creditCardEdit');
@@ -43,7 +43,7 @@ describe('Component: CreditCards,', function() {
         }));
     });
 
-    describe('State: Base.creditCardAssign,', function() {
+    describe('State: Base.creditCardAssign', function() {
         var state;
         beforeEach(inject(function($state, CreditCards, UserGroups, Buyers) {
             state = $state.get('base.creditCardAssign');
@@ -72,7 +72,7 @@ describe('Component: CreditCards,', function() {
         }));
     });
 
-    describe('Controller: CreditCardEditCtrl,', function() {
+    describe('Controller: CreditCardEditCtrl', function() {
         var creditCardEditCtrl;
         beforeEach(inject(function($state, $controller, CreditCards) {
             creditCardEditCtrl = $controller('CreditCardEditCtrl', {
@@ -118,7 +118,7 @@ describe('Component: CreditCards,', function() {
         });
     });
 
-    describe('Controller: CreditCardCreateCtrl,', function() {
+    describe('Controller: CreditCardCreateCtrl', function() {
         var creditCardCreateCtrl;
         beforeEach(inject(function($state, $controller, CreditCards) {
             creditCardCreateCtrl = $controller('CreditCardCreateCtrl', {
@@ -147,7 +147,7 @@ describe('Component: CreditCards,', function() {
         });
     });
 
-    describe('Controller: CreditCardAssignCtrl,', function() {
+    describe('Controller: CreditCardAssignCtrl', function() {
         var creditCardAssignCtrl;
         beforeEach(inject(function($state, $controller, CreditCards) {
             creditCardAssignCtrl = $controller('CreditCardAssignCtrl', {

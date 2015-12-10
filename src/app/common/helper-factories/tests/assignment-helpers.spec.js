@@ -1,4 +1,4 @@
-describe('Factory: Assignments,', function() {
+describe('Factory: Assignments', function() {
     var q,
         scope,
         assignments,

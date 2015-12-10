@@ -1,4 +1,4 @@
-describe('Component: UserGroups,', function() {
+describe('Component: UserGroups', function() {
     var scope,
         q,
         userGroup;
@@ -15,7 +15,7 @@ describe('Component: UserGroups,', function() {
         };
     }));
 
-    describe('State: Base.groups,', function() {
+    describe('State: Base.groups', function() {
         var state;
         beforeEach(inject(function($state, UserGroups) {
             state = $state.get('base.groups');
@@ -27,7 +27,7 @@ describe('Component: UserGroups,', function() {
         }));
     });
 
-    describe('State: Base.groupEdit,', function() {
+    describe('State: Base.groupEdit', function() {
         var state;
         beforeEach(inject(function($state, UserGroups) {
             state = $state.get('base.groupEdit');
@@ -41,7 +41,7 @@ describe('Component: UserGroups,', function() {
         }));
     });
 
-    describe('State: Base.groupAssign,', function() {
+    describe('State: Base.groupAssign', function() {
         var state;
         beforeEach(inject(function($state, UserGroups, Users) {
             state = $state.get('base.groupAssign');
@@ -65,7 +65,7 @@ describe('Component: UserGroups,', function() {
         }));
     });
 
-    describe('Controller: UserGroupEditCtrl,', function() {
+    describe('Controller: UserGroupEditCtrl', function() {
         var userGroupEditCtrl;
         beforeEach(inject(function($state, $controller, UserGroups) {
             userGroupEditCtrl = $controller('UserGroupEditCtrl', {
@@ -95,7 +95,7 @@ describe('Component: UserGroups,', function() {
         });
     });
 
-    describe('Controller: UserGroupCreateCtrl,', function() {
+    describe('Controller: UserGroupCreateCtrl', function() {
         var userGroupCreateCtrl;
         beforeEach(inject(function($state, $controller, UserGroups) {
             userGroupCreateCtrl = $controller('UserGroupCreateCtrl', {
@@ -123,7 +123,7 @@ describe('Component: UserGroups,', function() {
         });
     });
 
-    describe('Controller: UserGroupAssignCtrl,', function() {
+    describe('Controller: UserGroupAssignCtrl', function() {
         var userGroupAssignCtrl;
         beforeEach(inject(function($state, $controller, UserGroups) {
             userGroupAssignCtrl = $controller('UserGroupAssignCtrl', {
