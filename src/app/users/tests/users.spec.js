@@ -1,4 +1,4 @@
-describe('Component: Users,', function() {
+describe('Component: Users', function() {
     var scope,
         q,
         today,
@@ -20,7 +20,7 @@ describe('Component: Users,', function() {
         }
     }));
 
-    describe('Controller: UserCreateCtrl,', function() {
+    describe('Controller: UserCreateCtrl', function() {
         var userCreateCtrl;
         beforeEach(inject(function($state, $controller, Users) {
             userCreateCtrl = $controller('UserCreateCtrl', {
@@ -48,7 +48,7 @@ describe('Component: Users,', function() {
         });
     });
 
-    describe('Controller: UserEditCtrl,', function() {
+    describe('Controller: UserEditCtrl', function() {
         var userEditCtrl;
         beforeEach(inject(function($state, $controller, Users) {
             userEditCtrl = $controller('UserEditCtrl', {

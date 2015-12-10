@@ -1,4 +1,4 @@
-describe('Component: Account,', function() {
+describe('Component: Account', function() {
     var scope,
         q,
         account;
@@ -19,7 +19,7 @@ describe('Component: Account,', function() {
         };
     }));
 
-    describe('State: Base.account,', function() {
+    describe('State: Base.account', function() {
         var state;
         beforeEach(inject(function($state, Me) {
             state = $state.get('base.account');
@@ -31,7 +31,7 @@ describe('Component: Account,', function() {
         }));
     });
 
-    describe('State: Base.changePassword,', function() {
+    describe('State: Base.changePassword', function() {
         var state;
         beforeEach(inject(function($state, Me) {
             state = $state.get('base.changePassword');
@@ -45,7 +45,7 @@ describe('Component: Account,', function() {
         }));
     });
 
-    describe('Controller: AccountCtrl,', function() {
+    describe('Controller: AccountCtrl', function() {
         var accountCtrl, currentProfile;
         beforeEach(inject(function($state, $controller) {
             accountCtrl = $controller('AccountCtrl', {
@@ -85,7 +85,7 @@ describe('Component: Account,', function() {
         //});
     });
 
-    //describe('Controller: ConfirmPasswordCtrl,', function() {
+    //describe('Controller: ConfirmPasswordCtrl', function() {
     //    var confirmPasswordCtrl;
     //    beforeEach(inject(function($state, $controller) {
     //        confirmPasswordCtrl = $controller('ConfirmPasswordCtrl', {
@@ -123,7 +123,7 @@ describe('Component: Account,', function() {
     //    });
     //});
 
-    describe('Controller: ChangePasswordCtrl,', function () {
+    describe('Controller: ChangePasswordCtrl', function () {
         var changePasswordCtrl;
         beforeEach(inject(function($state, $controller) {
             changePasswordCtrl = $controller('ChangePasswordCtrl', {

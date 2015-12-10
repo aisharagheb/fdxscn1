@@ -1,4 +1,4 @@
-describe('Component: CostCenters,', function() {
+describe('Component: CostCenters', function() {
     var scope,
         q,
         costCenter;
@@ -14,7 +14,7 @@ describe('Component: CostCenters,', function() {
         };
     }));
 
-    describe('State: Base.costCenters,', function() {
+    describe('State: Base.costCenters', function() {
         var state;
         beforeEach(inject(function($state, CostCenters) {
             state = $state.get('base.costCenters');
@@ -26,7 +26,7 @@ describe('Component: CostCenters,', function() {
         }));
     });
 
-    describe('State: Base.costCenterEdit,', function() {
+    describe('State: Base.costCenterEdit', function() {
         var state;
         beforeEach(inject(function($state, CostCenters) {
             state = $state.get('base.costCenterEdit');
@@ -40,7 +40,7 @@ describe('Component: CostCenters,', function() {
         }));
     });
 
-    describe('State: Base.costCenterAssign,', function() {
+    describe('State: Base.costCenterAssign', function() {
         var state;
         beforeEach(inject(function($state, CostCenters, UserGroups, Buyers) {
             state = $state.get('base.costCenterAssign');
@@ -69,7 +69,7 @@ describe('Component: CostCenters,', function() {
         }));
     });
 
-    describe('Controller: CostCenterEditCtrl,', function() {
+    describe('Controller: CostCenterEditCtrl', function() {
         var costCenterEditCtrl;
         beforeEach(inject(function($state, $controller, CostCenters) {
             costCenterEditCtrl = $controller('CostCenterEditCtrl', {
@@ -115,7 +115,7 @@ describe('Component: CostCenters,', function() {
         });
     });
 
-    describe('Controller: CostCenterCreateCtrl,', function() {
+    describe('Controller: CostCenterCreateCtrl', function() {
         var costCenterCreateCtrl;
         beforeEach(inject(function($state, $controller, CostCenters) {
             costCenterCreateCtrl = $controller('CostCenterCreateCtrl', {
@@ -143,7 +143,7 @@ describe('Component: CostCenters,', function() {
         });
     });
 
-    describe('Controller: CostCenterAssignCtrl,', function() {
+    describe('Controller: CostCenterAssignCtrl', function() {
         var costCenterAssignCtrl;
         beforeEach(inject(function($state, $controller, CostCenters) {
             costCenterAssignCtrl = $controller('CostCenterAssignCtrl', {

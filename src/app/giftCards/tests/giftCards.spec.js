@@ -1,4 +1,4 @@
-describe('Component: GiftCards,', function() {
+describe('Component: GiftCards', function() {
     var scope,
         q,
         giftCard;
@@ -19,7 +19,7 @@ describe('Component: GiftCards,', function() {
         };
     }));
 
-    describe('State: Base.giftCards,', function() {
+    describe('State: Base.giftCards', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
             state = $state.get('base.giftCards');
@@ -31,7 +31,7 @@ describe('Component: GiftCards,', function() {
         }));
     });
 
-    describe('State: Base.giftCardEdit,', function() {
+    describe('State: Base.giftCardEdit', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
             state = $state.get('base.giftCardEdit');
@@ -45,7 +45,7 @@ describe('Component: GiftCards,', function() {
         }));
     });
 
-    describe('State: Base.giftCardAssignGroup,', function() {
+    describe('State: Base.giftCardAssignGroup', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, UserGroups) {
             state = $state.get('base.giftCardAssignGroup');
@@ -69,7 +69,7 @@ describe('Component: GiftCards,', function() {
         }));
     });
 
-    describe('State: Base.giftCardAssignUser,', function() {
+    describe('State: Base.giftCardAssignUser', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, Users) {
             state = $state.get('base.giftCardAssignUser');
@@ -93,7 +93,7 @@ describe('Component: GiftCards,', function() {
         }));
     });
 
-    describe('Controller: GiftCardsCtrl,', function() {
+    describe('Controller: GiftCardsCtrl', function() {
         var giftCardsCtrl;
         beforeEach(inject(function($state, $controller) {
             giftCardsCtrl = $controller('GiftCardsCtrl', {
@@ -122,7 +122,7 @@ describe('Component: GiftCards,', function() {
         });
     });
 
-    describe('Controller: GiftCardEditCtrl,', function() {
+    describe('Controller: GiftCardEditCtrl', function() {
         var giftCardEditCtrl;
         beforeEach(inject(function($state, $controller) {
             giftCardEditCtrl = $controller('GiftCardEditCtrl', {
@@ -167,7 +167,7 @@ describe('Component: GiftCards,', function() {
         });
     });
 
-    describe('Controller: GiftCardCreateCtrl,', function() {
+    describe('Controller: GiftCardCreateCtrl', function() {
         var giftCardCreateCtrl;
         beforeEach(inject(function($state, $controller) {
             giftCardCreateCtrl = $controller('GiftCardCreateCtrl', {
@@ -198,7 +198,7 @@ describe('Component: GiftCards,', function() {
         });
     });
 
-    describe('Controller: GiftCardAssignGroupCtrl,', function() {
+    describe('Controller: GiftCardAssignGroupCtrl', function() {
         var giftCardAssignGroupCtrl;
         beforeEach(inject(function($state, $controller, SpendingAccounts) {
             giftCardAssignGroupCtrl = $controller('GiftCardAssignGroupCtrl', {
@@ -252,7 +252,7 @@ describe('Component: GiftCards,', function() {
         });
     });
 
-    describe('Controller: GiftCardAssignUserCtrl,', function() {
+    describe('Controller: GiftCardAssignUserCtrl', function() {
         var giftCardAssignUserCtrl;
         beforeEach(inject(function($state, $controller, SpendingAccounts) {
             giftCardAssignUserCtrl = $controller('GiftCardAssignUserCtrl', {
@@ -306,7 +306,7 @@ describe('Component: GiftCards,', function() {
         });
     });
 
-    describe('Factory: GiftCardFactory,', function() {
+    describe('Factory: GiftCardFactory', function() {
         var code;
         beforeEach(inject(function(GiftCardFactory) {
             code = GiftCardFactory.makeCode()

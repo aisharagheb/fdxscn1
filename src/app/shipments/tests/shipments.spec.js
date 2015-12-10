@@ -1,4 +1,4 @@
-describe('Component: Shipments,', function() {
+describe('Component: Shipments', function() {
     var scope,
         q,
         shipment;
@@ -22,7 +22,7 @@ describe('Component: Shipments,', function() {
         };
     }));
 
-    describe('State: Base.shipments,', function() {
+    describe('State: Base.shipments', function() {
         var state;
         beforeEach(inject(function($state, Shipments) {
             state = $state.get('base.shipments');
@@ -34,7 +34,7 @@ describe('Component: Shipments,', function() {
         }));
     });
 
-    describe('State: Base.shipmentEdit,', function() {
+    describe('State: Base.shipmentEdit', function() {
         var state;
         beforeEach(inject(function($state, Shipments, Orders) {
             state = $state.get('base.shipmentEdit');
@@ -53,7 +53,7 @@ describe('Component: Shipments,', function() {
         }));
     });
 
-    describe('State: Base.shipmentCreate,', function() {
+    describe('State: Base.shipmentCreate', function() {
         var state;
         beforeEach(inject(function($state, Orders) {
             state = $state.get('base.shipmentCreate');
@@ -65,7 +65,7 @@ describe('Component: Shipments,', function() {
         }));
     });
 
-    describe('Controller: ShipmentEditCtrl,', function() {
+    describe('Controller: ShipmentEditCtrl', function() {
         var shipmentEditCtrl, order;
         beforeEach(inject(function($state, $controller, Shipments) {
             shipmentEditCtrl = $controller('ShipmentEditCtrl', {
@@ -198,7 +198,7 @@ describe('Component: Shipments,', function() {
         });
     });
 
-    describe('Controller: ShipmentCreateCtrl,', function() {
+    describe('Controller: ShipmentCreateCtrl', function() {
         var shipmentCreateCtrl, order;
         beforeEach(inject(function($state, $controller, Shipments) {
             shipmentCreateCtrl = $controller('ShipmentCreateCtrl', {

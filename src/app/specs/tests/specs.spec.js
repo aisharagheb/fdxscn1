@@ -1,4 +1,4 @@
-describe('Component: Specs,', function() {
+describe('Component: Specs', function() {
     var scope,
         q,
         spec;
@@ -27,7 +27,7 @@ describe('Component: Specs,', function() {
         };
     }));
 
-    describe('State: Base.specs,', function() {
+    describe('State: Base.specs', function() {
         var state;
         beforeEach(inject(function($state, Specs) {
             state = $state.get('base.specs');
@@ -39,7 +39,7 @@ describe('Component: Specs,', function() {
         }));
     });
 
-    describe('State: Base.specEdit,', function() {
+    describe('State: Base.specEdit', function() {
         var state;
         beforeEach(inject(function($state, Specs) {
             state = $state.get('base.specEdit');
@@ -53,7 +53,7 @@ describe('Component: Specs,', function() {
         }));
     });
 
-    describe('State: Base.specAssign,', function() {
+    describe('State: Base.specAssign', function() {
         var state;
         beforeEach(inject(function($state, Specs, Products) {
             state = $state.get('base.specAssign');
@@ -77,7 +77,7 @@ describe('Component: Specs,', function() {
         }));
     });
 
-    describe('Controller: SpecEditCtrl,', function() {
+    describe('Controller: SpecEditCtrl', function() {
         var specEditCtrl;
         beforeEach(inject(function($state, $controller, Specs) {
             specEditCtrl = $controller('SpecEditCtrl', {
@@ -152,7 +152,7 @@ describe('Component: Specs,', function() {
         });
     });
 
-    describe('Controller: SpecCreateCtrl,', function() {
+    describe('Controller: SpecCreateCtrl', function() {
         var specCreateCtrl;
         beforeEach(inject(function($state, $controller, Specs) {
             specCreateCtrl = $controller('SpecCreateCtrl', {
@@ -206,7 +206,7 @@ describe('Component: Specs,', function() {
         });
     });
     
-    describe('Controller: SpecAssignCtrl,', function() {
+    describe('Controller: SpecAssignCtrl', function() {
         var specAssignCtrl;
         beforeEach(inject(function($state, $controller, Specs) {
             specAssignCtrl = $controller('SpecAssignCtrl', {

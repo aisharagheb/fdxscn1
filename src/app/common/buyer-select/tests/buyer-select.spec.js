@@ -10,7 +10,7 @@ describe('Buyer-Select:', function() {
         buyers = Buyers;
     }));
 
-    describe('Directive: ordercloudSelectBuyer,', function() {
+    describe('Directive: ordercloudSelectBuyer', function() {
         var element;
         beforeEach(inject(function($compile, Buyers) {
             var deferred1 = q.defer();
@@ -38,7 +38,7 @@ describe('Buyer-Select:', function() {
         });
     });
 
-    describe('Controller: SelectBuyerCtrl,', function() {
+    describe('Controller: SelectBuyerCtrl', function() {
         var buyerSelectCtrl,
             mock_buyer = {
                 ID: 'buyer_id',

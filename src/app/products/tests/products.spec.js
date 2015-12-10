@@ -1,4 +1,4 @@
-describe('Component: Products,', function() {
+describe('Component: Products', function() {
     var scope,
         q,
         product;
@@ -23,7 +23,7 @@ describe('Component: Products,', function() {
         };
     }));
 
-    describe('State: Base.products,', function() {
+    describe('State: Base.products', function() {
         var state;
         beforeEach(inject(function($state, Products) {
             state = $state.get('base.products');
@@ -35,7 +35,7 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('State: Base.productEdit,', function() {
+    describe('State: Base.productEdit', function() {
         var state;
         beforeEach(inject(function($state, Products) {
             state = $state.get('base.productEdit');
@@ -49,7 +49,7 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('State: Base.productAssignments,', function() {
+    describe('State: Base.productAssignments', function() {
         var state;
         beforeEach(inject(function($state, Products) {
             state = $state.get('base.productAssignments');
@@ -68,7 +68,7 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('State: Base.productCreateAssignment,', function() {
+    describe('State: Base.productCreateAssignment', function() {
         var state;
         beforeEach(inject(function($state, UserGroups, PriceSchedules) {
             state = $state.get('base.productCreateAssignment');
@@ -85,7 +85,7 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('Controller: ProductEditCtrl,', function() {
+    describe('Controller: ProductEditCtrl', function() {
         var productEditCtrl;
         beforeEach(inject(function($state, $controller, Products) {
             productEditCtrl = $controller('ProductEditCtrl', {
@@ -131,7 +131,7 @@ describe('Component: Products,', function() {
         });
     });
 
-    describe('Controller: ProductCreateCtrl,', function() {
+    describe('Controller: ProductCreateCtrl', function() {
         var productCreateCtrl;
         beforeEach(inject(function($state, $controller, Products) {
             productCreateCtrl = $controller('ProductCreateCtrl', {
@@ -159,7 +159,7 @@ describe('Component: Products,', function() {
         });
     });
 
-    describe('Controller: ProductAssignmentsCtrl,', function() {
+    describe('Controller: ProductAssignmentsCtrl', function() {
         var productAssignmentsCtrl;
         beforeEach(inject(function($state, $controller, Products) {
             productAssignmentsCtrl = $controller('ProductAssignmentsCtrl', {
@@ -186,7 +186,7 @@ describe('Component: Products,', function() {
         });
     });
 
-    describe('Controller: ProductCreateAssignmentCtrl,', function() {
+    describe('Controller: ProductCreateAssignmentCtrl', function() {
         var productCreateAssignmentCtrl;
         beforeEach(inject(function($state, $controller, Products) {
             productCreateAssignmentCtrl = $controller('ProductCreateAssignmentCtrl', {

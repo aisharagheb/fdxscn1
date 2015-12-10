@@ -1,4 +1,4 @@
-describe('Component: PriceSchedules,', function() {
+describe('Component: PriceSchedules', function() {
     var scope,
         q,
         priceSchedule;
@@ -26,7 +26,7 @@ describe('Component: PriceSchedules,', function() {
         };
     }));
 
-    describe('State: Base.priceSchedules,', function() {
+    describe('State: Base.priceSchedules', function() {
         var state;
         beforeEach(inject(function($state, PriceSchedules) {
             state = $state.get('base.priceSchedules');
@@ -38,7 +38,7 @@ describe('Component: PriceSchedules,', function() {
         }));
     });
 
-    describe('State: Base.priceScheduleEdit,', function() {
+    describe('State: Base.priceScheduleEdit', function() {
         var state;
         beforeEach(inject(function($state, PriceSchedules) {
             state = $state.get('base.priceScheduleEdit');
@@ -53,7 +53,7 @@ describe('Component: PriceSchedules,', function() {
     });
 
 
-    describe('Controller: PriceScheduleEditCtrl,', function() {
+    describe('Controller: PriceScheduleEditCtrl', function() {
         var priceScheduleEditCtrl;
         beforeEach(inject(function($state, $controller, PriceSchedules) {
             priceScheduleEditCtrl = $controller('PriceScheduleEditCtrl', {
@@ -117,7 +117,7 @@ describe('Component: PriceSchedules,', function() {
         });
     });
 
-    describe('Controller: PriceScheduleCreateCtrl,', function() {
+    describe('Controller: PriceScheduleCreateCtrl', function() {
         var priceScheduleCreateCtrl;
         beforeEach(inject(function($state, $controller, PriceSchedules) {
             priceScheduleCreateCtrl = $controller('PriceScheduleCreateCtrl', {

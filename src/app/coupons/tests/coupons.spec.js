@@ -1,4 +1,4 @@
-describe('Component: Coupons,', function() {
+describe('Component: Coupons', function() {
     var scope,
         q,
         coupon;
@@ -27,7 +27,7 @@ describe('Component: Coupons,', function() {
         };
     }));
 
-    describe('State: Base.coupons,', function() {
+    describe('State: Base.coupons', function() {
         var state;
         beforeEach(inject(function($state, Coupons) {
             state = $state.get('base.coupons');
@@ -39,7 +39,7 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponEdit,', function() {
+    describe('State: Base.couponEdit', function() {
         var state;
         beforeEach(inject(function($state, Coupons) {
             state = $state.get('base.couponEdit');
@@ -53,7 +53,7 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponAssignParty,', function() {
+    describe('State: Base.couponAssignParty', function() {
         var state;
         beforeEach(inject(function($state, Coupons, UserGroups, Buyers) {
             state = $state.get('base.couponAssignParty');
@@ -82,7 +82,7 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponAssignProduct,', function() {
+    describe('State: Base.couponAssignProduct', function() {
         var state;
         beforeEach(inject(function($state, Coupons, Products) {
             state = $state.get('base.couponAssignProduct');
@@ -106,7 +106,7 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponAssignCategory,', function() {
+    describe('State: Base.couponAssignCategory', function() {
         var state;
         beforeEach(inject(function($state, Coupons, Categories) {
             state = $state.get('base.couponAssignCategory');
@@ -130,7 +130,7 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('Controller: CouponEditCtrl,', function() {
+    describe('Controller: CouponEditCtrl', function() {
         var couponEditCtrl;
         beforeEach(inject(function($state, $controller, Coupons) {
             couponEditCtrl = $controller('CouponEditCtrl', {
@@ -176,7 +176,7 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponCreateCtrl,', function() {
+    describe('Controller: CouponCreateCtrl', function() {
         var couponCreateCtrl;
         var code;
         beforeEach(inject(function($state, $controller, Coupons) {
@@ -214,7 +214,7 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponAssignCtrl,', function() {
+    describe('Controller: CouponAssignCtrl', function() {
         var couponAssignCtrl;
         beforeEach(inject(function($state, $controller, Coupons) {
             couponAssignCtrl = $controller('CouponAssignCtrl', {
@@ -253,7 +253,7 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponAssignProductCtrl,', function() {
+    describe('Controller: CouponAssignProductCtrl', function() {
         var couponAssignProductCtrl;
         beforeEach(inject(function($state, $controller, Coupons) {
             couponAssignProductCtrl = $controller('CouponAssignProductCtrl', {
@@ -291,7 +291,7 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponAssignCategoryCtrl,', function() {
+    describe('Controller: CouponAssignCategoryCtrl', function() {
         var couponAssignCategoryCtrl;
         beforeEach(inject(function($state, $controller, Coupons) {
             couponAssignCategoryCtrl = $controller('CouponAssignCategoryCtrl', {
