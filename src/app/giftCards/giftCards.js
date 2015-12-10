@@ -81,11 +81,16 @@ function GiftCardsController ( GiftCardList, SpendingAccounts ) {
     var vm = this;
     vm.list = GiftCardList;
     vm.pagingfunction = PagingFunction;
+    vm.searchfunction = Search;
 
     function PagingFunction() {
         if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
             SpendingAccounts.List(null, vm.list.Meta.Page + 1, vm.list.Meta.PageSize, null, null, {'RedemptionCode': '*'});
         }
+    }
+
+    function Search(searchTerm) {
+        return SpendingAccounts.List(searchTerm, null, null, null, null, {'RedemptionCode': '*'});
     }
 }
 

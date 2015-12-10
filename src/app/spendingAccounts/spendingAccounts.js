@@ -77,9 +77,14 @@ function SpendingAccountsConfig( $stateProvider ) {
         });
 }
 
-function SpendingAccountsController( SpendingAccountList ) {
+function SpendingAccountsController( SpendingAccountList, SpendingAccounts ) {
     var vm = this;
     vm.list = SpendingAccountList;
+    vm.searchfunction = Search;
+
+    function Search(searchTerm) {
+        return SpendingAccounts.List(searchTerm, null, null, null, null, {'RedemptionCode': '!*'});
+    }
 }
 
 function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpendingAccount, SpendingAccounts ) {
@@ -182,9 +187,7 @@ function SpendingAccountAssignment($q, $state, $injector, Underscore, Assignment
         var assigned = Underscore.pluck(AssignmentList, PartyID);
         var selected = Underscore.pluck(Underscore.where(List, {selected: true}), 'ID');
         var toAdd = Assignments.getToAssign(List, AssignmentList, PartyID);
-        console.log(toAdd);
         var toUpdate = Underscore.intersection(selected, assigned);
-        console.log(toUpdate);
         var toDelete = Assignments.getToDelete(List, AssignmentList, PartyID);
         var queue = [];
         var dfd = $q.defer();
