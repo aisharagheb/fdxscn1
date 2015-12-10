@@ -291,7 +291,7 @@ describe('Component: Categories', function() {
             spyOn(Categories, 'List').and.returnValue(dfd.promise);
         }));
 
-        describe('GetCategoryTree', function(Categories) {
+        describe('GetCategoryTree', function() {
             beforeEach(function() {
                 treeService.GetCategoryTree();
             });
