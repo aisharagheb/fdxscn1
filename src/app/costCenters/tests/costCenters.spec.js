@@ -71,10 +71,9 @@ describe('Component: CostCenters', function() {
 
     describe('Controller: CostCenterEditCtrl', function() {
         var costCenterEditCtrl;
-        beforeEach(inject(function($state, $controller, CostCenters) {
+        beforeEach(inject(function($state, $controller) {
             costCenterEditCtrl = $controller('CostCenterEditCtrl', {
                 $scope: scope,
-                CostCenters: CostCenters,
                 SelectedCostCenter: costCenter
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -117,10 +116,9 @@ describe('Component: CostCenters', function() {
 
     describe('Controller: CostCenterCreateCtrl', function() {
         var costCenterCreateCtrl;
-        beforeEach(inject(function($state, $controller, CostCenters) {
+        beforeEach(inject(function($state, $controller) {
             costCenterCreateCtrl = $controller('CostCenterCreateCtrl', {
-                $scope: scope,
-                CostCenters: CostCenters
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -145,10 +143,9 @@ describe('Component: CostCenters', function() {
 
     describe('Controller: CostCenterAssignCtrl', function() {
         var costCenterAssignCtrl;
-        beforeEach(inject(function($state, $controller, CostCenters) {
+        beforeEach(inject(function($state, $controller) {
             costCenterAssignCtrl = $controller('CostCenterAssignCtrl', {
                 $scope: scope,
-                CostCenters: CostCenters,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedCostCenter: {}
@@ -170,9 +167,7 @@ describe('Component: CostCenters', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 costCenterAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {

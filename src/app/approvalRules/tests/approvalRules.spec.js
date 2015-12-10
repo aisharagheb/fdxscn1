@@ -62,10 +62,9 @@ describe('Component: ApprovalRules', function() {
 
     describe('Controller: ApprovalRuleEditCtrl', function() {
         var approvalRuleEditCtrl;
-        beforeEach(inject(function($state, $controller, ApprovalRules) {
+        beforeEach(inject(function($state, $controller) {
             approvalRuleEditCtrl = $controller('ApprovalRuleEditCtrl', {
                 $scope: scope,
-                ApprovalRules: ApprovalRules,
                 SelectedApprovalRule: approvalRule
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -108,10 +107,9 @@ describe('Component: ApprovalRules', function() {
 
     describe('Controller: ApprovalRuleCreateCtrl', function() {
         var approvalRuleCreateCtrl;
-        beforeEach(inject(function($state, $controller, ApprovalRules) {
+        beforeEach(inject(function($state, $controller) {
             approvalRuleCreateCtrl = $controller('ApprovalRuleCreateCtrl', {
-                $scope: scope,
-                ApprovalRules: ApprovalRules
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));

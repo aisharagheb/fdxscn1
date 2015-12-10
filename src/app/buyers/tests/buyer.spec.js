@@ -42,10 +42,9 @@ describe('Component: Buyers', function() {
 
     describe('Controller: BuyerEditCtrl', function() {
         var buyerEditCtrl;
-        beforeEach(inject(function($state, $controller, Buyers) {
+        beforeEach(inject(function($state, $controller) {
             buyerEditCtrl = $controller('BuyerEditCtrl', {
                 $scope: scope,
-                Buyers: Buyers,
                 SelectedBuyer: buyer
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -71,10 +70,9 @@ describe('Component: Buyers', function() {
 
     describe('Controller: BuyerCreateCtrl', function() {
         var buyerCreateCtrl;
-        beforeEach(inject(function($state, $controller, Buyers) {
+        beforeEach(inject(function($state, $controller) {
             buyerCreateCtrl = $controller('BuyerCreateCtrl', {
-                $scope: scope,
-                Buyers: Buyers
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));

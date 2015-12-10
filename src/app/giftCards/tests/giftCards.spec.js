@@ -35,9 +35,7 @@ describe('Component: GiftCards', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
             state = $state.get('base.giftCardEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(SpendingAccounts, 'Get').and.returnValue(defer.promise);
+            spyOn(SpendingAccounts, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedGiftCard', inject(function ($injector, $stateParams, SpendingAccounts) {
             $injector.invoke(state.resolve.SelectedGiftCard);
@@ -51,9 +49,7 @@ describe('Component: GiftCards', function() {
             state = $state.get('base.giftCardAssignGroup');
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(SpendingAccounts, 'Get').and.returnValue(defer.promise);
+            spyOn(SpendingAccounts, 'Get').and.returnValue(null);
         }));
         it('should resolve UserGroupList', inject(function ($injector, UserGroups) {
             $injector.invoke(state.resolve.UserGroupList);
@@ -74,10 +70,8 @@ describe('Component: GiftCards', function() {
         beforeEach(inject(function($state, SpendingAccounts, Users) {
             state = $state.get('base.giftCardAssignUser');
             spyOn(Users, 'List').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(SpendingAccounts, 'Get').and.returnValue(defer.promise);
-            spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(defer.promise);
+            spyOn(SpendingAccounts, 'Get').and.returnValue(null);
+            spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
         }));
         it('should resolve UserList', inject(function ($injector, Users) {
             $injector.invoke(state.resolve.UserList);
@@ -196,10 +190,9 @@ describe('Component: GiftCards', function() {
 
     describe('Controller: GiftCardAssignGroupCtrl', function() {
         var giftCardAssignGroupCtrl;
-        beforeEach(inject(function($state, $controller, SpendingAccounts) {
+        beforeEach(inject(function($state, $controller) {
             giftCardAssignGroupCtrl = $controller('GiftCardAssignGroupCtrl', {
                 $scope: scope,
-                GiftCards: SpendingAccounts,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedGiftCard: {}
@@ -210,9 +203,7 @@ describe('Component: GiftCards', function() {
 
         describe('SaveAssignments', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 giftCardAssignGroupCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -222,10 +213,7 @@ describe('Component: GiftCards', function() {
 
         describe('pagingfunction', function() {
             beforeEach(inject(function(SpendingAccounts) {
-                var defer = q.defer();
-                defer.resolve(null);
-                spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(defer.promise);
-                scope.$digest();
+                spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
                 giftCardAssignGroupCtrl.list = {
                     Meta: {
                         Page: 1,
@@ -250,10 +238,9 @@ describe('Component: GiftCards', function() {
 
     describe('Controller: GiftCardAssignUserCtrl', function() {
         var giftCardAssignUserCtrl;
-        beforeEach(inject(function($state, $controller, SpendingAccounts) {
+        beforeEach(inject(function($state, $controller) {
             giftCardAssignUserCtrl = $controller('GiftCardAssignUserCtrl', {
                 $scope: scope,
-                GiftCards: SpendingAccounts,
                 UserList: [],
                 AssignedUsers: [],
                 SelectedGiftCard: {},
@@ -264,9 +251,7 @@ describe('Component: GiftCards', function() {
 
         describe('SaveAssignments', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 giftCardAssignUserCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -276,10 +261,7 @@ describe('Component: GiftCards', function() {
 
         describe('pagingfunction', function() {
             beforeEach(inject(function(SpendingAccounts) {
-                var defer = q.defer();
-                defer.resolve(null);
-                spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(defer.promise);
-                scope.$digest();
+                spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
                 giftCardAssignUserCtrl.list = {
                     Meta: {
                         Page: 1,

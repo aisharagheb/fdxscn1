@@ -37,7 +37,6 @@ describe('Component: Account', function() {
                 defer.resolve(account);
                 spyOn(AccountService, 'Update').and.returnValue(defer.promise);
                 accountCtrl.update();
-                scope.$digest();
             }));
             it ('should call the Accounts Update method', inject(function(AccountService) {
                 expect(AccountService.Update).toHaveBeenCalledWith(currentProfile, account);
@@ -113,7 +112,6 @@ describe('Component: Account', function() {
                 defer.resolve(account);
                 spyOn(AccountService, 'ChangePassword').and.returnValue(defer.promise);
                 changePasswordCtrl.changePassword();
-                scope.$digest();
             }));
             it ('should call the Accounts ChangePassword method', inject(function(AccountService) {
                 expect(AccountService.ChangePassword).toHaveBeenCalledWith(changePasswordCtrl.currentUser);

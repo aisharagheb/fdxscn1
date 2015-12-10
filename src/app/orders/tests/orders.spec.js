@@ -38,10 +38,8 @@ describe('Component: Orders', function() {
         var state;
         beforeEach(inject(function($state, Orders, LineItems) {
             state = $state.get('base.orderEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Orders, 'Get').and.returnValue(defer.promise);
-            spyOn(LineItems, 'List').and.returnValue(defer.promise);
+            spyOn(Orders, 'Get').and.returnValue(null);
+            spyOn(LineItems, 'List').and.returnValue(null);
         }));
         it('should resolve SelectedOrder', inject(function ($injector, $stateParams, Orders) {
             $injector.invoke(state.resolve.SelectedOrder);
@@ -56,10 +54,9 @@ describe('Component: Orders', function() {
 
     describe('Controller: OrderEditCtrl', function() {
         var orderEditCtrl, lineItem;
-        beforeEach(inject(function($state, $controller, Orders) {
+        beforeEach(inject(function($state, $controller) {
             orderEditCtrl = $controller('OrderEditCtrl', {
                 $scope: scope,
-                Orders: Orders,
                 SelectedOrder: order,
                 LineItemList: []
             });
@@ -84,14 +81,10 @@ describe('Component: Orders', function() {
 
         describe('goToProduct', function() {
             beforeEach(inject(function() {
-                var defer = q.defer();
-                defer.resolve(null);
-                defer.resolve(null);
                 lineItem = {
                     ProductID: 'potato'
                 }
                 orderEditCtrl.goToProduct(lineItem);
-                scope.$digest();
             }));
             it ('should enter the productEdit state', inject(function($state) {
                 expect($state.go).toHaveBeenCalledWith('base.productEdit', {'productid': lineItem.ProductID});

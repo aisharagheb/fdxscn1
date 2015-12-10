@@ -42,9 +42,7 @@ describe('Component: PriceSchedules', function() {
         var state;
         beforeEach(inject(function($state, PriceSchedules) {
             state = $state.get('base.priceScheduleEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(PriceSchedules, 'Get').and.returnValue(defer.promise);
+            spyOn(PriceSchedules, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedPriceSchedule', inject(function ($injector, $stateParams, PriceSchedules) {
             $injector.invoke(state.resolve.SelectedPriceSchedule);
@@ -55,10 +53,9 @@ describe('Component: PriceSchedules', function() {
 
     describe('Controller: PriceScheduleEditCtrl', function() {
         var priceScheduleEditCtrl;
-        beforeEach(inject(function($state, $controller, PriceSchedules) {
+        beforeEach(inject(function($state, $controller) {
             priceScheduleEditCtrl = $controller('PriceScheduleEditCtrl', {
                 $scope: scope,
-                PriceSchedules: PriceSchedules,
                 SelectedPriceSchedule: priceSchedule
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -71,11 +68,8 @@ describe('Component: PriceSchedules', function() {
                 priceScheduleEditCtrl.priceSchedule = priceSchedule;
                 priceScheduleEditCtrl.quantity = quantity;
                 priceScheduleEditCtrl.quantity = price;
-                var defer = q.defer();
-                defer.resolve(priceSchedule);
-                spyOn(PriceBreak, 'addPriceBreak').and.returnValue(defer.promise);
+                spyOn(PriceBreak, 'addPriceBreak').and.returnValue(null);
                 priceScheduleEditCtrl.addPriceBreak();
-                scope.$digest();
             }));
             it ('should call the PriceBreak addPriceBreak method', inject(function(PriceBreak) {
                 expect(PriceBreak.addPriceBreak).toHaveBeenCalledWith(priceSchedule, price, quantity);
@@ -119,10 +113,9 @@ describe('Component: PriceSchedules', function() {
 
     describe('Controller: PriceScheduleCreateCtrl', function() {
         var priceScheduleCreateCtrl;
-        beforeEach(inject(function($state, $controller, PriceSchedules) {
+        beforeEach(inject(function($state, $controller) {
             priceScheduleCreateCtrl = $controller('PriceScheduleCreateCtrl', {
-                $scope: scope,
-                PriceSchedules: PriceSchedules
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -134,11 +127,8 @@ describe('Component: PriceSchedules', function() {
                 priceScheduleCreateCtrl.priceSchedule = priceSchedule;
                 priceScheduleCreateCtrl.quantity = quantity;
                 priceScheduleCreateCtrl.quantity = price;
-                var defer = q.defer();
-                defer.resolve(priceSchedule);
-                spyOn(PriceBreak, 'addPriceBreak').and.returnValue(defer.promise);
+                spyOn(PriceBreak, 'addPriceBreak').and.returnValue(null);
                 priceScheduleCreateCtrl.addPriceBreak();
-                scope.$digest();
             }));
             it ('should call the PriceBreak addPriceBreak method', inject(function(PriceBreak) {
                 expect(PriceBreak.addPriceBreak).toHaveBeenCalledWith(priceSchedule, price, quantity);

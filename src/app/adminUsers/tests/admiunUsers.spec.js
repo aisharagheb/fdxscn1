@@ -19,10 +19,9 @@ describe('Component: AdminUsers', function() {
 
     describe('Controller: AdminUserCreateCtrl', function() {
         var adminUserCreateCtrl;
-        beforeEach(inject(function($state, $controller, AdminUsers) {
+        beforeEach(inject(function($state, $controller) {
             adminUserCreateCtrl = $controller('AdminUserCreateCtrl', {
-                $scope: scope,
-                AdminUsers: AdminUsers
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -47,10 +46,9 @@ describe('Component: AdminUsers', function() {
 
     describe('Controller: AdminUserEditCtrl', function() {
         var adminUserEditCtrl;
-        beforeEach(inject(function($state, $controller, AdminUsers) {
+        beforeEach(inject(function($state, $controller) {
             adminUserEditCtrl = $controller('AdminUserEditCtrl', {
                 $scope: scope,
-                AdminUsers: AdminUsers,
                 SelectedAdminUser: adminUser
             });
             spyOn($state, 'go').and.returnValue(true);

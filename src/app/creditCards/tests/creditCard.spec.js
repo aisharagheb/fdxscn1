@@ -33,9 +33,7 @@ describe('Component: CreditCards', function() {
         var state;
         beforeEach(inject(function($state, CreditCards) {
             state = $state.get('base.creditCardEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(CreditCards, 'Get').and.returnValue(defer.promise);
+            spyOn(CreditCards, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedCreditCard', inject(function ($injector, $stateParams, CreditCards) {
             $injector.invoke(state.resolve.SelectedCreditCard);
@@ -50,9 +48,7 @@ describe('Component: CreditCards', function() {
             spyOn(Buyers, 'Get').and.returnValue(null);
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(CreditCards, 'ListAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(CreditCards, 'Get').and.returnValue(defer.promise);
+            spyOn(CreditCards, 'Get').and.returnValue(null);
         }));
         it('should resolve Buyer', inject(function ($injector, Buyers) {
             $injector.invoke(state.resolve.Buyer);
@@ -74,10 +70,9 @@ describe('Component: CreditCards', function() {
 
     describe('Controller: CreditCardEditCtrl', function() {
         var creditCardEditCtrl;
-        beforeEach(inject(function($state, $controller, CreditCards) {
+        beforeEach(inject(function($state, $controller) {
             creditCardEditCtrl = $controller('CreditCardEditCtrl', {
                 $scope: scope,
-                CreditCards: CreditCards,
                 SelectedCreditCard: creditCard
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -120,10 +115,9 @@ describe('Component: CreditCards', function() {
 
     describe('Controller: CreditCardCreateCtrl', function() {
         var creditCardCreateCtrl;
-        beforeEach(inject(function($state, $controller, CreditCards) {
+        beforeEach(inject(function($state, $controller) {
             creditCardCreateCtrl = $controller('CreditCardCreateCtrl', {
-                $scope: scope,
-                CreditCards: CreditCards
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -149,10 +143,9 @@ describe('Component: CreditCards', function() {
 
     describe('Controller: CreditCardAssignCtrl', function() {
         var creditCardAssignCtrl;
-        beforeEach(inject(function($state, $controller, CreditCards) {
+        beforeEach(inject(function($state, $controller) {
             creditCardAssignCtrl = $controller('CreditCardAssignCtrl', {
                 $scope: scope,
-                CreditCards: CreditCards,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedCreditCard: {},
@@ -163,9 +156,7 @@ describe('Component: CreditCards', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 creditCardAssignCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -175,9 +166,7 @@ describe('Component: CreditCards', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 creditCardAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {

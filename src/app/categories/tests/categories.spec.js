@@ -71,10 +71,10 @@ describe('Component: Categories', function() {
         beforeEach(inject(function($state, Categories, Products) {
             state = $state.get('base.categoryAssignProduct');
             spyOn(Products, 'List').and.returnValue(null);
+            spyOn(Categories, 'ListProductAssignments').and.returnValue(null);
             var defer = q.defer();
             defer.resolve();
             spyOn(Categories, 'Get').and.returnValue(defer.promise);
-            spyOn(Categories, 'ListProductAssignments').and.returnValue(defer.promise);
         }));
         it('should resolve ProductList', inject(function ($injector, Products) {
             $injector.invoke(state.resolve.ProductList);
@@ -92,10 +92,9 @@ describe('Component: Categories', function() {
 
     describe('Controller: CategoryEditCtrl', function() {
         var categoryEditCtrl;
-        beforeEach(inject(function($state, $controller, Categories) {
+        beforeEach(inject(function($state, $controller) {
             categoryEditCtrl = $controller('CategoryEditCtrl', {
                 $scope: scope,
-                Categories: Categories,
                 SelectedCategory: category
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -138,10 +137,9 @@ describe('Component: Categories', function() {
 
     describe('Controller: CategoryCreateCtrl', function() {
         var categoryCreateCtrl;
-        beforeEach(inject(function($state, $controller, Categories) {
+        beforeEach(inject(function($state, $controller) {
             categoryCreateCtrl = $controller('CategoryCreateCtrl', {
-                $scope: scope,
-                Categories: Categories
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -178,11 +176,8 @@ describe('Component: Categories', function() {
 
         describe('treeOptions.dropped', function() {
             beforeEach(inject(function(CategoryTreeService) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(CategoryTreeService, 'UpdateCategoryNode').and.returnValue(defer.promise);
+                spyOn(CategoryTreeService, 'UpdateCategoryNode').and.returnValue(null);
                 categoryTreeCtrl.treeOptions.dropped();
-                scope.$digest();
             }));
             it ('should call the CategoryTreeService UpdateCategoryNode method', inject(function(CategoryTreeService) {
                 expect(CategoryTreeService.UpdateCategoryNode).toHaveBeenCalled();
@@ -208,10 +203,9 @@ describe('Component: Categories', function() {
 
     describe('Controller: CategoryAssignCtrl', function() {
         var categoryAssignCtrl;
-        beforeEach(inject(function($state, $controller, Categories) {
+        beforeEach(inject(function($state, $controller) {
             categoryAssignCtrl = $controller('CategoryAssignCtrl', {
                 $scope: scope,
-                Categories: Categories,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedCategory: {}
@@ -221,9 +215,7 @@ describe('Component: Categories', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 categoryAssignCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -233,9 +225,7 @@ describe('Component: Categories', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 categoryAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {
@@ -246,10 +236,9 @@ describe('Component: Categories', function() {
 
     describe('Controller: CategoryAssignProductCtrl', function() {
         var categoryAssignProductCtrl;
-        beforeEach(inject(function($state, $controller, Categories) {
+        beforeEach(inject(function($state, $controller) {
             categoryAssignProductCtrl = $controller('CategoryAssignProductCtrl', {
                 $scope: scope,
-                Categories: Categories,
                 ProductList: [],
                 ProductAssignments: [],
                 SelectedCategory: {}
@@ -259,9 +248,7 @@ describe('Component: Categories', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 categoryAssignProductCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -271,9 +258,7 @@ describe('Component: Categories', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 categoryAssignProductCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {
