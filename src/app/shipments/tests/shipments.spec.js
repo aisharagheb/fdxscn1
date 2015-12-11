@@ -38,9 +38,7 @@ describe('Component: Shipments', function() {
         var state;
         beforeEach(inject(function($state, Shipments, Orders) {
             state = $state.get('base.shipmentEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Shipments, 'Get').and.returnValue(defer.promise);
+            spyOn(Shipments, 'Get').and.returnValue(null);
             spyOn(Orders, 'List').and.returnValue(null);
         }));
         it('should resolve SelectedShipment', inject(function ($injector, $stateParams, Shipments) {
@@ -67,10 +65,9 @@ describe('Component: Shipments', function() {
 
     describe('Controller: ShipmentEditCtrl', function() {
         var shipmentEditCtrl, order;
-        beforeEach(inject(function($state, $controller, Shipments) {
+        beforeEach(inject(function($state, $controller) {
             shipmentEditCtrl = $controller('ShipmentEditCtrl', {
                 $scope: scope,
-                Shipments: Shipments,
                 SelectedShipment: shipment,
                 OrderList: [],
                 lineitems: {
@@ -179,10 +176,7 @@ describe('Component: Shipments', function() {
 
         describe('pagingfunction', function() {
             beforeEach(inject(function(LineItems) {
-                var defer = q.defer();
-                defer.resolve(null);
-                spyOn(LineItems, 'List').and.returnValue(defer.promise);
-                scope.$digest();
+                spyOn(LineItems, 'List').and.returnValue(null);
                 shipmentEditCtrl.lineitems.list = {
                     Meta: {
                         Page: 1,
@@ -200,10 +194,9 @@ describe('Component: Shipments', function() {
 
     describe('Controller: ShipmentCreateCtrl', function() {
         var shipmentCreateCtrl, order;
-        beforeEach(inject(function($state, $controller, Shipments) {
+        beforeEach(inject(function($state, $controller) {
             shipmentCreateCtrl = $controller('ShipmentCreateCtrl', {
                 $scope: scope,
-                Shipments: Shipments,
                 OrderList: []
             });
             spyOn($state, 'go').and.returnValue(true);

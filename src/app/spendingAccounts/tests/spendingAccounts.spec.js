@@ -34,9 +34,7 @@ describe('Component: SpendingAccounts', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
             state = $state.get('base.spendingAccountEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(SpendingAccounts, 'Get').and.returnValue(defer.promise);
+            spyOn(SpendingAccounts, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedSpendingAccount', inject(function ($injector, $stateParams, SpendingAccounts) {
             $injector.invoke(state.resolve.SelectedSpendingAccount);
@@ -50,9 +48,7 @@ describe('Component: SpendingAccounts', function() {
             state = $state.get('base.spendingAccountAssignGroup');
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(SpendingAccounts, 'Get').and.returnValue(defer.promise);
+            spyOn(SpendingAccounts, 'Get').and.returnValue(null);
         }));
         it('should resolve UserGroupList', inject(function ($injector, UserGroups) {
             $injector.invoke(state.resolve.UserGroupList);
@@ -73,10 +69,8 @@ describe('Component: SpendingAccounts', function() {
         beforeEach(inject(function($state, SpendingAccounts, Users) {
             state = $state.get('base.spendingAccountAssignUser');
             spyOn(Users, 'List').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(SpendingAccounts, 'Get').and.returnValue(defer.promise);
-            spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(defer.promise);
+            spyOn(SpendingAccounts, 'Get').and.returnValue(null);
+            spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
         }));
         it('should resolve UserList', inject(function ($injector, Users) {
             $injector.invoke(state.resolve.UserList);
@@ -166,10 +160,9 @@ describe('Component: SpendingAccounts', function() {
 
     describe('Controller: SpendingAccountAssignGroupCtrl', function() {
         var spendingAccountAssignGroupCtrl;
-        beforeEach(inject(function($state, $controller, SpendingAccounts) {
+        beforeEach(inject(function($state, $controller) {
             spendingAccountAssignGroupCtrl = $controller('SpendingAccountAssignGroupCtrl', {
                 $scope: scope,
-                SpendingAccounts: SpendingAccounts,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedSpendingAccount: {}
@@ -180,9 +173,7 @@ describe('Component: SpendingAccounts', function() {
 
         describe('SaveAssignments', function() {
             beforeEach(inject(function(SpendingAccountAssignment) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(SpendingAccountAssignment, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(SpendingAccountAssignment, 'saveAssignments').and.returnValue(null);
                 spendingAccountAssignGroupCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(SpendingAccountAssignment) {
@@ -192,10 +183,7 @@ describe('Component: SpendingAccounts', function() {
 
         describe('pagingfunction', function() {
             beforeEach(inject(function(SpendingAccountAssignment) {
-                var defer = q.defer();
-                defer.resolve(null);
-                spyOn(SpendingAccountAssignment, 'paging').and.returnValue(defer.promise);
-                scope.$digest();
+                spyOn(SpendingAccountAssignment, 'paging').and.returnValue(null);
                 spendingAccountAssignGroupCtrl.list = {
                     Meta: {
                         Page: 1,
@@ -220,10 +208,9 @@ describe('Component: SpendingAccounts', function() {
 
     describe('Controller: SpendingAccountAssignUserCtrl', function() {
         var spendingAccountAssignUserCtrl;
-        beforeEach(inject(function($state, $controller, SpendingAccounts) {
+        beforeEach(inject(function($state, $controller) {
             spendingAccountAssignUserCtrl = $controller('SpendingAccountAssignUserCtrl', {
                 $scope: scope,
-                SpendingAccounts: SpendingAccounts,
                 UserList: [],
                 AssignedUsers: [],
                 SelectedSpendingAccount: {},
@@ -234,9 +221,7 @@ describe('Component: SpendingAccounts', function() {
 
         describe('SaveAssignments', function() {
             beforeEach(inject(function(SpendingAccountAssignment) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(SpendingAccountAssignment, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(SpendingAccountAssignment, 'saveAssignments').and.returnValue(null);
                 spendingAccountAssignUserCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(SpendingAccountAssignment) {
@@ -246,10 +231,7 @@ describe('Component: SpendingAccounts', function() {
 
         describe('pagingfunction', function() {
             beforeEach(inject(function(SpendingAccountAssignment) {
-                var defer = q.defer();
-                defer.resolve(null);
-                spyOn(SpendingAccountAssignment, 'paging').and.returnValue(defer.promise);
-                scope.$digest();
+                spyOn(SpendingAccountAssignment, 'paging').and.returnValue(null);
                 spendingAccountAssignUserCtrl.list = {
                     Meta: {
                         Page: 1,

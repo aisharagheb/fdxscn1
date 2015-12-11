@@ -31,9 +31,7 @@ describe('Component: UserGroups', function() {
         var state;
         beforeEach(inject(function($state, UserGroups) {
             state = $state.get('base.groupEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(UserGroups, 'Get').and.returnValue(defer.promise);
+            spyOn(UserGroups, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedUserGroup', inject(function ($injector, $stateParams, UserGroups) {
             $injector.invoke(state.resolve.SelectedUserGroup);
@@ -47,9 +45,7 @@ describe('Component: UserGroups', function() {
             state = $state.get('base.groupAssign');
             spyOn(Users, 'List').and.returnValue(null);
             spyOn(UserGroups, 'ListUserAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(UserGroups, 'Get').and.returnValue(defer.promise);
+            spyOn(UserGroups, 'Get').and.returnValue(null);
         }));
         it('should resolve UserList', inject(function ($injector, Users) {
             $injector.invoke(state.resolve.UserList);
@@ -67,10 +63,9 @@ describe('Component: UserGroups', function() {
 
     describe('Controller: UserGroupEditCtrl', function() {
         var userGroupEditCtrl;
-        beforeEach(inject(function($state, $controller, UserGroups) {
+        beforeEach(inject(function($state, $controller) {
             userGroupEditCtrl = $controller('UserGroupEditCtrl', {
                 $scope: scope,
-                UserGroups: UserGroups,
                 SelectedUserGroup: userGroup
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -97,10 +92,9 @@ describe('Component: UserGroups', function() {
 
     describe('Controller: UserGroupCreateCtrl', function() {
         var userGroupCreateCtrl;
-        beforeEach(inject(function($state, $controller, UserGroups) {
+        beforeEach(inject(function($state, $controller) {
             userGroupCreateCtrl = $controller('UserGroupCreateCtrl', {
-                $scope: scope,
-                UserGroups: UserGroups
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -125,10 +119,9 @@ describe('Component: UserGroups', function() {
 
     describe('Controller: UserGroupAssignCtrl', function() {
         var userGroupAssignCtrl;
-        beforeEach(inject(function($state, $controller, UserGroups) {
+        beforeEach(inject(function($state, $controller) {
             userGroupAssignCtrl = $controller('UserGroupAssignCtrl', {
                 $scope: scope,
-                UserGroups: UserGroups,
                 UserList: [],
                 AssignedUsers: [],
                 SelectedUserGroup: {}
@@ -138,9 +131,7 @@ describe('Component: UserGroups', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 userGroupAssignCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -150,9 +141,7 @@ describe('Component: UserGroups', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 userGroupAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {
