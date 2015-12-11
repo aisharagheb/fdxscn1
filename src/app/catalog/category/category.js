@@ -13,9 +13,6 @@ function CategoryConfig($stateProvider) {
             controller: 'CategoryCtrl',
             controllerAs: 'category',
             resolve: {
-                Category: function(Categories, $stateParams) {
-                    return Categories.Get($stateParams.categoryid);
-                },
                 CategoryList: function($q, Me, ImpersonationService, $stateParams) {
                     var dfd = $q.defer();
                     Me.ListSubcategories($stateParams.categoryid)
@@ -47,9 +44,8 @@ function CategoryConfig($stateProvider) {
         });
 }
 
-function CategoryController(Category, CategoryList, ProductList) {
+function CategoryController(CategoryList, ProductList) {
     var vm = this;
-    vm.category = Category;
     vm.categories = CategoryList;
     vm.products = ProductList;
 }

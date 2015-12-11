@@ -6,6 +6,8 @@ angular.module('orderCloud')
     .directive('ordercloudCategoryList', CategoryListDirective)
     .directive('ordercloudProductList', ProductListDirective)
     .factory('CatalogTreeService', CatalogTreeService)
+    .directive('catalogNode', CatalogNode)
+    .directive('catalogTree', CatalogTree)
 
 ;
 
@@ -61,7 +63,6 @@ function CatalogController(Catalog) {
 function CatalogTreeController(Tree) {
     var vm = this;
     vm.tree = Tree;
-    console.log(vm.tree);
 }
 
 function CategoryListDirective() {
@@ -69,7 +70,6 @@ function CategoryListDirective() {
         restrict: 'E',
         templateUrl: 'catalog/templates/category.list.tpl.html',
         scope: {
-            currentcategory: '=',
             categorylist: '='
         }
     };
@@ -80,7 +80,6 @@ function ProductListDirective() {
         restrict: 'E',
         templateUrl: 'catalog/templates/product.list.tpl.html',
         scope: {
-            currentcategory: '=',
             productlist: '='
         }
     };
@@ -116,4 +115,32 @@ function CatalogTreeService($q, Underscore, Me) {
         }
         return node;
     }
+}
+
+function CatalogTree() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            tree: '='
+        },
+        template: "<ul class='nav nav-pills nav-stacked'><catalog-node ng-repeat='node in tree' node='node'></catalog-node></ul>"
+    };
+}
+
+function CatalogNode($compile) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            node: '='
+        },
+        template: '<li><a ui-sref="base.catalog.category({categoryid:node.ID})" ng-bind-html="node.Name"></a></li>',
+        link: function(scope, element) {
+            if (angular.isArray(scope.node.children)) {
+                element.append("<catalog-tree tree='node.children' />");
+                $compile(element.contents())(scope);
+            }
+        }
+    };
 }
