@@ -2,9 +2,10 @@ angular.module('orderCloud')
 
     .config(CatalogConfig)
     .controller('CatalogCtrl', CatalogController)
-    .controller('CatalogListCtrl', CatalogListController)
+    .controller('CatalogTreeCtrl', CatalogTreeController)
     .directive('ordercloudCategoryList', CategoryListDirective)
     .directive('ordercloudProductList', ProductListDirective)
+    .factory('CatalogTreeService', CatalogTreeService)
 
 ;
 
@@ -20,9 +21,9 @@ function CatalogConfig($stateProvider) {
                     controllerAs: 'catalog'
                 },
                 'left@base.catalog': {
-                    templateUrl: 'catalog/templates/catalog.list.tpl.html',
-                    controller: 'CatalogListCtrl',
-                    controllerAs: 'catalogList'
+                    templateUrl: 'catalog/templates/catalog.tree.tpl.html',
+                    controller: 'CatalogTreeCtrl',
+                    controllerAs: 'catalogTree'
                 }
             },
             resolve: {
@@ -40,6 +41,9 @@ function CatalogConfig($stateProvider) {
                             });
                     });
                     return dfd.promise;
+                },
+                Tree: function(CatalogTreeService) {
+                    return CatalogTreeService.GetCatalogTree();
                 }
             }
         });
@@ -54,9 +58,10 @@ function CatalogController(Catalog) {
     vm.categories = Catalog;
 }
 
-function CatalogListController(Catalog) {
+function CatalogTreeController(Tree) {
     var vm = this;
-    vm.tree = Catalog;
+    vm.tree = Tree;
+    console.log(vm.tree);
 }
 
 function CategoryListDirective() {
@@ -79,4 +84,36 @@ function ProductListDirective() {
             productlist: '='
         }
     };
+}
+
+function CatalogTreeService($q, Underscore, Me) {
+    return {
+        GetCatalogTree: tree
+    };
+
+    function tree() {
+        var tree = [];
+        var dfd = $q.defer();
+        Me.ListCategories(null, 'all', 1, 100).then(function(list) {
+            angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
+                tree.push(getNode(node, list));
+            });
+            dfd.resolve(tree);
+        });
+        return dfd.promise;
+    }
+
+    function getNode(node, list) {
+        var children = Underscore.where(list.Items, {ParentID: node.ID});
+        if (children.length > 0) {
+            node.children = children;
+            angular.forEach(children, function(child) {
+                return getNode(child, list);
+            });
+        }
+        else {
+            node.children = [];
+        }
+        return node;
+    }
 }

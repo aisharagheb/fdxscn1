@@ -4,7 +4,6 @@ var browserSync = require('browser-sync').create();
 //Enter Server Info Here
 var appName = null;  //used for externally accessible site... must only include letters ('_', '-' not allowed)
 var portNumber = 12000;  //used for localhost
-
 var protractor = require('gulp-angular-protractor');
 
 if (appName) {
