@@ -1,4 +1,4 @@
-describe('Component: Products,', function() {
+describe('Component: Products', function() {
     var scope,
         q,
         product;
@@ -23,7 +23,7 @@ describe('Component: Products,', function() {
         };
     }));
 
-    describe('State: Base.products,', function() {
+    describe('State: Base.products', function() {
         var state;
         beforeEach(inject(function($state, Products) {
             state = $state.get('base.products');
@@ -35,13 +35,11 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('State: Base.productEdit,', function() {
+    describe('State: Base.productEdit', function() {
         var state;
         beforeEach(inject(function($state, Products) {
             state = $state.get('base.productEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Products, 'Get').and.returnValue(defer.promise);
+            spyOn(Products, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedProduct', inject(function ($injector, $stateParams, Products) {
             $injector.invoke(state.resolve.SelectedProduct);
@@ -49,14 +47,12 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('State: Base.productAssignments,', function() {
+    describe('State: Base.productAssignments', function() {
         var state;
         beforeEach(inject(function($state, Products) {
             state = $state.get('base.productAssignments');
             spyOn(Products, 'ListAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Products, 'Get').and.returnValue(defer.promise);
+            spyOn(Products, 'Get').and.returnValue(null);
         }));
         it('should resolve Assignments', inject(function ($injector, $stateParams, Products) {
             $injector.invoke(state.resolve.Assignments);
@@ -68,7 +64,7 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('State: Base.productCreateAssignment,', function() {
+    describe('State: Base.productCreateAssignment', function() {
         var state;
         beforeEach(inject(function($state, UserGroups, PriceSchedules) {
             state = $state.get('base.productCreateAssignment');
@@ -85,12 +81,11 @@ describe('Component: Products,', function() {
         }));
     });
 
-    describe('Controller: ProductEditCtrl,', function() {
+    describe('Controller: ProductEditCtrl', function() {
         var productEditCtrl;
-        beforeEach(inject(function($state, $controller, Products) {
+        beforeEach(inject(function($state, $controller) {
             productEditCtrl = $controller('ProductEditCtrl', {
                 $scope: scope,
-                Products: Products,
                 SelectedProduct: product
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -131,12 +126,11 @@ describe('Component: Products,', function() {
         });
     });
 
-    describe('Controller: ProductCreateCtrl,', function() {
+    describe('Controller: ProductCreateCtrl', function() {
         var productCreateCtrl;
-        beforeEach(inject(function($state, $controller, Products) {
+        beforeEach(inject(function($state, $controller) {
             productCreateCtrl = $controller('ProductCreateCtrl', {
-                $scope: scope,
-                Products: Products
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -159,12 +153,11 @@ describe('Component: Products,', function() {
         });
     });
 
-    describe('Controller: ProductAssignmentsCtrl,', function() {
+    describe('Controller: ProductAssignmentsCtrl', function() {
         var productAssignmentsCtrl;
-        beforeEach(inject(function($state, $controller, Products) {
+        beforeEach(inject(function($state, $controller) {
             productAssignmentsCtrl = $controller('ProductAssignmentsCtrl', {
                 $scope: scope,
-                Products: Products,
                 SelectedProduct: {}
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -186,12 +179,11 @@ describe('Component: Products,', function() {
         });
     });
 
-    describe('Controller: ProductCreateAssignmentCtrl,', function() {
+    describe('Controller: ProductCreateAssignmentCtrl', function() {
         var productCreateAssignmentCtrl;
-        beforeEach(inject(function($state, $controller, Products) {
+        beforeEach(inject(function($state, $controller) {
             productCreateAssignmentCtrl = $controller('ProductCreateAssignmentCtrl', {
                 $scope: scope,
-                Products: Products,
                 UserGroupList: [],
                 PriceScheduleList: []
         });

@@ -20,7 +20,7 @@ function SpendingAccountsConfig( $stateProvider ) {
             data: {componentName: 'Spending Accounts'},
             resolve: {
                 SpendingAccountList: function(SpendingAccounts) {
-                    return SpendingAccounts.List();
+                    return SpendingAccounts.List(null, null, null, null, null, {'RedemptionCode': '!*'});
                 }
             }
         })
@@ -50,10 +50,10 @@ function SpendingAccountsConfig( $stateProvider ) {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List();
                 },
-                AssignmentList: function($stateParams, SpendingAccounts) {
+                AssignedUserGroups: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.ListAssignments($stateParams.spendingAccountid, null, null, 'Group');
                 },
-                SpendingAccount: function($stateParams, SpendingAccounts) {
+                SelectedSpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
                 }
             }
@@ -67,19 +67,24 @@ function SpendingAccountsConfig( $stateProvider ) {
                 UserList: function(Users) {
                     return Users.List();
                 },
-                AssignmentList: function($stateParams, SpendingAccounts) {
+                AssignedUsers: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.ListAssignments($stateParams.spendingAccountid, null, null, 'User');
                 },
-                SpendingAccount: function($stateParams, SpendingAccounts) {
+                SelectedSpendingAccount: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.spendingAccountid);
                 }
             }
         });
 }
 
-function SpendingAccountsController( SpendingAccountList ) {
+function SpendingAccountsController( SpendingAccountList, SpendingAccounts ) {
     var vm = this;
     vm.list = SpendingAccountList;
+    vm.searchfunction = Search;
+
+    function Search(searchTerm) {
+        return SpendingAccounts.List(searchTerm, null, null, null, null, {'RedemptionCode': '!*'});
+    }
 }
 
 function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpendingAccount, SpendingAccounts ) {
@@ -91,7 +96,7 @@ function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpend
     vm.Submit = function() {
         SpendingAccounts.Update(spendingaccountid, vm.spendingAccount)
             .then(function() {
-                $state.go('^.spendingAccounts')
+                $state.go('base.spendingAccounts')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -101,7 +106,7 @@ function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpend
     vm.Delete = function() {
         SpendingAccounts.Delete(spendingaccountid)
             .then(function() {
-                $state.go('^.spendingAccounts')
+                $state.go('base.spendingAccounts')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -116,7 +121,7 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     vm.Submit = function() {
         SpendingAccounts.Create(vm.spendingAccount)
             .then(function() {
-                $state.go('^.spendingAccounts');
+                $state.go('base.spendingAccounts');
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -124,11 +129,11 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     }
 }
 
-function SpendingAccountAssignGroupController($scope, UserGroupList, AssignmentList, SpendingAccount, SpendingAccountAssignment) {
+function SpendingAccountAssignGroupController($scope, UserGroupList, AssignedUserGroups, SelectedSpendingAccount, SpendingAccountAssignment) {
     var vm = this;
     vm.list = UserGroupList;
-    vm.assignments = AssignmentList;
-    vm.spendingAccount = SpendingAccount;
+    vm.assignments = AssignedUserGroups;
+    vm.spendingAccount = SelectedSpendingAccount;
     vm.pagingfunction = PagingFunction;
     vm.saveAssignments = SaveAssignments;
 
@@ -147,11 +152,11 @@ function SpendingAccountAssignGroupController($scope, UserGroupList, AssignmentL
     }
 }
 
-function SpendingAccountAssignUserController($scope, UserList, AssignmentList, SpendingAccount, SpendingAccountAssignment) {
+function SpendingAccountAssignUserController($scope, UserList, AssignedUsers, SelectedSpendingAccount, SpendingAccountAssignment) {
     var vm = this;
     vm.list = UserList;
-    vm.assignments = AssignmentList;
-    vm.spendingAccount = SpendingAccount;
+    vm.assignments = AssignedUsers;
+    vm.spendingAccount = SelectedSpendingAccount;
     vm.pagingfunction = PagingFunction;
     vm.saveAssignments = SaveAssignments;
 
@@ -182,9 +187,7 @@ function SpendingAccountAssignment($q, $state, $injector, Underscore, Assignment
         var assigned = Underscore.pluck(AssignmentList, PartyID);
         var selected = Underscore.pluck(Underscore.where(List, {selected: true}), 'ID');
         var toAdd = Assignments.getToAssign(List, AssignmentList, PartyID);
-        console.log(toAdd);
         var toUpdate = Underscore.intersection(selected, assigned);
-        console.log(toUpdate);
         var toDelete = Assignments.getToDelete(List, AssignmentList, PartyID);
         var queue = [];
         var dfd = $q.defer();

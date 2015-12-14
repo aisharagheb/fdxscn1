@@ -1,4 +1,4 @@
-describe('Component: Coupons,', function() {
+describe('Component: Coupons', function() {
     var scope,
         q,
         coupon;
@@ -27,7 +27,7 @@ describe('Component: Coupons,', function() {
         };
     }));
 
-    describe('State: Base.coupons,', function() {
+    describe('State: Base.coupons', function() {
         var state;
         beforeEach(inject(function($state, Coupons) {
             state = $state.get('base.coupons');
@@ -39,7 +39,7 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponEdit,', function() {
+    describe('State: Base.couponEdit', function() {
         var state;
         beforeEach(inject(function($state, Coupons) {
             state = $state.get('base.couponEdit');
@@ -53,16 +53,14 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponAssignParty,', function() {
+    describe('State: Base.couponAssignParty', function() {
         var state;
         beforeEach(inject(function($state, Coupons, UserGroups, Buyers) {
             state = $state.get('base.couponAssignParty');
             spyOn(Buyers, 'Get').and.returnValue(null);
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(Coupons, 'ListAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Coupons, 'Get').and.returnValue(defer.promise);
+            spyOn(Coupons, 'Get').and.returnValue(null);
         }));
         it('should resolve Buyer', inject(function ($injector, Buyers) {
             $injector.invoke(state.resolve.Buyer);
@@ -82,15 +80,13 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponAssignProduct,', function() {
+    describe('State: Base.couponAssignProduct', function() {
         var state;
         beforeEach(inject(function($state, Coupons, Products) {
             state = $state.get('base.couponAssignProduct');
             spyOn(Products, 'List').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Coupons, 'Get').and.returnValue(defer.promise);
-            spyOn(Coupons, 'ListProductAssignments').and.returnValue(defer.promise);
+            spyOn(Coupons, 'Get').and.returnValue(null);
+            spyOn(Coupons, 'ListProductAssignments').and.returnValue(null);
         }));
         it('should resolve ProductList', inject(function ($injector, Products) {
             $injector.invoke(state.resolve.ProductList);
@@ -106,15 +102,13 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('State: Base.couponAssignCategory,', function() {
+    describe('State: Base.couponAssignCategory', function() {
         var state;
         beforeEach(inject(function($state, Coupons, Categories) {
             state = $state.get('base.couponAssignCategory');
             spyOn(Categories, 'List').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Coupons, 'Get').and.returnValue(defer.promise);
-            spyOn(Coupons, 'ListCategoryAssignments').and.returnValue(defer.promise);
+            spyOn(Coupons, 'Get').and.returnValue(null);
+            spyOn(Coupons, 'ListCategoryAssignments').and.returnValue(null);
         }));
         it('should resolve CategoryList', inject(function ($injector, Categories) {
             $injector.invoke(state.resolve.CategoryList);
@@ -130,12 +124,11 @@ describe('Component: Coupons,', function() {
         }));
     });
 
-    describe('Controller: CouponEditCtrl,', function() {
+    describe('Controller: CouponEditCtrl', function() {
         var couponEditCtrl;
-        beforeEach(inject(function($state, $controller, Coupons) {
+        beforeEach(inject(function($state, $controller) {
             couponEditCtrl = $controller('CouponEditCtrl', {
                 $scope: scope,
-                Coupons: Coupons,
                 SelectedCoupon: coupon
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -176,13 +169,12 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponCreateCtrl,', function() {
+    describe('Controller: CouponCreateCtrl', function() {
         var couponCreateCtrl;
         var code;
-        beforeEach(inject(function($state, $controller, Coupons) {
+        beforeEach(inject(function($state, $controller) {
             couponCreateCtrl = $controller('CouponCreateCtrl', {
-                $scope: scope,
-                Coupons: Coupons
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -214,13 +206,12 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponAssignCtrl,', function() {
+    describe('Controller: CouponAssignCtrl', function() {
         var couponAssignCtrl;
-        beforeEach(inject(function($state, $controller, Coupons) {
+        beforeEach(inject(function($state, $controller) {
             couponAssignCtrl = $controller('CouponAssignCtrl', {
                 $scope: scope,
                 Buyer: {},
-                Coupons: Coupons,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedCoupon: {}
@@ -230,9 +221,7 @@ describe('Component: Coupons,', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 couponAssignCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -242,9 +231,7 @@ describe('Component: Coupons,', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 couponAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {
@@ -253,12 +240,11 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponAssignProductCtrl,', function() {
+    describe('Controller: CouponAssignProductCtrl', function() {
         var couponAssignProductCtrl;
-        beforeEach(inject(function($state, $controller, Coupons) {
+        beforeEach(inject(function($state, $controller) {
             couponAssignProductCtrl = $controller('CouponAssignProductCtrl', {
                 $scope: scope,
-                Coupons: Coupons,
                 ProductList: [],
                 ProductAssignments: [],
                 SelectedCoupon: {}
@@ -268,9 +254,7 @@ describe('Component: Coupons,', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 couponAssignProductCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -280,9 +264,7 @@ describe('Component: Coupons,', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 couponAssignProductCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {
@@ -291,12 +273,11 @@ describe('Component: Coupons,', function() {
         });
     });
 
-    describe('Controller: CouponAssignCategoryCtrl,', function() {
+    describe('Controller: CouponAssignCategoryCtrl', function() {
         var couponAssignCategoryCtrl;
-        beforeEach(inject(function($state, $controller, Coupons) {
+        beforeEach(inject(function($state, $controller) {
             couponAssignCategoryCtrl = $controller('CouponAssignCategoryCtrl', {
                 $scope: scope,
-                Coupons: Coupons,
                 CategoryList: [],
                 CategoryAssignments: [],
                 SelectedCoupon: {}
@@ -306,9 +287,7 @@ describe('Component: Coupons,', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 couponAssignCategoryCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -318,9 +297,7 @@ describe('Component: Coupons,', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 couponAssignCategoryCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {

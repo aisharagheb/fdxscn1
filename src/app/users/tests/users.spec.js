@@ -1,4 +1,4 @@
-describe('Component: Users,', function() {
+describe('Component: Users', function() {
     var scope,
         q,
         today,
@@ -20,12 +20,34 @@ describe('Component: Users,', function() {
         }
     }));
 
-    describe('Controller: UserCreateCtrl,', function() {
+    describe('State: Base.users', function() {
+        var state;
+        beforeEach(inject(function($state, Users) {
+            state = $state.get('base.users');
+            spyOn(Users, 'List').and.returnValue(null);
+        }));
+        it('should resolve UserGroupList', inject(function ($injector, Users) {
+            $injector.invoke(state.resolve.UserList);
+            expect(Users.List).toHaveBeenCalled();
+        }));
+    });
+
+    describe('State: Base.userEdit', function() {
+        var state;
+        beforeEach(inject(function($state, Users) {
+            state = $state.get('base.userEdit');
+            spyOn(Users, 'Get').and.returnValue(null);
+        }));
+        it('should resolve SelectedUserGroup', inject(function ($injector, $stateParams, Users) {
+            $injector.invoke(state.resolve.SelectedUser);
+            expect(Users.Get).toHaveBeenCalledWith($stateParams.userid);
+        }));
+    });
+    describe('Controller: UserCreateCtrl', function() {
         var userCreateCtrl;
-        beforeEach(inject(function($state, $controller, Users) {
+        beforeEach(inject(function($state, $controller) {
             userCreateCtrl = $controller('UserCreateCtrl', {
-                $scope: scope,
-                Users: Users
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -48,12 +70,11 @@ describe('Component: Users,', function() {
         });
     });
 
-    describe('Controller: UserEditCtrl,', function() {
+    describe('Controller: UserEditCtrl', function() {
         var userEditCtrl;
-        beforeEach(inject(function($state, $controller, Users) {
+        beforeEach(inject(function($state, $controller) {
             userEditCtrl = $controller('UserEditCtrl', {
                 $scope: scope,
-                Users: Users,
                 SelectedUser: user
             });
             spyOn($state, 'go').and.returnValue(true);

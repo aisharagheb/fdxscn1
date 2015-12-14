@@ -14,19 +14,13 @@ function LoginConfig( $stateProvider ) {
             url: '/login/:token',
             templateUrl:'login/templates/login.tpl.html',
             controller:'LoginCtrl',
-            controllerAs: 'login',
-            data:{
-                limitAccess: false //Whether or not to require authentication on this state
-            }
+            controllerAs: 'login'
         })
         .state( 'loginDev', {
             url: '/dev/login',
             templateUrl: 'login/templates/login.dev.tpl.html',
             controller: 'DevLoginCtrl',
-            controllerAs: 'devLogin',
-            data: {
-                limitAccess: false
-            }
+            controllerAs: 'devLogin'
         });
 }
 
@@ -94,7 +88,6 @@ function LoginService( $q, $window, PasswordResets, clientid ) {
 
 function LoginController( $state, $stateParams, $exceptionHandler, LoginService, Credentials ) {
     var vm = this;
-
     vm.token = $stateParams.token;
     vm.form = vm.token ? 'reset' : 'login';
     vm.setForm = function(form) {
@@ -106,7 +99,6 @@ function LoginController( $state, $stateParams, $exceptionHandler, LoginService,
             function() {
                 $state.go( 'base.home' );
             });
-        $state.go( 'base.home' );
     };
 
     vm.forgotPassword = function() {

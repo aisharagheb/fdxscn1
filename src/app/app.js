@@ -9,16 +9,17 @@ angular.module( 'orderCloud', [
 	'ui.bootstrap',
 	'orderCloud.sdk',
 	'toastr',
+    'jcs-autoValidate',
     'ordercloud-infinite-scroll',
 	'ordercloud-buyer-select',
     'ordercloud-search',
     'ordercloud-assignment-helpers',
     'ordercloud-paging-helpers',
-    'ordercloud-auto-id'
+    'ordercloud-auto-id',
+    'ordercloud-impersonation'
 ])
 
 	.run( SetBuyerID )
-	.run( Security )
 	.config( Routing )
 	.config( ErrorHandling )
 	.controller( 'AppCtrl', AppCtrl )
@@ -28,24 +29,10 @@ function SetBuyerID( BuyerID, buyerid ) {
 	BuyerID.Get() ? angular.noop() : BuyerID.Set(buyerid);
 }
 
-function Security( $rootScope, $state, Auth ) {
-	$rootScope.$on('$stateChangeStart', function(e, to) {
-		/*TODO: make the '$stateChangeStart event' accept a function so users can control the redirect from each state's declaration.*/
-		if (!to.data.limitAccess) return;
-		Auth.IsAuthenticated()
-			.catch(sendToLogin);
-
-		function sendToLogin() {
-			$state.go('login');
-		}
-	})
-}
-
 function Routing( $urlRouterProvider, $urlMatcherFactoryProvider ) {
 	$urlMatcherFactoryProvider.strictMode(false);
 	$urlRouterProvider.otherwise( '/home' );
 	//$locationProvider.html5Mode(true);
-	//TODO: For HTML5 mode to work we need to always return index.html as the entry point on the serverside
 }
 
 function ErrorHandling( $provide ) {
@@ -59,7 +46,7 @@ function ErrorHandling( $provide ) {
 	}
 }
 
-function AppCtrl( $state, appname, Credentials ) {
+function AppCtrl( $state, appname, Auth, BuyerID ) {
 	var vm = this;
 	vm.name = appname;
 	vm.showLeftNav = true;
@@ -67,7 +54,8 @@ function AppCtrl( $state, appname, Credentials ) {
 		vm.showLeftNav = !vm.showLeftNav;
 	};
 	vm.logout = function() {
-		Credentials.Delete();
+		Auth.RemoveToken();
+		BuyerID.Set(null);
 		$state.go('login');
 	};
 }

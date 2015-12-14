@@ -1,4 +1,4 @@
-describe('Component: Addresses,', function() {
+describe('Component: Addresses', function() {
     var scope,
         q,
         address;
@@ -22,7 +22,7 @@ describe('Component: Addresses,', function() {
         };
     }));
 
-    describe('State: Base.addresses,', function() {
+    describe('State: Base.addresses', function() {
         var state;
         beforeEach(inject(function($state, Addresses) {
             state = $state.get('base.addresses');
@@ -34,7 +34,7 @@ describe('Component: Addresses,', function() {
         }));
     });
 
-    describe('State: Base.addressEdit,', function() {
+    describe('State: Base.addressEdit', function() {
         var state;
         beforeEach(inject(function($state, Addresses) {
             state = $state.get('base.addressEdit');
@@ -48,7 +48,7 @@ describe('Component: Addresses,', function() {
         }));
     });
 
-    describe('State: Base.addressAssign,', function() {
+    describe('State: Base.addressAssign', function() {
         var state;
         beforeEach(inject(function($state, Addresses, UserGroups) {
             state = $state.get('base.addressAssign');
@@ -72,12 +72,11 @@ describe('Component: Addresses,', function() {
         }));
     });
 
-    describe('Controller: AddressEditCtrl,', function() {
+    describe('Controller: AddressEditCtrl', function() {
         var addressEditCtrl;
-        beforeEach(inject(function($state, $controller, Addresses) {
+        beforeEach(inject(function($state, $controller) {
             addressEditCtrl = $controller('AddressEditCtrl', {
                 $scope: scope,
-                Addresses: Addresses,
                 SelectedAddress: address
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -118,12 +117,11 @@ describe('Component: Addresses,', function() {
         });
     });
 
-    describe('Controller: AddressCreateCtrl,', function() {
+    describe('Controller: AddressCreateCtrl', function() {
         var addressCreateCtrl;
-        beforeEach(inject(function($state, $controller, Addresses) {
+        beforeEach(inject(function($state, $controller) {
             addressCreateCtrl = $controller('AddressCreateCtrl', {
-                $scope: scope,
-                Addresses: Addresses
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -146,12 +144,11 @@ describe('Component: Addresses,', function() {
         });
     });
 
-    describe('Controller: AddressAssignCtrl,', function() {
+    describe('Controller: AddressAssignCtrl', function() {
         var addressAssignCtrl;
-        beforeEach(inject(function($state, $controller, Addresses) {
+        beforeEach(inject(function($state, $controller) {
             addressAssignCtrl = $controller('AddressAssignCtrl', {
                 $scope: scope,
-                Addresses: Addresses,
                 AssignmentsList: [],
                 UserGroupList: [],
                 SelectedAddress: {}
@@ -162,11 +159,8 @@ describe('Component: Addresses,', function() {
         describe('saveAssignments', function() {
             describe('toAdd and toDelete', function() {
                 beforeEach(inject(function(Addresses) {
-                    var defer = q.defer();
-                    defer.resolve(null);
-                    spyOn(Addresses, 'SaveAssignment').and.returnValue(defer.promise);
-                    spyOn(Addresses, 'DeleteAssignment').and.returnValue(defer.promise);
-                    scope.$digest();
+                    spyOn(Addresses, 'SaveAssignment').and.returnValue(null);
+                    spyOn(Addresses, 'DeleteAssignment').and.returnValue(null);
                     addressAssignCtrl.assignments= {
                         Meta: {},
                         Items: [
@@ -215,10 +209,7 @@ describe('Component: Addresses,', function() {
             });
             describe('toUpdate', function() {
                 beforeEach(inject(function(Addresses) {
-                    var defer = q.defer();
-                    defer.resolve(null);
-                    spyOn(Addresses, 'SaveAssignment').and.returnValue(defer.promise);
-                    scope.$digest();
+                    spyOn(Addresses, 'SaveAssignment').and.returnValue(null);
                     addressAssignCtrl.assignments= {
                         Meta: {},
                         Items: [
@@ -259,10 +250,7 @@ describe('Component: Addresses,', function() {
         });
         describe('pagingfunction', function() {
             beforeEach(inject(function(UserGroups) {
-                var defer = q.defer();
-                defer.resolve(null);
-                spyOn(UserGroups, 'List').and.returnValue(defer.promise);
-                scope.$digest();
+                spyOn(UserGroups, 'List').and.returnValue(null);
                 addressAssignCtrl.list = {
                     Meta: {
                         Page: 1,

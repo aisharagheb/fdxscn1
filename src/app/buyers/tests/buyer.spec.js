@@ -1,4 +1,4 @@
-describe('Component: Buyers,', function() {
+describe('Component: Buyers', function() {
     var scope,
         q,
         buyer;
@@ -14,7 +14,7 @@ describe('Component: Buyers,', function() {
         };
     }));
 
-    describe('State: Base.buyers,', function() {
+    describe('State: Base.buyers', function() {
         var state;
         beforeEach(inject(function($state, Buyers) {
             state = $state.get('base.buyers');
@@ -26,7 +26,7 @@ describe('Component: Buyers,', function() {
         }));
     });
 
-    describe('State: Base.buyerEdit,', function() {
+    describe('State: Base.buyerEdit', function() {
         var state;
         beforeEach(inject(function($state, Buyers) {
             state = $state.get('base.buyerEdit');
@@ -40,12 +40,11 @@ describe('Component: Buyers,', function() {
         }));
     });
 
-    describe('Controller: BuyerEditCtrl,', function() {
+    describe('Controller: BuyerEditCtrl', function() {
         var buyerEditCtrl;
-        beforeEach(inject(function($state, $controller, Buyers) {
+        beforeEach(inject(function($state, $controller) {
             buyerEditCtrl = $controller('BuyerEditCtrl', {
                 $scope: scope,
-                Buyers: Buyers,
                 SelectedBuyer: buyer
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -69,12 +68,11 @@ describe('Component: Buyers,', function() {
         });
     });
 
-    describe('Controller: BuyerCreateCtrl,', function() {
+    describe('Controller: BuyerCreateCtrl', function() {
         var buyerCreateCtrl;
-        beforeEach(inject(function($state, $controller, Buyers) {
+        beforeEach(inject(function($state, $controller) {
             buyerCreateCtrl = $controller('BuyerCreateCtrl', {
-                $scope: scope,
-                Buyers: Buyers
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));

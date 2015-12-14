@@ -1,4 +1,4 @@
-describe('Component: CostCenters,', function() {
+describe('Component: CostCenters', function() {
     var scope,
         q,
         costCenter;
@@ -14,7 +14,7 @@ describe('Component: CostCenters,', function() {
         };
     }));
 
-    describe('State: Base.costCenters,', function() {
+    describe('State: Base.costCenters', function() {
         var state;
         beforeEach(inject(function($state, CostCenters) {
             state = $state.get('base.costCenters');
@@ -26,7 +26,7 @@ describe('Component: CostCenters,', function() {
         }));
     });
 
-    describe('State: Base.costCenterEdit,', function() {
+    describe('State: Base.costCenterEdit', function() {
         var state;
         beforeEach(inject(function($state, CostCenters) {
             state = $state.get('base.costCenterEdit');
@@ -40,7 +40,7 @@ describe('Component: CostCenters,', function() {
         }));
     });
 
-    describe('State: Base.costCenterAssign,', function() {
+    describe('State: Base.costCenterAssign', function() {
         var state;
         beforeEach(inject(function($state, CostCenters, UserGroups, Buyers) {
             state = $state.get('base.costCenterAssign');
@@ -69,12 +69,11 @@ describe('Component: CostCenters,', function() {
         }));
     });
 
-    describe('Controller: CostCenterEditCtrl,', function() {
+    describe('Controller: CostCenterEditCtrl', function() {
         var costCenterEditCtrl;
-        beforeEach(inject(function($state, $controller, CostCenters) {
+        beforeEach(inject(function($state, $controller) {
             costCenterEditCtrl = $controller('CostCenterEditCtrl', {
                 $scope: scope,
-                CostCenters: CostCenters,
                 SelectedCostCenter: costCenter
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -115,12 +114,11 @@ describe('Component: CostCenters,', function() {
         });
     });
 
-    describe('Controller: CostCenterCreateCtrl,', function() {
+    describe('Controller: CostCenterCreateCtrl', function() {
         var costCenterCreateCtrl;
-        beforeEach(inject(function($state, $controller, CostCenters) {
+        beforeEach(inject(function($state, $controller) {
             costCenterCreateCtrl = $controller('CostCenterCreateCtrl', {
-                $scope: scope,
-                CostCenters: CostCenters
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -143,12 +141,11 @@ describe('Component: CostCenters,', function() {
         });
     });
 
-    describe('Controller: CostCenterAssignCtrl,', function() {
+    describe('Controller: CostCenterAssignCtrl', function() {
         var costCenterAssignCtrl;
-        beforeEach(inject(function($state, $controller, CostCenters) {
+        beforeEach(inject(function($state, $controller) {
             costCenterAssignCtrl = $controller('CostCenterAssignCtrl', {
                 $scope: scope,
-                CostCenters: CostCenters,
                 UserGroupList: [],
                 AssignedUserGroups: [],
                 SelectedCostCenter: {}
@@ -170,9 +167,7 @@ describe('Component: CostCenters,', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 costCenterAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {

@@ -1,4 +1,4 @@
-describe('Component: Search,', function() {
+describe('Component: Search', function() {
     var scope;
     beforeEach(module('orderCloud'));
     beforeEach(module('orderCloud.sdk'));
@@ -6,7 +6,7 @@ describe('Component: Search,', function() {
     beforeEach(inject(function($rootScope) {
         scope = $rootScope.$new();
     }));
-    describe('Directive: ordercloudSearch,', function() {
+    describe('Directive: ordercloudSearch', function() {
         var element;
         beforeEach(inject(function($compile) {
             scope.ctrl = {
@@ -20,7 +20,7 @@ describe('Component: Search,', function() {
             expect(element.isolateScope().controlleras).toEqual({searchTerm: ''});
         });
     });
-    describe('Controller: ordercloudSearchCtrl,', function() {
+    describe('Controller: ordercloudSearchCtrl', function() {
         var searchCtrl;
         beforeEach(inject(function($controller, $injector, Products) {
             scope.servicename = 'Products';
@@ -42,7 +42,7 @@ describe('Component: Search,', function() {
             expect(scope.$watch).toHaveBeenCalled();
         });
     });
-    describe('Factory: TrackSearch,', function() {
+    describe('Factory: TrackSearch', function() {
         var trackSearch;
         beforeEach(inject(function(TrackSearch) {
             trackSearch = TrackSearch;

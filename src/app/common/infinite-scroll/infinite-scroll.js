@@ -40,8 +40,8 @@ function InfiniteScrollDirective(Paging) {
 function InfiniteScrollController($scope, Paging, TrackSearch) {
     TrackSearch.SetTerm(null);
     $scope.$watchCollection(function() {
-        if ($scope.controlleras && $scope.controlleras.list) {
-            return $scope.controlleras.list;
+        if ($scope.controlleras && $scope.controlleras.assignments) {
+            return $scope.controlleras.assignments;
         }
     }, function() {
         if ($scope.controlleras && $scope.controlleras.assignments && $scope.controlleras.list && $scope.idname) {

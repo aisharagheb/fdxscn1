@@ -1,4 +1,4 @@
-describe('Component: Specs,', function() {
+describe('Component: Specs', function() {
     var scope,
         q,
         spec;
@@ -27,7 +27,7 @@ describe('Component: Specs,', function() {
         };
     }));
 
-    describe('State: Base.specs,', function() {
+    describe('State: Base.specs', function() {
         var state;
         beforeEach(inject(function($state, Specs) {
             state = $state.get('base.specs');
@@ -39,13 +39,11 @@ describe('Component: Specs,', function() {
         }));
     });
 
-    describe('State: Base.specEdit,', function() {
+    describe('State: Base.specEdit', function() {
         var state;
         beforeEach(inject(function($state, Specs) {
             state = $state.get('base.specEdit');
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Specs, 'Get').and.returnValue(defer.promise);
+            spyOn(Specs, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedSpec', inject(function ($injector, $stateParams, Specs) {
             $injector.invoke(state.resolve.SelectedSpec);
@@ -53,15 +51,13 @@ describe('Component: Specs,', function() {
         }));
     });
 
-    describe('State: Base.specAssign,', function() {
+    describe('State: Base.specAssign', function() {
         var state;
         beforeEach(inject(function($state, Specs, Products) {
             state = $state.get('base.specAssign');
             spyOn(Products, 'List').and.returnValue(null);
             spyOn(Specs, 'ListProductAssignments').and.returnValue(null);
-            var defer = q.defer();
-            defer.resolve();
-            spyOn(Specs, 'Get').and.returnValue(defer.promise);
+            spyOn(Specs, 'Get').and.returnValue(null);
         }));
         it('should resolve ProductList', inject(function ($injector, $stateParams, Products) {
             $injector.invoke(state.resolve.ProductList);
@@ -77,12 +73,11 @@ describe('Component: Specs,', function() {
         }));
     });
 
-    describe('Controller: SpecEditCtrl,', function() {
+    describe('Controller: SpecEditCtrl', function() {
         var specEditCtrl;
-        beforeEach(inject(function($state, $controller, Specs) {
+        beforeEach(inject(function($state, $controller) {
             specEditCtrl = $controller('SpecEditCtrl', {
                 $scope: scope,
-                Specs: Specs,
                 SelectedSpec: spec
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -152,12 +147,11 @@ describe('Component: Specs,', function() {
         });
     });
 
-    describe('Controller: SpecCreateCtrl,', function() {
+    describe('Controller: SpecCreateCtrl', function() {
         var specCreateCtrl;
-        beforeEach(inject(function($state, $controller, Specs) {
+        beforeEach(inject(function($state, $controller) {
             specCreateCtrl = $controller('SpecCreateCtrl', {
-                $scope: scope,
-                Specs: Specs
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -206,12 +200,11 @@ describe('Component: Specs,', function() {
         });
     });
     
-    describe('Controller: SpecAssignCtrl,', function() {
+    describe('Controller: SpecAssignCtrl', function() {
         var specAssignCtrl;
-        beforeEach(inject(function($state, $controller, Specs) {
+        beforeEach(inject(function($state, $controller) {
             specAssignCtrl = $controller('SpecAssignCtrl', {
                 $scope: scope,
-                Specs: Specs,
                 ProductList: [],
                 ProductAssignments: [],
                 SelectedSpec: {}
@@ -221,9 +214,7 @@ describe('Component: Specs,', function() {
 
         describe('SaveAssignment', function() {
             beforeEach(inject(function(Assignments) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Assignments, 'saveAssignments').and.returnValue(defer.promise);
+                spyOn(Assignments, 'saveAssignments').and.returnValue(null);
                 specAssignCtrl.saveAssignments();
             }));
             it ('should call the Assignments saveAssignments method', inject(function(Assignments) {
@@ -233,9 +224,7 @@ describe('Component: Specs,', function() {
 
         describe('PagingFunction', function() {
             beforeEach(inject(function(Paging) {
-                var defer = q.defer();
-                defer.resolve();
-                spyOn(Paging, 'paging').and.returnValue(defer.promise);
+                spyOn(Paging, 'paging').and.returnValue(null);
                 specAssignCtrl.pagingfunction();
             }));
             it ('should call the Paging paging method', inject(function(Paging) {

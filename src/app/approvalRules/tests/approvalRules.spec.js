@@ -1,4 +1,4 @@
-describe('Component: ApprovalRules,', function() {
+describe('Component: ApprovalRules', function() {
     var scope,
         q,
         approvalRule;
@@ -34,7 +34,7 @@ describe('Component: ApprovalRules,', function() {
         };
     }));
 
-    describe('State: Base.approvalRules,', function() {
+    describe('State: Base.approvalRules', function() {
         var state;
         beforeEach(inject(function($state, ApprovalRules) {
             state = $state.get('base.approvalRules');
@@ -46,7 +46,7 @@ describe('Component: ApprovalRules,', function() {
         }));
     });
 
-    describe('State: Base.approvalRuleEdit,', function() {
+    describe('State: Base.approvalRuleEdit', function() {
         var state;
         beforeEach(inject(function($state, ApprovalRules) {
             state = $state.get('base.approvalRuleEdit');
@@ -60,12 +60,11 @@ describe('Component: ApprovalRules,', function() {
         }));
     });
 
-    describe('Controller: ApprovalRuleEditCtrl,', function() {
+    describe('Controller: ApprovalRuleEditCtrl', function() {
         var approvalRuleEditCtrl;
-        beforeEach(inject(function($state, $controller, ApprovalRules) {
+        beforeEach(inject(function($state, $controller) {
             approvalRuleEditCtrl = $controller('ApprovalRuleEditCtrl', {
                 $scope: scope,
-                ApprovalRules: ApprovalRules,
                 SelectedApprovalRule: approvalRule
             });
             spyOn($state, 'go').and.returnValue(true);
@@ -106,12 +105,11 @@ describe('Component: ApprovalRules,', function() {
         });
     });
 
-    describe('Controller: ApprovalRuleCreateCtrl,', function() {
+    describe('Controller: ApprovalRuleCreateCtrl', function() {
         var approvalRuleCreateCtrl;
-        beforeEach(inject(function($state, $controller, ApprovalRules) {
+        beforeEach(inject(function($state, $controller) {
             approvalRuleCreateCtrl = $controller('ApprovalRuleCreateCtrl', {
-                $scope: scope,
-                ApprovalRules: ApprovalRules
+                $scope: scope
             });
             spyOn($state, 'go').and.returnValue(true);
         }));
@@ -130,6 +128,60 @@ describe('Component: ApprovalRules,', function() {
             }));
             it ('should enter the approvalRules state', inject(function($state) {
                 expect($state.go).toHaveBeenCalledWith('base.approvalRules');
+            }));
+        });
+    });
+    
+    describe('Factory: ApprovalRuleFactory', function() {
+        var approvalRuleService, term;
+        beforeEach(inject(function(ApprovalRuleFactory, Users, UserGroups, CostCenters, Categories) {
+            approvalRuleService = ApprovalRuleFactory;
+            var defer = q.defer();
+            defer.resolve(null);
+            spyOn(Users, 'List').and.returnValue(defer.promise);
+            spyOn(UserGroups, 'List').and.returnValue(defer.promise);
+            spyOn(CostCenters, 'List').and.returnValue(defer.promise);
+            spyOn(Categories, 'List').and.returnValue(defer.promise);
+        }));
+
+        describe('UserList', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.UserList(term);
+            });
+
+            it ('should call Users List method', inject(function(Users) {
+                expect(Users.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('UserGroups', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.UserGroupList(term);
+            });
+
+            it ('should call UserGroups List method', inject(function(UserGroups) {
+                expect(UserGroups.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('CostCenterList', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.CostCenterList(term);
+            });
+
+            it ('should call CostCenters List method', inject(function(CostCenters) {
+                expect(CostCenters.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('CategoryList', function() {
+            beforeEach(function() {
+                term = "test";
+                approvalRuleService.CategoryList(term);
+            });
+
+            it ('should call Users List method', inject(function(Categories) {
+                expect(Categories.List).toHaveBeenCalledWith(term);
             }));
         });
     });

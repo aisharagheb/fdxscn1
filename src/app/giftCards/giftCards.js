@@ -24,12 +24,6 @@ function GiftCardsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.giftCardCreate', {
-            url: '/giftCards/create',
-            templateUrl: 'giftCards/templates/giftCardCreate.tpl.html',
-            controller: 'GiftCardCreateCtrl',
-            controllerAs: 'giftCardCreate'
-        })
         .state( 'base.giftCardEdit', {
             url: '/giftCards/:giftCardid/edit',
             templateUrl: 'giftCards/templates/giftCardEdit.tpl.html',
@@ -41,6 +35,12 @@ function GiftCardsConfig( $stateProvider ) {
                 }
             }
         })
+        .state( 'base.giftCardCreate', {
+            url: '/giftCards/create',
+            templateUrl: 'giftCards/templates/giftCardCreate.tpl.html',
+            controller: 'GiftCardCreateCtrl',
+            controllerAs: 'giftCardCreate'
+        })
         .state( 'base.giftCardAssignGroup', {
             url: '/giftCards/:giftCardid/assign',
             templateUrl: 'giftCards/templates/giftCardAssignGroup.tpl.html',
@@ -50,10 +50,10 @@ function GiftCardsConfig( $stateProvider ) {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List();
                 },
-                AssignmentList: function($stateParams, SpendingAccounts) {
+                AssignedUserGroups: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.ListAssignments($stateParams.giftCardid, null, null, 'Group');
                 },
-                GiftCard: function($stateParams, SpendingAccounts) {
+                SelectedGiftCard: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.giftCardid);
                 }
             }
@@ -67,10 +67,10 @@ function GiftCardsConfig( $stateProvider ) {
                 UserList: function(Users) {
                     return Users.List();
                 },
-                AssignmentList: function($stateParams, SpendingAccounts) {
+                AssignedUsers: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.ListAssignments($stateParams.giftCardid, null, null, 'User');
                 },
-                GiftCard: function($stateParams, SpendingAccounts) {
+                SelectedGiftCard: function($stateParams, SpendingAccounts) {
                     return SpendingAccounts.Get($stateParams.giftCardid);
                 }
             }
@@ -81,11 +81,46 @@ function GiftCardsController ( GiftCardList, SpendingAccounts ) {
     var vm = this;
     vm.list = GiftCardList;
     vm.pagingfunction = PagingFunction;
+    vm.searchfunction = Search;
 
     function PagingFunction() {
         if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
             SpendingAccounts.List(null, vm.list.Meta.Page + 1, vm.list.Meta.PageSize, null, null, {'RedemptionCode': '*'});
         }
+    }
+
+    function Search(searchTerm) {
+        return SpendingAccounts.List(searchTerm, null, null, null, null, {'RedemptionCode': '*'});
+    }
+}
+
+function GiftCardEditController($state, $exceptionHandler, SelectedGiftCard, GiftCardFactory, SpendingAccounts) {
+    var vm = this,
+        giftCardID = SelectedGiftCard.ID;
+    vm.format = GiftCardFactory.dateFormat;
+    vm.open1 = vm.open2 = false;
+    vm.giftCard = SelectedGiftCard;
+    vm.Submit = Submit;
+    vm.Delete = Delete;
+
+    function Submit() {
+        SpendingAccounts.Update(giftCardID, vm.giftCard)
+            .then(function() {
+                $state.go('base.giftCards')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
+    }
+
+    function Delete() {
+        SpendingAccounts.Delete(giftCardID)
+            .then(function() {
+                $state.go('base.giftCards')
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
     }
 }
 
@@ -100,38 +135,6 @@ function GiftCardCreateController($state, $exceptionHandler, GiftCardFactory, Sp
     function Submit() {
         SpendingAccounts.Create(vm.giftcard)
             .then(function() {
-                $state.go('^.giftCards')
-            })
-            .catch(function(ex) {
-                $exceptionHandler(ex);
-            });
-    }
-}
-
-function GiftCardEditController($state, $exceptionHandler, SelectedGiftCard, GiftCardFactory, SpendingAccounts) {
-    var vm = this,
-        giftCardID = SelectedGiftCard.ID;
-    vm.format = GiftCardFactory.dateFormat;
-    vm.open1 = vm.open2 = false;
-    vm.giftCard = SelectedGiftCard;
-    vm.Update = Update;
-    vm.Delete = Delete;
-
-    function Update() {
-        if (vm.giftCard.StartDate < vm.giftCard.EndDate) {
-            SpendingAccounts.Update(giftCardID, vm.giftCard)
-                .then(function() {
-                    $state.go('base.giftCards')
-                })
-                .catch(function(ex) {
-                    $exceptionHandler(ex);
-                });
-        }
-    }
-
-    function Delete() {
-        SpendingAccounts.Delete(giftCardID)
-            .then(function() {
                 $state.go('base.giftCards')
             })
             .catch(function(ex) {
@@ -140,11 +143,11 @@ function GiftCardEditController($state, $exceptionHandler, SelectedGiftCard, Gif
     }
 }
 
-function GiftCardAssignGroupController($q, UserGroupList, AssignmentList, GiftCard, UserGroups, SpendingAccounts, Assignments) {
+function GiftCardAssignGroupController($q, UserGroupList, AssignedUserGroups, SelectedGiftCard, UserGroups, SpendingAccounts, Assignments) {
     var vm = this;
     vm.list = UserGroupList;
-    vm.assignments = AssignmentList;
-    vm.giftCard = GiftCard;
+    vm.assignments = AssignedUserGroups;
+    vm.giftCard = SelectedGiftCard;
     vm.saveAssignments = SaveAssignments;
     vm.pagingfunction = PagingFunction;
 
@@ -186,11 +189,11 @@ function GiftCardAssignGroupController($q, UserGroupList, AssignmentList, GiftCa
     }
 }
 
-function GiftCardAssignUserController($q, UserList, AssignmentList, GiftCard, Users, SpendingAccounts, Assignments) {
+function GiftCardAssignUserController($q, UserList, AssignedUsers, SelectedGiftCard, Users, SpendingAccounts, Assignments) {
     var vm = this;
     vm.list = UserList;
-    vm.assignments = AssignmentList;
-    vm.giftCard = GiftCard;
+    vm.assignments = AssignedUsers;
+    vm.giftCard = SelectedGiftCard;
     vm.saveAssignments = SaveAssignments;
     vm.pagingfunction = PagingFunction;
 
