@@ -163,11 +163,11 @@ function SpecAssignController(Assignments, Paging, ProductList, ProductAssignmen
     }
 
     function DeleteFunc(ItemID) {
-        return Specs.DeleteProductAssignment(vm.Spec.ID, null, ItemID);
+        return Specs.DeleteProductAssignment(vm.Spec.ID, ItemID);
     }
 
     function SaveAssignment() {
-        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc);
+        return Assignments.saveAssignments(vm.list.Items, vm.assignments.Items, SaveFunc, DeleteFunc, 'ProductID');
     }
 
     function AssignmentFunc() {
