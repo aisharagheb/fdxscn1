@@ -105,6 +105,7 @@ function GiftCardEditController($state, $exceptionHandler, SelectedGiftCard, Gif
     vm.giftCard = SelectedGiftCard;
     vm.Submit = Submit;
     vm.Delete = Delete;
+    vm.giftCard.AllowAsPaymentMethod = true;
 
     function Submit() {
         SpendingAccounts.Update(giftCardID, vm.giftCard)
@@ -134,9 +135,11 @@ function GiftCardCreateController($state, $exceptionHandler, GiftCardFactory, Sp
     vm.Submit = Submit;
     vm.autoGen = GiftCardFactory.autoGenDefault;
     vm.createCode = GiftCardFactory.makeCode;
+    vm.giftCard = {};
+    vm.giftCard.AllowAsPaymentMethod = true;
 
     function Submit() {
-        SpendingAccounts.Create(vm.giftcard)
+        SpendingAccounts.Create(vm.giftCard)
             .then(function() {
                 $state.go('base.giftCards')
             })
