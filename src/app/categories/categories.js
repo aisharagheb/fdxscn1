@@ -178,7 +178,7 @@ function CategoryAssignController(Assignments, Paging, UserGroupList, AssignedUs
     vm.pagingfunction = PagingFunction;
 
     function SaveFunc(ItemID) {
-        Categories.SaveAssignment({
+        return Categories.SaveAssignment({
             UserID: null,
             UserGroupID: ItemID,
             CategoryID: vm.Category.ID
@@ -186,7 +186,7 @@ function CategoryAssignController(Assignments, Paging, UserGroupList, AssignedUs
     }
 
     function DeleteFunc(ItemID) {
-        Categories.DeleteAssignment(vm.Category.ID, null, ItemID);
+        return Categories.DeleteAssignment(vm.Category.ID, null, ItemID);
     }
 
     function SaveAssignment() {
