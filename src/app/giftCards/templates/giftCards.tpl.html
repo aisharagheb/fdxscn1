@@ -3,7 +3,11 @@
         Gift Cards
     </h3>
     <ordercloud-search placeholder="Search Gift Cards..." controlleras="giftCards"></ordercloud-search>
-    <section class="table-fixed-header">
+    <div class="well well-lg text-center" ng-if="!giftCards.list.Items.length">
+        <b ng-if="!giftCards.searching()">The selected buyer does not have any gift cards.</b>
+        <b ng-if="giftCards.searching()"><i class="fa fa-search"></i> No gift cards match your search.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="giftCards.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="SpendingAccounts" controlleras="giftCards">
             <table class="table table-hover">

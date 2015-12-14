@@ -77,11 +77,14 @@ function GiftCardsConfig( $stateProvider ) {
         });
 }
 
-function GiftCardsController ( GiftCardList, SpendingAccounts ) {
+function GiftCardsController ( GiftCardList, SpendingAccounts, TrackSearch ) {
     var vm = this;
     vm.list = GiftCardList;
     vm.pagingfunction = PagingFunction;
     vm.searchfunction = Search;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 
     function PagingFunction() {
         if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
