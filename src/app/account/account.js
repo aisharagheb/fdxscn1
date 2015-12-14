@@ -142,6 +142,9 @@ function ChangePasswordController( $state, $exceptionHandler, toastr, AccountSer
 		AccountService.ChangePassword(vm.currentUser)
 			.then(function() {
 				toastr.success('Password successfully changed', 'Success!');
+				vm.currentUser.CurrentPassword = null;
+				vm.currentUser.NewPassword = null;
+				vm.currentUser.ConfirmPassword = null;
 				$state.go('base.account');
 			})
 			.catch(function(ex) {
