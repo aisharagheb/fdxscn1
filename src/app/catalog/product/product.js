@@ -16,6 +16,21 @@ function ProductConfig($stateProvider) {
             resolve: {
                 Product: function(Me, $stateParams) {
                     return Me.GetProduct($stateParams.productid);
+                },
+                SpecList: function(Specs, $q, $stateParams) {
+                    var queue = [];
+                    var dfd = $q.defer();
+                    Specs.ListProductAssignments(null, $stateParams.productid)
+                        .then(function(data) {
+                            angular.forEach(data.Items, function(assignment) {
+                                queue.push(Specs.Get(assignment.SpecID));
+                            });
+                            $q.all(queue)
+                                .then(function(result) {
+                                    dfd.resolve(result);
+                                });
+                        });
+                    return dfd.promise;
                 }
             }
         })
@@ -33,10 +48,11 @@ function ProductConfig($stateProvider) {
         });
 }
 
-function ProductController(Product) {
+function ProductController(Product, SpecList) {
     var vm = this;
     console.log(Product);
     vm.item = Product;
+    vm.item.Specs = SpecList;
 }
 
 function ProductConfigController(Product) {

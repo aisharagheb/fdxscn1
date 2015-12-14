@@ -17,6 +17,8 @@ function OrderCloudOrderInputDirective() {
     }
 }
 
-function OrderInputController() {
-
+function OrderInputController($state) {
+    var vm = this;
+    vm.currentState = $state.current.name;
+    console.log(vm.currentState.name);
 }
