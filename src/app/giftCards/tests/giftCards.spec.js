@@ -161,32 +161,32 @@ describe('Component: GiftCards', function() {
         });
     });
 
-    //describe('Controller: GiftCardCreateCtrl', function() {
-    //    var giftCardCreateCtrl;
-    //    beforeEach(inject(function($state, $controller) {
-    //        giftCardCreateCtrl = $controller('GiftCardCreateCtrl', {
-    //            $scope: scope
-    //        });
-    //        spyOn($state, 'go').and.returnValue(true);
-    //    }));
-    //
-    //    describe('Submit', function() {
-    //        beforeEach(inject(function(SpendingAccounts) {
-    //            giftCardCreateCtrl.giftCard = giftCard;
-    //            var defer = q.defer();
-    //            defer.resolve(giftCard);
-    //            spyOn(SpendingAccounts, 'Create').and.returnValue(defer.promise);
-    //            giftCardCreateCtrl.Submit();
-    //            scope.$digest();
-    //        }));
-    //        it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
-    //            expect(SpendingAccounts.Create).toHaveBeenCalledWith(giftCardCreateCtrl.giftCard);
-    //        }));
-    //        it ('should enter the giftCards state', inject(function($state) {
-    //            expect($state.go).toHaveBeenCalledWith('base.giftCards');
-    //        }));
-    //    });
-    //});
+    describe('Controller: GiftCardCreateCtrl', function() {
+        var giftCardCreateCtrl;
+        beforeEach(inject(function($state, $controller) {
+            giftCardCreateCtrl = $controller('GiftCardCreateCtrl', {
+                $scope: scope
+            });
+            spyOn($state, 'go').and.returnValue(true);
+        }));
+
+        describe('Submit', function() {
+            beforeEach(inject(function(SpendingAccounts) {
+                giftCardCreateCtrl.giftCard = giftCard;
+                var defer = q.defer();
+                defer.resolve(giftCard);
+                spyOn(SpendingAccounts, 'Create').and.returnValue(defer.promise);
+                giftCardCreateCtrl.Submit();
+                scope.$digest();
+            }));
+            it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
+                expect(SpendingAccounts.Create).toHaveBeenCalledWith(giftCardCreateCtrl.giftCard);
+            }));
+            it ('should enter the giftCards state', inject(function($state) {
+                expect($state.go).toHaveBeenCalledWith('base.giftCards');
+            }));
+        });
+    });
 
     describe('Controller: GiftCardAssignGroupCtrl', function() {
         var giftCardAssignGroupCtrl;
