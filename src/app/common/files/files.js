@@ -109,8 +109,30 @@ function ordercloudFileUpload( $parse, Underscore, FileReader, FilesService ) {
                 .then(function(fileData) {
                     if (!scope.model.xp) scope.model.xp = {};
                     scope.model.xp[scope.keyname] = fileData;
+                    scope.model.xp[scope.keyname].Type = file.type;
                     scope.model.FileUpdated = true;
                 });
+        }
+
+        var allowed = {
+            Extensions: [],
+            Types: []
+        };
+        if (scope.extensions) {
+            var items = Underscore.map(scope.extensions.split(','), function(ext) { return ext.replace(/ /g,'').replace(/\./g,'').toLowerCase() });
+            angular.forEach(items, function(item) {
+                if (item.indexOf('/') > -1) {
+                    if (item.indexOf('*') > -1) {
+                        allowed.Types.push(item.split('/')[0]);
+                    }
+                    else {
+                        allowed.Extensions.push(item.split('/')[1]);
+                    }
+                }
+                else {
+                    allowed.Extensions.push(item);
+                }
+            });
         }
 
         function updateModel(event) {
@@ -119,10 +141,9 @@ function ordercloudFileUpload( $parse, Underscore, FileReader, FilesService ) {
                     if (event.target.files[0] == null) return;
                     var fileName = event.target.files[0].name;
                     var valid = true;
-                    if (scope.extensions && fileName) {
-                        var type = fileName.split('.').pop().toLowerCase();
-                        var allowed = Underscore.map(scope.extensions.split(','), function(ext) { return ext.replace(/ /g,'').replace(/\./g,'').toLowerCase() });
-                        valid = allowed.indexOf(type) != -1;
+                    if ((allowed.Extensions.length || allowed.Types.length) && fileName) {
+                        var ext = fileName.split('.').pop().toLowerCase();
+                        valid = (allowed.Extensions.indexOf(ext) != -1 || allowed.Types.indexOf(event.target.files[0].type.split('/')[0]) > -1);
                     }
                     if (valid) {
                         scope.invalidExtension = false;
