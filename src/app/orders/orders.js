@@ -3,6 +3,7 @@ angular.module( 'orderCloud' )
     .config( OrdersConfig )
     .controller( 'OrdersCtrl', OrdersController )
     .controller( 'OrderEditCtrl', OrderEditController )
+    .factory( 'OrdersTypeAheadSearchFactory', OrdersTypeAheadSearchFactory )
 ;
 
 function OrdersConfig( $stateProvider ) {
@@ -40,7 +41,7 @@ function OrdersController(OrderList) {
     vm.list = OrderList;
 }
 
-function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItemList, Orders, LineItems, $scope ) {
+function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTypeAheadSearchFactory, LineItemList, Orders, LineItems, $scope ) {
     var vm = this,
         orderid = SelectedOrder.ID;
     vm.order = SelectedOrder;
@@ -97,5 +98,58 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, LineItem
                 }
             )
         }
+    }
+    vm.spendingAccountTypeAhead = OrdersTypeAheadSearchFactory.SpendingAccountList;
+    vm.shippingAddressTypeAhead = OrdersTypeAheadSearchFactory.ShippingAddressList;
+    vm.billingAddressTypeAhead = OrdersTypeAheadSearchFactory.BillingAddressList;
+}
+
+function OrdersTypeAheadSearchFactory($q, SpendingAccounts, Addresses, Underscore) {
+    return {
+        SpendingAccountList: SpendingAccountList,
+        ShippingAddressList: ShippingAddressList,
+        BillingAddressList: BillingAddressList
+    };
+
+    function SpendingAccountList(term) {
+        return SpendingAccounts.List(term).then(function(data) {
+            return data.Items;
+        });
+    }
+
+    function ShippingAddressList(term) {
+        var dfd = $q.defer();
+        var queue = [];
+        queue.push(Addresses.List(term));
+        queue.push(Addresses.ListAssignments(null, null, null, null, true));
+        $q.all(queue)
+            .then(function(result) {
+                var searchAssigned = Underscore.intersection(Underscore.pluck(result[0].Items, 'ID'), Underscore.pluck(result[1].Items, 'AddressID'));
+                var addressList = Underscore.filter(result[0].Items, function(address) {
+                    if (searchAssigned.indexOf(address.ID) > -1) {
+                        return address;
+                    }
+                })
+                dfd.resolve(addressList);
+            });
+        return dfd.promise;
+    }
+
+    function BillingAddressList(term) {
+        var dfd = $q.defer();
+        var queue = [];
+        queue.push(Addresses.List(term));
+        queue.push(Addresses.ListAssignments(null, null, null, null, null, true));
+        $q.all(queue)
+            .then(function(result) {
+                var searchAssigned = Underscore.intersection(Underscore.pluck(result[0].Items, 'ID'), Underscore.pluck(result[1].Items, 'AddressID'));
+                var addressList = Underscore.filter(result[0].Items, function(address) {
+                    if (searchAssigned.indexOf(address.ID) > -1) {
+                        return address;
+                    }
+                })
+                dfd.resolve(addressList);
+            });
+        return dfd.promise;
     }
 }

@@ -146,5 +146,50 @@ describe('Component: Orders', function() {
             }));
         });
     });
+
+    describe('Factory: OrdersTypeAheadSearchFactory', function() {
+        var ordersService, term;
+        beforeEach(inject(function(OrdersTypeAheadSearchFactory, SpendingAccounts, Addresses) {
+            ordersService = OrdersTypeAheadSearchFactory;
+            var defer = q.defer();
+            defer.resolve(null);
+            spyOn(SpendingAccounts, 'List').and.returnValue(defer.promise);
+            spyOn(Addresses, 'List').and.returnValue(defer.promise);
+            spyOn(Addresses, 'ListAssignments').and.returnValue(defer.promise);
+        }));
+
+        describe('SpendingAccountList', function() {
+            beforeEach(function() {
+                term = "test";
+                ordersService.SpendingAccountList(term);
+            });
+
+            it ('should call SpendingAccounts List method', inject(function(SpendingAccounts) {
+                expect(SpendingAccounts.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('ShippingAddressList', function() {
+            beforeEach(function() {
+                term = "test";
+                ordersService.ShippingAddressList(term);
+            });
+
+            it ('should call Addresses List method and Addresses ListAssignments method', inject(function(Addresses) {
+                expect(Addresses.List).toHaveBeenCalledWith(term);
+                expect(Addresses.ListAssignments).toHaveBeenCalledWith(null, null, null, null, true);
+            }));
+        });
+        describe('BillingAddressList', function() {
+            beforeEach(function() {
+                term = "test";
+                ordersService.BillingAddressList(term);
+            });
+
+            it ('should call Addresses List method Addresses ListAssignments method', inject(function(Addresses) {
+                expect(Addresses.List).toHaveBeenCalledWith(term);
+                expect(Addresses.ListAssignments).toHaveBeenCalledWith(null, null, null, null, null, true);
+            }));
+        });
+    });
 });
 

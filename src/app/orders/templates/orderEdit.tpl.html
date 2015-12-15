@@ -20,19 +20,37 @@
         <div class="row">
             <div class="form-group col-sm-3">
                 <label for="orderFromUserInput">From User</label>
-                <input id="orderFromUserInput" type="text" class="form-control" ng-model="orderEdit.order.FromUserID" required/>
+                <input id="orderFromUserInput" type="text" class="form-control" ng-model="orderEdit.order.FromUserID" disabled/>
             </div>
             <div class="form-group col-sm-3">
                 <label for="orderBillAddInput">Billing Address ID</label>
-                <input id="orderBillAddInput" type="text" class="form-control" ng-model="orderEdit.order.BillingAddressID"/>
+                <input
+                        id="orderBillAddInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="orderEdit.order.BillingAddressID"
+                        uib-typeahead="address.ID as address.AddressName for address in orderEdit.billingAddressTypeAhead($viewValue, orderEdit.order.FromUserID)"
+                        />
             </div>
             <div class="form-group col-sm-3">
                 <label for="orderShipAddInput">Shipping Address ID</label>
-                <input id="orderShipAddInput" type="text" class="form-control" ng-model="orderEdit.order.ShippingAddressID"/>
+                <input
+                        id="orderShipAddInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="orderEdit.order.ShippingAddressID"
+                        uib-typeahead="address.ID as address.AddressName for address in orderEdit.shippingAddressTypeAhead($viewValue)"
+                        />
             </div>
             <div class="form-group col-sm-3">
                 <label for="orderSpendingAccountInput">Spending Account ID</label>
-                <input id="orderSpendingAccountInput" type="text" class="form-control" ng-model="orderEdit.order.SpendingAccountID"/>
+                <input
+                        id="orderSpendingAccountInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="orderEdit.order.SpendingAccountID"
+                        uib-typeahead="spendingAccount.ID as spendingAccount.Name for spendingAccount in orderEdit.spendingAccountTypeAhead($viewValue)"
+                        />
             </div>
         </div>
         <div class="row">
@@ -47,7 +65,7 @@
             </div>
             <div class="form-group col-sm-3">
                 <label for="orderSavedCCInput">Saved Credit Card ID</label>
-                <input id="orderSavedCCInput" type="text" class="form-control" ng-model="orderEdit.order.SavedCreditCardID"/>
+                <input id="orderSavedCCInput" type="text" class="form-control" ng-model="orderEdit.order.CreditCardID"/>
             </div>
             <div class="form-group col-sm-6">
                 <label for="orderCommentsInput">Order Comments:</label>
