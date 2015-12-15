@@ -125,6 +125,7 @@ function ProductAssignmentsController($exceptionHandler, $stateParams, $state, S
     vm.list = Assignments.Items;
     vm.productID = $stateParams.productid;
     vm.productName = angular.copy(SelectedProduct.Name);
+    vm.pagingfunction = PagingFunction;
 
     vm.Delete = function(scope) {
         Products.DeleteAssignment($stateParams.productid, null, scope.assignment.UserGroupID)
@@ -136,7 +137,15 @@ function ProductAssignmentsController($exceptionHandler, $stateParams, $state, S
             })
     }
 
-
+    function PagingFunction() {
+        if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
+            Products.ListAssignments($stateParams.productid, null, null, null, null, vm.list.Meta.Page + 1, vm.list.Meta.PageSize)
+                .then(function(data) {
+                    vm.list.Items = [].concat(vm.list.Items, data.Items);
+                    vm.list.Meta = data.Meta;
+                });
+        }
+    }
 }
 
 function ProductCreateAssignmentController($q, $stateParams, $state, Underscore, UserGroupList, PriceScheduleList, Products, BuyerID) {
