@@ -2,7 +2,10 @@
     <h3 class="page-header">
         Specs
     </h3>
-    <section class="table-fixed-header">
+    <div class="well well-lg text-center" ng-if="!specs.list.Items.length">
+        <b>The selected buyer does not have any specs.</b>
+    </div>
+    <section class="table-fixed-header" ng-if="specs.list.Items.length">
         <div class="table-header-bg"></div>
         <div class="table-container" ordercloud-infinite-scroll servicename="Specs" controlleras="specs">
             <table class="table table-hover">
