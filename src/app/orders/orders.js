@@ -3,6 +3,8 @@ angular.module( 'orderCloud' )
     .config( OrdersConfig )
     .controller( 'OrdersCtrl', OrdersController )
     .controller( 'OrderEditCtrl', OrderEditController )
+    .controller( 'OrderHistoryCtrl', OrderHistoryController )
+    .factory( 'OrderHistoryFactory', OrderHistoryFactory )
     .factory( 'OrdersTypeAheadSearchFactory', OrdersTypeAheadSearchFactory )
 ;
 
@@ -33,7 +35,19 @@ function OrdersConfig( $stateProvider ) {
                     return LineItems.List($stateParams.orderid);
                 }
             }
-        });
+        })
+        .state( 'base.orderHistory', {
+            url: '/orders/:orderid/detail',
+            templateUrl: 'orders/templates/orderHistory.tpl.html',
+            controller: 'OrderHistoryCtrl',
+            controllerAs: 'orderHistory',
+            resolve: {
+                SelectedOrder: function($stateParams, OrderHistoryFactory) {
+                    return OrderHistoryFactory.GetOrderDetails($stateParams.orderid);
+                }
+            }
+        })
+    ;
 }
 
 function OrdersController(OrderList) {
@@ -43,7 +57,7 @@ function OrdersController(OrderList) {
 
 function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTypeAheadSearchFactory, LineItemList, Orders, LineItems, $scope ) {
     var vm = this,
-        orderid = SelectedOrder.ID;
+    orderid = SelectedOrder.ID;
     vm.order = SelectedOrder;
     vm.orderID = SelectedOrder.ID;
     vm.list = LineItemList;
@@ -102,6 +116,76 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTy
     vm.spendingAccountTypeAhead = OrdersTypeAheadSearchFactory.SpendingAccountList;
     vm.shippingAddressTypeAhead = OrdersTypeAheadSearchFactory.ShippingAddressList;
     vm.billingAddressTypeAhead = OrdersTypeAheadSearchFactory.BillingAddressList;
+}
+
+function OrderHistoryController( SelectedOrder ) {
+    var vm = this;
+    vm.order = SelectedOrder;
+}
+
+function OrderHistoryFactory( $q, Underscore, Orders, LineItems, Products ) {
+    var service = {
+        GetOrderDetails: _getOrderDetails
+    };
+
+    function _getOrderDetails(orderID) {
+        var deferred = $q.defer();
+        var order;
+        var lineItemQueue = [];
+        var productQueue = [];
+
+        Orders.Get(orderID)
+            .then(function(data) {
+                order = data;
+                order.LineItems = [];
+                gatherLineItems();
+            });
+
+        function gatherLineItems() {
+            LineItems.List(orderID, 1, 100)
+                .then(function(data) {
+                    order.LineItems = order.LineItems.concat(data.Items);
+                    for (var i = 2; i <= data.Meta.TotalPages; i++) {
+                        lineItemQueue.push(LineItems.List(orderID, i, 100));
+                    }
+                    $q.all(lineItemQueue).then(function(results) {
+                        angular.forEach(results, function(result) {
+                            order.LineItems = order.LineItems.concat(result.Items);
+                        });
+                        gatherProducts();
+                    });
+                });
+        }
+
+        function gatherProducts() {
+            var productIDs = Underscore.uniq(Underscore.pluck(order.LineItems, 'ProductID'));
+
+            angular.forEach(productIDs, function(productID) {
+                productQueue.push((function() {
+                    var d = $q.defer();
+
+                    Products.Get(productID)
+                        .then(function(product) {
+                            angular.forEach(Underscore.where(order.LineItems, {ProductID: product.ID}), function(item) {
+                                item.Product = product;
+                            });
+
+                            d.resolve();
+                        });
+
+                    return d.promise;
+                })());
+            });
+
+            $q.all(productQueue).then(function() {
+                deferred.resolve(order);
+            });
+        }
+
+        return deferred.promise;
+    }
+
+    return service;
 }
 
 function OrdersTypeAheadSearchFactory($q, SpendingAccounts, Addresses, Underscore) {
