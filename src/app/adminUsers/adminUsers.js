@@ -9,18 +9,22 @@ angular.module( 'orderCloud' )
 
 function AdminUsersConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.adminUsers', {
+        .state( 'adminUsers', {
+            parent: 'base',
             url: '/adminUsers',
             templateUrl:'adminUsers/templates/adminUsers.tpl.html',
             controller:'AdminUsersCtrl',
             controllerAs: 'adminUsers',
+            data: {
+                componentName: 'Admin Users'
+            },
             resolve: {
                 AdminUsersList: function(AdminUsers) {
                     return AdminUsers.List();
                 }
             }
         })
-        .state( 'base.adminUserEdit', {
+        .state( 'adminUsers.edit', {
             url: '/adminUsers/:adminuserid/edit',
             templateUrl:'adminUsers/templates/adminUserEdit.tpl.html',
             controller:'AdminUserEditCtrl',
@@ -31,7 +35,7 @@ function AdminUsersConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.adminUserCreate', {
+        .state( 'adminUsers.create', {
             url: '/adminUsers/create',
             templateUrl:'adminUsers/templates/adminUserCreate.tpl.html',
             controller:'AdminUserCreateCtrl',
@@ -59,7 +63,7 @@ function AdminUserEditController( $exceptionHandler, $state, SelectedAdminUser, 
     vm.Submit = function() {
         AdminUsers.Update(adminuserid, vm.adminUser)
             .then(function() {
-                $state.go('base.adminUsers')
+                $state.go('adminUsers')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -69,7 +73,7 @@ function AdminUserEditController( $exceptionHandler, $state, SelectedAdminUser, 
     vm.Delete = function() {
         AdminUsers.Delete(adminuserid)
             .then(function() {
-                $state.go('base.adminUsers')
+                $state.go('adminUsers')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -85,7 +89,7 @@ function AdminUserCreateController( $exceptionHandler, $state, AdminUsers ) {
         vm.adminUser.TermsAccepted = today;
         AdminUsers.Create( vm.adminUser)
             .then(function() {
-                $state.go('base.adminUsers')
+                $state.go('adminUsers')
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
