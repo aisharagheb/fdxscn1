@@ -14,10 +14,10 @@ describe('Component: Buyers', function() {
         };
     }));
 
-    describe('State: Base.buyers', function() {
+    describe('State: buyers', function() {
         var state;
         beforeEach(inject(function($state, Buyers) {
-            state = $state.get('base.buyers');
+            state = $state.get('buyers');
             spyOn(Buyers, 'List').and.returnValue(null);
         }));
         it('should resolve BuyerList', inject(function ($injector, Buyers) {
@@ -26,10 +26,10 @@ describe('Component: Buyers', function() {
         }));
     });
 
-    describe('State: Base.buyerEdit', function() {
+    describe('State: buyers.edit', function() {
         var state;
         beforeEach(inject(function($state, Buyers) {
-            state = $state.get('base.buyerEdit');
+            state = $state.get('buyers.edit');
             var defer = q.defer();
             defer.resolve();
             spyOn(Buyers, 'Get').and.returnValue(defer.promise);
@@ -63,7 +63,7 @@ describe('Component: Buyers', function() {
                 expect(Buyers.Update).toHaveBeenCalledWith(buyerEditCtrl.buyer);
             }));
             it ('should enter the buyers state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.buyers');
+                expect($state.go).toHaveBeenCalledWith('buyers');
             }));
         });
     });
@@ -90,7 +90,7 @@ describe('Component: Buyers', function() {
                 expect(Buyers.Create).toHaveBeenCalledWith(buyer);
             }));
             it ('should enter the buyers state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.buyers');
+                expect($state.go).toHaveBeenCalledWith('buyers');
             }));
         });
     });
