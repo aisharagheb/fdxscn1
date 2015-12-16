@@ -29,7 +29,10 @@ function CatalogConfig($stateProvider) {
                 }
             },
             resolve: {
-                Catalog: function($q, Me, ImpersonationService) {
+                Tree: function(CatalogTreeService) {
+                    return CatalogTreeService.GetCatalogTree();
+                },
+                Catalog: function($q, Me, ImpersonationService, Tree) {
                     var dfd = $q.defer();
                     Me.ListCategories(null, 1).then(
                         function(response) {
@@ -37,15 +40,10 @@ function CatalogConfig($stateProvider) {
                         },
                         function(response) {
                             ImpersonationService.impersonate(response).then(function() {
-                                var categories = Me.As().ListCategories(null, 1);
-                                console.log(categories);
-                                dfd.resolve(categories);
+                                dfd.resolve(Me.As().ListCategories(null, 1));
                             });
                     });
                     return dfd.promise;
-                },
-                Tree: function(CatalogTreeService) {
-                    return CatalogTreeService.GetCatalogTree();
                 }
             }
         });
@@ -85,7 +83,7 @@ function ProductListDirective() {
     };
 }
 
-function CatalogTreeService($q, Underscore, Me) {
+function CatalogTreeService($q, Underscore, ImpersonationService, Me) {
     return {
         GetCatalogTree: tree
     };
@@ -98,6 +96,16 @@ function CatalogTreeService($q, Underscore, Me) {
                 tree.push(getNode(node, list));
             });
             dfd.resolve(tree);
+        }).catch(function(response) {
+            ImpersonationService.impersonate(response)
+                .then(function() {
+                    Me.As().ListCategories(null, 'all', 1, 100).then(function(list) {
+                        angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
+                            tree.push(getNode(node, list));
+                        });
+                        dfd.resolve(tree);
+                    });
+                });
         });
         return dfd.promise;
     }

@@ -2,6 +2,6 @@
     <input type="number" class="form-control text-center" ng-if="!orderInput.product.StandardPriceSchedule.RestrictedQuantity" placeholder="Quantity">
     <span class="input-group-addon"><i class="fa fa-shopping-cart"></i></span>
 </div>
-<div>
-    <button ui-sref="base.catalog.product.config({productid:product.ID, specformid})" class="btn btn-block">Customize Product</button>
+<div ng-if="orderInput.currentState === 'base.catalog.product' && product.Specs.length > 0">
+    <button ui-sref="base.catalog.product.config({specformid: null})" class="btn btn-block">Customize Product</button>
 </div>

@@ -20,8 +20,7 @@ function CategoryConfig($stateProvider) {
                             dfd.resolve(response);
                         }, function(response) {
                             ImpersonationService.impersonate(response).then(function() {
-                                var categories = Me.As().ListSubcategories($stateParams.categoryid);
-                                dfd.resolve(categories);
+                                dfd.resolve(Me.As().ListSubcategories($stateParams.categoryid));
                             });
                         });
                     return dfd.promise;
@@ -34,8 +33,7 @@ function CategoryConfig($stateProvider) {
                         },
                         function(response) {
                             ImpersonationService.impersonate(response).then(function() {
-                                var products = Me.As().ListProducts(null, $stateParams.categoryid);
-                                dfd.resolve(products);
+                                dfd.resolve(Me.As().ListProducts(null, $stateParams.categoryid));
                             });
                         });
                     return dfd.promise;
