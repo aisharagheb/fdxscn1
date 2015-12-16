@@ -45,9 +45,9 @@
         </section>
     </fieldset>
     <div class="form-group">
-        <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-default" ui-sref="^"><i class="fa fa-arrow-left"></i> Back</button>
         <button type="button" class="btn btn-primary" ng-click="couponAssign.saveAssignments()">Update Party Assignments</button>
-        <button type="button" class="btn btn-default" ui-sref="^.couponAssignProduct({couponid: couponAssign.coupon.ID})">Assign Products</button>
-        <button type="button" class="btn btn-default" ui-sref="^.couponAssignCategory({couponid: couponAssign.coupon.ID})">Assign Categories</button>
+        <button type="button" class="btn btn-default" ui-sref="^.assignProduct({couponid: couponAssign.coupon.ID})">Assign Products</button>
+        <button type="button" class="btn btn-default" ui-sref="^.assignCategory({couponid: couponAssign.coupon.ID})">Assign Categories</button>
     </div>
 </article>

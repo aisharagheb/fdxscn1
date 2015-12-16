@@ -254,7 +254,7 @@ describe('Component: SpendingAccounts', function() {
         });
     });
 
-    xdescribe('Factory: SpendingAccountAssignment', function(){
+    describe('Factory: SpendingAccountAssignment', function(){
        var spendingAccountAssignment, sampleList, assignments;
         beforeEach(inject(function(SpendingAccountAssignment, Assignments, $state){
             spendingAccountAssignment = SpendingAccountAssignment;
