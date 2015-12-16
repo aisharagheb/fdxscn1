@@ -63,7 +63,7 @@ function ApprovalRuleEditController( $exceptionHandler, $state, ApprovalRuleFact
     vm.Submit = function() {
         ApprovalRules.Update(approvalRuleID, vm.approvalRule)
             .then(function() {
-                $state.go('approvalRules')
+                $state.go('approvalRules', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -73,12 +73,12 @@ function ApprovalRuleEditController( $exceptionHandler, $state, ApprovalRuleFact
     vm.Delete = function() {
         ApprovalRules.Delete(SelectedApprovalRule.ID)
             .then(function() {
-                $state.go('approvalRules')
+                $state.go('approvalRules', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
             });
-    }
+    };
 
     vm.userIDTypeAhead = ApprovalRuleFactory.UserList;
     vm.userGroupIDTypeAhead = ApprovalRuleFactory.UserGroupList;
@@ -99,7 +99,7 @@ function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRuleFac
     vm.Submit = function() {
         ApprovalRules.Create(vm.approvalRule)
             .then(function() {
-                $state.go('approvalRules')
+                $state.go('approvalRules', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

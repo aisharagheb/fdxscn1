@@ -56,7 +56,7 @@ function BuyerEditController($exceptionHandler, $state, SelectedBuyer, Buyers) {
     vm.Submit = function() {
         Buyers.Update(vm.buyer)
             .then(function() {
-                $state.go('buyers');
+                $state.go('buyers', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -70,7 +70,7 @@ function BuyerCreateController($exceptionHandler, $state, Buyers) {
     vm.Submit = function () {
         Buyers.Create(vm.buyer)
             .then(function() {
-                $state.go('buyers');
+                $state.go('buyers', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

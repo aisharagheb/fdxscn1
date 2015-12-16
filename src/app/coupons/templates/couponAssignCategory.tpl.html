@@ -1,6 +1,6 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        Category Assignments for {{couponAssignCat.Coupon.Label}}
+        Category Assignments for {{couponAssignCat.coupon.Label}}
     </h3>
     <section class="table-fixed-header">
         <div class="table-header-bg"></div>
@@ -39,9 +39,9 @@
         </div>
     </section>
     <div class="form-group">
-        <button type="button" class="btn btn-default" ui-sref="^.coupons"><i class="fa fa-arrow-left"></i> Back</button>
-        <button type="button" class="btn btn-primary" ng-click="couponAssignCat.saveAssignment()">Update Category Assignments</button>
-        <button type="button" class="btn btn-default" ui-sref="^.couponAssignParty({couponid: couponAssignCat.coupon.ID})">Assign Parties</button>
-        <button type="button" class="btn btn-default" ui-sref="^.couponAssignProduct({couponid: couponAssignCat.coupon.ID})">Assign Products</button>
+        <button type="button" class="btn btn-default" ui-sref="^"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="couponAssignCat.saveAssignments()">Update Category Assignments</button>
+        <button type="button" class="btn btn-default" ui-sref="^.assignParty({couponid: couponAssignCat.coupon.ID})">Assign Parties</button>
+        <button type="button" class="btn btn-default" ui-sref="^.assignProduct({couponid: couponAssignCat.coupon.ID})">Assign Products</button>
     </div>
 </article>

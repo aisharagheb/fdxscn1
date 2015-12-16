@@ -5,7 +5,7 @@ angular.module( 'orderCloud' )
     .controller( 'CategoryEditCtrl', CategoryEditController )
     .controller( 'CategoryCreateCtrl', CategoryCreateController )
     .controller( 'CategoryTreeCtrl', CategoryTreeController )
-    .controller( 'CategoryAssignCtrl', CategoryAssignController )
+    .controller( 'CategoryAssignPartyCtrl', CategoryAssignPartyController )
     .controller( 'CategoryAssignProductCtrl', CategoryAssignProductController )
     .factory( 'CategoryTreeService', CategoryTreeService )
     .directive( 'categoryNode', CategoryNode )
@@ -15,7 +15,8 @@ angular.module( 'orderCloud' )
 
 function CategoriesConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.categories', {
+        .state( 'categories', {
+            parent: 'base',
             url: '/categories',
             templateUrl:'categories/templates/categories.tpl.html',
             controller:'CategoriesCtrl',
@@ -27,22 +28,19 @@ function CategoriesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.categoryTree', {
-            url: '/categorytree',
+        .state( 'categories.tree', {
+            url: '/tree',
             templateUrl: 'categories/templates/categoryTree.tpl.html',
             controller: 'CategoryTreeCtrl',
             controllerAs: 'categoryTree',
             resolve: {
-                Catalog: function(Categories) {
-                    return Categories.List('all', null, 1, 100);
-                },
                 Tree: function(CategoryTreeService) {
                     return CategoryTreeService.GetCategoryTree();
                 }
             }
         })
-        .state( 'base.categoryEdit', {
-            url: '/categories/:categoryid/edit',
+        .state( 'categories.edit', {
+            url: '/:categoryid/edit',
             templateUrl:'categories/templates/categoryEdit.tpl.html',
             controller:'CategoryEditCtrl',
             controllerAs: 'categoryEdit',
@@ -54,17 +52,17 @@ function CategoriesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.categoryCreate', {
-            url: '/categories/create',
+        .state( 'categories.create', {
+            url: '/create',
             templateUrl:'categories/templates/categoryCreate.tpl.html',
             controller:'CategoryCreateCtrl',
             controllerAs: 'categoryCreate'
         })
-        .state( 'base.categoryAssign', {
-            url: '/categories/:categoryid/assign/party',
-            templateUrl: 'categories/templates/categoryAssign.tpl.html',
-            controller: 'CategoryAssignCtrl',
-            controllerAs: 'categoryAssign',
+        .state( 'categories.assignParty', {
+            url: '/:categoryid/assign/party',
+            templateUrl: 'categories/templates/categoryAssignParty.tpl.html',
+            controller: 'CategoryAssignPartyCtrl',
+            controllerAs: 'categoryAssignParty',
             resolve: {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List();
@@ -79,8 +77,8 @@ function CategoriesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.categoryAssignProduct', {
-            url: '/categories/:categoryid/assign/product',
+        .state( 'categories.assignProduct', {
+            url: '/:categoryid/assign/product',
             templateUrl: 'categories/templates/categoryAssignProduct.tpl.html',
             controller: 'CategoryAssignProductCtrl',
             controllerAs: 'categoryAssignProd',
@@ -117,7 +115,7 @@ function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Ca
     vm.Submit = function() {
         Categories.Update(categoryID, vm.category)
             .then(function() {
-                $state.go('base.categories')
+                $state.go('categories', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -127,7 +125,7 @@ function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Ca
     vm.Delete = function() {
         Categories.Delete(SelectedCategory.ID)
             .then(function() {
-                $state.go('base.categories')
+                $state.go('categories', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -145,7 +143,7 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
         }
         Categories.Create(vm.category)
             .then(function() {
-                $state.go('base.categories')
+                $state.go('categories', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -153,9 +151,8 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
     }
 }
 
-function CategoryTreeController(Catalog, Tree, CategoryTreeService) {
+function CategoryTreeController(Tree, CategoryTreeService) {
     var vm = this;
-    vm.catalog = Catalog;
     vm.tree = Tree;
 
     vm.toggle = function(scope) {
@@ -169,11 +166,12 @@ function CategoryTreeController(Catalog, Tree, CategoryTreeService) {
     };
 }
 
-function CategoryAssignController(Assignments, Paging, UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
+function CategoryAssignPartyController(Assignments, Paging, UserGroupList, AssignedUserGroups, SelectedCategory, Categories) {
     var vm = this;
     vm.Category = SelectedCategory;
     vm.list = UserGroupList;
     vm.assignments = AssignedUserGroups;
+    console.log(AssignedUserGroups);
     vm.saveAssignments = SaveAssignment;
     vm.pagingfunction = PagingFunction;
 

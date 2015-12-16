@@ -27,10 +27,10 @@ describe('Component: Coupons', function() {
         };
     }));
 
-    describe('State: Base.coupons', function() {
+    describe('State: coupons', function() {
         var state;
         beforeEach(inject(function($state, Coupons) {
-            state = $state.get('base.coupons');
+            state = $state.get('coupons');
             spyOn(Coupons, 'List').and.returnValue(null);
         }));
         it('should resolve CouponList', inject(function ($injector, Coupons) {
@@ -39,10 +39,10 @@ describe('Component: Coupons', function() {
         }));
     });
 
-    describe('State: Base.couponEdit', function() {
+    describe('State: coupons.edit', function() {
         var state;
         beforeEach(inject(function($state, Coupons) {
-            state = $state.get('base.couponEdit');
+            state = $state.get('coupons.edit');
             var defer = q.defer();
             defer.resolve();
             spyOn(Coupons, 'Get').and.returnValue(defer.promise);
@@ -53,10 +53,10 @@ describe('Component: Coupons', function() {
         }));
     });
 
-    describe('State: Base.couponAssignParty', function() {
+    describe('State: coupons.assignParty', function() {
         var state;
         beforeEach(inject(function($state, Coupons, UserGroups, Buyers) {
-            state = $state.get('base.couponAssignParty');
+            state = $state.get('coupons.assignParty');
             spyOn(Buyers, 'Get').and.returnValue(null);
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(Coupons, 'ListAssignments').and.returnValue(null);
@@ -80,10 +80,10 @@ describe('Component: Coupons', function() {
         }));
     });
 
-    describe('State: Base.couponAssignProduct', function() {
+    describe('State: coupons.assignProduct', function() {
         var state;
         beforeEach(inject(function($state, Coupons, Products) {
-            state = $state.get('base.couponAssignProduct');
+            state = $state.get('coupons.assignProduct');
             spyOn(Products, 'List').and.returnValue(null);
             spyOn(Coupons, 'Get').and.returnValue(null);
             spyOn(Coupons, 'ListProductAssignments').and.returnValue(null);
@@ -102,10 +102,10 @@ describe('Component: Coupons', function() {
         }));
     });
 
-    describe('State: Base.couponAssignCategory', function() {
+    describe('State: coupons.assignCategory', function() {
         var state;
         beforeEach(inject(function($state, Coupons, Categories) {
-            state = $state.get('base.couponAssignCategory');
+            state = $state.get('coupons.assignCategory');
             spyOn(Categories, 'List').and.returnValue(null);
             spyOn(Coupons, 'Get').and.returnValue(null);
             spyOn(Coupons, 'ListCategoryAssignments').and.returnValue(null);
@@ -148,7 +148,7 @@ describe('Component: Coupons', function() {
                 expect(Coupons.Update).toHaveBeenCalledWith(couponEditCtrl.couponID, couponEditCtrl.coupon);
             }));
             it ('should enter the coupons state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.coupons');
+                expect($state.go).toHaveBeenCalledWith('coupons', {}, {reload:true});
             }));
         });
 
@@ -164,7 +164,7 @@ describe('Component: Coupons', function() {
                 expect(Coupons.Delete).toHaveBeenCalledWith(coupon.ID);
             }));
             it ('should enter the coupons state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.coupons');
+                expect($state.go).toHaveBeenCalledWith('coupons', {}, {reload:true});
             }));
         });
     });
@@ -201,7 +201,7 @@ describe('Component: Coupons', function() {
                 expect(Coupons.Create).toHaveBeenCalledWith(coupon);
             }));
             it ('should enter the coupons state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.coupons');
+                expect($state.go).toHaveBeenCalledWith('coupons', {}, {reload:true});
             }));
         });
     });

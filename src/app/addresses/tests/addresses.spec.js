@@ -96,7 +96,7 @@ describe('Component: Addresses', function() {
                 expect(Addresses.Update).toHaveBeenCalledWith(addressEditCtrl.addressID, addressEditCtrl.address);
             }));
             it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('addresses');
+                expect($state.go).toHaveBeenCalledWith('addresses', {}, {reload:true});
             }));
         });
 
@@ -112,7 +112,7 @@ describe('Component: Addresses', function() {
                 expect(Addresses.Delete).toHaveBeenCalledWith(address.ID, false);
             }));
             it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('addresses');
+                expect($state.go).toHaveBeenCalledWith('addresses', {}, {reload:true});
             }));
         });
     });
@@ -139,7 +139,7 @@ describe('Component: Addresses', function() {
                 expect(Addresses.Create).toHaveBeenCalledWith(address);
             }));
             it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('addresses');
+                expect($state.go).toHaveBeenCalledWith('addresses', {}, {reload:true} );
             }));
         });
     });

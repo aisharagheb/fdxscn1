@@ -2,9 +2,7 @@ angular.module( 'orderCloud' )
 
     .config( LoginConfig )
     .factory( 'LoginService', LoginService )
-    .factory( 'DevLoginService', DevLoginService )
     .controller( 'LoginCtrl', LoginController )
-    .controller( 'DevLoginCtrl', DevLoginController )
 
 ;
 
@@ -16,27 +14,6 @@ function LoginConfig( $stateProvider ) {
             controller:'LoginCtrl',
             controllerAs: 'login'
         })
-        .state( 'loginDev', {
-            url: '/dev/login',
-            templateUrl: 'login/templates/login.dev.tpl.html',
-            controller: 'DevLoginCtrl',
-            controllerAs: 'devLogin'
-        });
-}
-
-function DevLoginService($resource, clientid, apiurl) {
-    return {
-        LogInDev: LogInDev
-    };
-
-    function LogInDev(credentials) {
-        var data = {
-            ClientID: clientid,
-            Username: credentials.Username,
-            Password: credentials.Password
-        };
-        return $resource(apiurl + '/v1/DevAppLogin', {}, { method: 'POST' }).save(data).$promise;
-    }
 }
 
 function LoginService( $q, $window, PasswordResets, clientid ) {
@@ -128,16 +105,4 @@ function LoginController( $state, $stateParams, $exceptionHandler, LoginService,
                 vm.credentials.ConfirmPassword = null;
             });
     };
-}
-
-function DevLoginController(DevLoginService, $state, Auth) {
-    var vm = this;
-    vm.submit = function() {
-        DevLoginService.LogInDev(vm.credentials).then(
-            function(data) {
-                Auth.SetToken(data.Items[0].access_token);
-                $state.go('base.home');
-            }
-        );
-    }
 }

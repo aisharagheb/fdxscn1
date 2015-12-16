@@ -84,7 +84,7 @@ describe('Component: ApprovalRules', function() {
                 expect(ApprovalRules.Update).toHaveBeenCalledWith(approvalRuleEditCtrl.approvalRuleID, approvalRuleEditCtrl.approvalRule);
             }));
             it ('should enter the approvalRules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('approvalRules');
+                expect($state.go).toHaveBeenCalledWith('approvalRules', {}, {reload:true});
             }));
         });
 
@@ -100,7 +100,7 @@ describe('Component: ApprovalRules', function() {
                 expect(ApprovalRules.Delete).toHaveBeenCalledWith(approvalRule.ID);
             }));
             it ('should enter the approvalRules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('approvalRules');
+                expect($state.go).toHaveBeenCalledWith('approvalRules', {}, {reload:true});
             }));
         });
     });
@@ -127,7 +127,7 @@ describe('Component: ApprovalRules', function() {
                 expect(ApprovalRules.Create).toHaveBeenCalledWith(approvalRule);
             }));
             it ('should enter the approvalRules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('approvalRules');
+                expect($state.go).toHaveBeenCalledWith('approvalRules', {}, {reload:true});
             }));
         });
     });
