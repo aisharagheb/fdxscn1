@@ -35,7 +35,6 @@ function ImpersonationService($q, $resource, $cookieStore, $uibModal, $state, ap
                                 Users.GetAccessToken(selectedUser.ID, {ClientID: buyer_clientid, Claims: ["FullAccess"]})
                                     .then(function(token) {
                                         Auth.SetImpersonationToken(selectedUser.ID, token["access_token"]);
-                                        Auth.SetImpersonating(true);
                                         dfd.resolve();
                                     });
                             }
@@ -45,7 +44,6 @@ function ImpersonationService($q, $resource, $cookieStore, $uibModal, $state, ap
                         $state.go('base.home');
                     });
                 } else {
-                    Auth.SetImpersonating(true);
                     dfd.resolve();
                 }
             } else dfd.resolve('Error: You do not have permission to impersonate a buyer user.');
