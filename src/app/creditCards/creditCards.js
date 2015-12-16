@@ -10,7 +10,8 @@ angular.module( 'orderCloud' )
 
 function CreditCardsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.creditCards', {
+        .state( 'creditCards', {
+            parent: 'base',
             url: '/creditCards',
             templateUrl:'creditCards/templates/creditCards.tpl.html',
             controller:'CreditCardsCtrl',
@@ -22,8 +23,8 @@ function CreditCardsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.creditCardEdit', {
-            url: '/creditCards/:creditCardid/edit',
+        .state( 'creditCards.edit', {
+            url: '/:creditCardid/edit',
             templateUrl:'creditCards/templates/creditCardEdit.tpl.html',
             controller:'CreditCardEditCtrl',
             controllerAs: 'creditCardEdit',
@@ -33,14 +34,14 @@ function CreditCardsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.creditCardCreate', {
-            url: '/creditCards/create',
+        .state( 'creditCards.create', {
+            url: '/create',
             templateUrl:'creditCards/templates/creditCardCreate.tpl.html',
             controller:'CreditCardCreateCtrl',
             controllerAs: 'creditCardCreate'
         })
-        .state( 'base.creditCardAssign', {
-            url: '/creditCards/:creditCardid/assign',
+        .state( 'creditCards.assign', {
+            url: '/:creditCardid/assign',
             templateUrl: 'creditCards/templates/creditCardAssign.tpl.html',
             controller: 'CreditCardAssignCtrl',
             controllerAs: 'creditCardAssign',
@@ -83,7 +84,7 @@ function CreditCardEditController( $exceptionHandler, $state, SelectedCreditCard
         vm.creditCard.ExpirationDate = expiration;
         CreditCards.Update(creditcardid, vm.creditCard)
             .then(function() {
-                $state.go('base.creditCards')
+                $state.go('creditCards', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -93,7 +94,7 @@ function CreditCardEditController( $exceptionHandler, $state, SelectedCreditCard
     vm.Delete = function() {
         CreditCards.Delete(SelectedCreditCard.ID)
             .then(function() {
-                $state.go('base.creditCards')
+                $state.go('creditCards', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -113,7 +114,7 @@ function CreditCardCreateController( $exceptionHandler, $state, CreditCards) {
         vm.creditCard.ExpirationDate = expiration;
         CreditCards.Create(vm.creditCard)
             .then(function() {
-                $state.go('base.creditCards')
+                $state.go('creditCards', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

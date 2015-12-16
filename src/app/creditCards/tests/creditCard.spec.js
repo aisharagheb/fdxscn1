@@ -17,10 +17,10 @@ describe('Component: CreditCards', function() {
         };
     }));
 
-    describe('State: Base.creditCards', function() {
+    describe('State: creditCards', function() {
         var state;
         beforeEach(inject(function($state, CreditCards) {
-            state = $state.get('base.creditCards');
+            state = $state.get('creditCards');
             spyOn(CreditCards, 'List').and.returnValue(null);
         }));
         it('should resolve CreditCardList', inject(function ($injector, CreditCards) {
@@ -29,10 +29,10 @@ describe('Component: CreditCards', function() {
         }));
     });
 
-    describe('State: Base.creditCardEdit', function() {
+    describe('State: creditCards.edit', function() {
         var state;
         beforeEach(inject(function($state, CreditCards) {
-            state = $state.get('base.creditCardEdit');
+            state = $state.get('creditCards.edit');
             spyOn(CreditCards, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedCreditCard', inject(function ($injector, $stateParams, CreditCards) {
@@ -41,10 +41,10 @@ describe('Component: CreditCards', function() {
         }));
     });
 
-    describe('State: Base.creditCardAssign', function() {
+    describe('State: creditCards.assign', function() {
         var state;
         beforeEach(inject(function($state, CreditCards, UserGroups, Buyers) {
-            state = $state.get('base.creditCardAssign');
+            state = $state.get('creditCards.assign');
             spyOn(Buyers, 'Get').and.returnValue(null);
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(CreditCards, 'ListAssignments').and.returnValue(null);
@@ -92,7 +92,7 @@ describe('Component: CreditCards', function() {
                 expect(CreditCards.Update).toHaveBeenCalledWith(creditCardEditCtrl.creditCardID, creditCardEditCtrl.creditCard);
             }));
             it ('should enter the creditCards state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.creditCards');
+                expect($state.go).toHaveBeenCalledWith('creditCards', {}, {reload:true});
             }));
         });
 
@@ -108,7 +108,7 @@ describe('Component: CreditCards', function() {
                 expect(CreditCards.Delete).toHaveBeenCalledWith(creditCard.ID);
             }));
             it ('should enter the creditCards state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.creditCards');
+                expect($state.go).toHaveBeenCalledWith('creditCards', {}, {reload:true});
             }));
         });
     });
@@ -136,7 +136,7 @@ describe('Component: CreditCards', function() {
                 expect(CreditCards.Create).toHaveBeenCalledWith(creditCard);
             }));
             it ('should enter the creditCards state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.creditCards');
+                expect($state.go).toHaveBeenCalledWith('creditCards', {}, {reload:true});
             }));
         });
     });
