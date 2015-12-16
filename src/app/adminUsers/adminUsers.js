@@ -25,7 +25,7 @@ function AdminUsersConfig( $stateProvider ) {
             }
         })
         .state( 'adminUsers.edit', {
-            url: '/adminUsers/:adminuserid/edit',
+            url: '/:adminuserid/edit',
             templateUrl:'adminUsers/templates/adminUserEdit.tpl.html',
             controller:'AdminUserEditCtrl',
             controllerAs: 'adminUserEdit',
@@ -36,7 +36,7 @@ function AdminUsersConfig( $stateProvider ) {
             }
         })
         .state( 'adminUsers.create', {
-            url: '/adminUsers/create',
+            url: '/create',
             templateUrl:'adminUsers/templates/adminUserCreate.tpl.html',
             controller:'AdminUserCreateCtrl',
             controllerAs: 'adminUserCreate'
