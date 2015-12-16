@@ -115,7 +115,7 @@ function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Ca
     vm.Submit = function() {
         Categories.Update(categoryID, vm.category)
             .then(function() {
-                $state.go('categories')
+                $state.go('categories', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -125,7 +125,7 @@ function CategoryEditController( $exceptionHandler, $state, SelectedCategory, Ca
     vm.Delete = function() {
         Categories.Delete(SelectedCategory.ID)
             .then(function() {
-                $state.go('categories')
+                $state.go('categories', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -143,7 +143,7 @@ function CategoryCreateController($exceptionHandler,$state, Categories) {
         }
         Categories.Create(vm.category)
             .then(function() {
-                $state.go('categories')
+                $state.go('categories', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -171,6 +171,7 @@ function CategoryAssignPartyController(Assignments, Paging, UserGroupList, Assig
     vm.Category = SelectedCategory;
     vm.list = UserGroupList;
     vm.assignments = AssignedUserGroups;
+    console.log(AssignedUserGroups);
     vm.saveAssignments = SaveAssignment;
     vm.pagingfunction = PagingFunction;
 

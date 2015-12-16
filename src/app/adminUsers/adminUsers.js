@@ -63,7 +63,7 @@ function AdminUserEditController( $exceptionHandler, $state, SelectedAdminUser, 
     vm.Submit = function() {
         AdminUsers.Update(adminuserid, vm.adminUser)
             .then(function() {
-                $state.go('adminUsers')
+                $state.go('adminUsers', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -73,7 +73,7 @@ function AdminUserEditController( $exceptionHandler, $state, SelectedAdminUser, 
     vm.Delete = function() {
         AdminUsers.Delete(adminuserid)
             .then(function() {
-                $state.go('adminUsers')
+                $state.go('adminUsers', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -89,7 +89,7 @@ function AdminUserCreateController( $exceptionHandler, $state, AdminUsers ) {
         vm.adminUser.TermsAccepted = today;
         AdminUsers.Create( vm.adminUser)
             .then(function() {
-                $state.go('adminUsers')
+                $state.go('adminUsers', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

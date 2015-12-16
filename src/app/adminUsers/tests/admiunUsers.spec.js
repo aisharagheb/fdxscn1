@@ -39,7 +39,7 @@ describe('Component: AdminUsers', function() {
                 expect(AdminUsers.Create).toHaveBeenCalledWith(adminUser);
             }));
             it ('should enter the adminUsers state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('adminUsers');
+                expect($state.go).toHaveBeenCalledWith('adminUsers', {}, {reload:true});
             }));
         });
     });
@@ -68,7 +68,7 @@ describe('Component: AdminUsers', function() {
                 expect(AdminUsers.Update).toHaveBeenCalledWith(adminUserEditCtrl.adminUserID, adminUser);
             }));
             it ('should enter the adminUsers state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('adminUsers');
+                expect($state.go).toHaveBeenCalledWith('adminUsers', {}, {reload:true});
             }));
         });
 
@@ -84,7 +84,7 @@ describe('Component: AdminUsers', function() {
                 expect(AdminUsers.Delete).toHaveBeenCalledWith(adminUser.ID);
             }));
             it ('should enter the adminUsers state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('adminUsers');
+                expect($state.go).toHaveBeenCalledWith('adminUsers', {}, {reload:true});
             }));
         });
     });

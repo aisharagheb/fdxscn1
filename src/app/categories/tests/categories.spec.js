@@ -114,7 +114,7 @@ describe('Component: Categories', function() {
                 expect(Categories.Update).toHaveBeenCalledWith(categoryEditCtrl.categoryID, categoryEditCtrl.category);
             }));
             it ('should enter the categories state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('categories');
+                expect($state.go).toHaveBeenCalledWith('categories', {}, {reload:true});
             }));
         });
 
@@ -130,7 +130,7 @@ describe('Component: Categories', function() {
                 expect(Categories.Delete).toHaveBeenCalledWith(category.ID);
             }));
             it ('should enter the categories state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('categories');
+                expect($state.go).toHaveBeenCalledWith('categories', {}, {reload:true});
             }));
         });
     });
@@ -157,7 +157,7 @@ describe('Component: Categories', function() {
                 expect(Categories.Create).toHaveBeenCalledWith(category);
             }));
             it ('should enter the categories state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('categories');
+                expect($state.go).toHaveBeenCalledWith('categories', {}, {reload:true});
             }));
         });
     });
