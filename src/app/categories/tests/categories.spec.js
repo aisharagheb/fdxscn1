@@ -16,10 +16,10 @@ describe('Component: Categories', function() {
         };
     }));
 
-    describe('State: Base.categories', function() {
+    describe('State: categories', function() {
         var state;
         beforeEach(inject(function($state, Categories) {
-            state = $state.get('base.categories');
+            state = $state.get('categories');
             spyOn(Categories, 'List').and.returnValue(null);
         }));
         it('should resolve CategoryList', inject(function ($injector, Categories) {
@@ -28,10 +28,10 @@ describe('Component: Categories', function() {
         }));
     });
 
-    describe('State: Base.categoryEdit', function() {
+    describe('State: categories.edit', function() {
         var state;
         beforeEach(inject(function($state, Categories) {
-            state = $state.get('base.categoryEdit');
+            state = $state.get('categories.edit');
             var defer = q.defer();
             defer.resolve();
             spyOn(Categories, 'Get').and.returnValue(defer.promise);
@@ -42,10 +42,10 @@ describe('Component: Categories', function() {
         }));
     });
 
-    describe('State: Base.categoryAssign', function() {
+    describe('State: categories.assignParty', function() {
         var state;
         beforeEach(inject(function($state, Categories, UserGroups) {
-            state = $state.get('base.categoryAssign');
+            state = $state.get('categories.assignParty');
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(Categories, 'ListAssignments').and.returnValue(null);
             var defer = q.defer();
@@ -66,10 +66,10 @@ describe('Component: Categories', function() {
         }));
     });
 
-    describe('State: Base.categoryAssignProduct', function() {
+    describe('State: categories.assignProduct', function() {
         var state;
         beforeEach(inject(function($state, Categories, Products) {
-            state = $state.get('base.categoryAssignProduct');
+            state = $state.get('categories.assignProduct');
             spyOn(Products, 'List').and.returnValue(null);
             spyOn(Categories, 'ListProductAssignments').and.returnValue(null);
             var defer = q.defer();
@@ -114,7 +114,7 @@ describe('Component: Categories', function() {
                 expect(Categories.Update).toHaveBeenCalledWith(categoryEditCtrl.categoryID, categoryEditCtrl.category);
             }));
             it ('should enter the categories state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.categories');
+                expect($state.go).toHaveBeenCalledWith('categories');
             }));
         });
 
@@ -130,7 +130,7 @@ describe('Component: Categories', function() {
                 expect(Categories.Delete).toHaveBeenCalledWith(category.ID);
             }));
             it ('should enter the categories state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.categories');
+                expect($state.go).toHaveBeenCalledWith('categories');
             }));
         });
     });
@@ -157,7 +157,7 @@ describe('Component: Categories', function() {
                 expect(Categories.Create).toHaveBeenCalledWith(category);
             }));
             it ('should enter the categories state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.categories');
+                expect($state.go).toHaveBeenCalledWith('categories');
             }));
         });
     });
@@ -191,7 +191,7 @@ describe('Component: Categories', function() {
                     toggle: function() {
                         test = true;
                     }
-                }
+                };
                 categoryTreeCtrl.toggle(bool);
 
             }));
@@ -201,10 +201,10 @@ describe('Component: Categories', function() {
         });
     });
 
-    describe('Controller: CategoryAssignCtrl', function() {
+    describe('Controller: CategoryAssignPartyCtrl', function() {
         var categoryAssignCtrl;
         beforeEach(inject(function($state, $controller) {
-            categoryAssignCtrl = $controller('CategoryAssignCtrl', {
+            categoryAssignCtrl = $controller('CategoryAssignPartyCtrl', {
                 $scope: scope,
                 UserGroupList: [],
                 AssignedUserGroups: [],
