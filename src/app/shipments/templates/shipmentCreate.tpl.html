@@ -27,7 +27,7 @@
                 <input id="costInput" type="number" step="any" class="form-control" ng-model="shipmentCreate.shipment.Cost"/>
             </div>
         </div>
-        <div uib-collapse="shipmentCreate.OrderSelected">
+        <div uib-collapse="shipmentCreate.OrderSelected" class="form-group">
             <h4>
                 <b>Select Order</b>
             </h4>
@@ -58,7 +58,7 @@
                 </div>
             </section>
         </div>
-        <div uib-collapse="!shipmentCreate.OrderSelected">
+        <div uib-collapse="!shipmentCreate.OrderSelected" class="form-group">
             <h4>
                 <b>Select Line Items</b>
             </h4>
