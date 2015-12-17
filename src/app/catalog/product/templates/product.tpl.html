@@ -6,5 +6,6 @@
     </div>
         <div ng-class="{'col-md-6': product.item.xp.image, 'col-md-12': !product.item.xp.image}">
             <div ui-view="view"></div>
+            <ordercloud-order-input ng-if="!product.item.xp.image" product="product.item"></ordercloud-order-input>
         </div>
 </article>

@@ -23,8 +23,14 @@ function OrderInputController($state, appname, $scope, $localForage, Orders, Lin
     vm.currentState = $state.current.name;
     vm.price = null;
     vm.addToCart = AddToCart;
+    console.log($scope.product, vm.currentState);
+
     $localForage.getItem(appname + '.CurrentOrderID').then(function(data) {
         orderid = data;
+    });
+
+    $scope.$on('$stateChangeSuccess', function(event, toState) {
+        vm.currentState = toState.name;
     });
 
     $scope.$watch(function() {

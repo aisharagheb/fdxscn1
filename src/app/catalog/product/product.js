@@ -11,7 +11,7 @@ function ProductConfig($stateProvider) {
             url: '/product/:productid',
             templateUrl: 'catalog/product/templates/product.tpl.html',
             views: {
-                'catalog@catalog': {
+                '': {
                     templateUrl: 'catalog/product/templates/product.tpl.html',
                     controller: 'ProductCtrl',
                     controllerAs: 'product'
@@ -55,10 +55,10 @@ function ProductConfig($stateProvider) {
                 }
             }
         })
-        .state('product.config', {
+        .state('catalog.product.config', {
             url: '/config/:specformid',
             views: {
-                'view@base.catalog.product': {
+                'view@catalog.product': {
                     templateUrl: function($stateParams) {
                         var spec_form = 'default-spec-form';
                         if ($stateParams.specformid) {
