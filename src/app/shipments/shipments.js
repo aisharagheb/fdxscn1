@@ -93,8 +93,11 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
 
     vm.deleteLineItem = function(index) {
         vm.shipment.Items.splice(index, 1);
-        vm.lineitems.list.Items[index].addToShipment = false;
-        vm.lineitems.list.Items[index].disabled = false;
+        Shipments.Patch(shipmentid, {Items: vm.shipment.Items});
+        if (vm.lineitems.list.Items) {
+            vm.lineitems.list.Items[index].addToShipment = false;
+            vm.lineitems.list.Items[index].disabled = false;
+        }
     };
 
     vm.Submit = function() {

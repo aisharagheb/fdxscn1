@@ -27,7 +27,7 @@
                 <input id="costInput" type="number" step="any" class="form-control" ng-model="shipmentEdit.shipment.Cost"/>
             </div>
         </div>
-        <div uib-collapse="shipmentEdit.OrderSelected">
+        <div uib-collapse="shipmentEdit.OrderSelected" class="form-group">
             <h4>
                 <b>Select Order</b>
             </h4>
@@ -63,7 +63,7 @@
                 </div>
             </section>
         </div>
-        <div uib-collapse="!shipmentEdit.OrderSelected">
+        <div uib-collapse="!shipmentEdit.OrderSelected" class="form-group">
             <h4>
                 <b>Select Line Items</b>
             </h4>
@@ -106,7 +106,7 @@
         <div class="well well-lg text-center" ng-show="!shipmentEdit.shipment.Items.length">
             <b>The selected shipment does not currently have any line items.</b>
         </div>
-        <div ng-hide="!shipmentEdit.shipment.Items.length">
+        <div ng-hide="!shipmentEdit.shipment.Items.length" class="form-group">
             <h4>
                 <b>Line Items on this Shipment</b>
             </h4>

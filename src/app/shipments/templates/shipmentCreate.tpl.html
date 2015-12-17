@@ -33,7 +33,7 @@
             </h4>
             <section class="table-fixed-header" ng-if="shipmentCreate.list.Items.length">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="LineItems" listobject="shipmentCreate.list">
+                <div class="table-container" ordercloud-infinite-scroll servicename="LineItems" controlleras="shipmentCreate">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -62,9 +62,9 @@
             <h4>
                 <b>Select Line Items</b>
             </h4>
-            <section class="table-fixed-header" ng-if="shipmentCreate.listli.Items.length">
+            <section class="table-fixed-header" ng-if="shipmentCreate.lineitems.list.Items.length">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" listobject="shipmentCreate.listli">
+                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" controlleras="shipmentCreate">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -84,7 +84,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="li in shipmentCreate.listli.Items track by $index">
+                        <tr ng-repeat="li in shipmentCreate.lineitems.list.Items track by $index">
                             <td class="text-center"><input type="checkbox" ng-model="li.addToShipment"></td>
                             <td>{{li.ID}}</td>
                             <td>{{li.Quantity}}</td>

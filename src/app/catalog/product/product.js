@@ -7,7 +7,7 @@ angular.module('orderCloud')
 
 function ProductConfig($stateProvider) {
     $stateProvider
-        .state('base.catalog.product', {
+        .state('catalog.product', {
             url: '/product/:productid',
             templateUrl: 'catalog/product/templates/product.tpl.html',
             views: {
@@ -16,7 +16,7 @@ function ProductConfig($stateProvider) {
                     controller: 'ProductCtrl',
                     controllerAs: 'product'
                 },
-                'view@base.catalog.product': {
+                'view@catalog.product': {
                     templateUrl: 'catalog/product/templates/product.view.tpl.html',
                     controller: 'ProductCtrl',
                     controllerAs: 'product'
@@ -55,10 +55,10 @@ function ProductConfig($stateProvider) {
                 }
             }
         })
-        .state('base.catalog.product.config', {
+        .state('catalog.product.config', {
             url: '/config/:specformid',
             views: {
-                'view@base.catalog.product': {
+                'view@catalog.product': {
                     templateUrl: function($stateParams) {
                         var spec_form = 'default-spec-form';
                         if ($stateParams.specformid) {
