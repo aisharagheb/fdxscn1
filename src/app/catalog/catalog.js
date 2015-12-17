@@ -22,7 +22,7 @@ function CatalogConfig($stateProvider) {
                     controller: 'CatalogCtrl',
                     controllerAs: 'catalog'
                 },
-                'left@base.catalog': {
+                'left@catalog': {
                     templateUrl: 'catalog/templates/catalog.tree.tpl.html',
                     controller: 'CatalogTreeCtrl',
                     controllerAs: 'catalogTree'
@@ -54,19 +54,20 @@ function CatalogConfig($stateProvider) {
                                     if (list.Items.length === 0) dfd.resolve(null);
                                     else {
                                         dfd.resolve(list.Items[1]);
-                                        $localForage(appname + '.CurrentOrderID', list.Items[1].ID);
+                                        $localForage.setItem(appname + '.CurrentOrderID', list.Items[1].ID);
                                     }
                                 });
                         }, function(response) {
                             ImpersonationService.impersonate(response).then(function() {
                                 Me.As().Get()
                                     .then(function(me) {
-                                        Orders.As().List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
+                                        Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
                                             .then(function(list) {
                                                 if (list.Items.length === 0) dfd.resolve(null);
                                                 else {
                                                     dfd.resolve(list.Items[1]);
-                                                    $localForage(appname + '.CurrentOrderID', list.Items[1].ID);
+                                                    console.log(list.Items[1]);
+                                                    $localForage.setItem(appname + '.CurrentOrderID', list.Items[1].ID);
                                                 }
                                             });
                                     });
