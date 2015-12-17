@@ -146,6 +146,11 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
             });
     };
 
+    vm.unselectOrder = function() {
+        vm.OrderSelected = false;
+        vm.lineitems.list = [];
+    };
+
     vm.Submit = function() {
         angular.forEach(vm.lineitems.list.Items, function(li) {
             if(li.addToShipment){
