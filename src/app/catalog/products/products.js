@@ -7,7 +7,7 @@ angular.module('orderCloud')
 
 function ProductListConfig($stateProvider) {
     $stateProvider
-        .state('base.catalog.products', {
+        .state('catalog.products', {
             url: '/products',
             templateUrl: 'catalog/products/templates/products.tpl.html',
             controller: 'ProductListCtrl',
