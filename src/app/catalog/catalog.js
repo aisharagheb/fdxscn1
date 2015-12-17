@@ -44,6 +44,35 @@ function CatalogConfig($stateProvider) {
                             });
                     });
                     return dfd.promise;
+                },
+                Order: function($q, $localForage, Tree, Me, appname, ImpersonationService, Orders) {
+                    var dfd = $q.defer();
+                    Me.Get()
+                        .then(function(me) {
+                            Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
+                                .then(function(list) {
+                                    if (list.Items.length === 0) dfd.resolve(null);
+                                    else {
+                                        dfd.resolve(list.Items[1]);
+                                        $localForage(appname + '.CurrentOrderID', list.Items[1].ID);
+                                    }
+                                });
+                        }, function(response) {
+                            ImpersonationService.impersonate(response).then(function() {
+                                Me.As().Get()
+                                    .then(function(me) {
+                                        Orders.As().List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
+                                            .then(function(list) {
+                                                if (list.Items.length === 0) dfd.resolve(null);
+                                                else {
+                                                    dfd.resolve(list.Items[1]);
+                                                    $localForage(appname + '.CurrentOrderID', list.Items[1].ID);
+                                                }
+                                            });
+                                    });
+                            });
+                        });
+                    return dfd.promise;
                 }
             }
         });
