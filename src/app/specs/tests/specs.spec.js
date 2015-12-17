@@ -27,10 +27,10 @@ describe('Component: Specs', function() {
         };
     }));
 
-    describe('State: Base.specs', function() {
+    describe('State: specs', function() {
         var state;
         beforeEach(inject(function($state, Specs) {
-            state = $state.get('base.specs');
+            state = $state.get('specs');
             spyOn(Specs, 'List').and.returnValue(null);
         }));
         it('should resolve SpecList', inject(function ($injector, Specs) {
@@ -39,10 +39,10 @@ describe('Component: Specs', function() {
         }));
     });
 
-    describe('State: Base.specEdit', function() {
+    describe('State: specs.edit', function() {
         var state;
         beforeEach(inject(function($state, Specs) {
-            state = $state.get('base.specEdit');
+            state = $state.get('specs.edit');
             spyOn(Specs, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedSpec', inject(function ($injector, $stateParams, Specs) {
@@ -51,10 +51,10 @@ describe('Component: Specs', function() {
         }));
     });
 
-    describe('State: Base.specAssign', function() {
+    describe('State: specs.assign', function() {
         var state;
         beforeEach(inject(function($state, Specs, Products) {
-            state = $state.get('base.specAssign');
+            state = $state.get('specs.assign');
             spyOn(Products, 'List').and.returnValue(null);
             spyOn(Specs, 'ListProductAssignments').and.returnValue(null);
             spyOn(Specs, 'Get').and.returnValue(null);
@@ -126,7 +126,7 @@ describe('Component: Specs', function() {
                 expect(Specs.Update).toHaveBeenCalledWith(specEditCtrl.specID, specEditCtrl.spec);
             }));
             it ('should enter the specs state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.specs');
+                expect($state.go).toHaveBeenCalledWith('specs', {}, {reload:true});
             }));
         });
 
@@ -142,7 +142,7 @@ describe('Component: Specs', function() {
                 expect(Specs.Delete).toHaveBeenCalledWith(spec.ID);
             }));
             it ('should enter the specs state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.specs');
+                expect($state.go).toHaveBeenCalledWith('specs', {}, {reload:true});
             }));
         });
     });
@@ -195,7 +195,7 @@ describe('Component: Specs', function() {
                 expect(Specs.Create).toHaveBeenCalledWith(spec);
             }));
             it ('should enter the specs state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.specs');
+                expect($state.go).toHaveBeenCalledWith('specs', {}, {reload:true});
             }));
         });
     });

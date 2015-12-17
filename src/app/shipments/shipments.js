@@ -160,7 +160,7 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
         });
         Shipments.Create(vm.shipment)
             .then(function() {
-                $state.go('base.shipments', {}, {reload:true})
+                $state.go('shipments', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
