@@ -218,6 +218,20 @@ describe('Component: Shipments', function() {
             }));
         });
 
+        describe('unselectOrder', function() {
+            beforeEach(inject(function() {
+                shipmentCreateCtrl.lineitems.list = [1, 2, 3];
+                shipmentCreateCtrl.OrderSelected = true;
+                shipmentCreateCtrl.unselectOrder();
+            }));
+            it('should make OrderSelected false', inject(function () {
+                expect(shipmentCreateCtrl.OrderSelected).toEqual(false);
+            }));
+            it('should empty list', inject(function () {
+                expect(shipmentCreateCtrl.lineitems.list.length).toEqual(0);
+            }));
+        });
+
         describe('Submit', function() {
             beforeEach(inject(function(Shipments) {
                 shipmentCreateCtrl.shipment = shipment;
