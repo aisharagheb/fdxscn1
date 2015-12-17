@@ -113,3 +113,31 @@
     }
   }
 }
+
+ui-view,
+[ui-view] {
+  &.ng-enter {
+    opacity:0;
+    transition:all 300ms ease-in-out;
+  }
+
+  &.ng-leave {
+    opacity:1;
+    transition:all 300ms ease-in-out;
+
+  }
+
+  &.ng-enter-active {
+    opacity:1;
+    transition:all 300ms ease-in-out;
+    position:absolute;
+    width:100%;
+  }
+
+  &.ng-leave-active {
+    opacity:0;
+    transition:all 300ms ease-in-out;
+    position:absolute;
+    width:100%;
+  }
+}
