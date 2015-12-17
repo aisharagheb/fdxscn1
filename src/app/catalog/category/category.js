@@ -7,7 +7,7 @@ angular.module('orderCloud')
 
 function CategoryConfig($stateProvider) {
     $stateProvider
-        .state('base.catalog.category', {
+        .state('catalog.category', {
             url: '/category/:categoryid',
             templateUrl: 'catalog/category/templates/category.tpl.html',
             controller: 'CategoryCtrl',

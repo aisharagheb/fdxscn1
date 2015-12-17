@@ -3,7 +3,9 @@ angular.module( 'orderCloud' )
     .config( OrderHistoryConfig )
     .controller( 'OrderHistoryCtrl', OrderHistoryController )
     .controller( 'OrderHistoryDetailCtrl', OrderHistoryDetailController )
+    .controller( 'OrderHistoryDetailLineItemCtrl', OrderHistoryDetailLineItemController )
     .factory( 'OrderHistoryFactory', OrderHistoryFactory )
+    .filter('paymentmethods', paymentmethods)
 ;
 
 function OrderHistoryConfig( $stateProvider ) {
@@ -32,6 +34,17 @@ function OrderHistoryConfig( $stateProvider ) {
                 }
             }
         })
+        .state( 'orderHistory.detail.lineItem', {
+            url: '/:lineitemid',
+            templateUrl: 'orderHistory/templates/orderHistory.detail.lineItem.tpl.html',
+            controller: 'OrderHistoryDetailLineItemCtrl',
+            controllerAs: 'orderHistoryDetailLineItem',
+            resolve: {
+                SelectedLineItem: function($stateParams, OrderHistoryFactory) {
+                    return OrderHistoryFactory.GetLineItemDetails($stateParams.orderid, $stateParams.lineitemid);
+                }
+            }
+        })
     ;
 }
 
@@ -45,9 +58,15 @@ function OrderHistoryDetailController( SelectedOrder ) {
     vm.order = SelectedOrder;
 }
 
-function OrderHistoryFactory( $q, Underscore, Orders, LineItems, Products ) {
+function OrderHistoryDetailLineItemController( SelectedLineItem ) {
+    var vm = this;
+    vm.lineItem = SelectedLineItem;
+}
+
+function OrderHistoryFactory( $q, Underscore, Orders, LineItems, Products, SpendingAccounts ) {
     var service = {
-        GetOrderDetails: _getOrderDetails
+        GetOrderDetails: _getOrderDetails,
+        GetLineItemDetails: _getLineItemDetails
     };
 
     function _getOrderDetails(orderID) {
@@ -100,12 +119,55 @@ function OrderHistoryFactory( $q, Underscore, Orders, LineItems, Products ) {
             });
 
             $q.all(productQueue).then(function() {
-                deferred.resolve(order);
+                if (order.SpendingAccountID) {
+                    SpendingAccounts.Get(order.SpendingAccountID)
+                        .then(function(sa) {
+                            order.SpendingAccount = sa;
+                            deferred.resolve(order);
+                        });
+                }
+                else {
+                    deferred.resolve(order);
+                }
             });
         }
 
         return deferred.promise;
     }
 
+    function _getLineItemDetails(orderID, lineItemID) {
+        var deferred = $q.defer();
+        var lineItem;
+
+        LineItems.Get(orderID, lineItemID)
+            .then(function(li) {
+                lineItem = li;
+                getProduct();
+            });
+
+        function getProduct() {
+            Products.Get(lineItem.ProductID)
+                .then(function(product) {
+                    lineItem.Product = product;
+                    deferred.resolve(lineItem);
+                });
+        }
+
+        return deferred.promise;
+    }
+
     return service;
+}
+
+function paymentmethods() {
+    var map = {
+        'PurchaseOrder': 'Purchase Order',
+        'CreditCard': 'CreditCard',
+        'SpendingAccount': 'Spending Account',
+        'PayPalExpressCheckout': 'PayPal Express Checkout'
+    };
+    return function(method) {
+        if (!map[method]) return method;
+        return map[method];
+    }
 }

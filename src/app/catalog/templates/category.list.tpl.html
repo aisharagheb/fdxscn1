@@ -4,7 +4,7 @@
     </h3>
     <div class="category-list row">
         <div class="col-md-3" ng-repeat="category in categorylist">
-            <div class="category-item" ui-sref="base.catalog.category({categoryid: category.ID})">
+            <div class="category-item" ui-sref="catalog.category({categoryid: category.ID})">
                 <h3 class="item-name">{{category.Name || category.ID}}</h3>
                 <p class="item-id" ng-if="category.Name">{{category.ID}}</p>
                 <div class="thumbnail-image">

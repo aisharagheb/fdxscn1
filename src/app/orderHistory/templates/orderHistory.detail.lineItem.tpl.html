@@ -1,0 +1,61 @@
+<article class="container-fluid">
+    <h3 class="page-header">
+        <b>Line Item - {{orderHistoryDetailLineItem.lineItem.ID}}</b>
+    </h3>
+    <form name="OrderHistoryDetailLineItemForm" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-1">Product ID:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetailLineItem.lineItem.Product.ID}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Product Name:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetailLineItem.lineItem.Product.Name}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Unit Price:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetailLineItem.lineItem.UnitPrice | currency}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Quantity:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetailLineItem.lineItem.Quantity}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Price:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetailLineItem.lineItem.LineTotal | currency}}
+            </div>
+        </div>
+        <div class="form-group" ng-if="orderHistoryDetailLineItem.lineItem.Specs.length">
+            <label class="col-sm-1">Specs:</label>
+            <div class="col-sm-11">
+                <div class="form-group" ng-repeat="spec in orderHistoryDetailLineItem.lineItem.Specs" ng-if="spec.Value">
+                    <span class="col-sm-1">{{spec.Name}}:</span>
+                    <div class="col-sm-11">
+                        {{spec.Value}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-if="orderHistoryDetailLineItem.lineItem.ShippingAddress">
+            <label class="col-sm-1">Ship To:</label>
+            <div class="col-sm-11">
+                <span ng-if="orderHistoryDetailLineItem.lineItem.ShippingAddress.CompanyName">{{orderHistoryDetailLineItem.lineItem.ShippingAddress.CompanyName}}<br /></span>
+                <span ng-if="orderHistoryDetailLineItem.lineItem.ShippingAddress.FirstName || orderHistoryDetailLineItem.lineItem.ShippingAddress.LastName">{{orderHistoryDetailLineItem.lineItem.ShippingAddress.FirstName + ' ' + orderHistoryDetailLineItem.lineItem.ShippingAddress.LastName}}<br /></span>
+                <span>{{orderHistoryDetailLineItem.lineItem.ShippingAddress.Street1}}<br /></span>
+                <span ng-if="orderHistoryDetailLineItem.lineItem.ShippingAddress.Street2">{{orderHistoryDetailLineItem.lineItem.ShippingAddress.Street2}}<br /></span>
+                <span>{{orderHistoryDetailLineItem.lineItem.ShippingAddress.City + ', ' + orderHistoryDetailLineItem.lineItem.ShippingAddress.State + ' ' + orderHistoryDetailLineItem.lineItem.ShippingAddress.Zip}}<br /></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" ui-sref="^">Back to Order</button>
+        </div>
+    </form>
+</article>
