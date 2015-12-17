@@ -39,8 +39,8 @@
         </div>
     </section>
     <div class="form-group">
-        <button type="button" class="btn btn-default" ui-sref="^.spendingAccounts"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-default" ui-sref="^"><i class="fa fa-arrow-left"></i> Back</button>
         <button type="button" class="btn btn-primary" ng-click="spendingAccountAssignGroup.saveAssignments()">Update Party Assignments</button>
-        <button type="button" class="btn btn-default" ui-sref="^.spendingAccountAssignUser({spendingAccountid: spendingAccountAssignGroup.spendingAccount.ID})">Assign Users</button>
+        <button type="button" class="btn btn-default" ui-sref="^.assignUser({spendingAccountid: spendingAccountAssignGroup.spendingAccount.ID})">Assign Users</button>
     </div>
 </article>
