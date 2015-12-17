@@ -26,10 +26,10 @@ describe('Component: PriceSchedules', function() {
         };
     }));
 
-    describe('State: Base.priceSchedules', function() {
+    describe('State: priceSchedules', function() {
         var state;
         beforeEach(inject(function($state, PriceSchedules) {
-            state = $state.get('base.priceSchedules');
+            state = $state.get('priceSchedules');
             spyOn(PriceSchedules, 'List').and.returnValue(null);
         }));
         it('should resolve PriceScheduleList', inject(function ($injector, PriceSchedules) {
@@ -38,10 +38,10 @@ describe('Component: PriceSchedules', function() {
         }));
     });
 
-    describe('State: Base.priceScheduleEdit', function() {
+    describe('State: priceSchedules.edit', function() {
         var state;
         beforeEach(inject(function($state, PriceSchedules) {
-            state = $state.get('base.priceScheduleEdit');
+            state = $state.get('priceSchedules.edit');
             spyOn(PriceSchedules, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedPriceSchedule', inject(function ($injector, $stateParams, PriceSchedules) {
@@ -90,7 +90,7 @@ describe('Component: PriceSchedules', function() {
                 expect(PriceSchedules.Update).toHaveBeenCalledWith(priceScheduleEditCtrl.priceScheduleID, priceScheduleEditCtrl.priceSchedule);
             }));
             it ('should enter the priceSchedules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.priceSchedules');
+                expect($state.go).toHaveBeenCalledWith('priceSchedules', {}, {reload:true});
             }));
         });
 
@@ -106,7 +106,7 @@ describe('Component: PriceSchedules', function() {
                 expect(PriceSchedules.Delete).toHaveBeenCalledWith(priceSchedule.ID);
             }));
             it ('should enter the priceSchedules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.priceSchedules');
+                expect($state.go).toHaveBeenCalledWith('priceSchedules', {}, {reload:true});
             }));
         });
     });
@@ -148,7 +148,7 @@ describe('Component: PriceSchedules', function() {
                 expect(PriceSchedules.Create).toHaveBeenCalledWith(priceSchedule);
             }));
             it ('should enter the priceSchedules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.priceSchedules');
+                expect($state.go).toHaveBeenCalledWith('priceSchedules', {}, {reload:true});
             }));
         });
     });
