@@ -9,10 +9,18 @@ function checkoutShippingConfig($stateProvider) {
 			url: '/shipping',
 			templateUrl: 'checkout/shipping/templates/checkout.shipping.tpl.html',
 			controller: 'CheckoutShippingCtrl',
-			controllerAs: 'checkoutShipping'
+			controllerAs: 'checkoutShipping',
+			resolve: {
+				ShippingAddresses: function($q, Me, Underscore) {
+					return Me.As().ListAddresses().then(function(data) {
+						return Underscore.where(data.Items, {Shipping:true});
+					});
+				}
+			}
 		})
 }
 
-function CheckoutShippingController() {
+function CheckoutShippingController(ShippingAddresses) {
 	var vm = this;
+	vm.shippingAddresses = ShippingAddresses;
 }

@@ -32,7 +32,7 @@ function checkoutConfig($stateProvider) {
 					LineItems.Get(CurrentOrder.ID)
 						.then(function(data) {
 							var productQueue =[];
-							var productIDs = Underscore.pluck(data.Items, 'ProductID');
+							var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
 							angular.forEach(productIDs, function(id) {
 								productQueue.push(Products.Get(id));
 							});
@@ -70,10 +70,34 @@ function checkoutConfig($stateProvider) {
 		})
 }
 
-function CheckoutController(CurrentOrder, LineItemsList) {
+function CheckoutController($q, CurrentOrder, LineItemsList, LineItems, Products, Underscore) {
 	var vm = this;
 	vm.lineItems = LineItemsList;
 	vm.currentOrder = CurrentOrder;
+
+	vm.pagingfunction = function() {
+		if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
+			var dfd = $q.defer();
+			LineItems.List(CurrentOrder.ID, vm.lineItems.Meta.Page + 1, vm.lineItems.Meta.PageSize)
+				.then(function(data) {
+					vm.lineItems.Meta = data.Meta;
+					var productQueue = [];
+					var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
+					angular.forEach(productIDs, function(id) {
+						productQueue.push(Products.Get(id));
+					});
+					$q.all(productQueue)
+						.then(function(results) {
+							angular.forEach(data.Items, function(li) {
+								li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
+							});
+							vm.lineItems.Items = [].concat(vm.lineItems.Items, data.Items);
+						})
+				});
+			return dfd.promise;
+		}
+		else return null;
+	}
 }
 
 function OrderReviewController() {

@@ -9,10 +9,15 @@ function checkoutPaymentConfig($stateProvider) {
 			url: '/payment',
 			templateUrl: 'checkout/payment/templates/checkout.payment.tpl.html',
 			controller: 'CheckoutPaymentCtrl',
-			controllerAs: 'checkoutPayment'
+			controllerAs: 'checkoutPayment',
+			resolve: {
+				AvailableCostCenters: function(Me) {
+					return Me.As().ListCostCenters();
+				}
+			}
 		})
 }
 
-function CheckoutPaymentController() {
+function CheckoutPaymentController(AvailableCostCenters) {
 	var vm = this;
 }

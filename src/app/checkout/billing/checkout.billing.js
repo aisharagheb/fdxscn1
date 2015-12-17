@@ -9,10 +9,18 @@ function checkoutBillingConfig($stateProvider) {
 			url: '/billing',
 			templateUrl: 'checkout/billing/templates/checkout.billing.tpl.html',
 			controller: 'CheckoutBillingCtrl',
-			controllerAs: 'checkoutBilling'
+			controllerAs: 'checkoutBilling',
+			resolve: {
+				BillingAddresses: function($q, Me, Underscore) {
+					return Me.As().ListAddresses().then(function(data) {
+						return Underscore.where(data.Items, {Billing:true});
+					});
+				}
+			}
 		})
 }
 
-function CheckoutBillingController() {
+function CheckoutBillingController(BillingAddresses) {
 	var vm = this;
+	vm.billingAddresses = BillingAddresses;
 }
