@@ -12,7 +12,7 @@
             <p>{{node.Name}}</p>
             <a class="btn btn-default" data-nodrag ui-sref="^.edit({categoryid: node.ID})"><i class="fa fa-edit"></i> Edit</a>
         </div>
-        <ol ui-tree-nodes ng-model="node.children" ng-class="{'ng-hide': collapsed}">
+        <ol ui-tree-nodes ng-model="node.children" collapse="collapsed">
             <li ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'">
             </li>
         </ol>
