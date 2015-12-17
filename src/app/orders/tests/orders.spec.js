@@ -22,10 +22,10 @@ describe('Component: Orders', function() {
         };
     }));
 
-    describe('State: Base.orders', function() {
+    describe('State: orders', function() {
         var state;
         beforeEach(inject(function($state, Orders) {
-            state = $state.get('base.orders');
+            state = $state.get('orders');
             spyOn(Orders, 'List').and.returnValue(null);
         }));
         it('should resolve OrderList', inject(function ($injector, Orders) {
@@ -34,10 +34,10 @@ describe('Component: Orders', function() {
         }));
     });
 
-    describe('State: Base.orderEdit', function() {
+    describe('State: orders.edit', function() {
         var state;
         beforeEach(inject(function($state, Orders, LineItems) {
-            state = $state.get('base.orderEdit');
+            state = $state.get('orders.edit');
             spyOn(Orders, 'Get').and.returnValue(null);
             spyOn(LineItems, 'List').and.returnValue(null);
         }));
@@ -87,7 +87,7 @@ describe('Component: Orders', function() {
                 orderEditCtrl.goToProduct(lineItem);
             }));
             it ('should enter the productEdit state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.productEdit', {'productid': lineItem.ProductID});
+                expect($state.go).toHaveBeenCalledWith('products.edit', {'productid': lineItem.ProductID});
             }));
         });
 
@@ -105,7 +105,7 @@ describe('Component: Orders', function() {
                 expect(Orders.Update).toHaveBeenCalledWith(orderEditCtrl.orderID, orderEditCtrl.order);
             }));
             it ('should enter the orders state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.orders');
+                expect($state.go).toHaveBeenCalledWith('orders', {}, {reload:true});
             }));
         });
 
@@ -121,7 +121,7 @@ describe('Component: Orders', function() {
                 expect(Orders.Delete).toHaveBeenCalledWith(order.ID);
             }));
             it ('should enter the orders state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.orders');
+                expect($state.go).toHaveBeenCalledWith('orders', {}, {reload:true});
             }));
         });
 
