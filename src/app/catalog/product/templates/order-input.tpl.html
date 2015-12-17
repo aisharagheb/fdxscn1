@@ -1,7 +1,13 @@
-<div class="input-group" ng-submit="orderInput.addToCart()" ng-if="orderInput.currentState === 'base.catalog.product.config' || product.Specs.length === 0">
-    <input type="number" class="form-control text-center" ng-if="!orderInput.product.StandardPriceSchedule.RestrictedQuantity" placeholder="Quantity">
-    <span class="input-group-addon"><i class="fa fa-shopping-cart"></i></span>
-</div>
+<form name="add_to_cart" ng-submit="orderInput.addToCart()" class="input-group form-group">
+    <input type="number" class="form-control text-center" min="{{product.StandardPriceSchedule.MinQuantity}}" max="{{product.StandardPriceSchedule.MaxQuantity}}" ng-model="orderInput.Quantity" ng-if="!product.StandardPriceSchedule.RestrictedQuantity" placeholder="Quantity">
+    <select ng-if="product.StandardPriceSchedule.RestrictedQuantity" class="form-control text-center" ng-model="orderInput.Quantity" ng-options="priceBreak.Quantity as priceBreak.Quantity for priceBreak in product.StandardPriceSchedule.PriceBreaks"></select>
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+            <span ng-if="orderInput.price" class="badge">{{orderInput.price | currency}}</span>
+            <i class="fa fa-shopping-cart"></i>
+        </button>
+    </span>
+</form>
 <div ng-if="orderInput.currentState === 'base.catalog.product' && product.Specs.length > 0">
-    <button ui-sref="base.catalog.product.config({specformid: null})" class="btn btn-block">Customize Product</button>
+    <button ui-sref="base.catalog.product.config" class="btn btn-block">Customize Product</button>
 </div>
