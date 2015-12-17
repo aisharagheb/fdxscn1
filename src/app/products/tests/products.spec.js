@@ -23,10 +23,10 @@ describe('Component: Products', function() {
         };
     }));
 
-    describe('State: Base.products', function() {
+    describe('State: products', function() {
         var state;
         beforeEach(inject(function($state, Products) {
-            state = $state.get('base.products');
+            state = $state.get('products', {}, {reload:true});
             spyOn(Products, 'List').and.returnValue(null);
         }));
         it('should resolve ProductList', inject(function ($injector, Products) {
@@ -35,10 +35,10 @@ describe('Component: Products', function() {
         }));
     });
 
-    describe('State: Base.productEdit', function() {
+    describe('State: products.edit', function() {
         var state;
         beforeEach(inject(function($state, Products) {
-            state = $state.get('base.productEdit');
+            state = $state.get('products.edit', {}, {reload:true});
             spyOn(Products, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedProduct', inject(function ($injector, $stateParams, Products) {
@@ -47,10 +47,10 @@ describe('Component: Products', function() {
         }));
     });
 
-    describe('State: Base.productAssignments', function() {
+    describe('State: products.assignments', function() {
         var state;
         beforeEach(inject(function($state, Products) {
-            state = $state.get('base.productAssignments');
+            state = $state.get('products.assignments', {}, {reload:true});
             spyOn(Products, 'ListAssignments').and.returnValue(null);
             spyOn(Products, 'Get').and.returnValue(null);
         }));
@@ -64,10 +64,10 @@ describe('Component: Products', function() {
         }));
     });
 
-    describe('State: Base.productCreateAssignment', function() {
+    describe('State: products.createAssignment', function() {
         var state;
         beforeEach(inject(function($state, UserGroups, PriceSchedules) {
-            state = $state.get('base.productCreateAssignment');
+            state = $state.get('products.createAssignment', {}, {reload:true});
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(PriceSchedules, 'List').and.returnValue(null);
         }));
@@ -105,7 +105,7 @@ describe('Component: Products', function() {
                 expect(Products.Update).toHaveBeenCalledWith(productEditCtrl.productID, productEditCtrl.product);
             }));
             it ('should enter the products state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.products');
+                expect($state.go).toHaveBeenCalledWith('products', {}, {reload:true});
             }));
         });
 
@@ -121,7 +121,7 @@ describe('Component: Products', function() {
                 expect(Products.Delete).toHaveBeenCalledWith(product.ID);
             }));
             it ('should enter the products state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.products');
+                expect($state.go).toHaveBeenCalledWith('products', {}, {reload:true});
             }));
         });
     });
@@ -148,7 +148,7 @@ describe('Component: Products', function() {
                 expect(Products.Create).toHaveBeenCalledWith(product);
             }));
             it ('should enter the products state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.products');
+                expect($state.go).toHaveBeenCalledWith('products', {}, {reload:true});
             }));
         });
     });
