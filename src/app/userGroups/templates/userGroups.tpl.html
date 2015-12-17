@@ -1,20 +1,20 @@
 <ui-view>
     <article class="container-fluid">
         <h3 class="page-header">
-            Users
+            User Groups
         </h3>
-        <ordercloud-search servicename="Users" controlleras="users"></ordercloud-search>
-        <div class="well well-lg text-center" ng-if="!users.list.Items.length">
-            <b ng-if="!users.searching()">The selected buyer does not have any users.</b>
-            <b ng-if="users.searching()"><i class="fa fa-search"></i> No users match your search.</b>
+        <ordercloud-search servicename="UserGroups" controlleras="userGroups"></ordercloud-search>
+        <div class="well well-lg text-center" ng-if="!userGroups.list.Items.length">
+            <b ng-if="!userGroups.searching()">The selected buyer does not have any user groups.</b>
+            <b ng-if="userGroups.searching()"><i class="fa fa-search"></i> No user groups match your search.</b>
         </div>
-        <section class="table-fixed-header" ng-if="users.list.Items.length">
+        <section class="table-fixed-header" ng-if="userGroups.list.Items.length">
             <div class="table-header-bg"></div>
-            <div class="table-container" ordercloud-infinite-scroll servicename="Users" controlleras="users">
+            <div class="table-container" ordercloud-infinite-scroll controlleras="userGroups" servicename="UserGroups">
                 <table class="table table-hover">
-                    <coluser>
+                    <colgroup>
                         <col class="action-column"/>
-                    </coluser>
+                    </colgroup>
                     <thead>
                     <tr>
                         <th>
@@ -28,17 +28,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in users.list.Items track by $index">
+                    <tr ng-repeat="userGroup in userGroups.list.Items track by $index">
                         <td>
-                            <div class="btn-user btn-block" uib-dropdown dropdown-append-to-body>
+                            <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
                                 <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
                                 <ul uib-dropdown-menu role="menu">
-                                    <li role="menuitem"><a ui-sref=".edit({userid:user.ID})">Edit User</a></li>
+                                    <li role="menuitem"><a ui-sref=".edit({userGroupid:userGroup.ID})">Edit User Group</a></li>
+                                    <li role="menuitem"><a ui-sref=".assign({userGroupid:userGroup.ID})">Party Assignments</a></li>
                                 </ul>
                             </div>
                         </td>
-                        <td>{{user.ID}}</td>
-                        <td>{{user.Username}}</td>
+                        <td>{{userGroup.ID}}</td>
+                        <td>{{userGroup.Name}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -46,5 +47,4 @@
         </section>
         <button type="button" class="btn btn-success" ui-sref=".create"><i class="fa fa-plus-circle"></i> Create New</button>
     </article>
-
 </ui-view>
