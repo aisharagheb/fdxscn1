@@ -7,23 +7,32 @@ angular.module('orderCloud')
 
 function checkoutConfig($stateProvider) {
 	$stateProvider
-		.state('base.checkout', {
+		.state('checkout', {
+			parent: 'base',
 			url: '/checkout',
 			templateUrl: 'checkout/templates/checkout.tpl.html',
 			controller: 'CheckoutCtrl',
 			controllerAs: 'checkout'
 		})
-		.state('base.orderSummary', {
-			url: '/checkout/summary',
-			templateUrl: 'checkout/templates/summary.tpl.html',
-			controller: 'OrderSummaryCtrl',
-			controllerAs: 'orderSummary'
+		.state('checkout.summary', {
+			url: '/summary',
+			views: {
+				'@base': {
+					templateUrl: 'checkout/templates/summary.tpl.html',
+					controller: 'OrderSummaryCtrl',
+					controllerAs: 'orderSummary'
+				}
+			}
 		})
-		.state('base.orderConfirmation', {
+		.state('checkout.confirmation', {
 			url: '/confirmation',
-			templateUrl: 'checkout/templates/confirmation.tpl.html',
-			controller: 'OrderConfirmationCtrl',
-			controllerAs: 'orderConfirmation'
+			views: {
+				'@base': {
+					templateUrl: 'checkout/templates/confirmation.tpl.html',
+					controller: 'OrderConfirmationCtrl',
+					controllerAs: 'orderConfirmation'
+				}
+			}
 		})
 }
 
