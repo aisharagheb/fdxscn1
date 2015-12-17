@@ -97,7 +97,8 @@
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="ShipmentCreateForm.$invalid">Save</button>
-            <button type="button" class="btn btn-default" ui-sref="^.shipments">Cancel</button>
+            <button type="button" class="btn btn-default" ui-sref="^">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="shipmentCreate.unselectOrder()" ng-if="shipmentCreate.OrderSelected">Unselect Order</button>
         </div>
     </form>
 </article>

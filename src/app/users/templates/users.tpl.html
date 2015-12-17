@@ -1,47 +1,50 @@
-<article class="container-fluid">
-    <h3 class="page-header">
-        Users
-    </h3>
-    <ordercloud-search servicename="Users" controlleras="users"></ordercloud-search>
-    <div class="well well-lg text-center" ng-if="!users.list.Items.length">
-        <b ng-if="!users.searching()">The selected buyer does not have any users.</b>
-        <b ng-if="users.searching()"><i class="fa fa-search"></i> No users match your search.</b>
-    </div>
-    <section class="table-fixed-header" ng-if="users.list.Items.length">
-        <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="Users" controlleras="users">
-            <table class="table table-hover">
-                <coluser>
-                    <col class="action-column"/>
-                </coluser>
-                <thead>
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                        <div>ID</div>
-                    </th>
-                    <th>
-                        <div>Name</div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="user in users.list.Items track by $index">
-                    <td>
-                        <div class="btn-user btn-block" uib-dropdown dropdown-append-to-body>
-                            <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
-                            <ul uib-dropdown-menu role="menu">
-                                <li role="menuitem"><a ui-sref="^.userEdit({userid:user.ID})">Edit User</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td>{{user.ID}}</td>
-                    <td>{{user.Username}}</td>
-                </tr>
-                </tbody>
-            </table>
+<ui-view>
+    <article class="container-fluid">
+        <h3 class="page-header">
+            Users
+        </h3>
+        <ordercloud-search servicename="Users" controlleras="users"></ordercloud-search>
+        <div class="well well-lg text-center" ng-if="!users.list.Items.length">
+            <b ng-if="!users.searching()">The selected buyer does not have any users.</b>
+            <b ng-if="users.searching()"><i class="fa fa-search"></i> No users match your search.</b>
         </div>
-    </section>
-    <button type="button" class="btn btn-success" ui-sref="^.userCreate"><i class="fa fa-plus-circle"></i> Create New</button>
-</article>
+        <section class="table-fixed-header" ng-if="users.list.Items.length">
+            <div class="table-header-bg"></div>
+            <div class="table-container" ordercloud-infinite-scroll servicename="Users" controlleras="users">
+                <table class="table table-hover">
+                    <coluser>
+                        <col class="action-column"/>
+                    </coluser>
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <div>ID</div>
+                        </th>
+                        <th>
+                            <div>Name</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="user in users.list.Items track by $index">
+                        <td>
+                            <div class="btn-user btn-block" uib-dropdown dropdown-append-to-body>
+                                <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                <ul uib-dropdown-menu role="menu">
+                                    <li role="menuitem"><a ui-sref=".edit({userid:user.ID})">Edit User</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{user.ID}}</td>
+                        <td>{{user.Username}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <button type="button" class="btn btn-success" ui-sref=".create"><i class="fa fa-plus-circle"></i> Create New</button>
+    </article>
+
+</ui-view>

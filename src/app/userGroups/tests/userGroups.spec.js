@@ -15,10 +15,10 @@ describe('Component: UserGroups', function() {
         };
     }));
 
-    describe('State: Base.groups', function() {
+    describe('State: userGroups', function() {
         var state;
         beforeEach(inject(function($state, UserGroups) {
-            state = $state.get('base.groups');
+            state = $state.get('userGroups');
             spyOn(UserGroups, 'List').and.returnValue(null);
         }));
         it('should resolve UserGroupList', inject(function ($injector, UserGroups) {
@@ -27,10 +27,10 @@ describe('Component: UserGroups', function() {
         }));
     });
 
-    describe('State: Base.groupEdit', function() {
+    describe('State: userGroups.edit', function() {
         var state;
         beforeEach(inject(function($state, UserGroups) {
-            state = $state.get('base.groupEdit');
+            state = $state.get('userGroups.edit');
             spyOn(UserGroups, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedUserGroup', inject(function ($injector, $stateParams, UserGroups) {
@@ -39,10 +39,10 @@ describe('Component: UserGroups', function() {
         }));
     });
 
-    describe('State: Base.groupAssign', function() {
+    describe('State: userGroups.assign', function() {
         var state;
         beforeEach(inject(function($state, UserGroups, Users) {
-            state = $state.get('base.groupAssign');
+            state = $state.get('userGroups.assign');
             spyOn(Users, 'List').and.returnValue(null);
             spyOn(UserGroups, 'ListUserAssignments').and.returnValue(null);
             spyOn(UserGroups, 'Get').and.returnValue(null);
@@ -85,7 +85,7 @@ describe('Component: UserGroups', function() {
                 expect(UserGroups.Update).toHaveBeenCalledWith(userGroupEditCtrl.groupID, userGroupEditCtrl.userGroup);
             }));
             it ('should enter the userGroups state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.groups');
+                expect($state.go).toHaveBeenCalledWith('userGroups', {}, {reload:true});
             }));
         });
     });
@@ -112,7 +112,7 @@ describe('Component: UserGroups', function() {
                 expect(UserGroups.Create).toHaveBeenCalledWith(userGroup);
             }));
             it ('should enter the userGroups state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.groups');
+                expect($state.go).toHaveBeenCalledWith('userGroups', {}, {reload:true});
             }));
         });
     });

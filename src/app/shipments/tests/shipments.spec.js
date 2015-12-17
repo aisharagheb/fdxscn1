@@ -22,10 +22,10 @@ describe('Component: Shipments', function() {
         };
     }));
 
-    describe('State: Base.shipments', function() {
+    describe('State: shipments', function() {
         var state;
         beforeEach(inject(function($state, Shipments) {
-            state = $state.get('base.shipments');
+            state = $state.get('shipments');
             spyOn(Shipments, 'List').and.returnValue(null);
         }));
         it('should resolve ShipmentList', inject(function ($injector, Shipments) {
@@ -34,10 +34,10 @@ describe('Component: Shipments', function() {
         }));
     });
 
-    describe('State: Base.shipmentEdit', function() {
+    describe('State: shipments.edit', function() {
         var state;
         beforeEach(inject(function($state, Shipments, Orders) {
-            state = $state.get('base.shipmentEdit');
+            state = $state.get('shipments.edit');
             spyOn(Shipments, 'Get').and.returnValue(null);
             spyOn(Orders, 'List').and.returnValue(null);
         }));
@@ -51,10 +51,10 @@ describe('Component: Shipments', function() {
         }));
     });
 
-    describe('State: Base.shipmentCreate', function() {
+    describe('State: shipments.create', function() {
         var state;
         beforeEach(inject(function($state, Orders) {
-            state = $state.get('base.shipmentCreate');
+            state = $state.get('shipments.create');
             spyOn(Orders, 'List').and.returnValue(null);
         }));
         it('should resolve OrderList', inject(function ($injector, $stateParams, Orders) {
@@ -154,7 +154,7 @@ describe('Component: Shipments', function() {
                 expect(Shipments.Update).toHaveBeenCalledWith(shipmentEditCtrl.shipmentID, shipmentEditCtrl.shipment);
             }));
             it ('should enter the shipments state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.shipments');
+                expect($state.go).toHaveBeenCalledWith('shipments', {}, {reload:true});
             }));
         });
 
@@ -170,7 +170,7 @@ describe('Component: Shipments', function() {
                 expect(Shipments.Delete).toHaveBeenCalledWith(shipment.ID, false);
             }));
             it ('should enter the shipments state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.shipments');
+                expect($state.go).toHaveBeenCalledWith('shipments', {}, {reload:true});
             }));
         });
 
@@ -218,6 +218,20 @@ describe('Component: Shipments', function() {
             }));
         });
 
+        describe('unselectOrder', function() {
+            beforeEach(inject(function() {
+                shipmentCreateCtrl.lineitems.list = [1, 2, 3];
+                shipmentCreateCtrl.OrderSelected = true;
+                shipmentCreateCtrl.unselectOrder();
+            }));
+            it('should make OrderSelected false', inject(function () {
+                expect(shipmentCreateCtrl.OrderSelected).toEqual(false);
+            }));
+            it('should empty list', inject(function () {
+                expect(shipmentCreateCtrl.lineitems.list.length).toEqual(0);
+            }));
+        });
+
         describe('Submit', function() {
             beforeEach(inject(function(Shipments) {
                 shipmentCreateCtrl.shipment = shipment;
@@ -231,7 +245,7 @@ describe('Component: Shipments', function() {
                 expect(Shipments.Create).toHaveBeenCalledWith(shipment);
             }));
             it ('should enter the shipments state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.shipments');
+                expect($state.go).toHaveBeenCalledWith('shipments', {}, {reload:true});
             }));
         });
     });
