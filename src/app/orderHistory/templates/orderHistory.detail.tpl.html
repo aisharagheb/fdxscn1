@@ -1,2 +1,155 @@
-DETAIL
-<p>{{orderHistoryDetail.order.ID}}</p>
+<article class="container-fluid">
+    <h3 class="page-header">
+        <b>{{orderHistoryDetail.order.Type}} Order - {{orderHistoryDetail.order.ID}}</b>
+    </h3>
+    <form name="OrderHistoryDetailForm" class="form-horizontal">
+        <p><b>Order ID:</b> {{orderHistoryDetail.order.ID}}</p>
+        <p><b>Date {{orderHistoryDetail.order.DateSubmitted ? 'Submitted' : 'Created'}}:</b> {{(orderHistoryDetail.order.DateSubmitted || orderHistoryDetail.order.DateCreated) | date:'medium'}}</p>
+        <!--<div class="form-group">
+            <label class="col-sm-1">Order ID:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetail.order.ID}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Date {{orderHistoryDetail.order.DateSubmitted ? 'Submitted' : 'Created'}}:</label>
+            <div class="col-sm-11">
+                {{(orderHistoryDetail.order.DateSubmitted || orderHistoryDetail.order.DateCreated) | date:'medium'}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Status:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetail.order.Status}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1">Payment Method:</label>
+            <div class="col-sm-11">
+                {{orderHistoryDetail.order.PaymentMethod}}
+            </div>
+        </div>-->
+        <!--<div class="row">
+            <div class="form-group col-sm-6">
+                <label for="orderIDInput">Order ID</label>
+                <input id="orderIDInput" type="text" class="form-control" ng-model="orderHistoryDetail.order.ID" required/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderShippingCostInput">Shipping Cost</label>
+                <input id="orderShippingCostInput" type="number" step="any" class="form-control" ng-model="orderHistoryDetail.order.ShippingCost"/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderTaxCostInput">Tax Cost</label>
+                <input id="orderTaxCostInput" type="number" step="any" class="form-control" ng-model="orderHistoryDetail.order.TaxCost"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label for="orderFromUserInput">From User</label>
+                <input id="orderFromUserInput" type="text" class="form-control" ng-model="orderHistoryDetail.order.FromUserID" disabled/>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderBillAddInput">Billing Address ID</label>
+                <input
+                        id="orderBillAddInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="orderHistoryDetail.order.BillingAddressID"
+                        uib-typeahead="address.ID as address.AddressName for address in orderHistoryDetail.billingAddressTypeAhead($viewValue, orderHistoryDetail.order.FromUserID)"
+                />
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderShipAddInput">Shipping Address ID</label>
+                <input
+                        id="orderShipAddInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="orderHistoryDetail.order.ShippingAddressID"
+                        uib-typeahead="address.ID as address.AddressName for address in orderHistoryDetail.shippingAddressTypeAhead($viewValue)"
+                />
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderSpendingAccountInput">Spending Account ID</label>
+                <input
+                        id="orderSpendingAccountInput"
+                        type="text"
+                        class="form-control"
+                        ng-model="orderHistoryDetail.order.SpendingAccountID"
+                        uib-typeahead="spendingAccount.ID as spendingAccount.Name for spendingAccount in orderHistoryDetail.spendingAccountTypeAhead($viewValue)"
+                />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-3">
+                <label for="orderPaymentTypeInput">Payment Method</label>
+                <select id="orderPaymentTypeInput" class="form-control" ng-model="orderHistoryDetail.order.PaymentMethod">
+                    <option value="PurchaseOrder">Purchase Order</option>
+                    <option value="CreditCard">Credit Card</option>
+                    <option value="BudgetAccount">Spending Account</option>
+                    <option value="PayPalExpressCheckout">Pay Pal Express Checkout</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="orderSavedCCInput">Saved Credit Card ID</label>
+                <input id="orderSavedCCInput" type="text" class="form-control" ng-model="orderHistoryDetail.order.CreditCardID"/>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="orderCommentsInput">Order Comments:</label>
+                <textarea id="orderCommentsInput" type="text" step="any" class="form-control" ng-model="orderHistoryDetail.order.Comments"></textarea>
+            </div>
+        </div>-->
+        <div ng-if="orderHistoryDetail.order.LineItems.length">
+            <h4>
+                Line Items
+            </h4>
+            <section class="table-fixed-header">
+                <div class="table-header-bg"></div>
+                <div class="table-container" ordercloud-infinite-scroll controlleras="orderEdit">
+                    <table class="table table-hover">
+                        <colgroup>
+                            <col class="action-column"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>
+                                <div>ID</div>
+                            </th>
+                            <th>
+                                <div>Product</div>
+                            </th>
+                            <th>
+                                <div>Unit Price</div>
+                            </th>
+                            <th>
+                                <div>Quantity</div>
+                            </th>
+                            <th>
+                                <div>Price</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="li in orderHistoryDetail.order.LineItems track by $index">
+                            <td>
+                                <a ui-sref="orderHistory.detail.lineitem">{{li.ID}}</a>
+                            </td>
+                            <td>
+                                {{li.Product.Name}}
+                            </td>
+                            <td>{{li.UnitPrice | currency}}</td>
+                            <td>{{li.Quantity}}</td>
+                            <td>{{li.LineTotal | currency}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <div class="well well-lg text-center" ng-if="!orderHistoryDetail.order.LineItems.length">
+            <b>This order does not have any line items</b>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" ui-sref="orderHistory">Back to List</button>
+        </div>
+    </form>
+</article>
