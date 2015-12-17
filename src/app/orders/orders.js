@@ -8,7 +8,8 @@ angular.module( 'orderCloud' )
 
 function OrdersConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.orders', {
+        .state( 'orders', {
+            parent: 'base',
             url: '/orders',
             templateUrl:'orders/templates/orders.tpl.html',
             controller:'OrdersCtrl',
@@ -20,8 +21,8 @@ function OrdersConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.orderEdit', {
-            url: '/orders/:orderid/edit',
+        .state( 'orders.edit', {
+            url: '/:orderid/edit',
             templateUrl:'orders/templates/orderEdit.tpl.html',
             controller:'OrderEditCtrl',
             controllerAs: 'orderEdit',
@@ -61,7 +62,7 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTy
     };
 
     vm.goToProduct = function(lineitem) {
-        $state.go('base.productEdit', {'productid': lineitem.ProductID});
+        $state.go('products.edit', {'productid': lineitem.ProductID});
     };
 
     vm.Submit = function() {
@@ -73,7 +74,7 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTy
         });
         Orders.Update(orderid, vm.order)
             .then(function() {
-                $state.go('base.orders');
+                $state.go('orders', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -83,7 +84,7 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTy
     vm.Delete = function() {
         Orders.Delete(orderid)
             .then(function() {
-                $state.go('base.orders');
+                $state.go('orders', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -130,7 +131,7 @@ function OrdersTypeAheadSearchFactory($q, SpendingAccounts, Addresses, Underscor
                     if (searchAssigned.indexOf(address.ID) > -1) {
                         return address;
                     }
-                })
+                });
                 dfd.resolve(addressList);
             });
         return dfd.promise;
@@ -148,7 +149,7 @@ function OrdersTypeAheadSearchFactory($q, SpendingAccounts, Addresses, Underscor
                     if (searchAssigned.indexOf(address.ID) > -1) {
                         return address;
                     }
-                })
+                });
                 dfd.resolve(addressList);
             });
         return dfd.promise;

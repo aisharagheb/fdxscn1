@@ -3,13 +3,26 @@
 		Checkout
 	</h3>
 	<div class="row">
-		<div class="col-sm-7">
+		<div class="col-sm-8">
 			<nav>
-
+				<ul class="nav nav-pills">
+					<li role="presentation" ui-sref-active="active">
+						<a ui-sref=".shipping">Shipping</a>
+					</li>
+					<li role="presentation" ui-sref-active="active">
+						<a ui-sref=".billing">Billing</a>
+					</li>
+					<li role="presentation" ui-sref-active="active">
+						<a ui-sref=".payment">Payment</a>
+					</li>
+					<li role="presentation" ui-sref-active="active">
+						<a ui-sref=".summary">Summary</a>
+					</li>
+				</ul>
 			</nav>
 			<ui-view></ui-view>
 		</div>
-		<div class="col-sm-5">
+		<div class="col-sm-4">
 			<h4>Order Summary</h4>
 		</div>
 	</div>

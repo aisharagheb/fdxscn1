@@ -9,7 +9,8 @@ angular.module( 'orderCloud' )
 
 function UsersConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.users', {
+        .state( 'users', {
+            parent: 'base',
             url: '/users',
             templateUrl:'users/templates/users.tpl.html',
             controller:'UsersCtrl',
@@ -21,8 +22,8 @@ function UsersConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.userEdit', {
-            url: '/users/:userid/edit',
+        .state( 'users.edit', {
+            url: '/:userid/edit',
             templateUrl:'users/templates/userEdit.tpl.html',
             controller:'UserEditCtrl',
             controllerAs: 'userEdit',
@@ -32,8 +33,8 @@ function UsersConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.userCreate', {
-            url: '/users/create',
+        .state( 'users.create', {
+            url: '/create',
             templateUrl:'users/templates/userCreate.tpl.html',
             controller:'UserCreateCtrl',
             controllerAs: 'userCreate'
@@ -59,7 +60,7 @@ function UserEditController( $exceptionHandler, $state, SelectedUser, Users ) {
         vm.user.TermsAccepted = today;
         Users.Update(userid, vm.user)
             .then(function() {
-                $state.go('base.users')
+                $state.go('users', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -69,7 +70,7 @@ function UserEditController( $exceptionHandler, $state, SelectedUser, Users ) {
     vm.Delete = function() {
         Users.Delete(userid)
             .then(function() {
-                $state.go('base.users')
+                $state.go('users', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -85,7 +86,7 @@ function UserCreateController( $exceptionHandler, $state, Users ) {
         vm.user.TermsAccepted = today;
         Users.Create( vm.user)
             .then(function() {
-                $state.go('base.users')
+                $state.go('users', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

@@ -11,9 +11,10 @@ angular.module( 'orderCloud' )
 
 function UserGroupsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.groups', {
-            url: '/groups',
-            templateUrl:'userGroups/templates/groups.tpl.html',
+        .state( 'userGroups', {
+            parent: 'base',
+            url: '/userGroups',
+            templateUrl:'userGroups/templates/userGroups.tpl.html',
             controller:'UserGroupsCtrl',
             controllerAs: 'userGroups',
             data: {componentName: 'User Groups'},
@@ -23,9 +24,9 @@ function UserGroupsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.groupEdit', {
-            url: '/groups/:userGroupid/edit',
-            templateUrl:'userGroups/templates/groupEdit.tpl.html',
+        .state( 'userGroups.edit', {
+            url: '/:userGroupid/edit',
+            templateUrl:'userGroups/templates/userGroupEdit.tpl.html',
             controller:'UserGroupEditCtrl',
             controllerAs: 'userGroupEdit',
             resolve: {
@@ -34,15 +35,15 @@ function UserGroupsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.groupCreate', {
-            url: '/groups/create',
-            templateUrl:'userGroups/templates/groupCreate.tpl.html',
+        .state( 'userGroups.create', {
+            url: '/create',
+            templateUrl:'userGroups/templates/userGroupCreate.tpl.html',
             controller:'UserGroupCreateCtrl',
             controllerAs: 'userGroupCreate'
         })
-        .state('base.groupAssign', {
-            url: '/groups/:userGroupid/assign',
-            templateUrl: 'userGroups/templates/groupAssign.tpl.html',
+        .state('userGroups.assign', {
+            url: '/:userGroupid/assign',
+            templateUrl: 'userGroups/templates/userGroupAssign.tpl.html',
             controller: 'UserGroupAssignCtrl',
             controllerAs: 'userGroupAssign',
             resolve: {
@@ -76,7 +77,7 @@ function UserGroupEditController( $exceptionHandler, $state, SelectedUserGroup, 
     vm.Submit = function() {
         UserGroups.Update(groupID, vm.userGroup)
             .then(function() {
-                $state.go('base.groups')
+                $state.go('userGroups', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -86,7 +87,7 @@ function UserGroupEditController( $exceptionHandler, $state, SelectedUserGroup, 
     vm.Delete = function() {
         UserGroups.Delete(SelectedUserGroup.ID)
             .then(function() {
-                $state.go('base.groups')
+                $state.go('userGroups', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -100,7 +101,7 @@ function UserGroupCreateController( $exceptionHandler, $state, UserGroups ) {
     vm.Submit = function() {
         UserGroups.Create(vm.userGroup)
             .then(function() {
-                $state.go('base.groups')
+                $state.go('userGroups', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

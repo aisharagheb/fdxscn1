@@ -10,7 +10,8 @@ angular.module( 'orderCloud' )
 
 function SpecsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.specs', {
+        .state( 'specs', {
+            parent: 'base',
             url: '/specs',
             templateUrl:'specs/templates/specs.tpl.html',
             controller:'SpecsCtrl',
@@ -22,8 +23,8 @@ function SpecsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.specEdit', {
-            url: '/specs/:specid/edit',
+        .state( 'specs.edit', {
+            url: '/:specid/edit',
             templateUrl:'specs/templates/specEdit.tpl.html',
             controller:'SpecEditCtrl',
             controllerAs: 'specEdit',
@@ -33,14 +34,14 @@ function SpecsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.specCreate', {
-            url: '/specs/create',
+        .state( 'specs.create', {
+            url: '/create',
             templateUrl:'specs/templates/specCreate.tpl.html',
             controller:'SpecCreateCtrl',
             controllerAs: 'specCreate'
         })
-        .state('base.specAssign', {
-            url: '/specs/:specid/assign',
+        .state('specs.assign', {
+            url: '/:specid/assign',
             templateUrl: 'specs/templates/specAssign.tpl.html',
             controller: 'SpecAssignCtrl',
             controllerAs: 'specAssign',
@@ -93,7 +94,7 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     vm.Submit = function() {
         Specs.Update(specid, vm.spec)
             .then(function() {
-                $state.go('base.specs')
+                $state.go('specs', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -103,7 +104,7 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     vm.Delete = function() {
         Specs.Delete(specid)
             .then(function() {
-                $state.go('base.specs')
+                $state.go('specs', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -140,7 +141,7 @@ function SpecCreateController( $exceptionHandler, $state, Specs) {
     vm.Submit = function() {
         Specs.Create(vm.spec)
             .then(function() {
-                $state.go('base.specs')
+                $state.go('specs', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

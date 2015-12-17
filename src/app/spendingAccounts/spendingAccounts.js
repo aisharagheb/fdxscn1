@@ -12,7 +12,8 @@ angular.module( 'orderCloud' )
 
 function SpendingAccountsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.spendingAccounts', {
+        .state( 'spendingAccounts', {
+            parent: 'base',
             url: '/spendingAccounts',
             templateUrl:'spendingAccounts/templates/spendingAccounts.tpl.html',
             controller:'SpendingAccountsCtrl',
@@ -24,8 +25,8 @@ function SpendingAccountsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.spendingAccountEdit', {
-            url: '/spendingAccounts/:spendingAccountid/edit',
+        .state( 'spendingAccounts.edit', {
+            url: '/:spendingAccountid/edit',
             templateUrl:'spendingAccounts/templates/spendingAccountEdit.tpl.html',
             controller:'SpendingAccountEditCtrl',
             controllerAs: 'spendingAccountEdit',
@@ -35,14 +36,14 @@ function SpendingAccountsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.spendingAccountCreate', {
-            url: '/spendingAccounts/create',
+        .state( 'spendingAccounts.create', {
+            url: '/create',
             templateUrl:'spendingAccounts/templates/spendingAccountCreate.tpl.html',
             controller:'SpendingAccountCreateCtrl',
             controllerAs: 'spendingAccountCreate'
         })
-        .state( 'base.spendingAccountAssignGroup', {
-            url: '/spendingAccounts/:spendingAccountid/assign',
+        .state( 'spendingAccounts.assignGroup', {
+            url: '/:spendingAccountid/assign',
             templateUrl: 'spendingAccounts/templates/spendingAccountAssignGroup.tpl.html',
             controller: 'SpendingAccountAssignGroupCtrl',
             controllerAs: 'spendingAccountAssignGroup',
@@ -58,8 +59,8 @@ function SpendingAccountsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.spendingAccountAssignUser', {
-            url: '/spendingAccounts/:spendingAccountid/assign/user',
+        .state( 'spendingAccounts.assignUser', {
+            url: '/:spendingAccountid/assign/user',
             templateUrl: 'spendingAccounts/templates/spendingAccountAssignUser.tpl.html',
             controller: 'SpendingAccountAssignUserCtrl',
             controllerAs: 'spendingAccountAssignUser',
@@ -96,7 +97,7 @@ function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpend
     vm.Submit = function() {
         SpendingAccounts.Update(spendingaccountid, vm.spendingAccount)
             .then(function() {
-                $state.go('base.spendingAccounts')
+                $state.go('spendingAccounts', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -106,7 +107,7 @@ function SpendingAccountEditController( $exceptionHandler, $state, SelectedSpend
     vm.Delete = function() {
         SpendingAccounts.Delete(spendingaccountid)
             .then(function() {
-                $state.go('base.spendingAccounts')
+                $state.go('spendingAccounts', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -121,7 +122,7 @@ function SpendingAccountCreateController( $exceptionHandler, $state, SpendingAcc
     vm.Submit = function() {
         SpendingAccounts.Create(vm.spendingAccount)
             .then(function() {
-                $state.go('base.spendingAccounts');
+                $state.go('spendingAccounts', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

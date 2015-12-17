@@ -20,10 +20,10 @@ describe('Component: Users', function() {
         }
     }));
 
-    describe('State: Base.users', function() {
+    describe('State: users', function() {
         var state;
         beforeEach(inject(function($state, Users) {
-            state = $state.get('base.users');
+            state = $state.get('users');
             spyOn(Users, 'List').and.returnValue(null);
         }));
         it('should resolve UserGroupList', inject(function ($injector, Users) {
@@ -32,10 +32,10 @@ describe('Component: Users', function() {
         }));
     });
 
-    describe('State: Base.userEdit', function() {
+    describe('State: users.edit', function() {
         var state;
         beforeEach(inject(function($state, Users) {
-            state = $state.get('base.userEdit');
+            state = $state.get('users.edit');
             spyOn(Users, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedUserGroup', inject(function ($injector, $stateParams, Users) {
@@ -65,7 +65,7 @@ describe('Component: Users', function() {
                 expect(Users.Create).toHaveBeenCalledWith(user);
             }));
             it ('should enter the users state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.users');
+                expect($state.go).toHaveBeenCalledWith('users', {}, {reload:true});
             }));
         });
     });
@@ -94,7 +94,7 @@ describe('Component: Users', function() {
                 expect(Users.Update).toHaveBeenCalledWith(userEditCtrl.userID, user);
             }));
             it ('should enter the users state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.users');
+                expect($state.go).toHaveBeenCalledWith('users', {}, {reload:true});
             }));
         });
 
@@ -110,7 +110,7 @@ describe('Component: Users', function() {
                 expect(Users.Delete).toHaveBeenCalledWith(user.ID);
             }));
             it ('should enter the users state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.users');
+                expect($state.go).toHaveBeenCalledWith('users', {}, {reload:true});
             }));
         });
     });

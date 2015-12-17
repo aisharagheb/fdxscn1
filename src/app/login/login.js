@@ -72,10 +72,13 @@ function LoginController( $state, $stateParams, $exceptionHandler, LoginService,
     };
 
     vm.submit = function() {
-        Credentials.Get( vm.credentials ).then(
-            function() {
+        Credentials.Get( vm.credentials )
+            .then(function() {
                 $state.go('home');
-            });
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            })
     };
 
     vm.forgotPassword = function() {
