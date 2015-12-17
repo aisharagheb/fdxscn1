@@ -100,18 +100,21 @@ describe('Component: Shipments', function() {
         });
 
         describe('deleteLineItem', function() {
-            beforeEach(inject(function() {
+            beforeEach(inject(function(Shipments) {
+                spyOn(Shipments, 'Patch').and.returnValue(null);
+                shipmentEditCtrl.OrderSelected = false;
                 shipmentEditCtrl.lineitems.list.Items = [
                             {
-                                addToShipment: false,
-                                disabled: false
+                                addToShipment: true,
+                                disabled: true
                             }
                 ];
                 var index = 0;
-                shipmentEditCtrl.lineitems.list.Items[index].addToShipment = true;
-                shipmentEditCtrl.lineitems.list.Items[index].disabled = true;
                 shipmentEditCtrl.shipment = shipment;
                 shipmentEditCtrl.deleteLineItem(index);
+            }));
+            it('should call the Shipments Patch method', inject(function (Shipments) {
+                expect(Shipments.Patch).toHaveBeenCalledWith(shipment.ID, {Items: shipmentEditCtrl.shipment.Items});
             }));
             it('should make addToShipment false', inject(function () {
                 expect(shipmentEditCtrl.lineitems.list.Items[0].addToShipment).toEqual(false);
