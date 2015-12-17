@@ -204,7 +204,6 @@ function SpendingAccountAssignment($q, $state, $injector, Underscore, Assignment
                     AssignmentObject = Underscore.where(AssignmentList, {UserGroupID: item.ID})[0]; //should be only one
                 }
                 if (AssignmentObject.AllowExceed !== item.allowExceed) {
-                    console.log(item.ID);
                     SaveAndUpdate(queue, SpendingAccountID, item, Party);
                 }
             }

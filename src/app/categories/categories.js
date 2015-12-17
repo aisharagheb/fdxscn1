@@ -171,7 +171,6 @@ function CategoryAssignPartyController(Assignments, Paging, UserGroupList, Assig
     vm.Category = SelectedCategory;
     vm.list = UserGroupList;
     vm.assignments = AssignedUserGroups;
-    console.log(AssignedUserGroups);
     vm.saveAssignments = SaveAssignment;
     vm.pagingfunction = PagingFunction;
 

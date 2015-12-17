@@ -22,7 +22,6 @@ function ProductListController($q, Me, ImpersonationService) {
         Items: []
     };
     vm.searchfunction = Search;
-    console.log('test');
 
     function Search(searchTerm) {
         var dfd = $q.defer();
