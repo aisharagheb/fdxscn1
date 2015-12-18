@@ -20,20 +20,20 @@
             </div>
             <div class="form-group col-sm-3">
                 <label for="shipDateInput">Ship Date</label>
-                <input id="shipDateInput" class="form-control" type="text" is-open="open1" uib-datepicker-popup="MM/dd/yyyy" ng-click="open1 = !open1"  datepicker-append-to-body="true" show-weeks="false" ng-model="shipmentCreate.shipment.DateShipped"/>
+                <input id="shipDateInput" class="form-control" type="text" is-open="open1" uib-datepicker-popup="MM/dd/yyyy" ng-click="open1 = !open1"  datepicker-append-to-body="true" show-weeks="false" ng-model="shipmentCreate.shipment.DateShipped" required/>
             </div>
             <div class="form-group col-sm-3">
                 <label for="costInput">Cost</label>
                 <input id="costInput" type="number" step="any" class="form-control" ng-model="shipmentCreate.shipment.Cost"/>
             </div>
         </div>
-        <div uib-collapse="shipmentCreate.OrderSelected">
+        <div uib-collapse="shipmentCreate.OrderSelected" class="form-group">
             <h4>
                 <b>Select Order</b>
             </h4>
             <section class="table-fixed-header" ng-if="shipmentCreate.list.Items.length">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="LineItems" controlleras="shipmentCreate">
+                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" controlleras="shipmentCreate">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -58,13 +58,13 @@
                 </div>
             </section>
         </div>
-        <div uib-collapse="!shipmentCreate.OrderSelected">
+        <div uib-collapse="!shipmentCreate.OrderSelected" class="form-group">
             <h4>
                 <b>Select Line Items</b>
             </h4>
             <section class="table-fixed-header" ng-if="shipmentCreate.lineitems.list.Items.length">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="Orders" controlleras="shipmentCreate">
+                <div class="table-container" ordercloud-infinite-scroll servicename="LineItems" controlleras="shipmentCreate">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -88,7 +88,10 @@
                             <td class="text-center"><input type="checkbox" ng-model="li.addToShipment"></td>
                             <td>{{li.ID}}</td>
                             <td>{{li.Quantity}}</td>
-                            <td class="text-center"><input type="number" class="form-control" ng-model="li.QuantityShipped"/></td>
+                            <td>
+                                <p ng-if="!li.addToShipment">{{li.QuantityShipped}}</p>
+                                <input type="number" class="form-control" ng-model="li.QuantityShipped" ng-if="li.addToShipment" min="1" max="{{li.Quantity}}"/>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
