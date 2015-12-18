@@ -174,7 +174,7 @@ function CatalogNode($compile) {
         scope: {
             node: '='
         },
-        template: '<li><a ui-sref="catalog.category({categoryid:node.ID})" ng-bind-html="node.Name"></a></li>',
+        template: '<li ui-sref-active="active"><a ui-sref="catalog.category({categoryid:node.ID})" ng-bind-html="node.Name"></a></li>',
         link: function(scope, element) {
             if (angular.isArray(scope.node.children)) {
                 element.append("<catalog-tree tree='node.children' />");

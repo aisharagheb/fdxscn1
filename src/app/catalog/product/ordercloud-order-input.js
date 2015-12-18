@@ -17,13 +17,12 @@ function OrderCloudOrderInputDirective() {
     };
 }
 
-function OrderInputController($state, appname, $scope, $localForage, Orders, LineItems) {
+function OrderInputController($state, appname, $scope, $rootScope, $localForage, Orders, LineItems) {
     var vm = this,
         orderid;
     vm.currentState = $state.current.name;
     vm.price = null;
     vm.addToCart = AddToCart;
-    console.log($scope.product, vm.currentState);
 
     $localForage.getItem(appname + '.CurrentOrderID').then(function(data) {
         orderid = data;
@@ -37,17 +36,14 @@ function OrderInputController($state, appname, $scope, $localForage, Orders, Lin
         return vm.Quantity;
     }, function(newValue, oldValue) {
         if (newValue && newValue !== oldValue) {
-            if ($scope.product.StandardPriceSchedule.RestrictedQuantity) {
-                angular.forEach($scope.product.StandardPriceSchedule.PriceBreaks, function(PriceBreaks) {
-                    if (vm.Quantity == PriceBreaks.Quantity) {
-                        vm.price = PriceBreaks.Price * vm.Quantity;
-                    }
-                    else return null;
-                });
-            }
-            else {
-                //TODO: No restricted quantity
-            }
+            var max_quantity = 0;
+            angular.forEach($scope.product.StandardPriceSchedule.PriceBreaks, function(PriceBreaks) {
+                if (vm.Quantity >= PriceBreaks.Quantity && PriceBreaks.Quantity > max_quantity) {
+                    max_quantity = PriceBreaks.Quantity;
+                    vm.price = PriceBreaks.Price * vm.Quantity;
+                }
+                else return null;
+            });
         }
         else if (newValue === null) {
             vm.price = null;
@@ -63,6 +59,7 @@ function OrderInputController($state, appname, $scope, $localForage, Orders, Lin
         else {
             Orders.Create({}).then(function(order) {
                 AddLineItem(order, $scope.product);
+                $localForage.setItem(appname + '.CurrentOrderID', order.ID);
             });
         }
     }
@@ -73,9 +70,9 @@ function OrderInputController($state, appname, $scope, $localForage, Orders, Lin
             ProductID: product.ID,
             Quantity: vm.Quantity,
             Specs: SetSpecs(product.Specs)
-        }).then(function() {
-            $localForage.setItem(appname + '.CurrentOrderID', order.ID);
-        })
+        }).then(function(lineItem) {
+            $rootScope.$broadcast('event:lineitemAddedToCart', order.ID, lineItem);
+        });
     }
 
     function SetSpecs(specs) {
