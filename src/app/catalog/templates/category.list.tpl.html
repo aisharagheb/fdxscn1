@@ -1,22 +1,16 @@
-<article>
+<article id="CategoryList">
     <h3 ng-if="categorylist.length > 0" class="page-header">
         {{categorylist.length > 1 ? 'Categories' : 'Category'}}
     </h3>
-    <div class="category-list row">
-        <div class="col-md-3" ng-repeat="category in categorylist">
-            <div class="category-item" ui-sref="catalog.category({categoryid: category.ID})">
-                <h3 class="item-name">{{category.Name || category.ID}}</h3>
-                <p class="item-id" ng-if="category.Name">{{category.ID}}</p>
-                <div class="thumbnail-image">
-                    <span class="fa-stack fa-5x" ng-if="!category.xp.image">
-                        <i class="fa fa-camera fa-stack-1x"></i>
-                        <i class="fa fa-ban fa-stack-2x text-danger"></i>
-                    </span>
-                    <div ng-if="category.xp.image">
-                        <img ng-src="{{category.xp.image.URL}}" alt="Category Image">
-                    </div>
+    <div class="category-list">
+        <div class="category-list-item" ng-repeat="category in categorylist">
+            <div class="thumbnail" ui-sref="catalog.category({categoryid: category.ID})">
+                <figure ng-if="category.xp.image">
+                    <img class="img-responsive" ng-src="{{category.xp.image.URL}}" alt="Category Image">
+                </figure>
+                <div class="caption">
+                    <h4 class="text-center">{{category.Name || category.ID}}</h4>
                 </div>
-                <p class="item-description" ng-if="category.Description">{{category.Description}}</p>
             </div>
         </div>
     </div>
