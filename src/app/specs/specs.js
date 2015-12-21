@@ -69,26 +69,25 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
         specid = angular.copy(SelectedSpec.ID);
     vm.specName = angular.copy(SelectedSpec.Name);
     vm.spec = SelectedSpec;
+    vm.Option = {};
+    vm.Options = vm.spec.Options;
 
     vm.addSpecOpt = function() {
-        vm.spec.Options.push({ID: vm.SpecOptID, Value: vm.SpecOptValue, PriceMarkup: vm.SpecOptMarkup, PriceMarkupType: vm.SpecOptMarkupType, IsOpenText: vm.SpecOptOpen, ListOrder: vm.SpecOptListOrder});
-        if (vm.SpecOptDefault) {
-            vm.spec.DefaultOptionID = vm.SpecOptID;
+        if (vm.DefaultOptionID) {
+            vm.spec.DefaultOptionID = vm.Option.ID;
         }
-        vm.SpecOptID = null;
-        vm.SpecOptValue = null;
-        vm.SpecOptMarkup = null;
-        vm.SpecOptMarkupType = null;
-        vm.SpecOptOpen = false;
-        vm.SpecOptListOrder = null;
-        vm.SpecOptDefault = false;
-    };
+        Specs.CreateOption(specid, vm.Option)
+            .then(function() {
+                    vm.Option = null;
+                })
+            };
 
     vm.deleteSpecOpt = function($index) {
         if (vm.spec.DefaultOptionID == vm.spec.Options[$index].ID) {
             vm.spec.DefaultOptionID = null;
         }
-        vm.spec.Options.splice($index, 1);
+        vm.Options.splice($index, 1);
+        Specs.DeleteOption(specid, vm.spec.Options[$index].ID)
     };
 
     vm.Submit = function() {
@@ -112,36 +111,44 @@ function SpecEditController( $exceptionHandler, $state, SelectedSpec, Specs ) {
     }
 }
 
-function SpecCreateController( $exceptionHandler, $state, Specs) {
+function SpecCreateController( $exceptionHandler, $q, $state, Specs) {
     var vm = this;
     vm.spec = {};
-    vm.spec.Options = new Array;
+    vm.Options = [];
+    var DefaultOptionID;
 
     vm.addSpecOpt = function() {
-        vm.spec.Options.push({ID: vm.SpecOptID, Value: vm.SpecOptValue, PriceMarkup: vm.SpecOptMarkup, PriceMarkupType: vm.SpecOptMarkupType, IsOpenText: vm.SpecOptOpen, ListOrder: vm.SpecOptListOrder});
-        if (vm.SpecOptDefault) {
-            vm.spec.DefaultOptionID = vm.SpecOptID;
+        vm.Options.push(vm.Option);
+        if (vm.DefaultOptionID) {
+            DefaultOptionID = vm.Option.ID;
         }
-        vm.SpecOptID = null;
-        vm.SpecOptValue = null;
-        vm.SpecOptMarkup = null;
-        vm.SpecOptMarkupType = null;
-        vm.SpecOptOpen = false;
-        vm.SpecOptListOrder = null;
-        vm.SpecOptDefault = false;
+        vm.Option = null;
+        vm.DefaultOptionID = null;
     };
 
     vm.deleteSpecOpt = function($index) {
-        if (vm.spec.DefaultOptionID == vm.spec.Options[$index].ID) {
+        if (vm.spec.DefaultOptionID == vm.Options[$index].ID) {
             vm.spec.DefaultOptionID = null;
         }
-        vm.spec.Options.splice($index, 1);
+        vm.Options.splice($index, 1);
     };
 
     vm.Submit = function() {
         Specs.Create(vm.spec)
-            .then(function() {
-                $state.go('specs', {}, {reload:true})
+            .then(function(spec) {
+                var queue = [],
+                    dfd = $q.defer();
+                angular.forEach(vm.Options, function(opt) {
+                    queue.push(Specs.CreateOption(spec.ID, opt));
+                });
+                $q.all(queue).then(function() {
+                    dfd.resolve();
+                    if(DefaultOptionID != null){
+                        Specs.Patch(spec.ID, {DefaultOptionID: DefaultOptionID})
+                    }
+                    $state.go('specs', {}, {reload: true});
+                })
+                return dfd.promise;
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
