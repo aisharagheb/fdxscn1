@@ -13,30 +13,15 @@ function CategoryConfig($stateProvider) {
             controller: 'CategoryCtrl',
             controllerAs: 'category',
             resolve: {
-                CategoryList: function($q, Me, ImpersonationService, $stateParams) {
-                    var dfd = $q.defer();
-                    Me.ListSubcategories($stateParams.categoryid)
-                        .then(function(response) {
-                            dfd.resolve(response);
-                        }, function(response) {
-                            ImpersonationService.impersonate(response).then(function() {
-                                dfd.resolve(Me.As().ListSubcategories($stateParams.categoryid));
-                            });
-                        });
-                    return dfd.promise;
+                CategoryList: function(Me, ImpersonationService, $stateParams) {
+                    return ImpersonationService.Impersonation(function() {
+                        return Me.ListSubcategories($stateParams.categoryid);
+                    });
                 },
-                ProductList: function($q, Me, ImpersonationService, $stateParams) {
-                    var dfd = $q.defer();
-                    Me.ListProducts(null, $stateParams.categoryid).then(
-                        function(response) {
-                            dfd.resolve(response);
-                        },
-                        function(response) {
-                            ImpersonationService.impersonate(response).then(function() {
-                                dfd.resolve(Me.As().ListProducts(null, $stateParams.categoryid));
-                            });
-                        });
-                    return dfd.promise;
+                ProductList: function(Me, ImpersonationService, $stateParams) {
+                    return ImpersonationService.Impersonation(function() {
+                        return Me.ListProducts(null, $stateParams.categoryid);
+                    });
                 }
             }
         });

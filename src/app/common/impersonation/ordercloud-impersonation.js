@@ -5,16 +5,27 @@ angular.module('ordercloud-impersonation', [])
 
 ;
 
-function ImpersonationService($q, $resource, $cookieStore, $uibModal, $state, apiurl, BuyerID, Users, Auth, appname) {
+function ImpersonationService(ApiClients, $q, $uibModal, $state, Users, Auth, toastr) {
     return {
-        impersonate: impersonate
+        DecryptToken: DecryptToken,
+        Impersonation: Impersonation,
+        StopImpersonating: StopImpersonating
     };
 
-    function impersonate(response) {
-        var dfd = $q.defer();
-        if (response.status === 404 && response.data.Errors && response.data.Errors[0].ErrorCode === 'NotFound' && response.data.Errors[0].Message === 'CustomerCompany not found: ') {
-            var decoded_token = JSON.parse(atob($cookieStore.get(appname + '.token').split('.')[1]));
-            if (decoded_token.role === 'FullAccess') {
+    function DecryptToken() {
+        Auth.SetImpersonating(false);
+        var token = Auth.GetToken().split('.');
+        return JSON.parse(atob(token[1]));
+    }
+
+    function Impersonation(FunctionCall) {
+        var dfd = $q.defer(),
+            jwt = DecryptToken();
+        if (jwt.type === 'Buyer') {
+            dfd.resolve(FunctionCall());
+        }
+        else {
+            if (jwt.role === 'FullAccess') {
                 if (!Auth.GetImpersonating()) {
                     var modalInstance = $uibModal.open({
                         animation: true,
@@ -28,28 +39,42 @@ function ImpersonationService($q, $resource, $cookieStore, $uibModal, $state, ap
                             }
                         }
                     });
-                    modalInstance.result.then(function(selectedUser) {
-                        $resource(apiurl + '/v1/buyers/:buyerID/apiclients', {'buyerID': BuyerID.Get()}).get().$promise.then(
-                            function(data) {
-                                var buyer_clientid = data.Items[0].ID;
-                                Users.GetAccessToken(selectedUser.ID, {ClientID: buyer_clientid, Claims: ["FullAccess"]})
-                                    .then(function(token) {
-                                        Auth.SetImpersonationToken(selectedUser.ID, token["access_token"]);
-                                        dfd.resolve();
-                                    });
-                            }
-                        );
-                    }, function() {
-                        //TODO: display some further message to the user before redirecting
-                        $state.go('base.home');
-                    });
-                } else {
-                    dfd.resolve();
+                    modalInstance.result
+                        .then(function(selectedUser) {
+                            ApiClients.List()
+                                .then(function(apiList) {
+                                    Users.GetAccessToken(selectedUser.ID, {ClientID: apiList.Items[0].ID, Claims: ['FullAccess']})
+                                        .then(function(token) {
+                                            Auth.SetImpersonationToken(selectedUser.ID, token["access_token"]);
+                                            Auth.SetImpersonating(true);
+                                            dfd.resolve(FunctionCall());
+                                        })
+                                        .catch(function() {
+                                            toastr.error('Could not set an impersonation token for the selected user.', 'Error:');
+                                        });
+                                })
+                                .catch(function() {
+                                    toastr.error("No buyer client ids found.", 'Error:');
+                                });
+                        })
+                        .catch(function() {
+                            $state.go('home');
+                        });
                 }
-            } else dfd.resolve('Error: You do not have permission to impersonate a buyer user.');
+                else {
+                    Auth.SetImpersonating(true);
+                    dfd.resolve(FunctionCall());
+                }
+            }
+            else {
+                toastr.error("You do not have permission to impersonate a buyer user.", 'Error:');
+            }
         }
-        else dfd.resolve();
         return dfd.promise;
+    }
+
+    function StopImpersonating() {
+
     }
 }
 
@@ -64,6 +89,6 @@ function ModalController($uibModalInstance, $state, UserList) {
 
     vm.cancel = function() {
         $uibModalInstance.dismiss('cancel');
-        $state.go('base.home');
+        $state.go('home');
     };
 }

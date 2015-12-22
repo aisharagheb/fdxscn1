@@ -23,17 +23,10 @@ function ProductConfig($stateProvider) {
                 }
             },
             resolve: {
-                Product: function($q, Me, $stateParams, ImpersonationService) {
-                    var dfd = $q.defer();
-                    Me.GetProduct($stateParams.productid)
-                        .then(function(data) {
-                            dfd.resolve(data);
-                        }, function(response) {
-                            ImpersonationService.impersonate(response).then(function() {
-                                dfd.resolve(Me.As().GetProduct($stateParams.productid));
-                            });
-                        });
-                    return dfd.promise;
+                Product: function(Me, $stateParams, ImpersonationService) {
+                    return ImpersonationService.Impersonation(function(){
+                        return Me.GetProduct($stateParams.productid);
+                    });
                 },
                 SpecList: function(Specs, $q, $stateParams) {
                     var queue = [];

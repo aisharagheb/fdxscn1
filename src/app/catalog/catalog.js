@@ -34,47 +34,12 @@ function CatalogConfig($stateProvider) {
                     return CatalogTreeService.GetCatalogTree();
                 },
                 Catalog: function($q, Me, ImpersonationService, Tree) {
-                    var dfd = $q.defer();
-                    Me.ListCategories(null, 1).then(
-                        function(response) {
-                            dfd.resolve(response);
-                        },
-                        function(response) {
-                            ImpersonationService.impersonate(response).then(function() {
-                                dfd.resolve(Me.As().ListCategories(null, 1));
-                            });
+                    return ImpersonationService.Impersonation(function() {
+                        return Me.ListCategories(null, 1);
                     });
-                    return dfd.promise;
                 },
-                Order: function($q, $localForage, Tree, Me, appname, ImpersonationService, Orders) {
-                    var dfd = $q.defer();
-                    Me.Get()
-                        .then(function(me) {
-                            Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
-                                .then(function(list) {
-                                    if (list.Items.length === 0) dfd.resolve(null);
-                                    else {
-                                        dfd.resolve(list.Items[1]);
-                                        $localForage.setItem(appname + '.CurrentOrderID', list.Items[1].ID);
-                                    }
-                                });
-                        }, function(response) {
-                            ImpersonationService.impersonate(response).then(function() {
-                                Me.As().Get()
-                                    .then(function(me) {
-                                        Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
-                                            .then(function(list) {
-                                                if (list.Items.length === 0) dfd.resolve(null);
-                                                else {
-                                                    dfd.resolve(list.Items[1]);
-                                                    console.log(list.Items[1]);
-                                                    $localForage.setItem(appname + '.CurrentOrderID', list.Items[1].ID);
-                                                }
-                                            });
-                                    });
-                            });
-                        });
-                    return dfd.promise;
+                Order: function(CurrentOrder, Tree) {
+                    return CurrentOrder.Get();
                 }
             }
         });
@@ -122,20 +87,13 @@ function CatalogTreeService($q, Underscore, ImpersonationService, Me) {
     function tree() {
         var tree = [];
         var dfd = $q.defer();
-        Me.ListCategories(null, 'all', 1, 100).then(function(list) {
-            angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
-                tree.push(getNode(node, list));
-            });
-            dfd.resolve(tree);
-        }).catch(function(response) {
-            ImpersonationService.impersonate(response)
-                .then(function() {
-                    Me.As().ListCategories(null, 'all', 1, 100).then(function(list) {
-                        angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
-                            tree.push(getNode(node, list));
-                        });
-                        dfd.resolve(tree);
+        ImpersonationService.Impersonation(function() {
+            Me.ListCategories(null, 'all', 1, 100)
+                .then(function(list) {
+                    angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
+                        tree.push(getNode(node, list));
                     });
+                    dfd.resolve(tree);
                 });
         });
         return dfd.promise;
