@@ -17,7 +17,8 @@ angular.module( 'orderCloud', [
     'ordercloud-paging-helpers',
     'ordercloud-auto-id',
     'ordercloud-impersonation',
-    'ordercloud-current-order'
+    'ordercloud-current-order',
+    'ui.grid'
 ])
 
 	.run( SetBuyerID )
