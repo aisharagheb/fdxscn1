@@ -9,7 +9,8 @@ function OrderCloudOrderInputDirective() {
     return {
         restrict: 'E',
         scope: {
-            product: '='
+            product: '=',
+            validationform: '='
         },
         templateUrl: 'catalog/product/templates/order-input.tpl.html',
         controller: 'OrderInputCtrl',
@@ -45,7 +46,7 @@ function OrderInputController($state, appname, $scope, $rootScope, $localForage,
                 else return null;
             });
         }
-        else if (newValue === null) {
+        else if (!newValue) {
             vm.price = null;
         }
     });
@@ -65,7 +66,6 @@ function OrderInputController($state, appname, $scope, $rootScope, $localForage,
     }
 
     function AddLineItem(order, product) {
-        console.log('hit add line item');
         LineItems.Create(order.ID, {
             ProductID: product.ID,
             Quantity: vm.Quantity,
@@ -98,7 +98,9 @@ function OrderInputController($state, appname, $scope, $rootScope, $localForage,
             else {
                 spec_to_push.Value = spec.Value || spec.DefaultValue || null;
             }
-            results.push(spec_to_push);
+            if (spec_to_push.Value || spec_to_push.OptionID) {
+                results.push(spec_to_push);
+            }
         });
         return results;
     }

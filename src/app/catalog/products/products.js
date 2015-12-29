@@ -28,11 +28,6 @@ function ProductListController($q, Me, ImpersonationService) {
         Me.ListProducts(searchTerm)
             .then(function(data) {
                 dfd.resolve(data);
-            }, function(response) {
-                ImpersonationService.impersonate(response)
-                    .then(function() {
-                        dfd.resolve(Me.As().ListProducts(searchTerm));
-                    });
             });
         return dfd.promise;
     }

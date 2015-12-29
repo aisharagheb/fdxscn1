@@ -1,11 +1,9 @@
 <form name="add_to_cart" ng-submit="orderInput.addToCart()" class="form-horizontal" ng-show="orderInput.currentState === 'catalog.product.config' || product.Specs.length === 0">
-    <div class="form-group">
-        <div class="col-sm-9">
-            <input type="number" class="form-control text-center" min="{{product.StandardPriceSchedule.MinQuantity}}" max="{{product.StandardPriceSchedule.MaxQuantity}}" ng-model="orderInput.Quantity" ng-if="!product.StandardPriceSchedule.RestrictedQuantity" placeholder="Quantity">
-            <select ng-if="product.StandardPriceSchedule.RestrictedQuantity" class="form-control text-center" ng-model="orderInput.Quantity" ng-options="priceBreak.Quantity as priceBreak.Quantity for priceBreak in product.StandardPriceSchedule.PriceBreaks"></select>
-        </div>
-        <div class="col-sm-3">
-            <button class="btn btn-success btn-block" type="submit">
+    <div class="input-group">
+        <input type="number" ng-required="true" class="form-control text-center" min="{{product.StandardPriceSchedule.MinQuantity}}" max="{{product.StandardPriceSchedule.MaxQuantity}}" ng-model="orderInput.Quantity" ng-if="!product.StandardPriceSchedule.RestrictedQuantity" placeholder="Quantity">
+        <select ng-required="true" ng-if="product.StandardPriceSchedule.RestrictedQuantity" class="form-control text-center" ng-model="orderInput.Quantity" ng-options="priceBreak.Quantity as priceBreak.Quantity for priceBreak in product.StandardPriceSchedule.PriceBreaks"></select>
+        <div class="input-group-btn">
+            <button ng-disabled="validationform.$invalid" class="btn btn-success btn-block" type="submit">
                 <span ng-if="orderInput.price" class="badge">{{orderInput.price | currency}}</span>
                 <i class="fa fa-plus-circle"></i>
                 Add To Cart

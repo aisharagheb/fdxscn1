@@ -4,7 +4,7 @@ angular.module('ordercloud-current-order', [])
 
 ;
 
-function CurrentOrderService($q, appname, ImpersonationService, $localForage, Orders) {
+function CurrentOrderService($q, appname, ImpersonationService, $localForage, Orders, Me) {
     var StorageName = appname + '.CurrentOrderID';
     return {
         Get: getOrder,
@@ -16,32 +16,25 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
         var dfd = $q.defer();
         getOrderID()
             .then(function(OrderID) {
-                if (OrderID !== null) {
-                    Orders.Get(OrderID).then(function(order) {
-                        dfd.resolve(order);
-                    })
-                }
-                else {
-                    // Double check for an open order
-                    ImpersonationService.Impersonate(Me.Get())
-                        .then(function(me) {
-                            ImpersonationService.Impersonate(function() {
-                                return Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
-                                    .then(function(order) {
-                                        if (order && order.ID) {
-                                            dfd.resolve(order);
-                                            $localForage.setItem(StorageName, order.ID);
-                                        }
-                                    })
-                            });
-                        })
-                        .catch(function(error) {
-                            dfd.resolve(error);
-                        });
-                }
+                Orders.Get(OrderID).then(function(order) {
+                    dfd.resolve(order);
+                });
             })
             .catch(function() {
-                dfd.resolve(null);
+                // Double check for an open order
+                ImpersonationService.Impersonation(Me.Get)
+                    .then(function(me) {
+                        ImpersonationService.Impersonation(function() {
+                            return Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
+                                .then(function(orders) {
+                                    $localForage.setItem(StorageName, orders.Items[0].ID);
+                                    dfd.resolve(orders.Items[0]);
+                                });
+                        });
+                    })
+                    .catch(function(error) {
+                        dfd.reject(error);
+                    });
             });
         return dfd.promise;
     }
@@ -50,10 +43,12 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
         var dfd = $q.defer();
         $localForage.getItem(StorageName)
             .then(function(orderID) {
-                dfd.resolve(orderID);
+                if (orderID)
+                    dfd.resolve(orderID);
+                else dfd.reject(null);
             })
             .catch(function() {
-                dfd.resolve(null);
+                dfd.reject(null);
             });
         return dfd.promise;
     }
