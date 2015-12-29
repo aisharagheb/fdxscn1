@@ -79,18 +79,6 @@ describe('Component: Orders', function() {
             }));
         });
 
-        describe('goToProduct', function() {
-            beforeEach(inject(function() {
-                lineItem = {
-                    ProductID: 'potato'
-                }
-                orderEditCtrl.goToProduct(lineItem);
-            }));
-            it ('should enter the productEdit state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('products.edit', {'productid': lineItem.ProductID});
-            }));
-        });
-
         describe('Submit', function() {
             beforeEach(inject(function(Orders) {
                 orderEditCtrl.order = order;

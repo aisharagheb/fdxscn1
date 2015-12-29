@@ -43,7 +43,7 @@ function OrdersController(OrderList) {
     vm.list = OrderList;
 }
 
-function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTypeAheadSearchFactory, LineItemList, Orders, LineItems, $scope ) {
+function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTypeAheadSearchFactory, LineItemList, Orders, LineItems, $scope) {
     var vm = this,
     orderid = SelectedOrder.ID;
     vm.order = SelectedOrder;
@@ -61,14 +61,29 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTy
             });
     };
 
-    vm.goToProduct = function(lineitem) {
-        $state.go('products.edit', {'productid': lineitem.ProductID});
+    vm.updateBillingAddress = function(){
+        vm.order.BillingAddressID = null;
+        vm.order.BillingAddress.ID = null;
+        Orders.Update(orderid, vm.order)
+            .then(function(){
+            Orders.SetBillingAddress(orderid, vm.order.BillingAddress)
+                .then(function() {
+                    $state.go($state.current, {}, {reload: true});
+                });
+        })
+    };
+
+    vm.updateShippingAddress = function(){
+        Orders.SetShippingAddress(orderid, vm.ShippingAddress)
+            .then(function() {
+                $state.go($state.current, {}, {reload: true});
+            });
     };
 
     vm.Submit = function() {
 
         angular.forEach(vm.list.Items, function(lineitem, index) {
-            if ($scope.EditForm['Quantity' + index].$dirty || $scope.EditForm['UnitPrice' + index].$dirty ) {
+            if ($scope.EditForm.LineItems['Quantity' + index].$dirty || $scope.EditForm.LineItems['UnitPrice' + index].$dirty ) {
                 LineItems.Update(orderid, lineitem.ID, lineitem);
             }
         });
