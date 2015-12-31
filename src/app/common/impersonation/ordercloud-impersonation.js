@@ -74,7 +74,9 @@ function ImpersonationService(ApiClients, $q, $uibModal, $state, Users, Auth, to
     }
 
     function StopImpersonating() {
-
+        Auth.ClearImpersonationToken();
+        Auth.SetImpersonating(false);
+        $state.go('home');
     }
 }
 

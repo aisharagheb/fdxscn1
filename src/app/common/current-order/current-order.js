@@ -9,16 +9,23 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
     return {
         Get: getOrder,
         GetID: getOrderID,
-        Set: setOrderID
+        Set: setOrderID,
+        Remove: removeOrder
     };
 
     function getOrder() {
         var dfd = $q.defer();
         getOrderID()
             .then(function(OrderID) {
-                Orders.Get(OrderID).then(function(order) {
-                    dfd.resolve(order);
-                });
+                Orders.Get(OrderID)
+                    .then(function(order) {
+                        dfd.resolve(order);
+                    })
+                    .catch(function() {
+                        // If method fails clear out saved order
+                        removeOrder();
+                        dfd.resolve(null);
+                    })
             })
             .catch(function() {
                 // Double check for an open order
@@ -27,9 +34,15 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
                         ImpersonationService.Impersonation(function() {
                             return Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
                                 .then(function(orders) {
-                                    $localForage.setItem(StorageName, orders.Items[0].ID);
-                                    dfd.resolve(orders.Items[0]);
-                                });
+                                    if (orders.Items.length >= 1) {
+                                        $localForage.setItem(StorageName, orders.Items[0].ID);
+                                        dfd.resolve(orders.Items[0]);
+                                    }
+                                    else dfd.resolve(null);
+                                })
+                                .catch(function() {
+                                    dfd.resolve(null);
+                                })
                         });
                     })
                     .catch(function(error) {
@@ -61,5 +74,9 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
             .catch(function(error) {
                 return error;
             });
+    }
+
+    function removeOrder() {
+        return $localForage.removeItem(StorageName);
     }
 }

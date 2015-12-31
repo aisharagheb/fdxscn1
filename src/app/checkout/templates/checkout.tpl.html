@@ -1,4 +1,4 @@
-<article class="container-fluid">
+<article class="container-fluid" xmlns="http://www.w3.org/1999/html">
 	<h3 class="page-header">
 		Checkout
 	</h3>
@@ -40,22 +40,28 @@
 							<col style="width:75px;">
 						</colgroup>
 						<tbody>
-						<tr ng-repeat="lineItem in checkout.lineItems.Items">
-							<td>
-								<form name="{{'lineitem_' + lineItem.ID + '_quantity'}}">
-									<input tabindex="{{$index + 1}}" type="number" class="form-control text-center" ng-model="lineItem.Quantity">
-								</form>
-							</td>
-							<td>
-								<a href="#">{{lineItem.Product.Name}}</a><br>
-								<small class="text-muted">{{lineItem.ProductID}}</small>
-							</td>
-							<td>
-								<button class="btn btn-default btn-block">
-									<i class="fa fa-trash text-danger"></i>
-								</button>
-							</td>
-						</tr>
+                            <tr ng-repeat="lineItem in checkout.lineItems.Items">
+                                <td>
+                                    <form name="{{'lineitem_' + lineItem.ID + '_quantity'}}">
+                                        <input tabindex="{{$index + 1}}" type="number" ng-change="checkout.updateQuantity(lineItem)" class="form-control text-center" ng-model="lineItem.Quantity">
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="#">{{lineItem.Product.Name}}</a><br>
+                                    <small class="text-muted">{{lineItem.ProductID}}</small></br>
+                                    <label>Shipping To:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-truck"></i></span>
+                                        <select required="true" ng-change="checkout.updateLineItemShipping(lineItem);" ng-model="lineItem.ShippingAddress.ID" class="form-control" ng-options="address.ID as address.AddressName for address in checkout.shippingAddresses"></select>
+                                        <span ng-click="" class="btn-success input-group-addon"><i class="fa fa-plus-circle"></i></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button ng-click="checkout.removeItem(lineItem)" class="btn btn-default btn-block">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </button>
+                                </td>
+                            </tr>
 						</tbody>
 					</table>
 				</div>

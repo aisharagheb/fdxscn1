@@ -17,8 +17,12 @@ function CartConfig($stateProvider) {
             controller: 'CartCtrl',
             controllerAs: 'cart',
             resolve: {
-                Order: function(CurrentOrder) {
-                    return CurrentOrder.Get();
+                Order: function($state, toastr, CurrentOrder) {
+                    return CurrentOrder.Get()
+                        .catch(function() {
+                            toastr.error('You do not have an active open order.', 'Error');
+                            $state.go('home');
+                        });
                 },
                 LineItemsList: function($q, Order, Underscore, Products, LineItems) {
                     var dfd = $q.defer();
@@ -36,7 +40,10 @@ function CartConfig($stateProvider) {
                                     });
                                     dfd.resolve(data);
                                 })
-                        });
+                        })
+                        .catch(function() {
+                            toastr.error("Your order does not contain any line items.", 'Error');
+                        })
                     return dfd.promise;
                 }
             }

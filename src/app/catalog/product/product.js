@@ -129,9 +129,7 @@ function ProductEditController(Underscore, LineItem, Order, LI_Product, LI_SpecL
     vm.order = Order;
     vm.item.Specs = LI_SpecList;
     angular.forEach(vm.item.Specs, function(spec) {
-        console.log(LineItem.Specs);
-        var spec_values = Underscore.where(LineItem.Specs, {SpecID: spec.ID});
-        console.log(spec.ID);
+        var spec_values = Underscore.where(LineItem.Specs, {SpecID: spec.ID})[0];
         spec.Value = spec_values.Value;
         spec.OptionID = spec_values.OptionID;
     });
