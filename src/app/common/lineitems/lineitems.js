@@ -1,4 +1,4 @@
-angular.module('ordercloud-lineitem', [])
+angular.module('ordercloud-lineitems', [])
 
     .factory('LineItemHelpers', LineItemFactory)
 
