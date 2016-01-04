@@ -18,7 +18,10 @@ angular.module( 'orderCloud', [
     'ordercloud-auto-id',
     'ordercloud-impersonation',
     'ordercloud-current-order',
-    'ui.grid'
+    'ordercloud-address',
+    'ordercloud-lineitems',
+    'ui.grid',
+    'ui.grid.infiniteScroll'
 ])
 
 	.run( SetBuyerID )
