@@ -2,7 +2,7 @@ angular.module('ordercloud-address', [])
 
     .directive('ordercloudAddressForm', AddressFormDirective)
     .directive('ordercloudAddressInfo', AddressInfoDirective)
-    .controller('AddressInfoCtrl', AddressInfoController)
+    .filter('address', AddressFilter)
 
 ;
 
@@ -29,20 +29,24 @@ function AddressInfoDirective() {
     };
 }
 
-function AddressInfoController($scope, Addresses) {
-    var vm = this;
-    vm.address = null;
-
-    $scope.$watch(function() {
-        return $scope.addressid;
-    }, function(newVal) {
-        if (newVal) {
-            Addresses.Get(newVal)
-                .then(function(address) {
-                    vm.address = address;
-                });
+function AddressFilter() {
+    return function(address, option) {
+        if (!address) return null;
+        if (option === 'full') {
+            var result = [];
+            if (address.addressName) {
+                result.push(address.addressName);
+            }
+            result.push((address.FirstName ? address.FirstName + ' ' : '') + address.LastName);
+            result.push(address.Street1);
+            if (address.Street2) {
+                result.push(address.Street2);
+            }
+            result.push(address.City + ', ' + address.State + ' ' + address.Zip);
+            return result.join('\n');
         }
-        else vm.address = null;
-    });
+        else {
+            return address.addressName + ': ' + address.Street1;
+        }
+    }
 }
-
