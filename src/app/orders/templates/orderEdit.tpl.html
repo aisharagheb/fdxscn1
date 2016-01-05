@@ -2,6 +2,9 @@
     <h3 class="page-header">
         <b>Edit {{orderEdit.order.Type}} Order:</b> {{orderEdit.orderID}}
     </h3>
+    <h4>
+        From User: <a ui-sref="users.edit({userid: orderEdit.order.FromUserID})" target="_blank">{{orderEdit.order.FromUserID}}</a>
+    </h4>
     <div ng-form="EditForm">
         <div ng-form="GeneralOrderInfo">
             <div class="row">
@@ -10,25 +13,24 @@
                     <input id="orderIDInput" type="text" class="form-control" ng-model="orderEdit.order.ID" required/>
                 </div>
                 <div class="form-group col-sm-6">
-                    <label for="orderFromUserInput">From User</label>
-                    <input id="orderFromUserInput" type="text" class="form-control" ng-model="orderEdit.order.FromUserID" disabled/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-6">
-                    <label for="orderCommentsInput">Order Comments:</label>
-                    <textarea id="orderCommentsInput" type="text" class="form-control" ng-model="orderEdit.order.Comments"></textarea>
+                    <label for="orderCommentsInput">Order Comments</label>
+                    <input id="orderCommentsInput" type="text" class="form-control" ng-model="orderEdit.order.Comments" />
                 </div>
             </div>
         </div>
-        <uib-accordion close-others="false">
-            <uib-accordion-group heading="Payment Information" ng-form="PaymentInfo">
+        <div class="panel panel-default" ng-form="PaymentInfo">
+            <div class="panel-heading" ng-click="isCollapsedPayment = !isCollapsedPayment">
+                <h4 class="panel-title">
+                    Payment Information
+                </h4>
+            </div>
+            <div class="panel-body" uib-collapse="isCollapsedPayment">
                 <div class="form-group col-sm-6">
                     <label for="orderPaymentTypeInput">Payment Method</label>
                     <select id="orderPaymentTypeInput" class="form-control" ng-model="orderEdit.order.PaymentMethod">
                         <option value="PurchaseOrder">Purchase Order</option>
                         <option value="CreditCard">Credit Card</option>
-                        <option value="BudgetAccount">Spending Account</option>
+                        <option value="SpendingAccount">Spending Account</option>
                         <option value="PayPalExpressCheckout">Pay Pal Express Checkout</option>
                     </select>
                 </div>
@@ -54,15 +56,23 @@
                     <label for="orderSavedCCInput">Saved Credit Card ID</label>
                     <input id="orderSavedCCInput" type="text" class="form-control" ng-model="orderEdit.order.CreditCardID"/>
                 </div>
-            </uib-accordion-group>
-            <uib-accordion-group heading="Billing Address">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" ng-click="isCollapsedBilling = !isCollapsedBilling">
+                <h4 class="panel-title">
+                    Billing Address
+                </h4>
+            </div>
+            <div class="panel-body" uib-collapse="isCollapsedBilling">
                 <div class="form-group col-sm-6" ng-form="BillingAddressID">
                     <div class="form-group col-sm-12">
                         <label for="orderBillAddInput">Billing Address ID
-                            <i class="fa fa-question-circle" uib-tooltip="Billing Address ID for entire Order"></i>
+                            <i class="fa fa-question-circle" uib-tooltip="Write only field. Updates Billing Address ID for entire Order."></i>
                         </label>
                         <input
                                 id="orderBillAddInput"
+                                name="orderBillAddInput"
                                 type="text"
                                 class="form-control"
                                 ng-model="orderEdit.order.BillingAddressID"
@@ -83,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-sm-6" ng-form="CustomBillingAddress">
+                <div class="form-group col-sm-6" ng-form="CustomBillingAddress = true">
                     <button type="button" class="btn btn-default btn-block" ng-click="customAddress = !customAddress">Use Custom Address</button>
                     <div uib-collapse="!customAddress">
                         <hr>
@@ -148,11 +158,18 @@
                         </div>
                     </div>
                 </div>
-            </uib-accordion-group>
-            <uib-accordion-group heading="Shipping Address">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" ng-click="isCollapsedShipping = !isCollapsedShipping">
+                <h4 class="panel-title">
+                    Shipping Address
+                </h4>
+            </div>
+            <div class="panel-body" uib-collapse="isCollapsedShipping">
                 <div class="form-group col-sm-6" ng-form="ShippingAdddressID">
                     <label for="orderShipAddInput">Shipping Address ID
-                        <i class="fa fa-question-circle" uib-tooltip="Write only field. Updates the Shipping Address ID on all Line Items associated with this Order"></i>
+                        <i class="fa fa-question-circle" uib-tooltip="Write only field. Updates the Shipping Address ID on all Line Items associated with this Order."></i>
                     </label>
                     <input
 
@@ -228,8 +245,15 @@
                         </div>
                     </div>
                 </div>
-            </uib-accordion-group>
-            <uib-accordion-group heading="Line Items" is-open="true">
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading" ng-click="isCollapsedLineItems = !isCollapsedLineItems">
+                <h4 class="panel-title">
+                    Line Items
+                </h4>
+            </div>
+            <div class="panel-body" uib-collapse="isCollapsedLineItems">
                 <section class="table-fixed-header" ng-if="orderEdit.list.Items.length">
                     <div class="table-header-bg"></div>
                     <div class="table-container" ordercloud-infinite-scroll controlleras="orderEdit">
@@ -250,10 +274,10 @@
                                     <div>Shipping Address ID</div>
                                 </th>
                                 <th>
-                                    <div>Unit Price</div>
+                                    <div>Quantity</div>
                                 </th>
                                 <th>
-                                    <div>Quantity</div>
+                                    <div>Unit Price</div>
                                 </th>
                             </tr>
                             </thead>
@@ -281,12 +305,11 @@
                 <div class="well well-lg text-center" ng-if="!orderEdit.list.Items.length">
                     <b>This order does not have any line items</b>
                 </div>
-            </uib-accordion-group>
-        </uib-accordion>
+            </div>
+        </div>
         <div class="form-group">
             <button type="button" class="btn btn-primary" ng-click="orderEdit.Submit()" ng-disabled="GeneralOrderInfo.$invalid || PaymentInformation.$invalid || LineItems.$invalid">Save</button>
             <button type="button" class="btn btn-default" ui-sref="^">Cancel</button>
             <button type="button" class="btn btn-default" ng-if="orderEdit.order.Status == 'Open' || 'Unsubmitted'" ng-click="orderEdit.Delete()"><i class="fa fa-trash text-danger"></i></button>
         </div>
-    </div>
 </article>

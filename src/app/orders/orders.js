@@ -43,13 +43,16 @@ function OrdersController(OrderList) {
     vm.list = OrderList;
 }
 
-function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTypeAheadSearchFactory, LineItemList, Orders, LineItems, $scope) {
+function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTypeAheadSearchFactory, LineItemList, Orders, LineItems, $scope, $q, Users) {
     var vm = this,
     orderid = SelectedOrder.ID;
     vm.order = SelectedOrder;
     vm.orderID = SelectedOrder.ID;
     vm.list = LineItemList;
     vm.pagingfunction = PagingFunction;
+    $scope.isCollapsedPayment = true;
+    $scope.isCollapsedBilling = true;
+    $scope.isCollapsedShipping = true;
 
     vm.deleteLineItem = function(lineitem) {
         LineItems.Delete(orderid, lineitem.ID)
@@ -75,25 +78,35 @@ function OrderEditController( $exceptionHandler, $state, SelectedOrder, OrdersTy
 
     vm.updateShippingAddress = function(){
         Orders.SetShippingAddress(orderid, vm.ShippingAddress)
-            .then(function() {
-                $state.go($state.current, {}, {reload: true});
-            });
+            //.then(function() {
+            //    $state.go($state.current, {}, {reload: true});
+            //});
     };
 
     vm.Submit = function() {
-
+        var dfd = $q.defer();
+        var queue = [];
         angular.forEach(vm.list.Items, function(lineitem, index) {
             if ($scope.EditForm.LineItems['Quantity' + index].$dirty || $scope.EditForm.LineItems['UnitPrice' + index].$dirty ) {
-                LineItems.Update(orderid, lineitem.ID, lineitem);
+                queue.push(LineItems.Update(orderid, lineitem.ID, lineitem));
             }
         });
-        Orders.Update(orderid, vm.order)
+        $q.all(queue)
             .then(function() {
-                $state.go('orders', {}, {reload:true});
+                dfd.resolve();
+                Orders.Update(orderid, vm.order)
+                    .then(function() {
+                        $state.go('orders', {}, {reload:true});
+                    })
+                    .catch(function(ex) {
+                        $exceptionHandler(ex)
+                    });
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
             });
+
+        return dfd.promise;
     };
 
     vm.Delete = function() {
