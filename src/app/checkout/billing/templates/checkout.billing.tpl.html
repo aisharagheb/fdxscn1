@@ -1,1 +1,13 @@
-<h4>Billing</h4>
+<div class="panel panel-default">
+    <div class="panel-heading"><b>Billing</b></div>
+    <div class="panel-body">
+        <div ng-if="!checkoutBilling.customAddress">
+            <label for="billing_address">Billing Address</label>
+            <select id="billing_address" name="BillingAddress" ng-change="checkoutBilling.SaveShippingAddress(checkout.currentOrder);" ng-model="checkout.currentOrder.BillingAddressID" class="form-control" ng-options="address.ID as (address.AddressName || address.Street1 + ' ' + address.Street2) for address in checkoutBilling.billingAddresses"></select>
+            <button ng-click="checkoutShipping.customShipping = true;" type="button" class="btn btn-success"><i class="fa fa-plus-circle"></i> Use Custom</button>
+        </div>
+        <div ng-if="checkoutBilling.customAddress">
+
+        </div>
+    </div>
+</div>

@@ -46,23 +46,6 @@ function checkoutConfig($stateProvider) {
                             });
                         return dfd.promise;
                     });
-                },
-                CustomShippingAddresses: function($q, Underscore, ShippingAddresses, LineItemsList, Addresses) {
-                    // Return Addresses that are not saved or assigned anywhere but my exist on the LineItems (created with Orders.SetShippingAddress({{ new address }});)
-                    var ShippingAddressIDs = Underscore.pluck(ShippingAddresses, 'ID');
-                    var LIShippingAddressIDs = Underscore.uniq(Underscore.pluck(LineItemsList.Items, 'ShippingAddress.ID'));
-                    var dfd = $q.defer();
-                    var queue = [];
-                    angular.forEach(LIShippingAddressIDs, function(LI_ID) {
-                        if (ShippingAddressIDs.indexOf(LI_ID) === -1) {
-                            queue.push(Addresses.Get(LI_ID));
-                        }
-                    });
-                    $q.all(queue)
-                        .then(function() {
-                            dfd.resolve();
-                        });
-                    return dfd.promise;
                 }
 			}
 		})
@@ -88,22 +71,30 @@ function checkoutConfig($stateProvider) {
 		})
 }
 
-function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, LineItems, Products, Underscore, ShippingAddresses) {
+function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, LineItems, Products, Underscore, ShippingAddresses, LineItemHelpers) {
 	var vm = this;
 	vm.lineItems = LineItemsList;
 	vm.currentOrder = CurrentOrder;
+    vm.currentShipAddress = null;
     vm.shippingAddresses = ShippingAddresses;
     vm.updateLineItemShipping = UpdateShipping;
-    vm.removeItem = DeleteItem;
-    vm.updateQuantity = UpdateQuantity;
+    vm.removeItem = LineItemHelpers.RemoveItem;
+    vm.updateQuantity = LineItemHelpers.UpdateQuantity;
+    vm.setCustomShipping = LineItemHelpers.CustomShipper;
+    vm.isMultipleAddressShipping = true;
 
+    // currently selected shipping address if all line items are going to the same place
     vm.currentOrder.ShippingAddressID = vm.lineItems.Items[0].ShippingAddressID;
     angular.forEach(vm.lineItems.Items, function(item) {
         if (vm.currentOrder.ShippingAddressID !== item.ShippingAddressID) {
             vm.currentOrder.ShippingAddressID = null;
         }
     });
+    if (vm.currentOrder.ShippingAddressID) {
+        vm.currentShipAddress = Underscore.where(vm.shippingAddresses, {ID: vm.currentOrder.ShippingAddressID})[0];
+    }
 
+    // paging function for line items
 	vm.pagingfunction = function() {
 		if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
 			var dfd = $q.defer();
@@ -140,22 +131,7 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
             });
     }
 
-    function DeleteItem(LineItemID) {
-        LineItems.Delete(vm.order.ID, LineItemID)
-            .then(function() {
-                $state.reload();
-            });
-    }
-
-    function UpdateQuantity(LineItem) {
-        if (LineItem.Quantity > 0) {
-            LineItems.Patch(vm.order.ID, LineItem.ID, {Quantity: LineItem.Quantity})
-                .then(function() {
-                    $state.reload();
-                });
-        }
-    }
-
+    // default state (if someone navigates to checkout -> checkout.shipping)
     $state.transitionTo('checkout.shipping');
 }
 
