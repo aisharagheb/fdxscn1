@@ -34,8 +34,8 @@ function AddressFilter() {
         if (!address) return null;
         if (option === 'full') {
             var result = [];
-            if (address.addressName) {
-                result.push(address.addressName);
+            if (address.AddressName) {
+                result.push(address.AddressName);
             }
             result.push((address.FirstName ? address.FirstName + ' ' : '') + address.LastName);
             result.push(address.Street1);
@@ -46,7 +46,7 @@ function AddressFilter() {
             return result.join('\n');
         }
         else {
-            return address.addressName + ': ' + address.Street1;
+            return address.Street1 + (address.Street2 ? ', ' + address.Street2 : '');
         }
     }
 }

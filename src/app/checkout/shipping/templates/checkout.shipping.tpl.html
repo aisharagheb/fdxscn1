@@ -1,12 +1,12 @@
 <div class="panel panel-default">
-    <div class="panel-heading">Shipping</div>
+    <div class="panel-heading"><b>Shipping</b></div>
     <div class="panel-body">
         <div ng-if="!checkoutShipping.customShipping">
             <div ng-if="checkout.shippingAddresses.length">
                 <label for="shipping_address">Shipping Address</label>
-                <select id="shipping_address" name="ShippingAddress" id="shipping_address" ng-change="checkoutShipping.SaveShippingAddress(checkout.currentOrder);" ng-model="checkout.currentOrder.ShippingAddressID" class="form-control" ng-options="address.ID as address.AddressName for address in checkout.shippingAddresses"></select>
+                <select id="shipping_address" name="ShippingAddress" ng-change="checkoutShipping.SaveShippingAddress(checkout.currentOrder);" ng-model="checkout.currentOrder.ShippingAddressID" class="form-control" ng-options="address.ID as (address.AddressName || address.Street1 + ' ' + address.Street2) for address in checkout.shippingAddresses"></select>
             </div>
-            <ordercloud-address-info addressid="{{checkout.currentOrder.ShippingAddressID}}"></ordercloud-address-info>
+            <pre ng-if="checkout.currentOrder.ShippingAddressID" style="word-wrap: break-word;">{{checkout.currentShipAddress | address: 'full'}}</pre>
             <button ng-click="checkoutShipping.customShipping = true;" type="button" class="btn btn-success"><i class="fa fa-plus-circle"></i> Use Custom</button>
         </div>
         <div ng-if="checkoutShipping.customShipping">

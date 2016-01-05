@@ -11,10 +11,15 @@ function checkoutBillingConfig($stateProvider) {
 			controller: 'CheckoutBillingCtrl',
 			controllerAs: 'checkoutBilling',
 			resolve: {
-				BillingAddresses: function($q, Me, Underscore) {
-					return Me.As().ListAddresses().then(function(data) {
-						return Underscore.where(data.Items, {Billing:true});
-					});
+				BillingAddresses: function($q, Me, Underscore, ImpersonationService) {
+                    return ImpersonationService.Impersonation(function() {
+                        var dfd = $q.defer();
+                        Me.ListAddresses()
+                            .then(function(data) {
+                                dfd.resolve(Underscore.where(data.Items, {Biling: true}));
+                            });
+                        return dfd.promise;
+                    });
 				}
 			}
 		})

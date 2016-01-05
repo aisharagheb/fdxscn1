@@ -36,7 +36,6 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
     }
 
     function saveCustomAddress(order) {
-        console.log('test');
         if (vm.saveAddress) {
             Addresses.Create(vm.address)
                 .then(function(address) {
