@@ -5,7 +5,7 @@ angular.module('ordercloud-impersonation', [])
 
 ;
 
-function ImpersonationService(ApiClients, $q, $uibModal, $state, Users, Auth, toastr) {
+function ImpersonationService(ApiClients, $q, $rootScope, $uibModal, $state, Users, Auth, toastr) {
     return {
         DecryptToken: DecryptToken,
         Impersonation: Impersonation,
@@ -47,6 +47,7 @@ function ImpersonationService(ApiClients, $q, $uibModal, $state, Users, Auth, to
                                         .then(function(token) {
                                             Auth.SetImpersonationToken(selectedUser.ID, token["access_token"]);
                                             Auth.SetImpersonating(true);
+                                            $rootScope.$broadcast('ImpersonationStarted');
                                             dfd.resolve(FunctionCall());
                                         })
                                         .catch(function() {
@@ -76,6 +77,7 @@ function ImpersonationService(ApiClients, $q, $uibModal, $state, Users, Auth, to
     function StopImpersonating() {
         Auth.ClearImpersonationToken();
         Auth.SetImpersonating(false);
+        $rootScope.$broadcast('ImpersonationStopped');
         $state.go('home');
     }
 }
