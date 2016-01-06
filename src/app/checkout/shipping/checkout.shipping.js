@@ -25,12 +25,9 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
 
     function saveShipAddress(order) {
         if (order && order.ShippingAddressID) {
-            Addresses.Get(order.ShippingAddressID)
-                .then(function(address) {
-                    Orders.SetShippingAddress(order.ID, address)
-                        .then(function() {
-                            $state.reload();
-                        });
+            Orders.Patch(order.ID, {ShippingAddressID: order.ShippingAddressID})
+                .then(function() {
+                    $state.reload();
                 });
         }
     }
@@ -43,19 +40,19 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
                         Me.Get()
                             .then(function(me) {
                                 Addresses.SaveAssignment({
-                                        AddressID: address.ID,
-                                        UserID: me.ID,
-                                        IsBilling: vm.isAlsoBilling,
-                                        IsShipping: true
-                                    })
-                                    .then(function() {
-                                        Orders.SetShippingAddress(order.ID, address)
-                                            .then(function() {
-                                                $state.reload();
-                                            });
-                                    });
-                            })
-                    })
+                                    AddressID: address.ID,
+                                    UserID: me.ID,
+                                    IsBilling: vm.isAlsoBilling,
+                                    IsShipping: true
+                                })
+                                .then(function() {
+                                    Orders.Patch(order.ID, {ShippingAddressID: address.ID})
+                                        .then(function() {
+                                            $state.reload();
+                                        });
+                                });
+                            });
+                    });
                 });
         }
         else {

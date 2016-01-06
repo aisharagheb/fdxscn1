@@ -37,7 +37,7 @@ function checkoutConfig($stateProvider) {
 						});
 					return dfd.promise;
 				},
-                ShippingAddresses: function($q, Me, Underscore, ImpersonationService) {
+                ShippingAddresses: function($q, Me, Underscore, ImpersonationService, CurrentOrder) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
                         Me.ListAddresses()

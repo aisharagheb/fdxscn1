@@ -6,7 +6,7 @@
                 <label for="shipping_address">Shipping Address</label>
                 <select id="shipping_address" name="ShippingAddress" ng-change="checkoutShipping.SaveShippingAddress(checkout.currentOrder);" ng-model="checkout.currentOrder.ShippingAddressID" class="form-control" ng-options="address.ID as (address.AddressName || address.Street1 + ' ' + address.Street2) for address in checkout.shippingAddresses"></select>
             </div>
-            <pre ng-if="checkout.currentOrder.ShippingAddressID" style="word-wrap: break-word;">{{checkout.currentShipAddress | address: 'full'}}</pre>
+            <p id="address_paragraph" ng-if="checkout.currentOrder.ShippingAddressID">{{checkout.currentShipAddress | address: 'full'}}</p>
             <button ng-click="checkoutShipping.customShipping = true;" type="button" class="btn btn-success"><i class="fa fa-plus-circle"></i> Use Custom</button>
         </div>
         <div ng-if="checkoutShipping.customShipping">

@@ -25,7 +25,49 @@ function checkoutBillingConfig($stateProvider) {
 		})
 }
 
-function CheckoutBillingController(BillingAddresses) {
+function CheckoutBillingController($state, Orders, Addresses, BillingAddresses, Me, ImpersonationService) {
 	var vm = this;
 	vm.billingAddresses = BillingAddresses;
+    vm.SaveBillingAddress = SaveBillingAddress;
+    vm.SaveCustomAddress = SaveCustomAddress;
+
+    function SaveBillingAddress(order) {
+        if (order && order.BillingAddressID) {
+            Orders.Patch(order.ID, {BillingAddressID: order.BillingAddressID})
+                .then(function() {
+                    $state.reload();
+                })
+        }
+    }
+
+    function SaveCustomAddress(order) {
+        if (vm.saveAddress) {
+            Addresses.Create(vm.address)
+                .then(function(address) {
+                    ImpersonationService.Impersonation(function() {
+                        Me.Get()
+                            .then(function(me) {
+                                Addresses.SaveAssignment({
+                                    AddressID: address.ID,
+                                    UserID: me.ID,
+                                    IsBilling: true,
+                                    IsShipping: false
+                                })
+                                .then(function() {
+                                    Orders.Patch(order.ID, {BillingAddressID: address.ID})
+                                        .then(function() {
+                                            $state.reload();
+                                        });
+                                });
+                            });
+                    });
+                });
+        }
+        else {
+            Orders.SetBillingAddress(order.ID, vm.address)
+                .then(function() {
+                    $state.reload();
+                });
+        }
+    }
 }
