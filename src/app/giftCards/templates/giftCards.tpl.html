@@ -1,45 +1,51 @@
-<article class="container-fluid">
-    <h3 class="page-header">
-        Gift Cards
-    </h3>
-    <ordercloud-search placeholder="Search Gift Cards..." controlleras="giftCards"></ordercloud-search>
-    <section class="table-fixed-header">
-        <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="SpendingAccounts" controlleras="giftCards">
-            <table class="table table-hover">
-                <colgroup>
-                    <col class="action-column"/>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                        <div>ID</div>
-                    </th>
-                    <th>
-                        <div>Name</div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="giftCard in giftCards.list.Items track by $index">
-                    <td>
-                        <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
-                            <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
-                            <ul uib-dropdown-menu role="menu">
-                                <li role="menuitem"><a ui-sref="^.giftCardEdit({giftCardid:giftCard.ID})">Edit Gift Card</a></li>
-                                <li role="menuitem"><a ui-sref="^.giftCardAssignGroup({giftCardid:giftCard.ID})">Assign User Group</a></li>
-                                <li role="menuitem"><a ui-sref="^.giftCardAssignUser({giftCardid:giftCard.ID})">Assign User</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td>{{giftCard.ID}}</td>
-                    <td>{{giftCard.Name}}</td>
-                </tr>
-                </tbody>
-            </table>
+<ui-view>
+    <article class="container-fluid">
+        <h3 class="page-header">
+            Gift Cards
+        </h3>
+        <ordercloud-search placeholder="Search Gift Cards..." controlleras="giftCards"></ordercloud-search>
+        <div class="well well-lg text-center" ng-if="!giftCards.list.Items.length">
+            <b ng-if="!giftCards.searching()">The selected buyer does not have any gift cards.</b>
+            <b ng-if="giftCards.searching()"><i class="fa fa-search"></i> No gift cards match your search.</b>
         </div>
-    </section>
-    <button type="button" class="btn btn-success" ui-sref="^.giftCardCreate"><i class="fa fa-plus-circle"></i> Create New</button>
-</article>
+        <section class="table-fixed-header" ng-if="giftCards.list.Items.length">
+            <div class="table-header-bg"></div>
+            <div class="table-container" ordercloud-infinite-scroll servicename="SpendingAccounts" controlleras="giftCards">
+                <table class="table table-hover">
+                    <colgroup>
+                        <col class="action-column"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <div>ID</div>
+                        </th>
+                        <th>
+                            <div>Name</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="giftCard in giftCards.list.Items track by $index">
+                        <td>
+                            <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
+                                <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                <ul uib-dropdown-menu role="menu">
+                                    <li role="menuitem"><a ui-sref=".edit({giftCardid:giftCard.ID})">Edit Gift Card</a></li>
+                                    <li role="menuitem"><a ui-sref=".assignGroup({giftCardid:giftCard.ID})">Assign User Group</a></li>
+                                    <li role="menuitem"><a ui-sref=".assignUser({giftCardid:giftCard.ID})">Assign User</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{giftCard.ID}}</td>
+                        <td>{{giftCard.Name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <button type="button" class="btn btn-success" ui-sref=".create"><i class="fa fa-plus-circle"></i> Create New</button>
+    </article>
+</ui-view>

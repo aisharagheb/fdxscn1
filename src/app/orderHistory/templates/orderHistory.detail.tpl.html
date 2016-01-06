@@ -1,0 +1,151 @@
+<ui-view>
+    <article class="container-fluid">
+        <h3 class="page-header">
+            <b>{{orderHistoryDetail.order.Type}} Order - {{orderHistoryDetail.order.ID}}</b>
+        </h3>
+        <form name="OrderHistoryDetailForm" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-1">Order ID:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.ID}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1">Date {{orderHistoryDetail.order.DateSubmitted ? 'Submitted' : 'Created'}}:</label>
+                <div class="col-sm-11">
+                    {{(orderHistoryDetail.order.DateSubmitted || orderHistoryDetail.order.DateCreated) | date:'medium'}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1">Created By:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.FromUserFirstName + ' ' + orderHistoryDetail.order.FromUserLastName}}
+                </div>
+            </div>
+            <div class="form-group" ng-if="orderHistoryDetail.order.PaymentMethod">
+                <label class="col-sm-1">Payment Method:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.PaymentMethod | paymentmethods}}
+                </div>
+            </div>
+            <div class="form-group" ng-if="['CreditCard', 'SpendingAccount'].indexOf(orderHistoryDetail.order.PaymentMethod) > -1">
+                <label class="col-sm-1">{{orderHistoryDetail.order.PaymentMethod == 'CreditCard' ? 'Credit Card' : 'Spending Account'}}:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.PaymentMethod == 'CreditCard' ? (orderHistoryDetail.order.CreditCard.CardType + ' ' + orderHistoryDetail.order.CreditCard.PartialAccountNumber) : orderHistoryDetail.order.SpendingAccount.Name}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-1">Status:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.Status}}
+                </div>
+            </div>
+            <div class="form-group" ng-if="orderHistoryDetail.order.BillingAddress">
+                <label class="col-sm-1">Bill To:</label>
+                <div class="col-sm-11">
+                    <span ng-if="orderHistoryDetail.order.BillingAddress.CompanyName">{{orderHistoryDetail.order.BillingAddress.CompanyName}}<br /></span>
+                    <span ng-if="orderHistoryDetail.order.BillingAddress.FirstName || orderHistoryDetail.order.BillingAddress.LastName">{{orderHistoryDetail.order.BillingAddress.FirstName + ' ' + orderHistoryDetail.order.BillingAddress.LastName}}<br /></span>
+                    <span>{{orderHistoryDetail.order.BillingAddress.Street1}}<br /></span>
+                    <span ng-if="orderHistoryDetail.order.BillingAddress.Street2">{{orderHistoryDetail.order.BillingAddress.Street2}}<br /></span>
+                    <span>{{orderHistoryDetail.order.BillingAddress.City + ', ' + orderHistoryDetail.order.BillingAddress.State + ' ' + orderHistoryDetail.order.BillingAddress.Zip}}<br /></span>
+                </div>
+            </div>
+            <div class="form-group" ng-if="orderHistoryDetail.order.ShippingAddress">
+                <label class="col-sm-1">Ship To:</label>
+                <div class="col-sm-11">
+                    <span ng-if="orderHistoryDetail.order.ShippingAddress.CompanyName">{{orderHistoryDetail.order.ShippingAddress.CompanyName}}<br /></span>
+                    <span ng-if="orderHistoryDetail.order.ShippingAddress.FirstName || orderHistoryDetail.order.ShippingAddress.LastName">{{orderHistoryDetail.order.ShippingAddress.FirstName + ' ' + orderHistoryDetail.order.ShippingAddress.LastName}}<br /></span>
+                    <span>{{orderHistoryDetail.order.ShippingAddress.Street1}}<br /></span>
+                    <span ng-if="orderHistoryDetail.order.ShippingAddress.Street2">{{orderHistoryDetail.order.ShippingAddress.Street2}}<br /></span>
+                    <span>{{orderHistoryDetail.order.ShippingAddress.City + ', ' + orderHistoryDetail.order.ShippingAddress.State + ' ' + orderHistoryDetail.order.ShippingAddress.Zip}}<br /></span>
+                </div>
+            </div>
+            <div class="form-group" ng-if="orderHistoryDetail.order.CostCenter">
+                <label class="col-sm-1">Cost Center:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.CostCenter}}
+                </div>
+            </div>
+            <div class="form-group" ng-if="orderHistoryDetail.order.Comments">
+                <label class="col-sm-1">Comments:</label>
+                <div class="col-sm-11">
+                    {{orderHistoryDetail.order.Comments}}
+                </div>
+            </div>
+            <div ng-if="orderHistoryDetail.order.LineItems.length">
+                <section class="table-fixed-header">
+                    <div class="table-header-bg"></div>
+                    <div class="table-container" ordercloud-infinite-scroll controlleras="orderEdit">
+                        <table class="table table-hover">
+                            <colgroup>
+                                <col class="action-column"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <div>ID</div>
+                                </th>
+                                <th>
+                                    <div>Product</div>
+                                </th>
+                                <th>
+                                    <div>Unit Price</div>
+                                </th>
+                                <th>
+                                    <div>Quantity</div>
+                                </th>
+                                <th>
+                                    <div>Price</div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="li in orderHistoryDetail.order.LineItems track by $index">
+                                <td>
+                                    <a ui-sref="orderHistory.detail.lineItem({lineitemid: li.ID})">{{li.ID}}</a>
+                                </td>
+                                <td>
+                                    {{li.Product.Name}}
+                                </td>
+                                <td>{{li.UnitPrice | currency}}</td>
+                                <td>{{li.Quantity}}</td>
+                                <td>{{li.LineTotal | currency}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div class="well well-lg text-center" ng-if="!orderHistoryDetail.order.LineItems.length">
+                <b>This order does not have any line items</b>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-2">Subtotal:</span>
+                <div class="col-sm-10">
+                    {{orderHistoryDetail.order.Subtotal | currency}}
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-2">Estimated Shipping & Handling:</span>
+                <div class="col-sm-10">
+                    {{orderHistoryDetail.order.ShippingCost | currency}}
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="col-sm-2">Tax:</span>
+                <div class="col-sm-10">
+                    {{orderHistoryDetail.order.TaxCost | currency}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2">Total:</label>
+                <div class="col-sm-10">
+                    {{orderHistoryDetail.order.Total | currency}}
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-default" ui-sref="orderHistory">Back to List</button>
+            </div>
+        </form>
+    </article>
+</ui-view>

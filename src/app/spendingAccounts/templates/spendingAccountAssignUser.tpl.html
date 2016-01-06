@@ -1,6 +1,6 @@
 <article class="container-fluid">
     <h3 class="page-header">
-        User Assignments for {{spendingAccountsAssignUser.spendingAccount.Name}}
+        User Assignments for {{spendingAccountAssignUser.spendingAccount.Name}}
     </h3>
     <section class="table-fixed-header">
         <div class="table-header-bg"></div>
@@ -19,7 +19,7 @@
                         <div>Username</div>
                     </th>
                     <th>
-                        <div>Allow To Exceed Balance</div>
+                        <div>Allow Exceed Balance</div>
                     </th>
                 </tr>
                 </thead>
@@ -39,8 +39,8 @@
         </div>
     </section>
     <div class="form-group">
-        <button type="button" class="btn btn-default" ui-sref="^.spendingAccounts"><i class="fa fa-arrow-left"></i> Back</button>
+        <button type="button" class="btn btn-default" ui-sref="^"><i class="fa fa-arrow-left"></i> Back</button>
         <button type="button" class="btn btn-primary" ng-click="spendingAccountAssignUser.saveAssignments()">Update Party Assignments</button>
-        <button type="button" class="btn btn-default" ui-sref="^.spendingAccountAssignGroup({spendingAccountid: spendingAccountAssignUser.spendingAccount.ID})">Assign Users</button>
+        <button type="button" class="btn btn-default" ui-sref="^.assignGroup({spendingAccountid: spendingAccountAssignUser.spendingAccount.ID})">Assign Users</button>
     </div>
 </article>

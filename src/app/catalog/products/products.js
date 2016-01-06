@@ -7,14 +7,28 @@ angular.module('orderCloud')
 
 function ProductListConfig($stateProvider) {
     $stateProvider
-        .state('base.catalog.products', {
+        .state('catalog.products', {
             url: '/products',
-            templateUrl: 'catalog/templates/products.tpl.html',
+            templateUrl: 'catalog/products/templates/products.tpl.html',
             controller: 'ProductListCtrl',
             controllerAs: 'products'
         });
 }
 
-function ProductListController() {
+function ProductListController($q, Me, ImpersonationService) {
+    var vm = this;
+    vm.list = {
+        Meta: {},
+        Items: []
+    };
+    vm.searchfunction = Search;
 
+    function Search(searchTerm) {
+        var dfd = $q.defer();
+        Me.ListProducts(searchTerm)
+            .then(function(data) {
+                dfd.resolve(data);
+            });
+        return dfd.promise;
+    }
 }

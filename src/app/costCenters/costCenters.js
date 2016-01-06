@@ -10,7 +10,8 @@ angular.module( 'orderCloud' )
 
 function CostCentersConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.costCenters', {
+        .state( 'costCenters', {
+            parent: 'base',
             url: '/costCenters',
             templateUrl:'costCenters/templates/costCenters.tpl.html',
             controller:'CostCentersCtrl',
@@ -22,8 +23,8 @@ function CostCentersConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.costCenterEdit', {
-            url: '/costCenters/:costCenterid/edit',
+        .state( 'costCenters.edit', {
+            url: '/:costCenterid/edit',
             templateUrl:'costCenters/templates/costCenterEdit.tpl.html',
             controller:'CostCenterEditCtrl',
             controllerAs: 'costCenterEdit',
@@ -35,14 +36,14 @@ function CostCentersConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.costCenterCreate', {
-            url: '/costCenters/create',
+        .state( 'costCenters.create', {
+            url: '/create',
             templateUrl:'costCenters/templates/costCenterCreate.tpl.html',
             controller:'CostCenterCreateCtrl',
             controllerAs: 'costCenterCreate'
         })
-        .state( 'base.costCenterAssign', {
-            url: '/costCenters/:costCenterid/assign',
+        .state( 'costCenters.assign', {
+            url: '/:costCenterid/assign',
             templateUrl: 'costCenters/templates/costCenterAssign.tpl.html',
             controller: 'CostCenterAssignCtrl',
             controllerAs: 'costCenterAssign',
@@ -58,7 +59,7 @@ function CostCentersConfig( $stateProvider ) {
                 },
                 SelectedCostCenter: function($stateParams, $state, CostCenters) {
                     return CostCenters.Get($stateParams.costCenterid).catch(function() {
-                        $state.go('^.costCenters');
+                        $state.go('^');
                     });
                 }
             }
@@ -83,7 +84,7 @@ function CostCenterEditController( $exceptionHandler, $state, SelectedCostCenter
     vm.Submit = function() {
         CostCenters.Update(costCenterid, vm.costCenter)
             .then(function() {
-                $state.go('base.costCenters')
+                $state.go('costCenters', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -93,7 +94,7 @@ function CostCenterEditController( $exceptionHandler, $state, SelectedCostCenter
     vm.Delete = function() {
         CostCenters.Delete(SelectedCostCenter.ID)
             .then(function() {
-                $state.go('base.costCenters')
+                $state.go('costCenters', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -108,7 +109,7 @@ function CostCenterCreateController( $exceptionHandler,$state, CostCenters) {
     vm.Submit = function() {
         CostCenters.Create(vm.costCenter)
             .then(function() {
-                $state.go('base.costCenters')
+                $state.go('costCenters', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

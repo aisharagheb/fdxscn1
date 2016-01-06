@@ -19,10 +19,10 @@ describe('Component: GiftCards', function() {
         };
     }));
 
-    describe('State: Base.giftCards', function() {
+    describe('State: giftCards', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
-            state = $state.get('base.giftCards');
+            state = $state.get('giftCards');
             spyOn(SpendingAccounts, 'List').and.returnValue(null);
         }));
         it('should resolve GiftCardList', inject(function ($injector, SpendingAccounts) {
@@ -31,10 +31,10 @@ describe('Component: GiftCards', function() {
         }));
     });
 
-    describe('State: Base.giftCardEdit', function() {
+    describe('State: giftCards.edit', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
-            state = $state.get('base.giftCardEdit');
+            state = $state.get('giftCards.edit');
             spyOn(SpendingAccounts, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedGiftCard', inject(function ($injector, $stateParams, SpendingAccounts) {
@@ -43,10 +43,10 @@ describe('Component: GiftCards', function() {
         }));
     });
 
-    describe('State: Base.giftCardAssignGroup', function() {
+    describe('State: giftCards.assignGroup', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, UserGroups) {
-            state = $state.get('base.giftCardAssignGroup');
+            state = $state.get('giftCards.assignGroup');
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
             spyOn(SpendingAccounts, 'Get').and.returnValue(null);
@@ -65,10 +65,10 @@ describe('Component: GiftCards', function() {
         }));
     });
 
-    describe('State: Base.giftCardAssignUser', function() {
+    describe('State: giftCards.assignUser', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, Users) {
-            state = $state.get('base.giftCardAssignUser');
+            state = $state.get('giftCards.assignUser');
             spyOn(Users, 'List').and.returnValue(null);
             spyOn(SpendingAccounts, 'Get').and.returnValue(null);
             spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
@@ -140,7 +140,7 @@ describe('Component: GiftCards', function() {
                 expect(SpendingAccounts.Update).toHaveBeenCalledWith(giftCardEditCtrl.giftCardID, giftCardEditCtrl.giftCard);
             }));
             it ('should enter the giftCards state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.giftCards');
+                expect($state.go).toHaveBeenCalledWith('giftCards', {}, {reload:true});
             }));
         });
 
@@ -156,7 +156,7 @@ describe('Component: GiftCards', function() {
                 expect(SpendingAccounts.Delete).toHaveBeenCalledWith(giftCard.ID);
             }));
             it ('should enter the giftCards state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.giftCards');
+                expect($state.go).toHaveBeenCalledWith('giftCards', {}, {reload:true});
             }));
         });
     });
@@ -172,7 +172,7 @@ describe('Component: GiftCards', function() {
 
         describe('Submit', function() {
             beforeEach(inject(function(SpendingAccounts) {
-                giftCardCreateCtrl.giftcard = giftCard;
+                giftCardCreateCtrl.giftCard = giftCard;
                 var defer = q.defer();
                 defer.resolve(giftCard);
                 spyOn(SpendingAccounts, 'Create').and.returnValue(defer.promise);
@@ -180,10 +180,10 @@ describe('Component: GiftCards', function() {
                 scope.$digest();
             }));
             it ('should call the SpendingAccounts Create method', inject(function(SpendingAccounts) {
-                expect(SpendingAccounts.Create).toHaveBeenCalledWith(giftCardCreateCtrl.giftcard);
+                expect(SpendingAccounts.Create).toHaveBeenCalledWith(giftCardCreateCtrl.giftCard);
             }));
             it ('should enter the giftCards state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.giftCards');
+                expect($state.go).toHaveBeenCalledWith('giftCards', {}, {reload:true});
             }));
         });
     });

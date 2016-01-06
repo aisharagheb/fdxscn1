@@ -1,0 +1,43 @@
+<ui-view>
+    <article class="container-fluid">
+        <h3 class="page-header">
+            Orders
+        </h3>
+        <ordercloud-search servicename="Orders" controlleras="orderHistory"></ordercloud-search>
+        <div class="well well-lg text-center" ng-if="!orderHistory.orders.Items.length">
+            <b ng-if="!orderHistory.searching()">The selected buyer does not have any orderHistory.</b>
+            <b ng-if="orderHistory.searching()"><i class="fa fa-search"></i> No orders match your search.</b>
+        </div>
+        <section class="table-fixed-header" ng-if="orderHistory.orders.Items.length">
+            <div class="table-header-bg"></div>
+            <div class="table-container" ordercloud-infinite-scroll servicename="Orders" controlleras="orderHistory">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>
+                            <div>ID</div>
+                        </th>
+                        <th>
+                            <div>Status</div>
+                        </th>
+                        <th>
+                            <div>Date Created/Submitted</div>
+                        </th>
+                        <th>
+                            <div>Total</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="order in orderHistory.orders.Items track by $index">
+                        <td ui-sref="orderHistory.detail({orderid: order.ID})">{{order.ID}}</td>
+                        <td>{{order.Status}}</td>
+                        <td>{{(order.DateSubmitted ||  order.DateCreated) | date}}</td>
+                        <td>{{order.Total | currency}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </article>
+</ui-view>

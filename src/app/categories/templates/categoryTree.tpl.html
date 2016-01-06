@@ -1,7 +1,5 @@
 <article class="container-fluid">
-
     <h3 class="page-header">Category Tree</h3>
-
     <script type="text/ng-template" id="nodes_renderer.html">
         <div ui-tree-handle class="tree-node tree-node-content" ng-class="{'inactive-node':!node.Active}">
             <i ng-if="node.children && node.children.length > 0" data-nodrag ng-click="categoryTree.toggle(this)"
@@ -12,9 +10,9 @@
                }">
             </i>
             <p>{{node.Name}}</p>
-            <a class="btn btn-default" data-nodrag ui-sref="^.categoryEdit({categoryid: node.ID})"><i class="fa fa-edit"></i> Edit</a>
+            <a class="btn btn-default" data-nodrag ui-sref="^.edit({categoryid: node.ID})"><i class="fa fa-edit"></i> Edit</a>
         </div>
-        <ol ui-tree-nodes ng-model="node.children" ng-class="{'ng-hide': collapsed}">
+        <ol ui-tree-nodes ng-model="node.children" collapse="collapsed">
             <li ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'">
             </li>
         </ol>
@@ -28,6 +26,6 @@
         </div>
     </section>
     <section></section>
-    <button type="button" class="btn btn-success" ui-sref="^.categoryCreate"><i class="fa fa-plus-circle"></i> Create New</button>
-    <button ui-sref="^.categories" class="btn btn-default"><i class="fa fa-table"></i> Category List</button>
+    <button type="button" class="btn btn-success" ui-sref="^.create"><i class="fa fa-plus-circle"></i> Create New</button>
+    <button ui-sref="^" class="btn btn-default"><i class="fa fa-table"></i> Category List</button>
 </article>

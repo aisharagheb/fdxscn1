@@ -2,7 +2,7 @@
     <h3 class="page-header">
         <b>Edit Spec</b>
     </h3>
-    <form name="SpecEditForm" ng-submit="specEdit.Submit()">
+    <form name="specEditForm" ng-submit="specEdit.Submit()">
         <div class="row">
             <div class="form-group col-sm-6">
                 <label for="specIDInput">Spec ID</label>
@@ -25,17 +25,17 @@
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label for="specOptIDInput">Spec Option ID</label>
-                        <input id="specOptIDInput" type="text" class="form-control" ng-model="specEdit.SpecOptID"/>
+                        <input id="specOptIDInput" type="text" class="form-control" ng-model="specEdit.Option.ID"/>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="specOptListOrderInput">List Order</label>
-                        <input id="specOptListOrderInput" type="text" class="form-control" ng-model="specEdit.SpecOptListOrder"/>
+                        <input id="specOptListOrderInput" type="text" class="form-control" ng-model="specEdit.Option.ListOrder"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label for="specMUTypeInput">Markup Type</label>
-                        <select id="specMUTypeInput" class="form-control" ng-model="specEdit.SpecOptMarkupType">
+                        <select id="specMUTypeInput" class="form-control" ng-model="specEdit.Option.MarkupType">
                             <option value="None">None</option>
                             <option value="AmountPerQuantity">Fixed amount per unit</option>
                             <option value="AmountTotal">Fixed amount per line</option>
@@ -44,17 +44,17 @@
                     </div>
                     <div class="col-sm-3 form-group">
                         <label for="specValueInput">Value</label>
-                        <input id="specValueInput" type="text" class="form-control" ng-model="specEdit.SpecOptValue"/>
+                        <input id="specValueInput" type="text" class="form-control" ng-model="specEdit.Option.Value"/>
                     </div>
                     <div class="col-sm-3 form-group">
                         <label for="specMarkupInput">Markup</label>
-                        <input id="specMarkupInput" type="number" step="any" class="form-control" ng-disabled="!specEdit.SpecOptMarkupType || specEdit.SpecOptMarkupType =='None'" ng-model="specEdit.SpecOptMarkup"/>
+                        <input id="specMarkupInput" type="number" step="any" class="form-control" ng-disabled="!specEdit.SpecOptMarkupType || specEdit.SpecOptMarkupType =='None'" ng-model="specEdit.Option.Markup"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label for="specOptIsOpenInput">
-                            <input id="specOptIsOpenInput" type="checkbox" ng-model="specEdit.SpecOptOpen"/>
+                            <input id="specOptIsOpenInput" type="checkbox" ng-model="specEdit.Option.IsOpenText"/>
                             Is Open Text
                         </label>
                     </div>
@@ -62,14 +62,14 @@
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label for="specOptDefaultInput">
-                            <input id="specOptDefaultInput" type="checkbox" ng-model="specEdit.SpecOptDefault"/>
+                            <input id="specOptDefaultInput" type="checkbox" ng-model="specEdit.DefaultOptionID"/>
                             Set as default Spec Option
                         </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2 form-group">
-                        <button type="button" class="btn btn-primary" ng-click="specEdit.addSpecOpt()" ng-disabled="specEdit.SpecOptID == null || specEdit.SpecOptValue == null">Add Spec Option</button>
+                        <button type="button" class="btn btn-primary" ng-click="specEdit.addSpecOpt()" ng-disabled="specEdit.Option.ID == null || specEdit.Option.Value == null">Add Spec Option</button>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
             </h4>
             <section class="table-fixed-header">
                 <div class="table-header-bg"></div>
-                <div class="table-container" ordercloud-infinite-scroll servicename="Specs" listobject="specEdit.spec.Options">
+                <div class="table-container" ordercloud-infinite-scroll servicename="Specs" controlleras="specEdit">
                     <table class="table table-hover">
                         <colgroup>
                             <col class="action-column"/>
@@ -104,7 +104,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="specOpts in specEdit.spec.Options track by $index">
+                        <tr ng-repeat="specOpts in specEdit.Options track by $index">
                             <td class="text-center"><a class="fa fa-trash text-danger" ng-click="specEdit.deleteSpecOpt($index)"></a></td>
                             <td>{{specOpts.ID}}</td>
                             <td>{{specOpts.Value}}</td>
@@ -137,8 +137,8 @@
             </div>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" ng-disabled="SpecEditForm.$invalid">Save</button>
-            <button type="button" class="btn btn-default" ui-sref="^.specs">Cancel</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="specEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^">Cancel</button>
         </div>
     </form>
 </article>

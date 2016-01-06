@@ -5,42 +5,42 @@
     <form name="GiftCardCreateForm" ng-submit="giftCardCreate.Submit()">
         <div class="row">
             <div class="form-group col-md-6">
-                <label for="giftcardIDInput">Gift Card ID</label>
-                <input id="giftcardIDInput" type="text" class="form-control" ordercloud-auto-id ng-model="giftCardCreate.giftcard.ID">
+                <label for="giftCardIDInput">Gift Card ID</label>
+                <input id="giftCardIDInput" type="text" class="form-control" ordercloud-auto-id ng-model="giftCardCreate.giftCard.ID">
             </div>
             <div class="form-group col-md-6">
-                <label for="giftcardNameInput">Gift Card Name</label>
-                <input id="giftcardNameInput" type="text" class="form-control" required ng-model="giftCardCreate.giftcard.Name">
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
-                <label for="giftcardStartDate">Start Date</label>
-                <input id="giftcardStartDate" type="text" ng-click="open1 = !open1" required is-open="open1" uib-datepicker-popup="{{giftCardCreate.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardCreate.giftcard.StartDate">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="giftcardExpirationDate">End Date</label>
-                <input id="giftcardExpirationDate" type="text" ng-click="open2 = !open2" required is-open="open2" min-date="giftCardCreate.giftcard.StartDate" ng-disabled="!giftCardCreate.giftcard.StartDate" uib-datepicker-popup="{{giftCardCreate.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardCreate.giftcard.EndDate">
+                <label for="giftCardNameInput">Gift Card Name</label>
+                <input id="giftCardNameInput" type="text" class="form-control" required ng-model="giftCardCreate.giftCard.Name">
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6">
-                <label for="giftcardBalance">Balance</label>
-                <input id="giftcardBalance" type="number" class="form-control" required ng-model="giftCardCreate.giftcard.Balance">
+                <label for="giftCardStartDate">Start Date</label>
+                <input id="giftCardStartDate" type="text" ng-click="open1 = !open1" is-open="open1" uib-datepicker-popup="{{giftCardCreate.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardCreate.giftCard.StartDate">
             </div>
             <div class="form-group col-md-6">
-                <label for="giftcardCode">RedemptionCode</label>
+                <label for="giftCardExpirationDate">End Date</label>
+                <input id="giftCardExpirationDate" type="text" ng-click="open2 = !open2" is-open="open2" min-date="giftCardCreate.giftCard.StartDate" ng-disabled="!giftCardCreate.giftCard.StartDate" uib-datepicker-popup="{{giftCardCreate.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardCreate.giftCard.EndDate">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="giftCardBalance">Balance</label>
+                <input id="giftCardBalance" type="number" class="form-control" required ng-model="giftCardCreate.giftCard.Balance">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="giftCardCode">RedemptionCode</label>
                 <div class="input-group">
-                    <input id="giftcardCode" type="text" class="form-control" required ng-model="giftCardCreate.giftcard.RedemptionCode">
+                    <input id="giftCardCode" type="text" class="form-control" required ng-model="giftCardCreate.giftCard.RedemptionCode">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" ng-click="giftCardCreate.giftcard.RedemptionCode = giftCardCreate.createCode()">Generate Code</button>
+                        <button class="btn btn-default" type="button" ng-click="giftCardCreate.giftCard.RedemptionCode = giftCardCreate.createCode()">Generate Code</button>
                     </span>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" ng-click="giftCardCreate.Submit()" ng-disabled="GiftCardCreateForm.$invalid">Save</button>
-            <button type="button" class="btn btn-default" ui-sref="^.giftCards">Cancel</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="GiftCardCreateForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^">Cancel</button>
         </div>
     </form>
 </article>

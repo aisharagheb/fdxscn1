@@ -9,22 +9,21 @@ angular.module( 'orderCloud' )
 
 function BuyerConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.buyers', {
+        .state( 'buyers', {
+            parent: 'base',
             url: '/buyers',
             templateUrl: 'buyers/templates/buyers.tpl.html',
             controller: 'BuyerCtrl',
             controllerAs: 'buyers',
-            data: {
-                componentName: 'Buyers'
-            },
+            data: { componentName: 'Buyers' },
             resolve: {
                 BuyerList: function(Buyers) {
                     return Buyers.List();
                 }
             }
         })
-        .state( 'base.buyerEdit', {
-            url: '/buyers/:buyerid/edit',
+        .state( 'buyers.edit', {
+            url: '/:buyerid/edit',
             templateUrl: 'buyers/templates/buyerEdit.tpl.html',
             controller: 'BuyerEditCtrl',
             controllerAs: 'buyerEdit',
@@ -34,8 +33,8 @@ function BuyerConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.buyerCreate', {
-            url: '/buyers/create',
+        .state( 'buyers.create', {
+            url: '/create',
             templateUrl: 'buyers/templates/buyerCreate.tpl.html',
             controller: 'BuyerCreateCtrl',
             controllerAs: 'buyerCreate'
@@ -55,7 +54,7 @@ function BuyerEditController($exceptionHandler, $state, SelectedBuyer, Buyers) {
     vm.Submit = function() {
         Buyers.Update(vm.buyer)
             .then(function() {
-                $state.go('base.buyers');
+                $state.go('buyers', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -69,7 +68,7 @@ function BuyerCreateController($exceptionHandler, $state, Buyers) {
     vm.Submit = function () {
         Buyers.Create(vm.buyer)
             .then(function() {
-                $state.go('base.buyers');
+                $state.go('buyers', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

@@ -16,11 +16,11 @@
         <div class="row">
             <div class="form-group col-md-6">
                 <label for="giftcardStartDate">Start Date</label>
-                <input required id="giftcardStartDate" type="text" ng-click="open1 = !open1" is-open="open1" uib-datepicker-popup="{{giftCardEdit.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardEdit.giftCard.StartDate">
+                <input id="giftcardStartDate" type="text" ng-click="open1 = !open1" is-open="open1" uib-datepicker-popup="{{giftCardEdit.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardEdit.giftCard.StartDate">
             </div>
             <div class="form-group col-md-6">
                 <label for="giftcardExpirationDate">End Date</label>
-                <input required id="giftcardExpirationDate" type="text" ng-click="open2 = !open2" is-open="open2" min-date="giftCardEdit.giftCard.StartDate" ng-disabled="!giftCardEdit.giftCard.StartDate" uib-datepicker-popup="{{giftCardEdit.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardEdit.giftCard.EndDate">
+                <input id="giftcardExpirationDate" type="text" ng-click="open2 = !open2" is-open="open2" min-date="giftCardEdit.giftCard.StartDate" ng-disabled="!giftCardEdit.giftCard.StartDate" uib-datepicker-popup="{{giftCardEdit.format}}" datepicker-append-to-body="true" class="form-control" ng-model="giftCardEdit.giftCard.EndDate">
             </div>
         </div>
         <div class="row">
@@ -34,8 +34,8 @@
             </div>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" ng-disabled="giftCardEditForm.$invalid" ng-click="giftCardEdit.Update(giftCardEdit.giftCard)">Save</button>
-            <button type="button" class="btn btn-default" ui-sref="^.giftCards">Cancel</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="giftCardEditForm.$invalid">Save</button>
+            <button type="button" class="btn btn-default" ui-sref="^">Cancel</button>
             <button type="button" class="btn btn-default" ng-click="giftCardEdit.Delete(giftCardEdit.giftCard)"><i class="fa fa-trash text-danger"></i></button>
         </div>
     </form>

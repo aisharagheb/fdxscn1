@@ -9,7 +9,8 @@ angular.module( 'orderCloud' )
 
 function ShipmentsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.shipments', {
+        .state( 'shipments', {
+            parent: 'base',
             url: '/shipments',
             templateUrl:'shipments/templates/shipments.tpl.html',
             controller:'ShipmentsCtrl',
@@ -21,8 +22,8 @@ function ShipmentsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.shipmentEdit', {
-            url: '/shipments/:shipmentid/edit',
+        .state( 'shipments.edit', {
+            url: '/:shipmentid/edit',
             templateUrl:'shipments/templates/shipmentEdit.tpl.html',
             controller:'ShipmentEditCtrl',
             controllerAs: 'shipmentEdit',
@@ -35,8 +36,8 @@ function ShipmentsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.shipmentCreate', {
-            url: '/shipments/create',
+        .state( 'shipments.create', {
+            url: '/create',
             templateUrl:'shipments/templates/shipmentCreate.tpl.html',
             controller:'ShipmentCreateCtrl',
             controllerAs: 'shipmentCreate',
@@ -92,8 +93,11 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
 
     vm.deleteLineItem = function(index) {
         vm.shipment.Items.splice(index, 1);
-        vm.lineitems.list.Items[index].addToShipment = false;
-        vm.lineitems.list.Items[index].disabled = false;
+        Shipments.Patch(shipmentid, {Items: vm.shipment.Items});
+        if (vm.lineitems.list.Items) {
+            vm.lineitems.list.Items[index].addToShipment = false;
+            vm.lineitems.list.Items[index].disabled = false;
+        }
     };
 
     vm.Submit = function() {
@@ -104,7 +108,7 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
         });
         Shipments.Update(shipmentid, vm.shipment)
             .then(function() {
-                $state.go('base.shipments');
+                $state.go('shipments', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -114,7 +118,7 @@ function ShipmentEditController( $exceptionHandler, $state, SelectedShipment, Sh
     vm.Delete = function() {
         Shipments.Delete(shipmentid, false)
             .then(function() {
-                $state.go('base.shipments')
+                $state.go('shipments', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -146,6 +150,11 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
             });
     };
 
+    vm.unselectOrder = function() {
+        vm.OrderSelected = false;
+        vm.lineitems.list = [];
+    };
+
     vm.Submit = function() {
         angular.forEach(vm.lineitems.list.Items, function(li) {
             if(li.addToShipment){
@@ -154,7 +163,7 @@ function ShipmentCreateController( $exceptionHandler, $state, Shipments, OrderLi
         });
         Shipments.Create(vm.shipment)
             .then(function() {
-                $state.go('base.shipments')
+                $state.go('shipments', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

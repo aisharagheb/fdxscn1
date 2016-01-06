@@ -12,7 +12,8 @@ angular.module( 'orderCloud' )
 
 function GiftCardsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.giftCards', {
+        .state( 'giftCards', {
+            parent: 'base',
             url: '/giftCards',
             templateUrl: 'giftCards/templates/giftCards.tpl.html',
             controller: 'GiftCardsCtrl',
@@ -24,8 +25,8 @@ function GiftCardsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.giftCardEdit', {
-            url: '/giftCards/:giftCardid/edit',
+        .state( 'giftCards.edit', {
+            url: '/:giftCardid/edit',
             templateUrl: 'giftCards/templates/giftCardEdit.tpl.html',
             controller: 'GiftCardEditCtrl',
             controllerAs: 'giftCardEdit',
@@ -35,14 +36,14 @@ function GiftCardsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.giftCardCreate', {
-            url: '/giftCards/create',
+        .state( 'giftCards.create', {
+            url: '/create',
             templateUrl: 'giftCards/templates/giftCardCreate.tpl.html',
             controller: 'GiftCardCreateCtrl',
             controllerAs: 'giftCardCreate'
         })
-        .state( 'base.giftCardAssignGroup', {
-            url: '/giftCards/:giftCardid/assign',
+        .state( 'giftCards.assignGroup', {
+            url: '/:giftCardid/assign',
             templateUrl: 'giftCards/templates/giftCardAssignGroup.tpl.html',
             controller: 'GiftCardAssignGroupCtrl',
             controllerAs: 'giftCardAssign',
@@ -58,8 +59,8 @@ function GiftCardsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.giftCardAssignUser', {
-            url: '/giftCards/:giftCardid/assign/user',
+        .state( 'giftCards.assignUser', {
+            url: '/:giftCardid/assign/user',
             templateUrl: 'giftCards/templates/giftCardAssignUser.tpl.html',
             controller: 'GiftCardAssignUserCtrl',
             controllerAs: 'giftCardAssignUser',
@@ -77,11 +78,14 @@ function GiftCardsConfig( $stateProvider ) {
         });
 }
 
-function GiftCardsController ( GiftCardList, SpendingAccounts ) {
+function GiftCardsController ( GiftCardList, SpendingAccounts, TrackSearch ) {
     var vm = this;
     vm.list = GiftCardList;
     vm.pagingfunction = PagingFunction;
     vm.searchfunction = Search;
+    vm.searching = function() {
+        return TrackSearch.GetTerm() ? true : false;
+    };
 
     function PagingFunction() {
         if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
@@ -102,11 +106,12 @@ function GiftCardEditController($state, $exceptionHandler, SelectedGiftCard, Gif
     vm.giftCard = SelectedGiftCard;
     vm.Submit = Submit;
     vm.Delete = Delete;
+    vm.giftCard.AllowAsPaymentMethod = true;
 
     function Submit() {
         SpendingAccounts.Update(giftCardID, vm.giftCard)
             .then(function() {
-                $state.go('base.giftCards')
+                $state.go('giftCards', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -116,7 +121,7 @@ function GiftCardEditController($state, $exceptionHandler, SelectedGiftCard, Gif
     function Delete() {
         SpendingAccounts.Delete(giftCardID)
             .then(function() {
-                $state.go('base.giftCards')
+                $state.go('giftCards', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -131,11 +136,13 @@ function GiftCardCreateController($state, $exceptionHandler, GiftCardFactory, Sp
     vm.Submit = Submit;
     vm.autoGen = GiftCardFactory.autoGenDefault;
     vm.createCode = GiftCardFactory.makeCode;
+    vm.giftCard = {};
+    vm.giftCard.AllowAsPaymentMethod = true;
 
     function Submit() {
-        SpendingAccounts.Create(vm.giftcard)
+        SpendingAccounts.Create(vm.giftCard)
             .then(function() {
-                $state.go('base.giftCards')
+                $state.go('giftCards', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

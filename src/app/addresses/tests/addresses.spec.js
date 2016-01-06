@@ -22,10 +22,10 @@ describe('Component: Addresses', function() {
         };
     }));
 
-    describe('State: Base.addresses', function() {
+    describe('State: addresses', function() {
         var state;
         beforeEach(inject(function($state, Addresses) {
-            state = $state.get('base.addresses');
+            state = $state.get('addresses');
             spyOn(Addresses, 'List').and.returnValue(null);
         }));
         it('should resolve AddressList', inject(function ($injector, Addresses) {
@@ -34,10 +34,10 @@ describe('Component: Addresses', function() {
         }));
     });
 
-    describe('State: Base.addressEdit', function() {
+    describe('State: addresses.edit', function() {
         var state;
         beforeEach(inject(function($state, Addresses) {
-            state = $state.get('base.addressEdit');
+            state = $state.get('addresses.edit');
             var defer = q.defer();
             defer.resolve();
             spyOn(Addresses, 'Get').and.returnValue(defer.promise);
@@ -48,10 +48,10 @@ describe('Component: Addresses', function() {
         }));
     });
 
-    describe('State: Base.addressAssign', function() {
+    describe('State: addresses.assign', function() {
         var state;
         beforeEach(inject(function($state, Addresses, UserGroups) {
-            state = $state.get('base.addressAssign');
+            state = $state.get('addresses.assign');
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(Addresses, 'ListAssignments').and.returnValue(null);
             var defer = q.defer();
@@ -96,7 +96,7 @@ describe('Component: Addresses', function() {
                 expect(Addresses.Update).toHaveBeenCalledWith(addressEditCtrl.addressID, addressEditCtrl.address);
             }));
             it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.addresses');
+                expect($state.go).toHaveBeenCalledWith('addresses', {}, {reload:true});
             }));
         });
 
@@ -112,7 +112,7 @@ describe('Component: Addresses', function() {
                 expect(Addresses.Delete).toHaveBeenCalledWith(address.ID, false);
             }));
             it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.addresses');
+                expect($state.go).toHaveBeenCalledWith('addresses', {}, {reload:true});
             }));
         });
     });
@@ -139,7 +139,7 @@ describe('Component: Addresses', function() {
                 expect(Addresses.Create).toHaveBeenCalledWith(address);
             }));
             it ('should enter the addresses state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.addresses');
+                expect($state.go).toHaveBeenCalledWith('addresses', {}, {reload:true} );
             }));
         });
     });

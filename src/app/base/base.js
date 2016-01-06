@@ -56,7 +56,7 @@ function BaseConfig( $stateProvider ) {
                 },
                 ComponentList: function($state, $q, Underscore) {
                     var deferred = $q.defer();
-                    var nonSpecific = ['Products', 'Specs', 'Price Schedules'];
+                    var nonSpecific = ['Products', 'Specs', 'Price Schedules', 'Admin Users'];
                     var components = {
                         nonSpecific: [],
                         buyerSpecific: []
@@ -64,10 +64,12 @@ function BaseConfig( $stateProvider ) {
                     angular.forEach($state.get(), function(state) {
                         if (!state.data || !state.data.componentName) return;
                         if (nonSpecific.indexOf(state.data.componentName) > -1) {
-                            components.nonSpecific.push({
-                                Display: state.data.componentName,
-                                StateRef: state.name
-                            });
+                            if (Underscore.findWhere(components.nonSpecific, {Display: state.data.componentName}) == undefined) {
+                                components.nonSpecific.push({
+                                    Display: state.data.componentName,
+                                    StateRef: state.name
+                                });
+                            }
                         } else {
                             if (Underscore.findWhere(components.buyerSpecific, {Display: state.data.componentName}) == undefined) {
                                 components.buyerSpecific.push({

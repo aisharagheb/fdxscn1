@@ -34,10 +34,10 @@ describe('Component: ApprovalRules', function() {
         };
     }));
 
-    describe('State: Base.approvalRules', function() {
+    describe('State: approvalRules', function() {
         var state;
         beforeEach(inject(function($state, ApprovalRules) {
-            state = $state.get('base.approvalRules');
+            state = $state.get('approvalRules');
             spyOn(ApprovalRules, 'List').and.returnValue(null);
         }));
         it('should resolve ApprovalRuleList', inject(function ($injector, ApprovalRules) {
@@ -46,10 +46,10 @@ describe('Component: ApprovalRules', function() {
         }));
     });
 
-    describe('State: Base.approvalRuleEdit', function() {
+    describe('State: approvalRules.edit', function() {
         var state;
         beforeEach(inject(function($state, ApprovalRules) {
-            state = $state.get('base.approvalRuleEdit');
+            state = $state.get('approvalRules.edit');
             var defer = q.defer();
             defer.resolve();
             spyOn(ApprovalRules, 'Get').and.returnValue(defer.promise);
@@ -84,7 +84,7 @@ describe('Component: ApprovalRules', function() {
                 expect(ApprovalRules.Update).toHaveBeenCalledWith(approvalRuleEditCtrl.approvalRuleID, approvalRuleEditCtrl.approvalRule);
             }));
             it ('should enter the approvalRules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.approvalRules');
+                expect($state.go).toHaveBeenCalledWith('approvalRules', {}, {reload:true});
             }));
         });
 
@@ -100,7 +100,7 @@ describe('Component: ApprovalRules', function() {
                 expect(ApprovalRules.Delete).toHaveBeenCalledWith(approvalRule.ID);
             }));
             it ('should enter the approvalRules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.approvalRules');
+                expect($state.go).toHaveBeenCalledWith('approvalRules', {}, {reload:true});
             }));
         });
     });
@@ -127,7 +127,7 @@ describe('Component: ApprovalRules', function() {
                 expect(ApprovalRules.Create).toHaveBeenCalledWith(approvalRule);
             }));
             it ('should enter the approvalRules state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.approvalRules');
+                expect($state.go).toHaveBeenCalledWith('approvalRules', {}, {reload:true});
             }));
         });
     });

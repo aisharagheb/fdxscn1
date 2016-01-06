@@ -1,42 +1,44 @@
-<article class="container-fluid">
-    <h3 class="page-header">
-        Credit Cards
-    </h3>
-    <div class="well well-lg text-center" ng-if="!creditCards.list.Items.length">
-        <b>The selected buyer does not have any credit cards.</b>
-    </div>
-    <section class="table-fixed-header" ng-if="creditCards.list.Items.length">
-        <div class="table-header-bg"></div>
-        <div class="table-container" ordercloud-infinite-scroll servicename="CreditCards" controlleras="creditCards">
-            <table class="table table-hover">
-                <colgroup>
-                    <col class="action-column"/>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>
-                    </th>
-                    <th>
-                        <div>ID</div>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="creditCard in creditCards.list.Items track by $index">
-                    <td>
-                        <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
-                            <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
-                            <ul uib-dropdown-menu role="menu">
-                                <li role="menuitem"><a ui-sref="^.creditCardEdit({creditCardid:creditCard.ID})">Edit Credit Card</a></li>
-                                <li role="menuitem"><a ui-sref="^.creditCardAssign({creditCardid:creditCard.ID})">Party Assignments</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td>{{creditCard.ID}}</td>
-                </tr>
-                </tbody>
-            </table>
+<ui-view>
+    <article class="container-fluid">
+        <h3 class="page-header">
+            Credit Cards
+        </h3>
+        <div class="well well-lg text-center" ng-if="!creditCards.list.Items.length">
+            <b>The selected buyer does not have any credit cards.</b>
         </div>
-    </section>
-    <button type="button" class="btn btn-success" ui-sref="^.creditCardCreate"><i class="fa fa-plus-circle"></i> Create New</button>
-</article>
+        <section class="table-fixed-header" ng-if="creditCards.list.Items.length">
+            <div class="table-header-bg"></div>
+            <div class="table-container" ordercloud-infinite-scroll servicename="CreditCards" controlleras="creditCards">
+                <table class="table table-hover">
+                    <colgroup>
+                        <col class="action-column"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <div>ID</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="creditCard in creditCards.list.Items track by $index">
+                        <td>
+                            <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
+                                <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                <ul uib-dropdown-menu role="menu">
+                                    <li role="menuitem"><a ui-sref=".edit({creditCardid:creditCard.ID})">Edit Credit Card</a></li>
+                                    <li role="menuitem"><a ui-sref=".assign({creditCardid:creditCard.ID})">Party Assignments</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{creditCard.ID}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <button type="button" class="btn btn-success" ui-sref=".create"><i class="fa fa-plus-circle"></i> Create New</button>
+    </article>
+</ui-view>

@@ -13,7 +13,8 @@ angular.module('orderCloud')
 
 function CatalogConfig($stateProvider) {
     $stateProvider
-        .state('base.catalog', {
+        .state('catalog', {
+            parent: 'base',
             url: '/catalog',
             data: {componentName: 'Catalog'},
             views: {
@@ -22,30 +23,23 @@ function CatalogConfig($stateProvider) {
                     controller: 'CatalogCtrl',
                     controllerAs: 'catalog'
                 },
-                'left@base.catalog': {
+                'left@catalog': {
                     templateUrl: 'catalog/templates/catalog.tree.tpl.html',
                     controller: 'CatalogTreeCtrl',
                     controllerAs: 'catalogTree'
                 }
             },
             resolve: {
-                Catalog: function($q, Me, ImpersonationService) {
-                    var dfd = $q.defer();
-                    Me.ListCategories(null, 1).then(
-                        function(response) {
-                            dfd.resolve(response);
-                        },
-                        function(response) {
-                            ImpersonationService.impersonate(response).then(function() {
-                                var categories = Me.As().ListCategories(null, 1);
-                                console.log(categories);
-                                dfd.resolve(categories);
-                            });
-                    });
-                    return dfd.promise;
-                },
                 Tree: function(CatalogTreeService) {
                     return CatalogTreeService.GetCatalogTree();
+                },
+                Catalog: function($q, Me, ImpersonationService, Tree) {
+                    return ImpersonationService.Impersonation(function() {
+                        return Me.ListCategories(null, 1);
+                    });
+                },
+                Order: function(CurrentOrder, Tree) {
+                    return CurrentOrder.Get();
                 }
             }
         });
@@ -85,7 +79,7 @@ function ProductListDirective() {
     };
 }
 
-function CatalogTreeService($q, Underscore, Me) {
+function CatalogTreeService($q, Underscore, ImpersonationService, Me) {
     return {
         GetCatalogTree: tree
     };
@@ -93,11 +87,14 @@ function CatalogTreeService($q, Underscore, Me) {
     function tree() {
         var tree = [];
         var dfd = $q.defer();
-        Me.ListCategories(null, 'all', 1, 100).then(function(list) {
-            angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
-                tree.push(getNode(node, list));
-            });
-            dfd.resolve(tree);
+        ImpersonationService.Impersonation(function() {
+            Me.ListCategories(null, 'all', 1, 100)
+                .then(function(list) {
+                    angular.forEach(Underscore.where(list.Items, {ParentID: null}), function(node) {
+                        tree.push(getNode(node, list));
+                    });
+                    dfd.resolve(tree);
+                });
         });
         return dfd.promise;
     }
@@ -135,7 +132,7 @@ function CatalogNode($compile) {
         scope: {
             node: '='
         },
-        template: '<li><a ui-sref="base.catalog.category({categoryid:node.ID})" ng-bind-html="node.Name"></a></li>',
+        template: '<li ui-sref-active="active"><a ui-sref="catalog.category({categoryid:node.ID})" ng-bind-html="node.Name"></a></li>',
         link: function(scope, element) {
             if (angular.isArray(scope.node.children)) {
                 element.append("<catalog-tree tree='node.children' />");

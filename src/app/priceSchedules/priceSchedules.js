@@ -9,7 +9,8 @@ angular.module( 'orderCloud' )
 
 function PriceSchedulesConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.priceSchedules', {
+        .state( 'priceSchedules', {
+            parent: 'base',
             url: '/priceSchedules',
             templateUrl:'priceSchedules/templates/priceSchedules.tpl.html',
             controller:'PriceSchedulesCtrl',
@@ -21,8 +22,8 @@ function PriceSchedulesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.priceScheduleEdit', {
-            url: '/priceSchedules/:priceScheduleid/edit',
+        .state( 'priceSchedules.edit', {
+            url: '/:priceScheduleid/edit',
             templateUrl:'priceSchedules/templates/priceScheduleEdit.tpl.html',
             controller:'PriceScheduleEditCtrl',
             controllerAs: 'priceScheduleEdit',
@@ -32,8 +33,8 @@ function PriceSchedulesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.priceScheduleCreate', {
-            url: '/priceSchedules/create',
+        .state( 'priceSchedules.create', {
+            url: '/create',
             templateUrl:'priceSchedules/templates/priceScheduleCreate.tpl.html',
             controller:'PriceScheduleCreateCtrl',
             controllerAs: 'priceScheduleCreate'
@@ -64,7 +65,7 @@ function PriceScheduleEditController( $exceptionHandler, $state, SelectedPriceSc
         vm.priceSchedule = PriceBreak.setMinMax(vm.priceSchedule);
         PriceSchedules.Update(priceScheduleid, vm.priceSchedule)
             .then(function() {
-                $state.go('base.priceSchedules')
+                $state.go('priceSchedules', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -74,7 +75,7 @@ function PriceScheduleEditController( $exceptionHandler, $state, SelectedPriceSc
     vm.Delete = function() {
         PriceSchedules.Delete(priceScheduleid)
             .then(function() {
-                $state.go('base.priceSchedules')
+                $state.go('priceSchedules', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -101,7 +102,7 @@ function PriceScheduleCreateController( $exceptionHandler, $state, PriceSchedule
         vm.priceSchedule = PriceBreak.setMinMax(vm.priceSchedule);
         PriceSchedules.Create(vm.priceSchedule)
             .then(function() {
-                $state.go('base.priceSchedules')
+                $state.go('priceSchedules', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)

@@ -1,5 +1,5 @@
 <div class="form-group" ng-class="{'has-error': invalidExtension}">
-    <figure ng-if="model.xp[keyname].URL">
+    <figure ng-if="model.xp[keyname].URL && model.xp[keyname].Type.indexOf('image') > -1">
         <img class="img-responsive" ng-src="{{model.xp[keyname].URL}}" alt="Product Image">
     </figure>
     <label>{{label}}</label>

@@ -37,8 +37,7 @@
                         type="text"
                         class="form-control"
                         ng-model="approvalRuleCreate.approvalRule.CostCenterID"
-                        uib-typeahead="costCenter.ID as costCenter.Name for costCenter in approvalRuleCreate.costCenterIDTypeAhead($viewValue)"
-                />
+                        uib-typeahead="costCenter.ID as costCenter.Name for costCenter in approvalRuleCreate.costCenterIDTypeAhead($viewValue)"/>
             </div>
             <div class="form-group col-sm-3">
                 <label for="categoryInput">Category ID</label>
@@ -47,8 +46,7 @@
                         type="text"
                         class="form-control"
                         ng-model="approvalRuleCreate.approvalRule.CategoryID"
-                        uib-typeahead="category.ID as category.Name for category in approvalRuleCreate.categoryIDTypeAhead($viewValue)"
-                />
+                        uib-typeahead="category.ID as category.Name for category in approvalRuleCreate.categoryIDTypeAhead($viewValue)"/>
             </div>
         </div>
         <div class="row">
@@ -87,8 +85,7 @@
                         class="form-control"
                         ng-model="approvalRuleCreate.approvalRule.SubmittingAssignment.UserGroupID"
                         placeholder="User Group ID"
-                        uib-typeahead="userGroup.ID as userGroup.Name for userGroup in approvalRuleCreate.userGroupIDTypeAhead($viewValue)"
-                />
+                        uib-typeahead="userGroup.ID as userGroup.Name for userGroup in approvalRuleCreate.userGroupIDTypeAhead($viewValue)"/>
             </div>
             <div class="form-group col-sm-3 no-padding">
                 <input
@@ -96,8 +93,7 @@
                         class="form-control"
                         ng-model="approvalRuleCreate.approvalRule.SubmittingAssignment.UserID"
                         placeholder="User ID"
-                        uib-typeahead="user.ID as (user.FirstName + ' ' + user.LastName + ' (' + user.Username + ')') for user in approvalRuleCreate.userIDTypeAhead($viewValue)"
-                />
+                        uib-typeahead="user.ID as (user.FirstName + ' ' + user.LastName + ' (' + user.Username + ')') for user in approvalRuleCreate.userIDTypeAhead($viewValue)"/>
             </div>
             <div class="form-group col-sm-3">
                 <label for="approvingUserGroup">Apply rule to the following approver(s):</label>
@@ -107,8 +103,7 @@
                         class="form-control"
                         ng-model="approvalRuleCreate.approvalRule.ApprovingAssignment.UserGroupID"
                         placeholder="User Group ID"
-                        uib-typeahead="userGroup.ID as userGroup.Name for userGroup in approvalRuleCreate.userGroupIDTypeAhead($viewValue)"
-                />
+                        uib-typeahead="userGroup.ID as userGroup.Name for userGroup in approvalRuleCreate.userGroupIDTypeAhead($viewValue)"/>
             </div>
             <div class="form-group col-sm-3 no-padding">
                 <input
@@ -116,8 +111,7 @@
                         class="form-control"
                         ng-model="approvalRuleCreate.approvalRule.ApprovingAssignment.UserID"
                         placeholder="User ID"
-                        uib-typeahead="user.ID as (user.FirstName + ' ' + user.LastName + ' (' + user.Username + ')') for user in approvalRuleCreate.userIDTypeAhead($viewValue)"
-                />
+                        uib-typeahead="user.ID as (user.FirstName + ' ' + user.LastName + ' (' + user.Username + ')') for user in approvalRuleCreate.userIDTypeAhead($viewValue)"/>
             </div>
         </div>
         <div class="row">
@@ -138,7 +132,7 @@
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" ng-disabled="ApprovalRuleCreateForm.$invalid">Save</button>
-            <button type="button" class="btn btn-default" ui-sref="^.approvalRules">Cancel</button>
+            <button type="button" class="btn btn-default" ui-sref="^">Cancel</button>
         </div>
     </form>
 </article>

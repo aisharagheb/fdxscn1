@@ -22,10 +22,10 @@ describe('Component: Orders', function() {
         };
     }));
 
-    describe('State: Base.orders', function() {
+    describe('State: orders', function() {
         var state;
         beforeEach(inject(function($state, Orders) {
-            state = $state.get('base.orders');
+            state = $state.get('orders');
             spyOn(Orders, 'List').and.returnValue(null);
         }));
         it('should resolve OrderList', inject(function ($injector, Orders) {
@@ -34,10 +34,10 @@ describe('Component: Orders', function() {
         }));
     });
 
-    describe('State: Base.orderEdit', function() {
+    describe('State: orders.edit', function() {
         var state;
         beforeEach(inject(function($state, Orders, LineItems) {
-            state = $state.get('base.orderEdit');
+            state = $state.get('orders.edit');
             spyOn(Orders, 'Get').and.returnValue(null);
             spyOn(LineItems, 'List').and.returnValue(null);
         }));
@@ -79,18 +79,6 @@ describe('Component: Orders', function() {
             }));
         });
 
-        describe('goToProduct', function() {
-            beforeEach(inject(function() {
-                lineItem = {
-                    ProductID: 'potato'
-                }
-                orderEditCtrl.goToProduct(lineItem);
-            }));
-            it ('should enter the productEdit state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.productEdit', {'productid': lineItem.ProductID});
-            }));
-        });
-
         describe('Submit', function() {
             beforeEach(inject(function(Orders) {
                 orderEditCtrl.order = order;
@@ -105,7 +93,7 @@ describe('Component: Orders', function() {
                 expect(Orders.Update).toHaveBeenCalledWith(orderEditCtrl.orderID, orderEditCtrl.order);
             }));
             it ('should enter the orders state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.orders');
+                expect($state.go).toHaveBeenCalledWith('orders', {}, {reload:true});
             }));
         });
 
@@ -121,7 +109,7 @@ describe('Component: Orders', function() {
                 expect(Orders.Delete).toHaveBeenCalledWith(order.ID);
             }));
             it ('should enter the orders state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.orders');
+                expect($state.go).toHaveBeenCalledWith('orders', {}, {reload:true});
             }));
         });
 
@@ -143,6 +131,51 @@ describe('Component: Orders', function() {
             }));
             it ('should call the LineItems List method', inject(function(LineItems) {
                 expect(LineItems.List).toHaveBeenCalledWith(orderEditCtrl.order.ID, orderEditCtrl.list.Meta.Page +1, orderEditCtrl.list.Meta.PageSize);
+            }));
+        });
+    });
+
+    describe('Factory: OrdersTypeAheadSearchFactory', function() {
+        var ordersService, term;
+        beforeEach(inject(function(OrdersTypeAheadSearchFactory, SpendingAccounts, Addresses) {
+            ordersService = OrdersTypeAheadSearchFactory;
+            var defer = q.defer();
+            defer.resolve(null);
+            spyOn(SpendingAccounts, 'List').and.returnValue(defer.promise);
+            spyOn(Addresses, 'List').and.returnValue(defer.promise);
+            spyOn(Addresses, 'ListAssignments').and.returnValue(defer.promise);
+        }));
+
+        describe('SpendingAccountList', function() {
+            beforeEach(function() {
+                term = "test";
+                ordersService.SpendingAccountList(term);
+            });
+
+            it ('should call SpendingAccounts List method', inject(function(SpendingAccounts) {
+                expect(SpendingAccounts.List).toHaveBeenCalledWith(term);
+            }));
+        });
+        describe('ShippingAddressList', function() {
+            beforeEach(function() {
+                term = "test";
+                ordersService.ShippingAddressList(term);
+            });
+
+            it ('should call Addresses List method and Addresses ListAssignments method', inject(function(Addresses) {
+                expect(Addresses.List).toHaveBeenCalledWith(term);
+                expect(Addresses.ListAssignments).toHaveBeenCalledWith(null, null, null, null, true);
+            }));
+        });
+        describe('BillingAddressList', function() {
+            beforeEach(function() {
+                term = "test";
+                ordersService.BillingAddressList(term);
+            });
+
+            it ('should call Addresses List method Addresses ListAssignments method', inject(function(Addresses) {
+                expect(Addresses.List).toHaveBeenCalledWith(term);
+                expect(Addresses.ListAssignments).toHaveBeenCalledWith(null, null, null, null, null, true);
             }));
         });
     });

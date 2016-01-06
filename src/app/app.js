@@ -16,7 +16,12 @@ angular.module( 'orderCloud', [
     'ordercloud-assignment-helpers',
     'ordercloud-paging-helpers',
     'ordercloud-auto-id',
-    'ordercloud-impersonation'
+    'ordercloud-impersonation',
+    'ordercloud-current-order',
+    'ordercloud-address',
+    'ordercloud-lineitems',
+    'ui.grid',
+    'ui.grid.infiniteScroll'
 ])
 
 	.run( SetBuyerID )
@@ -46,9 +51,10 @@ function ErrorHandling( $provide ) {
 	}
 }
 
-function AppCtrl( $state, appname, Auth, BuyerID ) {
+function AppCtrl( $rootScope, $state, appname, Auth, BuyerID ) {
 	var vm = this;
 	vm.name = appname;
+	vm.title = appname;
 	vm.showLeftNav = true;
 	vm.toggleLeftNav = function() {
 		vm.showLeftNav = !vm.showLeftNav;
@@ -58,4 +64,11 @@ function AppCtrl( $state, appname, Auth, BuyerID ) {
 		BuyerID.Set(null);
 		$state.go('login');
 	};
+	$rootScope.$on('$stateChangeSuccess', function(e, toState) {
+		if (toState.data && toState.data.componentName) {
+			vm.title = appname + ' - ' + toState.data.componentName
+		} else {
+			vm.title = appname;
+		}
+	});
 }

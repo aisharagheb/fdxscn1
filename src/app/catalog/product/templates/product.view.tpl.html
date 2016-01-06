@@ -1,0 +1,29 @@
+<h1>{{product.item.Name || product.item.ID}}</h1>
+<h3 ng-if="product.item.Name">{{product.item.ID}}</h3>
+<div class="panel panel-default" ng-if="product.item.StandardPriceSchedule.PriceBreaks">
+    <div class="panel-heading">
+        <h3 class="panel-title">Price Breaks</h3>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="priceBreak in product.item.StandardPriceSchedule.PriceBreaks">
+            <td>{{priceBreak.Quantity}}</td>
+            <td>{{priceBreak.Price}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="panel panel-default" ng-if="product.item.Description">
+    <div class="panel-heading">
+        <h3 class="panel-title">Description</h3>
+    </div>
+    <div class="panel-body">
+        {{product.item.Description}}
+    </div>
+</div>

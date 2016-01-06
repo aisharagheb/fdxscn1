@@ -5,7 +5,7 @@
 	</div>
 	<section class="table-fixed-header" ng-if="productAssignments.list.length">
 		<div class="table-header-bg"></div>
-		<div class="table-container">
+		<div class="table-container" ordercloud-infinite-scroll controlleras="productAssignments">
 			<table class="table table-hover table-striped">
 				<colgroup>
 					<col class="action-column"/>
@@ -38,6 +38,6 @@
 			</table>
 		</div>
 	</section>
-	<button type="button" class="btn btn-default" ui-sref="^.products"><i class="fa fa-arrow-left"></i> Back</button>
-	<button class="btn btn-success" ui-sref="base.productCreateAssignment({productid:productAssignments.productID})"><i class="fa fa-plus-circle"></i> New Assignment</button>
+	<button type="button" class="btn btn-default" ui-sref="^"><i class="fa fa-arrow-left"></i> Back</button>
+	<button class="btn btn-success" ui-sref="^.createAssignment({productid:productAssignments.productID})"><i class="fa fa-plus-circle"></i> New Assignment</button>
 </article>

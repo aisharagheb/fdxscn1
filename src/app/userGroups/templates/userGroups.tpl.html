@@ -1,0 +1,50 @@
+<ui-view>
+    <article class="container-fluid">
+        <h3 class="page-header">
+            User Groups
+        </h3>
+        <ordercloud-search servicename="UserGroups" controlleras="userGroups"></ordercloud-search>
+        <div class="well well-lg text-center" ng-if="!userGroups.list.Items.length">
+            <b ng-if="!userGroups.searching()">The selected buyer does not have any user groups.</b>
+            <b ng-if="userGroups.searching()"><i class="fa fa-search"></i> No user groups match your search.</b>
+        </div>
+        <section class="table-fixed-header" ng-if="userGroups.list.Items.length">
+            <div class="table-header-bg"></div>
+            <div class="table-container" ordercloud-infinite-scroll controlleras="userGroups" servicename="UserGroups">
+                <table class="table table-hover">
+                    <colgroup>
+                        <col class="action-column"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <div>ID</div>
+                        </th>
+                        <th>
+                            <div>Name</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="userGroup in userGroups.list.Items track by $index">
+                        <td>
+                            <div class="btn-group btn-block" uib-dropdown dropdown-append-to-body>
+                                <button type="button" class="btn btn-default btn-block" uib-dropdown-toggle><i class="fa fa-cog"></i> <span class="caret"></span></button>
+                                <ul uib-dropdown-menu role="menu">
+                                    <li role="menuitem"><a ui-sref=".edit({userGroupid:userGroup.ID})">Edit User Group</a></li>
+                                    <li role="menuitem"><a ui-sref=".assign({userGroupid:userGroup.ID})">Party Assignments</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{userGroup.ID}}</td>
+                        <td>{{userGroup.Name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <button type="button" class="btn btn-success" ui-sref=".create"><i class="fa fa-plus-circle"></i> Create New</button>
+    </article>
+</ui-view>

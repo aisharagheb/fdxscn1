@@ -10,7 +10,8 @@ angular.module( 'orderCloud' )
 
 function AddressesConfig( $stateProvider ) {
 	$stateProvider
-		.state( 'base.addresses', {
+		.state( 'addresses', {
+			parent: 'base',
 			url: '/addresses',
 			templateUrl:'addresses/templates/addresses.tpl.html',
 			controller:'AddressesCtrl',
@@ -22,31 +23,31 @@ function AddressesConfig( $stateProvider ) {
 				}
 			}
 		})
-		.state( 'base.addressEdit', {
-			url: '/addresses/:addressid/edit',
+		.state( 'addresses.edit', {
+			url: '/:addressid/edit',
 			templateUrl:'addresses/templates/addressEdit.tpl.html',
 			controller:'AddressEditCtrl',
 			controllerAs: 'addressEdit',
 			resolve: {
 				SelectedAddress: function($stateParams, $state, Addresses) {
 					return Addresses.Get($stateParams.addressid).catch(function() {
-                        $state.go('^.addresses');
+                        $state.go('^');
                     });
 				}
 			}
 		})
-		.state( 'base.addressCreate', {
+		.state( 'addresses.create', {
 			url: '/addresses/create',
 			templateUrl:'addresses/templates/addressCreate.tpl.html',
 			controller:'AddressCreateCtrl',
 			controllerAs: 'addressCreate'
 		})
-        .state( 'base.addressAssign', {
+        .state( 'addresses.assign', {
             url: '/addresses/:addressid/assign',
-            templateUrl: 'addresses/templates/addressAssign.tpl.html',
-            controller: 'AddressAssignCtrl',
-            controllerAs: 'addressAssign',
-            resolve: {
+	        templateUrl: 'addresses/templates/addressAssign.tpl.html',
+	        controller: 'AddressAssignCtrl',
+	        controllerAs: 'addressAssign',
+	        resolve: {
                 UserGroupList: function(UserGroups) {
                     return UserGroups.List();
                 },
@@ -55,7 +56,7 @@ function AddressesConfig( $stateProvider ) {
                 },
                 SelectedAddress: function($stateParams, $state, Addresses) {
                     return Addresses.Get($stateParams.addressid).catch(function() {
-                        $state.go('^.addresses');
+                        $state.go('^');
                     });
                 }
             }
@@ -79,7 +80,7 @@ function AddressEditController( $exceptionHandler, $state, SelectedAddress, Addr
 	vm.Submit = function() {
 		Addresses.Update(addressID, vm.address)
 			.then(function() {
-				$state.go('base.addresses');
+				$state.go('addresses', {}, {reload:true});
 			})
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -89,7 +90,7 @@ function AddressEditController( $exceptionHandler, $state, SelectedAddress, Addr
 	vm.Delete = function() {
 		Addresses.Delete(SelectedAddress.ID, false)
 			.then(function() {
-				$state.go('base.addresses')
+				$state.go('addresses', {}, {reload:true})
 			})
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -104,7 +105,7 @@ function AddressCreateController($exceptionHandler, $state, Addresses) {
 	vm.Submit = function() {
 		Addresses.Create(vm.address)
 			.then(function() {
-				$state.go('base.addresses')
+				$state.go('addresses', {}, {reload:true})
 			})
             .catch(function(ex) {
                 $exceptionHandler(ex);

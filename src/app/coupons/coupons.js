@@ -12,7 +12,8 @@ angular.module( 'orderCloud' )
 
 function CouponsConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.coupons', {
+        .state( 'coupons', {
+            parent: 'base',
             url: '/coupons',
             templateUrl:'coupons/templates/coupons.tpl.html',
             controller:'CouponsCtrl',
@@ -24,8 +25,8 @@ function CouponsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.couponEdit', {
-            url: '/coupons/:couponid/edit',
+        .state( 'coupons.edit', {
+            url: '/:couponid/edit',
             templateUrl:'coupons/templates/couponEdit.tpl.html',
             controller:'CouponEditCtrl',
             controllerAs: 'couponEdit',
@@ -44,14 +45,14 @@ function CouponsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.couponCreate', {
+        .state( 'coupons.create', {
             url: '/coupons/create',
             templateUrl: 'coupons/templates/couponCreate.tpl.html',
             controller: 'CouponCreateCtrl',
             controllerAs: 'couponCreate'
         })
-        .state( 'base.couponAssignParty', {
-            url: '/coupons/:couponid/assign/party',
+        .state( 'coupons.assignParty', {
+            url: '/:couponid/assign/party',
             templateUrl: 'coupons/templates/couponAssignParty.tpl.html',
             controller: 'CouponAssignCtrl',
             controllerAs: 'couponAssign',
@@ -70,8 +71,8 @@ function CouponsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.couponAssignProduct', {
-            url: '/coupons/:couponid/assign/product',
+        .state( 'coupons.assignProduct', {
+            url: '/:couponid/assign/product',
             templateUrl: 'coupons/templates/couponAssignProduct.tpl.html',
             controller: 'CouponAssignProductCtrl',
             controllerAs: 'couponAssignProd',
@@ -87,8 +88,8 @@ function CouponsConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.couponAssignCategory', {
-            url: '/coupons/:couponid/assign/category',
+        .state( 'coupons.assignCategory', {
+            url: '/:couponid/assign/category',
             templateUrl: 'coupons/templates/couponAssignCategory.tpl.html',
             controller: 'CouponAssignCategoryCtrl',
             controllerAs: 'couponAssignCat',
@@ -123,7 +124,7 @@ function CouponEditController( $exceptionHandler, $state, SelectedCoupon, Coupon
     vm.Submit = function() {
         Coupons.Update(couponid, vm.coupon)
             .then(function() {
-                $state.go('base.coupons')
+                $state.go('coupons', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -133,7 +134,7 @@ function CouponEditController( $exceptionHandler, $state, SelectedCoupon, Coupon
     vm.Delete = function() {
         Coupons.Delete(SelectedCoupon.ID)
             .then(function() {
-                $state.go('base.coupons')
+                $state.go('coupons', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -158,7 +159,7 @@ function CouponCreateController( $exceptionHandler, $state, Coupons) {
     vm.Submit = function() {
         Coupons.Create(vm.coupon)
             .then(function() {
-                $state.go('base.coupons')
+                $state.go('coupons', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

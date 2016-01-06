@@ -11,7 +11,8 @@ angular.module('orderCloud')
 
 function ProductsConfig($stateProvider) {
     $stateProvider
-        .state('base.products', {
+        .state('products', {
+            parent: 'base',
             url: '/products',
             templateUrl: 'products/templates/products.tpl.html',
             controller: 'ProductsCtrl',
@@ -23,8 +24,8 @@ function ProductsConfig($stateProvider) {
                 }
             }
         })
-        .state('base.productEdit', {
-            url: '/products/:productid/edit',
+        .state('products.edit', {
+            url: '/:productid/edit',
             templateUrl: 'products/templates/productEdit.tpl.html',
             controller: 'ProductEditCtrl',
             controllerAs: 'productEdit',
@@ -34,14 +35,14 @@ function ProductsConfig($stateProvider) {
                 }
             }
         })
-        .state('base.productCreate', {
-            url: '/products/create',
+        .state('products.create', {
+            url: '/create',
             templateUrl: 'products/templates/productCreate.tpl.html',
             controller: 'ProductCreateCtrl',
             controllerAs: 'productCreate'
         })
-        .state('base.productAssignments', {
-            url: '/products/:productid/assignments',
+        .state('products.assignments', {
+            url: '/:productid/assignments',
             templateUrl: 'products/templates/productAssignments.tpl.html',
             controller: 'ProductAssignmentsCtrl',
             controllerAs: 'productAssignments',
@@ -54,8 +55,8 @@ function ProductsConfig($stateProvider) {
                 }
             }
         })
-        .state('base.productCreateAssignment', {
-            url: '/products/:productid/assignments/new',
+        .state('products.createAssignment', {
+            url: '/:productid/assignments/new',
             templateUrl: 'products/templates/productCreateAssignment.tpl.html',
             controller: 'ProductCreateAssignmentCtrl',
             controllerAs: 'productCreateAssignment',
@@ -87,7 +88,7 @@ function ProductEditController($exceptionHandler, $state, SelectedProduct, Produ
     vm.Submit = function () {
         Products.Update(productid, vm.product)
             .then(function () {
-                $state.go('base.products')
+                $state.go('products', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -97,7 +98,7 @@ function ProductEditController($exceptionHandler, $state, SelectedProduct, Produ
     vm.Delete = function () {
         Products.Delete(productid)
             .then(function () {
-                $state.go('base.products')
+                $state.go('products', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -112,7 +113,7 @@ function ProductCreateController($exceptionHandler, $state, Products) {
     vm.Submit = function () {
         Products.Create(vm.product)
             .then(function () {
-                $state.go('base.products')
+                $state.go('products', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex)
@@ -125,6 +126,7 @@ function ProductAssignmentsController($exceptionHandler, $stateParams, $state, S
     vm.list = Assignments.Items;
     vm.productID = $stateParams.productid;
     vm.productName = angular.copy(SelectedProduct.Name);
+    vm.pagingfunction = PagingFunction;
 
     vm.Delete = function(scope) {
         Products.DeleteAssignment($stateParams.productid, null, scope.assignment.UserGroupID)
@@ -136,7 +138,15 @@ function ProductAssignmentsController($exceptionHandler, $stateParams, $state, S
             })
     }
 
-
+    function PagingFunction() {
+        if (vm.list.Meta.Page < vm.list.Meta.TotalPages) {
+            Products.ListAssignments($stateParams.productid, null, null, null, null, vm.list.Meta.Page + 1, vm.list.Meta.PageSize)
+                .then(function(data) {
+                    vm.list.Items = [].concat(vm.list.Items, data.Items);
+                    vm.list.Meta = data.Meta;
+                });
+        }
+    }
 }
 
 function ProductCreateAssignmentController($q, $stateParams, $state, Underscore, UserGroupList, PriceScheduleList, Products, BuyerID) {

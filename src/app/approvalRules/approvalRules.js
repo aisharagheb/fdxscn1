@@ -10,7 +10,8 @@ angular.module( 'orderCloud' )
 
 function ApprovalRulesConfig( $stateProvider ) {
     $stateProvider
-        .state( 'base.approvalRules', {
+        .state( 'approvalRules', {
+            parent: 'base',
             url: '/approvalRules',
             templateUrl:'approvalRules/templates/approvalRules.tpl.html',
             controller:'ApprovalRulesCtrl',
@@ -22,8 +23,8 @@ function ApprovalRulesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.approvalRuleEdit', {
-            url: '/approvalRules/:approvalRuleid/edit',
+        .state( 'approvalRules.edit', {
+            url: '/:approvalRuleid/edit',
             templateUrl:'approvalRules/templates/approvalRuleEdit.tpl.html',
             controller:'ApprovalRuleEditCtrl',
             controllerAs: 'approvalRuleEdit',
@@ -35,8 +36,8 @@ function ApprovalRulesConfig( $stateProvider ) {
                 }
             }
         })
-        .state( 'base.approvalRuleCreate', {
-            url: '/approvalRules/create',
+        .state( 'approvalRules.create', {
+            url: '/create',
             templateUrl:'approvalRules/templates/approvalRuleCreate.tpl.html',
             controller:'ApprovalRuleCreateCtrl',
             controllerAs: 'approvalRuleCreate'
@@ -62,7 +63,7 @@ function ApprovalRuleEditController( $exceptionHandler, $state, ApprovalRuleFact
     vm.Submit = function() {
         ApprovalRules.Update(approvalRuleID, vm.approvalRule)
             .then(function() {
-                $state.go('base.approvalRules')
+                $state.go('approvalRules', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
@@ -72,12 +73,12 @@ function ApprovalRuleEditController( $exceptionHandler, $state, ApprovalRuleFact
     vm.Delete = function() {
         ApprovalRules.Delete(SelectedApprovalRule.ID)
             .then(function() {
-                $state.go('base.approvalRules')
+                $state.go('approvalRules', {}, {reload:true});
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);
             });
-    }
+    };
 
     vm.userIDTypeAhead = ApprovalRuleFactory.UserList;
     vm.userGroupIDTypeAhead = ApprovalRuleFactory.UserGroupList;
@@ -98,7 +99,7 @@ function ApprovalRuleCreateController($exceptionHandler, $state, ApprovalRuleFac
     vm.Submit = function() {
         ApprovalRules.Create(vm.approvalRule)
             .then(function() {
-                $state.go('base.approvalRules')
+                $state.go('approvalRules', {}, {reload:true})
             })
             .catch(function(ex) {
                 $exceptionHandler(ex);

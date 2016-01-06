@@ -18,10 +18,10 @@ describe('Component: SpendingAccounts', function() {
         };
     }));
 
-    describe('State: Base.spendingAccounts', function() {
+    describe('State: spendingAccounts', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
-            state = $state.get('base.spendingAccounts');
+            state = $state.get('spendingAccounts');
             spyOn(SpendingAccounts, 'List').and.returnValue(null);
         }));
         it('should resolve SpendingAccountList', inject(function ($injector, SpendingAccounts) {
@@ -30,10 +30,10 @@ describe('Component: SpendingAccounts', function() {
         }));
     });
 
-    describe('State: Base.spendingAccountEdit', function() {
+    describe('State: spendingAccounts.edit', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts) {
-            state = $state.get('base.spendingAccountEdit');
+            state = $state.get('spendingAccounts.edit');
             spyOn(SpendingAccounts, 'Get').and.returnValue(null);
         }));
         it('should resolve SelectedSpendingAccount', inject(function ($injector, $stateParams, SpendingAccounts) {
@@ -42,10 +42,10 @@ describe('Component: SpendingAccounts', function() {
         }));
     });
 
-    describe('State: Base.spendingAccountAssignGroup', function() {
+    describe('State: spendingAccounts.assignGroup', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, UserGroups) {
-            state = $state.get('base.spendingAccountAssignGroup');
+            state = $state.get('spendingAccounts.assignGroup');
             spyOn(UserGroups, 'List').and.returnValue(null);
             spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
             spyOn(SpendingAccounts, 'Get').and.returnValue(null);
@@ -64,10 +64,10 @@ describe('Component: SpendingAccounts', function() {
         }));
     });
 
-    describe('State: Base.spendingAccountAssignUser', function() {
+    describe('State: spendingAccounts.assignUser', function() {
         var state;
         beforeEach(inject(function($state, SpendingAccounts, Users) {
-            state = $state.get('base.spendingAccountAssignUser');
+            state = $state.get('spendingAccounts.assignUser');
             spyOn(Users, 'List').and.returnValue(null);
             spyOn(SpendingAccounts, 'Get').and.returnValue(null);
             spyOn(SpendingAccounts, 'ListAssignments').and.returnValue(null);
@@ -110,7 +110,7 @@ describe('Component: SpendingAccounts', function() {
                 expect(SpendingAccounts.Update).toHaveBeenCalledWith(spendingAccountEditCtrl.spendingAccountID, spendingAccountEditCtrl.spendingAccount);
             }));
             it ('should enter the spendingAccounts state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.spendingAccounts');
+                expect($state.go).toHaveBeenCalledWith('spendingAccounts', {}, {reload:true});
             }));
         });
 
@@ -126,7 +126,7 @@ describe('Component: SpendingAccounts', function() {
                 expect(SpendingAccounts.Delete).toHaveBeenCalledWith(spendingAccount.ID);
             }));
             it ('should enter the spendingAccounts state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.spendingAccounts');
+                expect($state.go).toHaveBeenCalledWith('spendingAccounts', {}, {reload:true});
             }));
         });
     });
@@ -153,7 +153,7 @@ describe('Component: SpendingAccounts', function() {
                 expect(SpendingAccounts.Create).toHaveBeenCalledWith(spendingAccountCreateCtrl.spendingAccount);
             }));
             it ('should enter the spendingAccounts state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.spendingAccounts');
+                expect($state.go).toHaveBeenCalledWith('spendingAccounts', {}, {reload:true});
             }));
         });
     });
