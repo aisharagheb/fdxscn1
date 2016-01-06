@@ -25,7 +25,9 @@
                             </form>
                         </td>
                         <td>
-                            <img ng-if="lineItem.Product.xp.image" class="img-responsive" ng-src="{{lineItem.Product.xp.image.URL}}" alt="Product Image">
+                            <figure style="width: 100px;">
+                                <img ng-if="lineItem.Product.xp.image" class="img-responsive" ng-src="{{lineItem.Product.xp.image.URL}}" alt="Product Image">
+                            </figure>
                         </td>
                         <td>
                             <a href="#">{{lineItem.Product.Name}}</a><br>
