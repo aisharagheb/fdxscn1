@@ -37,7 +37,7 @@ function checkoutConfig($stateProvider) {
 						});
 					return dfd.promise;
 				},
-                ShippingAddresses: function($q, Me, Underscore, ImpersonationService) {
+                ShippingAddresses: function($q, Me, Underscore, ImpersonationService, CurrentOrder) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
                         Me.ListAddresses()
@@ -132,7 +132,9 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
     }
 
     // default state (if someone navigates to checkout -> checkout.shipping)
-    $state.transitionTo('checkout.shipping');
+    if ($state.current.name === 'checkout') {
+        $state.transitionTo('checkout.shipping');
+    }
 }
 
 function OrderReviewController() {
