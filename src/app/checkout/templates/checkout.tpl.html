@@ -40,9 +40,9 @@
                                 <col>
                                 <col style="width:75px;">
                             </colgroup>
-                            <tr ng-repeat-start="lineItem in checkout.lineItems.Items" class="item_info">
+                            <tr ng-repeat-start="lineItem in checkout.lineItems.Items track by $index" class="item_info">
                                 <td>
-                                    <form name="{{'lineitem_' + lineItem.ID + '_quantity'}}">
+                                    <form name="{{'lineitem_' + $index + '_quantity'}}">
                                         <input tabindex="{{$index + 1}}" type="number" ng-change="checkout.updateQuantity(checkout.currentOrder, lineItem)" class="form-control text-center" ng-model="lineItem.Quantity">
                                     </form>
                                 </td>
