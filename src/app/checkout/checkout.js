@@ -3,6 +3,8 @@ angular.module('orderCloud')
 	.controller('CheckoutCtrl', CheckoutController)
 	.controller('OrderReviewCtrl', OrderReviewController)
 	.controller('OrderConfirmationCtrl', OrderConfirmationController)
+    //toggle isMultipleAddressShipping if you do not wish to allow line items to ship to multiple addresses
+    .constant('isMultipleAddressShipping', true);
 ;
 
 function checkoutConfig($stateProvider) {
@@ -49,29 +51,41 @@ function checkoutConfig($stateProvider) {
                 }
 			}
 		})
-		.state('checkout.review', {
-			url: '/review',
-			views: {
-				'@base': {
-					templateUrl: 'checkout/templates/review.tpl.html',
-					controller: 'OrderReviewCtrl',
-					controllerAs: 'orderReview'
-				}
+        .state('checkout.confirmation', {
+            url: '/confirmation',
+            views: {
+                '@base': {
+                    templateUrl: 'checkout/templates/confirmation.tpl.html',
+                    controller: 'OrderConfirmationCtrl',
+                    controllerAs: 'orderConfirmation'
+                }
+            }
+        })
+		.state('orderReview', {
+            parent: 'base',
+            data: {componentName: 'Checkout'},
+			url: '/order/:orderid/review',
+            templateUrl: 'checkout/templates/review.tpl.html',
+            controller: 'OrderReviewCtrl',
+            controllerAs: 'orderReview',
+            resolve: {
+                SubmittedOrder: function(Orders, $stateParams, $state, toastr) {
+                    return Orders.Get($stateParams.orderid)
+                        .then(function(order){
+                            if(order.Status == 'Unsubmitted') {
+                                $state.go('checkout.shipping')
+                                    .then(function() {
+                                        toastr.error('You cannot review an Unsubmitted Order', 'Error');
+                                    })
+                            }
+                        })
+                }
 			}
 		})
-		.state('checkout.confirmation', {
-			url: '/confirmation',
-			views: {
-				'@base': {
-					templateUrl: 'checkout/templates/confirmation.tpl.html',
-					controller: 'OrderConfirmationCtrl',
-					controllerAs: 'orderConfirmation'
-				}
-			}
-		})
+
 }
 
-function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, LineItems, Products, Underscore, ShippingAddresses, LineItemHelpers) {
+function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, LineItems, Products, Underscore, ShippingAddresses, LineItemHelpers, isMultipleAddressShipping) {
 	var vm = this;
 	vm.lineItems = LineItemsList;
 	vm.currentOrder = CurrentOrder;
@@ -81,7 +95,7 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
     vm.removeItem = LineItemHelpers.RemoveItem;
     vm.updateQuantity = LineItemHelpers.UpdateQuantity;
     vm.setCustomShipping = LineItemHelpers.CustomShipper;
-    vm.isMultipleAddressShipping = true;
+    vm.isMultipleAddressShipping = isMultipleAddressShipping;
 
     // currently selected shipping address if all line items are going to the same place
     vm.currentOrder.ShippingAddressID = vm.lineItems.Items[0].ShippingAddressID;
@@ -137,10 +151,32 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
     }
 }
 
-function OrderReviewController() {
-	var vm = this;
+function OrderConfirmationController(CurrentOrder, LineItemsList, Orders, $state, isMultipleAddressShipping) {
+    var vm = this;
+    vm.currentOrder = CurrentOrder;
+    vm.lineItems = LineItemsList;
+    vm.isMultipleAddressShipping = isMultipleAddressShipping;
+
+    vm.submitOrder = function() {
+        Orders.Submit(vm.currentOrder.ID)
+            .then(function() {
+                CurrentOrder.Remove()
+                    .then(function(){
+                        $state.go('orderReview', {orderid: vm.currentOrder.ID})
+                    })
+            })
+    }
 }
 
-function OrderConfirmationController() {
+function OrderReviewController(SubmittedOrder) {
 	var vm = this;
+    vm.submittedOrder = SubmittedOrder;
+
+    //if(vm.submittedOrder.Status == 'Unsubmitted') {
+    //    $state.go('checkout')
+    //        .then(function() {
+    //            toastr.error('You cannot review an Unsubmitted Order', 'Error');
+    //        })
+    //}
 }
+
