@@ -5,8 +5,9 @@ angular.module('ordercloud-lineitems', [])
 
 ;
 
-function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal) {
+function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope) {
     return {
+        SpecConvert: SpecConverter,
         RemoveItem: DeleteLineItem,
         UpdateQuantity: UpdateQuantity,
         ClearShipper: ClearShipping,
@@ -32,7 +33,7 @@ function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal) {
         if (LineItem.Quantity > 0) {
             LineItems.Patch(Order.ID, LineItem.ID, {Quantity: LineItem.Quantity})
                 .then(function() {
-                    $state.reload();
+                    $rootScope.$broadcast('LineItemQuantityUpdated');
                 });
         }
     }
@@ -57,6 +58,29 @@ function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal) {
                         $state.reload();
                     });
             });
+    }
+
+    function SpecConverter(specs) {
+        var results = [];
+        angular.forEach(specs, function(spec) {
+            var spec_to_push = {SpecID: spec.ID};
+            if (spec.Options.length > 0) {
+                if (spec.DefaultOptionID) {
+                    spec_to_push.OptionID = spec.DefaultOptionID;
+                }
+                if (spec.Value) {
+                    spec_to_push.Value = spec.Value;
+                }
+                else if (spec.OptionID) {
+                    spec_to_push.OptionID = spec.OptionID;
+                }
+            }
+            else {
+                spec_to_push.Value = spec.Value || spec.DefaultValue || null;
+            }
+            results.push(spec_to_push);
+        });
+        return results;
     }
 }
 

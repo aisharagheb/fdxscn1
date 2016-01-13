@@ -1,11 +1,14 @@
 <article id="catalog-wrapper" class="container-fluid" ng-class="{'toggled':!catalog.showTree}">
     <div id="catalog-aside" ui-view="left"></div>
     <div id="catalog-view" class="col-md-9">
-        <button class="btn btn-default" ng-click="catalog.toggleTree()">
-            <i class="fa" ng-class="[{'fa-caret-square-o-left': catalog.showTree}, {'fa-caret-square-o-right': !catalog.showTree}]"></i> {{catalog.showTree ? 'Hide' : 'Show'}} Category Tree
-        </button>
+        <div class="row">
+            <button class="btn btn-default pull-left" ng-click="catalog.toggleTree()">
+                <i class="fa" ng-class="[{'fa-caret-square-o-left': catalog.showTree}, {'fa-caret-square-o-right': !catalog.showTree}]"></i> {{catalog.showTree ? 'Hide' : 'Show'}} Category Tree
+            </button>
+            <ordercloud-minicart order="catalog.currentOrder" class="pull-right"></ordercloud-minicart>
+        </div>
         <ui-view>
             <ordercloud-category-list categorylist="catalog.categories.Items"></ordercloud-category-list>
-        </div>
+        </ui-view>
     </div>
 </article>

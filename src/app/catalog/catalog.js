@@ -45,9 +45,10 @@ function CatalogConfig($stateProvider) {
         });
 }
 
-function CatalogController(Catalog) {
+function CatalogController(Catalog, Order) {
     var vm = this;
     vm.showTree = true;
+    vm.currentOrder = Order;
     vm.toggleTree = function() {
         vm.showTree = !vm.showTree;
     };

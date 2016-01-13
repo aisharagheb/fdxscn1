@@ -24,14 +24,16 @@ function CartConfig($stateProvider) {
                             $state.go('home');
                         });
                 },
-                LineItemsList: function($q, Order, Underscore, Products, LineItems) {
+                LineItemsList: function($q, Order, Underscore, Me, LineItems, ImpersonationService) {
                     var dfd = $q.defer();
                     LineItems.Get(Order.ID)
                         .then(function(data) {
                             var productQueue =[];
                             var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
                             angular.forEach(productIDs, function(id) {
-                                productQueue.push(Products.Get(id));
+                                productQueue.push(ImpersonationService.Impersonation(function() {
+                                    return Me.GetProduct(id);
+                                }));
                             });
                             $q.all(productQueue)
                                 .then(function(results) {
@@ -43,36 +45,20 @@ function CartConfig($stateProvider) {
                         })
                         .catch(function() {
                             toastr.error("Your order does not contain any line items.", 'Error');
-                        })
+                        });
                     return dfd.promise;
                 }
             }
         });
 }
 
-function CartController($q, Underscore, $state, Order, LineItemsList, LineItems, Products) {
+function CartController($q, Underscore, $state, Order, Orders, LineItemsList, LineItems, LineItemHelpers, Products, $rootScope) {
     var vm = this;
     vm.order = Order;
     vm.lineItems = LineItemsList;
-    vm.removeItem = DeleteItem;
-    vm.updateQuantity = UpdateQuantity;
+    vm.removeItem = LineItemHelpers.RemoveItem;
+    vm.updateQuantity = LineItemHelpers.UpdateQuantity;
     vm.pagingfunction = PagingFunction;
-
-    function DeleteItem(LineItemID) {
-        LineItems.Delete(vm.order.ID, LineItemID)
-            .then(function() {
-                $state.reload();
-            });
-    }
-
-    function UpdateQuantity(LineItem) {
-        if (LineItem.Quantity > 0) {
-            LineItems.Patch(vm.order.ID, LineItem.ID, {Quantity: LineItem.Quantity})
-                .then(function() {
-                    $state.reload();
-                });
-        }
-    }
 
     function PagingFunction() {
         if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
@@ -97,16 +83,89 @@ function CartController($q, Underscore, $state, Order, LineItemsList, LineItems,
         }
         else return null;
     }
+
+    $rootScope.$on('LineItemAddedToCart', function() {
+        $state.go('cart');
+    });
+
+    $rootScope.$on('LineItemUpdated', function() {
+        $state.go('cart');
+    });
+
+    $rootScope.$on('LineItemQuantityUpdated', function() {
+        Orders.Get(vm.order.ID)
+            .then(function(data) {
+                vm.order = data;
+            });
+    });
 }
 
-function MiniCartController() {
+function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, Products) {
+    var vm = this;
+    vm.LineItems = {};
+    var queue = [];
+    $scope.$watch(function() {
+        return $scope.order.ID
+    }, function(newVal) {
+        if (!newVal) return;
+        getLineItems($scope.order);
+    });
 
+    function getLineItems(order) {
+        var dfd = $q.defer();
+        LineItems.List(order.ID)
+            .then(function(li) {
+                vm.LineItems = li;
+                if (li.Meta.TotalPages > li.Meta.Page) {
+                    var page = li.Meta.Page;
+                    while (page < li.Meta.TotalPages) {
+                        page += 1;
+                        queue.push(LineItems.List(order.ID, page));
+                    }
+                }
+                if (queue.length) {
+                    $q.all(queue)
+                        .then(function(results) {
+                            angular.forEach(results, function(result) {
+                                vm.LineItems.Items = [].concat(vm.LineItems.Items, result.Items);
+                                vm.LineItems.Meta = result.Meta;
+                            });
+                            getProductInfo(vm.LineItems);
+                            dfd.resolve(vm.LineItems.Items.reverse());
+                        });
+                }
+            });
+        return dfd.promise;
+    }
+
+    function getProductInfo(LineItems) {
+        var products = Underscore.uniq(Underscore.pluck(LineItems.Items, 'ProductID'));
+        var queue = [];
+        angular.forEach(products, function(product) {
+            queue.push(Products.Get(product));
+        });
+        $q.all(queue)
+            .then(function(results) {
+                angular.forEach(LineItems.Items, function(li) {
+                    li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
+                });
+            });
+    }
+
+    $rootScope.$on('LineItemAddedToCart', function() {
+        getLineItems($scope.order)
+            .then(function() {
+                vm.showLineItems = true;
+            });
+    })
 }
 
 function OrderCloudMiniCartDirective() {
     return {
         restrict: 'E',
-        scope: {},
+        scope: {
+            order: '='
+        },
         templateUrl: 'cart/templates/minicart.tpl.html',
         controller: 'MiniCartCtrl',
         controllerAs: 'minicart'

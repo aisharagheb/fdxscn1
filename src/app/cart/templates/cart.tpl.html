@@ -18,14 +18,18 @@
                     <col style="width:75px;">
                 </colgroup>
                 <tbody>
-                    <tr ng-repeat="lineItem in cart.lineItems.Items">
+                    <tr ng-repeat="lineItem in cart.lineItems.Items track by $index">
                         <td>
-                            <form name="{{'lineitem_' + lineItem.ID + '_quantity'}}">
-                                <input ng-change="cart.updateQuantity(lineItem)" tabindex="{{$index + 1}}" type="number" class="form-control text-center" ng-model="lineItem.Quantity">
+                            <form name="{{'lineitem_' + $index + '_quantity'}}" ng-submit="cart.updateQuantity(cart.order, lineItem)" class="form-group">
+                                <div ng-form="lineitem_quantity">
+                                    <input tabindex="{{$index + 1}}" ng-blur="cart.updateQuantity(cart.order, lineItem)" type="number" min="{{lineItem.Product.StandardPriceSchedule.MinQuantity}}" max="{{lineItem.Product.StandardPriceSchedule.MaxQuantity}}" required="true" class="form-control text-center" ng-model="lineItem.Quantity">
+                                </div>
                             </form>
                         </td>
                         <td>
-                            <img ng-if="lineItem.Product.xp.image" class="img-responsive" ng-src="{{lineItem.Product.xp.image.URL}}" alt="Product Image">
+                            <figure style="width: 100px;">
+                                <img ng-if="lineItem.Product.xp.image" class="img-responsive" ng-src="{{lineItem.Product.xp.image.URL}}" alt="Product Image">
+                            </figure>
                         </td>
                         <td>
                             <a href="#">{{lineItem.Product.Name}}</a><br>
@@ -36,10 +40,10 @@
                         </td>
                         <td>
                             <div class="btn-group-vertical">
-                                <button class="btn btn-default" ui-sref="catalog.lineitem({lineitemid: lineItem.ID, specformid: lineItem.Product.xp.specform})">
-                                    <i class="fa fa-edit text-info"></i>
+                                <button ng-if="lineItem.Specs.length" class="btn btn-default" ui-sref="catalog.lineitem({lineitemid: lineItem.ID, specformid: lineItem.Product.xp.specform})">
+                                    <i class="fa fa-edit text-warning"></i>
                                 </button>
-                                <button ng-click="cart.removeItem(lineItem.ID)" class="btn btn-default">
+                                <button ng-click="cart.removeItem(cart.order, lineItem)" class="btn btn-default">
                                     <i class="fa fa-trash text-danger"></i>
                                 </button>
                             </div>
