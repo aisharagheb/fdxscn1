@@ -65,6 +65,7 @@ function AppCtrl( $rootScope, $state, appname, Auth, BuyerID, ImpersonationServi
         ImpersonationService.StopImpersonating();
 		$state.go('login');
 	};
+    vm.EndImpersonation = ImpersonationService.StopImpersonating;
     vm.isImpersonating = !!Auth.GetImpersonating();
     $rootScope.$on('ImpersonationStarted', function() {
         vm.isImpersonating = true;

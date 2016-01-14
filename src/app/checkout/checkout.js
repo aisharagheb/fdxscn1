@@ -19,7 +19,7 @@ function checkoutConfig($stateProvider) {
 			controller: 'CheckoutCtrl',
 			controllerAs: 'checkout',
 			resolve: {
-                Order: function($q, toastr, CurrentOrder) {
+                Order: function($q, $state, toastr, CurrentOrder) {
                     var dfd = $q.defer();
                     CurrentOrder.Get()
                         .then(function(order) {
@@ -28,6 +28,9 @@ function checkoutConfig($stateProvider) {
                         .catch(function() {
                             dfd.reject();
                             toastr.error('You do not have an active open order.', 'Error');
+                            if ($state.current.name === 'checkout') {
+                                $state.go('home');
+                            }
                         });
                     return dfd.promise;
                 },

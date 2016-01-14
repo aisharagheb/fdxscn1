@@ -17,7 +17,7 @@ function CartConfig($stateProvider) {
             controller: 'CartCtrl',
             controllerAs: 'cart',
             resolve: {
-                Order: function($q, toastr, CurrentOrder) {
+                Order: function($q, $state, toastr, CurrentOrder) {
                     var dfd = $q.defer();
                     CurrentOrder.Get()
                         .then(function(order) {
@@ -26,6 +26,9 @@ function CartConfig($stateProvider) {
                         .catch(function() {
                             dfd.reject();
                             toastr.error('You do not have an active open order.', 'Error');
+                            if ($state.current.name === 'cart') {
+                                $state.go('home');
+                            }
                         });
                     return dfd.promise;
                 },
@@ -87,21 +90,21 @@ function CartController($q, Order, Orders, LineItemsList, LineItems, LineItemHel
     });
 }
 
-function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, LineItemHelpers) {
+function MiniCartController($q, $rootScope, LineItems, LineItemHelpers, CurrentOrder) {
     var vm = this;
     vm.LineItems = {};
-    var queue = [];
-    $scope.$watch(function() {
-        return $scope.order.ID
-    }, function(newVal) {
-        if (!newVal) return;
-        getLineItems($scope.order).then(function(data) {
-            LineItemHelpers.GetProductInfo(data);
+    vm.Order = null;
+    vm.showLineItems = false;
+
+    CurrentOrder.Get()
+        .then(function(data) {
+            vm.Order = data;
+            if (data) getLineItems(data);
         });
-    });
 
     function getLineItems(order) {
         var dfd = $q.defer();
+        var queue = [];
         LineItems.List(order.ID)
             .then(function(li) {
                 vm.LineItems = li;
@@ -112,49 +115,31 @@ function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, LineI
                         queue.push(LineItems.List(order.ID, page));
                     }
                 }
-                if (queue.length) {
-                    $q.all(queue)
-                        .then(function(results) {
-                            angular.forEach(results, function(result) {
-                                vm.LineItems.Items = [].concat(vm.LineItems.Items, result.Items);
-                                vm.LineItems.Meta = result.Meta;
-                            });
-                            dfd.resolve(vm.LineItems.Items.reverse());
+                $q.all(queue)
+                    .then(function(results) {
+                        angular.forEach(results, function(result) {
+                            vm.LineItems.Items = [].concat(vm.LineItems.Items, result.Items);
+                            vm.LineItems.Meta = result.Meta;
                         });
-                }
-                else dfd.resolve(vm.LineItems.Items.reverse());
+                        dfd.resolve(LineItemHelpers.GetProductInfo(vm.LineItems.Items.reverse()));
+                    });
             });
         return dfd.promise;
     }
 
-    function getProductInfo(LineItems) {
-        var products = Underscore.uniq(Underscore.pluck(LineItems.Items, 'ProductID'));
-        var queue = [];
-        angular.forEach(products, function(product) {
-            queue.push(Products.Get(product));
-        });
-        $q.all(queue)
-            .then(function(results) {
-                angular.forEach(LineItems.Items, function(li) {
-                    li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
-                });
-            });
-    }
-
     $rootScope.$on('LineItemAddedToCart', function() {
-        getLineItems($scope.order)
-            .then(function() {
+        CurrentOrder.Get()
+            .then(function(order) {
+                getLineItems(order);
                 vm.showLineItems = true;
             });
-    })
+    });
 }
 
 function OrderCloudMiniCartDirective() {
     return {
         restrict: 'E',
-        scope: {
-            order: '='
-        },
+        scope: {},
         templateUrl: 'cart/templates/minicart.tpl.html',
         controller: 'MiniCartCtrl',
         controllerAs: 'minicart'
