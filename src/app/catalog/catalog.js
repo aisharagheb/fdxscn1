@@ -38,8 +38,16 @@ function CatalogConfig($stateProvider) {
                         return Me.ListCategories(null, 1);
                     });
                 },
-                Order: function(CurrentOrder, Tree) {
-                    return CurrentOrder.Get();
+                Order: function($q, CurrentOrder, Tree) {
+                    var dfd = $q.defer();
+                    CurrentOrder.Get()
+                        .then(function(order) {
+                            dfd.resolve(order);
+                        })
+                        .catch(function() {
+                            dfd.resolve(null);
+                        });
+                    return dfd.promise;
                 }
             }
         });
