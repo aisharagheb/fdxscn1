@@ -17,34 +17,36 @@ function CartConfig($stateProvider) {
             controller: 'CartCtrl',
             controllerAs: 'cart',
             resolve: {
-                Order: function($state, toastr, CurrentOrder) {
-                    return CurrentOrder.Get()
+                Order: function($q, toastr, CurrentOrder) {
+                    var dfd = $q.defer();
+                    CurrentOrder.Get()
+                        .then(function(order) {
+                            dfd.resolve(order)
+                        })
                         .catch(function() {
+                            dfd.reject();
                             toastr.error('You do not have an active open order.', 'Error');
-                            $state.go('home');
                         });
+                    return dfd.promise;
                 },
-                LineItemsList: function($q, Order, Underscore, Me, LineItems, ImpersonationService) {
+                LineItemsList: function($q, Order, Underscore, Me, LineItems, toastr, LineItemHelpers) {
                     var dfd = $q.defer();
                     LineItems.Get(Order.ID)
                         .then(function(data) {
-                            var productQueue =[];
-                            var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
-                            angular.forEach(productIDs, function(id) {
-                                productQueue.push(ImpersonationService.Impersonation(function() {
-                                    return Me.GetProduct(id);
-                                }));
-                            });
-                            $q.all(productQueue)
-                                .then(function(results) {
-                                    angular.forEach(data.Items, function(li) {
-                                        li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
+                            if (!data.Items.length) {
+                                toastr.error("Your order does not contain any line items.", 'Error');
+                                dfd.reject();
+                            }
+                            else {
+                                LineItemHelpers.GetProductInfo(data.Items)
+                                    .then(function() {
+                                        dfd.resolve(data);
                                     });
-                                    dfd.resolve(data);
-                                })
+                            }
                         })
                         .catch(function() {
                             toastr.error("Your order does not contain any line items.", 'Error');
+                            dfd.reject();
                         });
                     return dfd.promise;
                 }
@@ -52,7 +54,7 @@ function CartConfig($stateProvider) {
         });
 }
 
-function CartController($q, Underscore, $state, Order, Orders, LineItemsList, LineItems, LineItemHelpers, Products, $rootScope) {
+function CartController($q, Order, Orders, LineItemsList, LineItems, LineItemHelpers, $rootScope) {
     var vm = this;
     vm.order = Order;
     vm.lineItems = LineItemsList;
@@ -61,36 +63,21 @@ function CartController($q, Underscore, $state, Order, Orders, LineItemsList, Li
     vm.pagingfunction = PagingFunction;
 
     function PagingFunction() {
+        var dfd = $q.defer();
         if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
-            var dfd = $q.defer();
             LineItems.List(vm.order.ID, vm.lineItems.Meta.Page + 1, vm.lineItems.Meta.PageSize)
                 .then(function(data) {
                     vm.lineItems.Meta = data.Meta;
-                    var productQueue = [];
-                    var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
-                    angular.forEach(productIDs, function(id) {
-                        productQueue.push(Products.Get(id));
-                    });
-                    $q.all(productQueue)
-                        .then(function(results) {
-                            angular.forEach(data.Items, function(li) {
-                                li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
-                            });
-                            vm.lineItems.Items = [].concat(vm.lineItems.Items, data.Items);
-                        })
+                    vm.lineItems.Items = [].concat(vm.lineItems.Items, data.Items);
+                    LineItemHelpers.GetProductInfo(vm.lineItems.Items)
+                        .then(function() {
+                            dfd.resolve(vm.lineItems);
+                        });
                 });
-            return dfd.promise;
         }
-        else return null;
+        else dfd.reject();
+        return dfd.promise;
     }
-
-    $rootScope.$on('LineItemAddedToCart', function() {
-        $state.go('cart');
-    });
-
-    $rootScope.$on('LineItemUpdated', function() {
-        $state.go('cart');
-    });
 
     $rootScope.$on('LineItemQuantityUpdated', function() {
         Orders.Get(vm.order.ID)
@@ -100,7 +87,7 @@ function CartController($q, Underscore, $state, Order, Orders, LineItemsList, Li
     });
 }
 
-function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, Products) {
+function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, LineItemHelpers) {
     var vm = this;
     vm.LineItems = {};
     var queue = [];
@@ -108,7 +95,9 @@ function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, Produ
         return $scope.order.ID
     }, function(newVal) {
         if (!newVal) return;
-        getLineItems($scope.order);
+        getLineItems($scope.order).then(function(data) {
+            LineItemHelpers.GetProductInfo(data);
+        });
     });
 
     function getLineItems(order) {
@@ -130,10 +119,10 @@ function MiniCartController($q, $scope, $rootScope, LineItems, Underscore, Produ
                                 vm.LineItems.Items = [].concat(vm.LineItems.Items, result.Items);
                                 vm.LineItems.Meta = result.Meta;
                             });
-                            getProductInfo(vm.LineItems);
                             dfd.resolve(vm.LineItems.Items.reverse());
                         });
                 }
+                else dfd.resolve(vm.LineItems.Items.reverse());
             });
         return dfd.promise;
     }

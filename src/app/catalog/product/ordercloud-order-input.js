@@ -18,7 +18,7 @@ function OrderCloudOrderInputDirective() {
     };
 }
 
-function OrderInputController($state, appname, $scope, $rootScope, $localForage, Orders, LineItems, LineItemHelpers) {
+function OrderInputController($state, appname, $scope, $rootScope, $localForage, Orders, LineItems, LineItemHelpers, CurrentOrder) {
     var vm = this,
         orderid;
     vm.currentState = $state.current.name;
@@ -52,17 +52,17 @@ function OrderInputController($state, appname, $scope, $rootScope, $localForage,
     });
 
     function AddToCart() {
-        if (orderid) {
-            Orders.Get(orderid).then(function(order) {
+        CurrentOrder.Get()
+            .then(function(order) {
                 AddLineItem(order, $scope.product);
+            })
+            .catch(function() {
+                Orders.Create({})
+                    .then(function(order) {
+                        CurrentOrder.Set(order.ID);
+                        AddLineItem(order, $scope.product);
+                    });
             });
-        }
-        else {
-            Orders.Create({}).then(function(order) {
-                AddLineItem(order, $scope.product);
-                $localForage.setItem(appname + '.CurrentOrderID', order.ID);
-            });
-        }
     }
 
     function AddLineItem(order, product) {

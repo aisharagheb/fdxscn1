@@ -5,11 +5,12 @@ angular.module('ordercloud-lineitems', [])
 
 ;
 
-function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope) {
+function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope, Products, Underscore) {
     return {
         SpecConvert: SpecConverter,
         RemoveItem: DeleteLineItem,
         UpdateQuantity: UpdateQuantity,
+        GetProductInfo: GetProductInformation,
         ClearShipper: ClearShipping,
         CustomShipper: CustomShipping
     };
@@ -33,13 +34,31 @@ function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal, $ro
         if (LineItem.Quantity > 0) {
             LineItems.Patch(Order.ID, LineItem.ID, {Quantity: LineItem.Quantity})
                 .then(function() {
-                    $rootScope.$broadcast('LineItemQuantityUpdated');
+                    $rootScope.$broadcast('LineItemQuantityUpdated', LineItem.ID);
                 });
         }
     }
 
     function ClearShipping(Order, LineItem) {
 
+    }
+
+    function GetProductInformation(LineItems) {
+        var li = LineItems.Items || LineItems;
+        var productIDs = Underscore.uniq(Underscore.pluck(li, 'ProductID'));
+        var dfd = $q.defer();
+        var queue = [];
+        angular.forEach(productIDs, function(productid) {
+            queue.push(Products.Get(productid));
+        });
+        $q.all(queue)
+            .then(function(results) {
+                angular.forEach(li, function(item) {
+                    item.Product = angular.copy(Underscore.where(results, {ID: item.ProductID})[0]);
+                });
+                dfd.resolve(li);
+            });
+        return dfd.promise;
     }
 
     function CustomShipping(Order, LineItem) {
@@ -55,7 +74,7 @@ function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal, $ro
             .then(function(address) {
                 LineItems.SetShippingAddress(Order.ID, LineItem.ID, address)
                     .then(function() {
-                        $state.reload();
+                        $rootScope.$broadcast('LineItemShippingUpdated', LineItem.ID);
                     });
             });
     }
