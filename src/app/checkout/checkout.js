@@ -133,6 +133,11 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
 		else return null;
 	}
 
+    vm.orderIsValid = false;
+    if(vm.currentOrder.BillingAddress && vm.currentOrder.BillingAddress.ID != null && vm.currentOrder.PaymentMethod != null){
+        vm.orderIsValid = true;
+    }
+
     function UpdateShipping(lineItem) {
         // Only lineItem.ShippingAddress.ID has the changed shipping address!
         Addresses.Get(lineItem.ShippingAddress.ID)
@@ -151,7 +156,7 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
     }
 }
 
-function OrderConfirmationController(CurrentOrder, LineItemsList, Orders, $state, isMultipleAddressShipping) {
+function OrderConfirmationController(CurrentOrder, LineItemsList, Orders, $state, isMultipleAddressShipping, $exceptionHandler) {
     var vm = this;
     vm.currentOrder = CurrentOrder;
     vm.lineItems = LineItemsList;
@@ -165,6 +170,9 @@ function OrderConfirmationController(CurrentOrder, LineItemsList, Orders, $state
                         $state.go('orderReview', {orderid: vm.currentOrder.ID})
                     })
             })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
     }
 }
 
