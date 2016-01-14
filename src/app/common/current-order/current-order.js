@@ -19,30 +19,37 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
             .then(function(OrderID) {
                 Orders.Get(OrderID)
                     .then(function(order) {
-                        dfd.resolve(order);
+                        if (order.Status === 'Unsubmitted') {
+                            dfd.resolve(order);
+                        }
+                        else {
+                            /* remove order if it has been submitted */
+                            removeOrder();
+                            dfd.reject();
+                        }
                     })
                     .catch(function() {
                         // If method fails clear out saved order
                         removeOrder();
-                        dfd.resolve(null);
-                    })
+                        dfd.reject();
+                    });
             })
             .catch(function() {
                 // Double check for an open order
                 ImpersonationService.Impersonation(Me.Get)
                     .then(function(me) {
                         ImpersonationService.Impersonation(function() {
-                            return Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID})
+                            return Orders.List('outgoing', null, null, null, null, null, null, null, {'FromUserID': me.ID, 'Status': 'Unsubmitted'})
                                 .then(function(orders) {
                                     if (orders.Items.length >= 1) {
                                         $localForage.setItem(StorageName, orders.Items[0].ID);
                                         dfd.resolve(orders.Items[0]);
                                     }
-                                    else dfd.resolve(null);
+                                    else dfd.reject();
                                 })
                                 .catch(function() {
-                                    dfd.resolve(null);
-                                })
+                                    dfd.reject();
+                                });
                         });
                     })
                     .catch(function(error) {
@@ -58,10 +65,10 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
             .then(function(orderID) {
                 if (orderID)
                     dfd.resolve(orderID);
-                else dfd.reject(null);
+                else dfd.reject();
             })
             .catch(function() {
-                dfd.reject(null);
+                dfd.reject();
             });
         return dfd.promise;
     }

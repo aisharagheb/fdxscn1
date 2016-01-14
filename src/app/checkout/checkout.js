@@ -3,6 +3,10 @@ angular.module('orderCloud')
 	.controller('CheckoutCtrl', CheckoutController)
 	.controller('OrderReviewCtrl', OrderReviewController)
 	.controller('OrderConfirmationCtrl', OrderConfirmationController)
+    .directive('ordercloudCheckoutLineitems', CheckoutLineItemsListDirective)
+    .controller('CheckoutLineItemsCtrl', CheckoutLineItemsController)
+    //toggle isMultipleAddressShipping if you do not wish to allow line items to ship to multiple addresses
+    .constant('isMultipleAddressShipping', true);
 ;
 
 function checkoutConfig($stateProvider) {
@@ -15,28 +19,18 @@ function checkoutConfig($stateProvider) {
 			controller: 'CheckoutCtrl',
 			controllerAs: 'checkout',
 			resolve: {
-                CurrentOrder: function(CurrentOrder) {
-                    return CurrentOrder.Get();
+                Order: function($q, toastr, CurrentOrder) {
+                    var dfd = $q.defer();
+                    CurrentOrder.Get()
+                        .then(function(order) {
+                            dfd.resolve(order)
+                        })
+                        .catch(function() {
+                            dfd.reject();
+                            toastr.error('You do not have an active open order.', 'Error');
+                        });
+                    return dfd.promise;
                 },
-				LineItemsList: function($q, Underscore, Products, LineItems, CurrentOrder) {
-					var dfd = $q.defer();
-					LineItems.Get(CurrentOrder.ID)
-						.then(function(data) {
-							var productQueue =[];
-							var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
-							angular.forEach(productIDs, function(id) {
-								productQueue.push(Products.Get(id));
-							});
-							$q.all(productQueue)
-								.then(function(results) {
-									angular.forEach(data.Items, function(li) {
-										li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
-									});
-									dfd.resolve(data);
-								})
-						});
-					return dfd.promise;
-				},
                 ShippingAddresses: function($q, Me, Underscore, ImpersonationService, CurrentOrder) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
@@ -49,87 +43,46 @@ function checkoutConfig($stateProvider) {
                 }
 			}
 		})
-		.state('checkout.review', {
-			url: '/review',
-			views: {
-				'@base': {
-					templateUrl: 'checkout/templates/review.tpl.html',
-					controller: 'OrderReviewCtrl',
-					controllerAs: 'orderReview'
-				}
+        .state('checkout.confirmation', {
+            url: '/confirmation',
+            views: {
+                '@base': {
+                    templateUrl: 'checkout/templates/confirmation.tpl.html',
+                    controller: 'OrderConfirmationCtrl',
+                    controllerAs: 'orderConfirmation'
+                }
+            }
+        })
+		.state('orderReview', {
+            parent: 'base',
+            data: {componentName: 'Checkout'},
+			url: '/order/:orderid/review',
+            templateUrl: 'checkout/templates/review.tpl.html',
+            controller: 'OrderReviewCtrl',
+            controllerAs: 'orderReview',
+            resolve: {
+                SubmittedOrder: function(Orders, $stateParams, $state, toastr) {
+                    return Orders.Get($stateParams.orderid)
+                        .then(function(order){
+                            if(order.Status == 'Unsubmitted') {
+                                $state.go('checkout.shipping')
+                                    .then(function() {
+                                        toastr.error('You cannot review an Unsubmitted Order', 'Error');
+                                    })
+                            }
+                        })
+                }
 			}
 		})
-		.state('checkout.confirmation', {
-			url: '/confirmation',
-			views: {
-				'@base': {
-					templateUrl: 'checkout/templates/confirmation.tpl.html',
-					controller: 'OrderConfirmationCtrl',
-					controllerAs: 'orderConfirmation'
-				}
-			}
-		})
+
 }
 
-function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, LineItems, Products, Underscore, ShippingAddresses, LineItemHelpers) {
-	var vm = this;
-	vm.lineItems = LineItemsList;
-	vm.currentOrder = CurrentOrder;
+function CheckoutController($state, Order, ShippingAddresses) {
+    var vm = this;
+    vm.currentOrder = Order;
     vm.currentShipAddress = null;
     vm.shippingAddresses = ShippingAddresses;
-    vm.updateLineItemShipping = UpdateShipping;
-    vm.removeItem = LineItemHelpers.RemoveItem;
-    vm.updateQuantity = LineItemHelpers.UpdateQuantity;
-    vm.setCustomShipping = LineItemHelpers.CustomShipper;
     vm.isMultipleAddressShipping = true;
-
-    // currently selected shipping address if all line items are going to the same place
-    vm.currentOrder.ShippingAddressID = vm.lineItems.Items[0].ShippingAddressID;
-    angular.forEach(vm.lineItems.Items, function(item) {
-        if (vm.currentOrder.ShippingAddressID !== item.ShippingAddressID) {
-            vm.currentOrder.ShippingAddressID = null;
-        }
-    });
-    if (vm.currentOrder.ShippingAddressID) {
-        vm.currentShipAddress = Underscore.where(vm.shippingAddresses, {ID: vm.currentOrder.ShippingAddressID})[0];
-    }
-
-    // paging function for line items
-	vm.pagingfunction = function() {
-		if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
-			var dfd = $q.defer();
-			LineItems.List(CurrentOrder.ID, vm.lineItems.Meta.Page + 1, vm.lineItems.Meta.PageSize)
-				.then(function(data) {
-					vm.lineItems.Meta = data.Meta;
-					var productQueue = [];
-					var productIDs = Underscore.uniq(Underscore.pluck(data.Items, 'ProductID'));
-					angular.forEach(productIDs, function(id) {
-						productQueue.push(Products.Get(id));
-					});
-					$q.all(productQueue)
-						.then(function(results) {
-							angular.forEach(data.Items, function(li) {
-								li.Product = angular.copy(Underscore.where(results, {ID:li.ProductID})[0]);
-							});
-							vm.lineItems.Items = [].concat(vm.lineItems.Items, data.Items);
-						})
-				});
-			return dfd.promise;
-		}
-		else return null;
-	}
-
-    function UpdateShipping(lineItem) {
-        // Only lineItem.ShippingAddress.ID has the changed shipping address!
-        Addresses.Get(lineItem.ShippingAddress.ID)
-            .then(function(address) {
-                LineItems.SetShippingAddress(vm.currentOrder.ID, lineItem.ID, address)
-                    .then(function(address) {
-                        console.log(address);
-                        lineItem.ShippingAddress = address;
-                    });
-            });
-    }
 
     // default state (if someone navigates to checkout -> checkout.shipping)
     if ($state.current.name === 'checkout') {
@@ -137,10 +90,78 @@ function CheckoutController($q, $state, CurrentOrder, LineItemsList, Addresses, 
     }
 }
 
-function OrderReviewController() {
-	var vm = this;
+function OrderConfirmationController(CurrentOrder, LineItemsList, Orders, $state, isMultipleAddressShipping, $exceptionHandler) {
+    var vm = this;
+    vm.currentOrder = CurrentOrder;
+    vm.lineItems = LineItemsList;
+    vm.isMultipleAddressShipping = isMultipleAddressShipping;
+
+    vm.submitOrder = function() {
+        Orders.Submit(vm.currentOrder.ID)
+            .then(function() {
+                CurrentOrder.Remove()
+                    .then(function(){
+                        $state.go('orderReview', {orderid: vm.currentOrder.ID})
+                    })
+            })
+            .catch(function(ex) {
+                $exceptionHandler(ex);
+            });
+    }
 }
 
-function OrderConfirmationController() {
+function OrderReviewController(SubmittedOrder) {
 	var vm = this;
+    vm.submittedOrder = SubmittedOrder;
+
+    //if(vm.submittedOrder.Status == 'Unsubmitted') {
+    //    $state.go('checkout')
+    //        .then(function() {
+    //            toastr.error('You cannot review an Unsubmitted Order', 'Error');
+    //        })
+    //}
+}
+
+function CheckoutLineItemsListDirective() {
+    return {
+        scope: {
+            order: '=',
+            addresses: '='
+        },
+        templateUrl: 'checkout/templates/checkout.lineitems.tpl.html',
+        controller: 'CheckoutLineItemsCtrl',
+        controllerAs: 'checkoutLI'
+    };
+}
+
+function CheckoutLineItemsController($scope, LineItems, LineItemHelpers) {
+    var vm = this;
+    vm.lineItems = {};
+    vm.UpdateQuantity = LineItemHelpers.UpdateQuantity;
+    vm.UpdateShippingAddress = LineItemHelpers.UpdateShipping;
+    vm.RemoveItem = LineItemHelpers.RemoveItem;
+
+    $scope.$watch(function() {
+        return $scope.order.ID;
+    }, function() {
+        LineItems.Get($scope.order.ID)
+            .then(function(data) {
+                vm.lineItems = data;
+                LineItemHelpers.GetProductInfo(vm.lineItems.Items);
+            });
+    });
+
+    vm.pagingfunction = function() {
+        if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
+            var dfd = $q.defer();
+            LineItems.List($scope.order.ID, vm.lineItems.Meta.Page + 1, vm.lineItems.Meta.PageSize)
+                .then(function(data) {
+                    vm.lineItems.Meta = data.Meta;
+                    vm.lineItems.Items = [].concat(vm.lineItems.Items, data.Items);
+                    LineItemHelpers.GetProductInfo(vm.lineItems.Items);
+                });
+            return dfd.promise;
+        }
+        else return null;
+    }
 }
