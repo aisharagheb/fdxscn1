@@ -24,20 +24,23 @@ function CartConfig($stateProvider) {
                             dfd.resolve(order)
                         })
                         .catch(function() {
-                            dfd.reject();
                             toastr.error('You do not have an active open order.', 'Error');
                             if ($state.current.name === 'cart') {
                                 $state.go('home');
                             }
+                            dfd.reject();
                         });
                     return dfd.promise;
                 },
-                LineItemsList: function($q, Order, Underscore, Me, LineItems, toastr, LineItemHelpers) {
+                LineItemsList: function($q, $state, Order, Underscore, Me, LineItems, toastr, LineItemHelpers) {
                     var dfd = $q.defer();
                     LineItems.Get(Order.ID)
                         .then(function(data) {
                             if (!data.Items.length) {
                                 toastr.error("Your order does not contain any line items.", 'Error');
+                                if ($state.current.name === 'cart') {
+                                    $state.go('home');
+                                }
                                 dfd.reject();
                             }
                             else {

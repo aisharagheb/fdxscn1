@@ -26,15 +26,15 @@ function checkoutConfig($stateProvider) {
                             dfd.resolve(order)
                         })
                         .catch(function() {
-                            dfd.reject();
                             toastr.error('You do not have an active open order.', 'Error');
-                            if ($state.current.name === 'checkout') {
+                            if ($state.current.name.indexOf('checkout') > -1) {
                                 $state.go('home');
                             }
+                            dfd.reject();
                         });
                     return dfd.promise;
                 },
-                ShippingAddresses: function($q, Me, Underscore, ImpersonationService, CurrentOrder) {
+                ShippingAddresses: function($q, Me, Underscore, ImpersonationService, Order) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
                         Me.ListAddresses()
