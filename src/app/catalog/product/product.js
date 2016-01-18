@@ -1,8 +1,9 @@
 angular.module('orderCloud')
 
     .config(ProductConfig)
+    .directive('specSelectField', SpecSelectionDirective)
     .controller('ProductCtrl', ProductController)
-    .controller('ProductEditCtrl', ProductEditController)
+    .controller('LineItemEditCtrl', LineItemEditController)
 
 ;
 
@@ -69,8 +70,8 @@ function ProductConfig($stateProvider) {
             url: '/lineitem/:lineitemid/edit/:specformid',
             views: {
                 '': {
-                    templateUrl: 'catalog/product/templates/product.tpl.html',
-                    controller: 'ProductEditCtrl',
+                    templateUrl: 'catalog/product/templates/lineitem.edit.tpl.html',
+                    controller: 'LineItemEditCtrl',
                     controllerAs: 'product'
                 },
                 'view@catalog.lineitem': {
@@ -81,7 +82,7 @@ function ProductConfig($stateProvider) {
                         }
                         return 'catalog/product/templates/spec-forms/' + spec_form + '.tpl.html';
                     },
-                    controller: 'ProductEditCtrl',
+                    controller: 'LineItemEditCtrl',
                     controllerAs: 'product'
                 }
             },
@@ -116,6 +117,33 @@ function ProductConfig($stateProvider) {
         });
 }
 
+function SpecSelectionDirective(Specs) {
+    return {
+        scope: {
+            spec: '='
+        },
+        templateUrl: 'catalog/product/templates/spec.selectionfield.tpl.html',
+        link: function(scope) {
+            scope.showField = false;
+            scope.$watch(function() {
+                return scope.spec.OptionID;
+            }, function(newVal, oldVal) {
+                if (!newVal) return;
+                Specs.GetOption(scope.spec.ID, scope.spec.OptionID)
+                    .then(function(specOption) {
+                        if (specOption.IsOpenText) {
+                            scope.showField = true;
+                            scope.spec.Value = null;
+                        }
+                        else {
+                            scope.showField = false;
+                        }
+                    });
+            });
+        }
+    };
+}
+
 function ProductController(Product, SpecList, Order) {
     var vm = this;
     vm.item = Product;
@@ -123,14 +151,24 @@ function ProductController(Product, SpecList, Order) {
     vm.item.Specs = SpecList;
 }
 
-function ProductEditController(Underscore, LineItem, Order, LI_Product, LI_SpecList) {
+function LineItemEditController(Underscore, LineItem, LineItems, LineItemHelpers, LI_Product, LI_SpecList, $rootScope) {
     var vm = this;
     vm.item = LI_Product;
-    vm.order = Order;
+    vm.item.Quantity = LineItem.Quantity;
     vm.item.Specs = LI_SpecList;
+    var spec_value = null;
     angular.forEach(vm.item.Specs, function(spec) {
-        var spec_values = Underscore.where(LineItem.Specs, {SpecID: spec.ID})[0];
-        spec.Value = spec_values.Value;
-        spec.OptionID = spec_values.OptionID;
+        spec_value = Underscore.where(LineItem.Specs, {SpecID: spec.ID})[0];
+        if (spec_value) {
+            spec.Value = spec_value.Value;
+            spec.OptionID = spec_value.OptionID;
+        }
     });
+
+    vm.UpdateLineItem = function() {
+        LineItems.Patch(LineItem.OrderID, LineItem.ID, {Quantity: vm.item.Quantity, Specs: LineItemHelpers.SpecConvert(vm.item.Specs)})
+            .then(function(data) {
+                $rootScope.$broadcast('LineItemUpdated', data);
+            });
+    }
 }

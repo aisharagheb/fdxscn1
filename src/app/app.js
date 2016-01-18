@@ -51,7 +51,7 @@ function ErrorHandling( $provide ) {
 	}
 }
 
-function AppCtrl( $rootScope, $state, appname, Auth, BuyerID ) {
+function AppCtrl( $rootScope, $state, appname, Auth, BuyerID, ImpersonationService ) {
 	var vm = this;
 	vm.name = appname;
 	vm.title = appname;
@@ -62,8 +62,17 @@ function AppCtrl( $rootScope, $state, appname, Auth, BuyerID ) {
 	vm.logout = function() {
 		Auth.RemoveToken();
 		BuyerID.Set(null);
+        ImpersonationService.StopImpersonating();
 		$state.go('login');
 	};
+    vm.EndImpersonation = ImpersonationService.StopImpersonating;
+    vm.isImpersonating = !!Auth.GetImpersonating();
+    $rootScope.$on('ImpersonationStarted', function() {
+        vm.isImpersonating = true;
+    });
+    $rootScope.$on('ImpersonationStopped', function() {
+        vm.isImpersonating = false;
+    });
 	$rootScope.$on('$stateChangeSuccess', function(e, toState) {
 		if (toState.data && toState.data.componentName) {
 			vm.title = appname + ' - ' + toState.data.componentName

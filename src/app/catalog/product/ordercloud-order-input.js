@@ -18,7 +18,7 @@ function OrderCloudOrderInputDirective() {
     };
 }
 
-function OrderInputController($state, appname, $scope, $rootScope, $localForage, Orders, LineItems) {
+function OrderInputController($state, appname, $scope, $rootScope, $localForage, Orders, LineItems, LineItemHelpers, CurrentOrder) {
     var vm = this,
         orderid;
     vm.currentState = $state.current.name;
@@ -52,56 +52,26 @@ function OrderInputController($state, appname, $scope, $rootScope, $localForage,
     });
 
     function AddToCart() {
-        if (orderid) {
-            Orders.Get(orderid).then(function(order) {
+        CurrentOrder.Get()
+            .then(function(order) {
                 AddLineItem(order, $scope.product);
+            })
+            .catch(function() {
+                Orders.Create({})
+                    .then(function(order) {
+                        CurrentOrder.Set(order.ID);
+                        AddLineItem(order, $scope.product);
+                    });
             });
-        }
-        else {
-            Orders.Create({}).then(function(order) {
-                AddLineItem(order, $scope.product);
-                $localForage.setItem(appname + '.CurrentOrderID', order.ID);
-            });
-        }
     }
 
     function AddLineItem(order, product) {
         LineItems.Create(order.ID, {
             ProductID: product.ID,
             Quantity: vm.Quantity,
-            Specs: SetSpecs(product.Specs)
+            Specs: LineItemHelpers.SpecConvert(product.Specs)
         }).then(function(lineItem) {
-            $rootScope.$broadcast('event:lineitemAddedToCart', order.ID, lineItem);
+            $rootScope.$broadcast('LineItemAddedToCart', order.ID, lineItem);
         });
-    }
-
-    function SetSpecs(specs) {
-        var results = [];
-        angular.forEach(specs, function(spec) {
-            var spec_to_push = {SpecID: spec.ID};
-            if (spec.Options.length > 0) {
-                if (spec.DefaultOptionID) {
-                    spec_to_push.OptionID = spec.DefaultOptionID;
-                }
-                if (spec.Value) {
-                    angular.forEach(spec.Options, function(option) {
-                        if (option.Value === spec.Value) {
-                            spec_to_push.Value = spec.Value;
-                            spec_to_push.OptionID = spec.OptionID;
-                        }
-                    });
-                }
-                else if (spec.OptionID) {
-                    spec_to_push.OptionID = spec.OptionID;
-                }
-            }
-            else {
-                spec_to_push.Value = spec.Value || spec.DefaultValue || null;
-            }
-            if (spec_to_push.Value || spec_to_push.OptionID) {
-                results.push(spec_to_push);
-            }
-        });
-        return results;
     }
 }

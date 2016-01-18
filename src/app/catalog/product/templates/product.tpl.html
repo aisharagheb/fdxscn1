@@ -1,11 +1,13 @@
 <article class="row form-group" ng-form="product_spec_form" id="product_view">
-    <div class="col-md-6" ng-if="product.item.xp.image">
-        <!--PRODUCT IMAGE-->
-        <img class="img-responsive" ng-src="{{product.item.xp.image.URL}}" alt="Product Image">
-        <ordercloud-order-input validationform="product_spec_form" product="product.item"></ordercloud-order-input>
-    </div>
-    <div ng-class="{'col-md-6': product.item.xp.image, 'col-md-12': !product.item.xp.image}">
-        <div ui-view="view"></div>
-        <ordercloud-order-input validationform="product_spec_form" ng-if="!product.item.xp.image" product="product.item"></ordercloud-order-input>
+    <div class="row">
+        <div class="col-md-6" ng-if="product.item.xp.image">
+            <!--PRODUCT IMAGE-->
+            <img class="img-responsive" ng-src="{{product.item.xp.image.URL}}" alt="Product Image">
+            <ordercloud-order-input validationform="product_spec_form" product="product.item"></ordercloud-order-input>
+        </div>
+        <div ng-class="{'col-md-6': product.item.xp.image, 'col-md-12': !product.item.xp.image}">
+            <div ui-view="view"></div>
+            <ordercloud-order-input validationform="product_spec_form" ng-if="!product.item.xp.image" product="product.item"></ordercloud-order-input>
+        </div>
     </div>
 </article>

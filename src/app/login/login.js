@@ -63,7 +63,7 @@ function LoginService( $q, $window, PasswordResets, clientid ) {
     }
 }
 
-function LoginController( $state, $stateParams, $exceptionHandler, LoginService, Credentials, BuyerID, buyerid ) {
+function LoginController( $state, $stateParams, $exceptionHandler, LoginService, Credentials, BuyerID, buyerid, ImpersonationService ) {
     var vm = this;
     vm.token = $stateParams.token;
     vm.form = vm.token ? 'reset' : 'login';
@@ -75,6 +75,7 @@ function LoginController( $state, $stateParams, $exceptionHandler, LoginService,
         Credentials.Get( vm.credentials )
             .then(function() {
                 BuyerID.Get() ? angular.noop() : BuyerID.Set(buyerid);
+                ImpersonationService.StopImpersonating();
                 $state.go('home');
             })
             .catch(function(ex) {

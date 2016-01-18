@@ -1,0 +1,40 @@
+<div id="minicart" uib-dropdown is-open="minicart.showLineItems" ng-if="minicart.LineItems.Items.length">
+    <div class="btn-group" uib-dropdown-toggle>
+        <label class="btn btn-primary">
+            <span>
+                <i class="fa fa-shopping-cart"></i>
+                <i class="badge">{{minicart.LineItems.Meta.TotalCount}}</i>
+            </span>
+        </label>
+        <label class="btn btn-default">{{order.Subtotal | currency}} <i class="fa fa-caret-down"></i></label>
+    </div>
+    <div id="minicart_line_item_list" uib-dropdown-menu role="menu" class="panel panel-default">
+        <div class="minicart-body">
+            <table class="table table-hover">
+                <colgroup>
+
+                </colgroup>
+                <tr ng-repeat="lineItem in minicart.LineItems.Items">
+                    <td>{{lineItem.Quantity}}</td>
+                    <td>
+                        <a href="#">{{lineItem.Product.Name}}</a><br>
+                        <small class="text-muted">{{lineItem.ProductID}}</small></br>
+                    </td>
+                    <td>
+                        <b class="text-success">{{lineItem.LineTotal | currency}}</b>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-xs-6">
+                    <button class="btn btn-info btn-block" ui-sref="cart">Cart</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="btn btn-success btn-block" ui-sref="checkout">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

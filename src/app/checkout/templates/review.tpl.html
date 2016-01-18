@@ -1,5 +1,72 @@
-<article class="container-fluid">
+<article class="container-fluid full-width">
 	<h3 class="page-header">
 		Order Review
 	</h3>
+    <div class="form-group hidden-print">
+        <button class="btn btn-default" ng-click="orderReview.print()">Print</button>
+    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Billing Address</b></div>
+            <div class="panel-body">
+                <div>
+                    <p id="address_paragraph">{{orderReview.submittedOrder.BillingAddress | address: 'full'}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default" ng-if="!orderReview.isMultipleAddressShipping">
+            <div class="panel-heading"><b>Shipping Address</b></div>
+            <div class="panel-body">
+                <div>
+                    <p id="address_paragraph">{{orderReview.lineItems.Items[0].ShippingAddress | address: 'full'}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Payment Information</b></div>
+            <div class="panel-body">
+                <div ng-if="orderReview.submittedOrder.PaymentMethod == 'CreditCard'">
+                    <p>Cardholder Name: {{orderReview.submittedOrder.CreditCard.CardholderName}}</p>
+                    <p><i class="fa fa-cc-visa fa-2x"></i> ending in {{orderReview.submittedOrder.CreditCard.PartialAccountNumber}}</p>
+                </div>
+                <div ng-if="orderReview.currentOrder.PaymentMethod == 'SpendingAccount'">
+                    Spending Account ID: {{orderReview.submittedOrder.SpendingAccountID}}
+                </div>
+                <div ng-if="orderReview.submittedOrder.PaymentMethod == 'PurchaseOrder'">
+                    <!--need info for each payment type-->
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><b>Line Items</b></div>
+            <div class="panel-body">
+                <div>
+                    <table class="table table-hover">
+                        <tbody>
+                        <colgroup>
+                            <col style="width:100px;">
+                            <col>
+                            <col style="width:75px;">
+                        </colgroup>
+                        <tr ng-repeat-start="lineItem in orderReview.LineItems.Items track by $index" class="item_info">
+                            <td>
+                                {{lineItem.Quantity}}
+                            </td>
+                            <td>
+                                <a href="#">{{lineItem.Product.Name}}</a><br>
+                                <small class="text-muted">{{lineItem.ProductID}}</small></br>
+                            </td>
+                        </tr>
+                        <tr ng-repeat-end class="shipping_info" ng-if="orderReview.isMultipleAddressShipping">
+                            <div>
+                                <td colspan="3">
+                                    <label>Shipping To:</label>
+                                    <p>{{lineItem.ShippingAddress | address}}</p>
+                                </td>
+                            </div>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 </article>

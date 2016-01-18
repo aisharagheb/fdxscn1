@@ -5,10 +5,12 @@ angular.module('ordercloud-lineitems', [])
 
 ;
 
-function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal) {
+function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope, Products, Underscore) {
     return {
+        SpecConvert: SpecConverter,
         RemoveItem: DeleteLineItem,
         UpdateQuantity: UpdateQuantity,
+        GetProductInfo: GetProductInformation,
         ClearShipper: ClearShipping,
         CustomShipper: CustomShipping
     };
@@ -32,13 +34,31 @@ function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal) {
         if (LineItem.Quantity > 0) {
             LineItems.Patch(Order.ID, LineItem.ID, {Quantity: LineItem.Quantity})
                 .then(function() {
-                    $state.reload();
+                    $rootScope.$broadcast('LineItemQuantityUpdated', LineItem.ID);
                 });
         }
     }
 
     function ClearShipping(Order, LineItem) {
 
+    }
+
+    function GetProductInformation(LineItems) {
+        var li = LineItems.Items || LineItems;
+        var productIDs = Underscore.uniq(Underscore.pluck(li, 'ProductID'));
+        var dfd = $q.defer();
+        var queue = [];
+        angular.forEach(productIDs, function(productid) {
+            queue.push(Products.Get(productid));
+        });
+        $q.all(queue)
+            .then(function(results) {
+                angular.forEach(li, function(item) {
+                    item.Product = angular.copy(Underscore.where(results, {ID: item.ProductID})[0]);
+                });
+                dfd.resolve(li);
+            });
+        return dfd.promise;
     }
 
     function CustomShipping(Order, LineItem) {
@@ -54,9 +74,32 @@ function LineItemFactory($state, CurrentOrder, Orders, LineItems, $uibModal) {
             .then(function(address) {
                 LineItems.SetShippingAddress(Order.ID, LineItem.ID, address)
                     .then(function() {
-                        $state.reload();
+                        $rootScope.$broadcast('LineItemShippingUpdated', LineItem.ID);
                     });
             });
+    }
+
+    function SpecConverter(specs) {
+        var results = [];
+        angular.forEach(specs, function(spec) {
+            var spec_to_push = {SpecID: spec.ID};
+            if (spec.Options.length > 0) {
+                if (spec.DefaultOptionID) {
+                    spec_to_push.OptionID = spec.DefaultOptionID;
+                }
+                if (spec.Value) {
+                    spec_to_push.Value = spec.Value;
+                }
+                else if (spec.OptionID) {
+                    spec_to_push.OptionID = spec.OptionID;
+                }
+            }
+            else {
+                spec_to_push.Value = spec.Value || spec.DefaultValue || null;
+            }
+            results.push(spec_to_push);
+        });
+        return results;
     }
 }
 
