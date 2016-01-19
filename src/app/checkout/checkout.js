@@ -36,7 +36,7 @@ function checkoutConfig($stateProvider) {
                         });
                     return dfd.promise;
                 },
-                ShippingAddresses: function($q, Me, Underscore, ImpersonationService, Order) {
+                ShippingAddresses: function($q, Me, Underscore, ImpersonationService) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
                         Me.ListAddresses()
@@ -124,7 +124,7 @@ function OrderConfirmationController(Order, CurrentOrder, Orders, $state, isMult
     }
 }
 
-function OrderReviewController(SubmittedOrder, isMultipleAddressShipping, LineItems, $q, LineItemHelpers, $scope) {
+function OrderReviewController(SubmittedOrder, isMultipleAddressShipping, LineItems, $q, LineItemHelpers) {
 	var vm = this;
     vm.submittedOrder = SubmittedOrder;
     vm.isMultipleAddressShipping = isMultipleAddressShipping;
@@ -169,7 +169,7 @@ function CheckoutLineItemsListDirective() {
     };
 }
 
-function CheckoutLineItemsController($scope, LineItems, LineItemHelpers) {
+function CheckoutLineItemsController($scope, $q, LineItems, LineItemHelpers) {
     var vm = this;
     vm.lineItems = {};
     vm.UpdateQuantity = LineItemHelpers.UpdateQuantity;
@@ -212,7 +212,7 @@ function ConfirmationLineItemsListDirective() {
     };
 }
 
-function ConfirmationLineItemsController($scope, LineItems, LineItemHelpers, isMultipleAddressShipping) {
+function ConfirmationLineItemsController($scope, $q, LineItems, LineItemHelpers, isMultipleAddressShipping) {
     var vm = this;
     vm.lineItems = {};
     vm.isMultipleAddressShipping = isMultipleAddressShipping;
