@@ -17,9 +17,9 @@
                         <label><input type="checkbox" ng-model="checkoutBilling.saveAddress"> Save Address for Future Use</label>
                     </div>
                 </div>
+                <button ng-disabled="order_billing.address_form.$invalid" type="submit" class="btn btn-success pull-left">Submit</button>
+                <button ng-click="checkoutBilling.customAddress = false;" type="button" class="btn btn-danger pull-right">Cancel</button>
             </form>
-            <button ng-disabled="order_billing.address_form.$invalid" type="submit" class="btn btn-success pull-left">Submit</button>
-            <button ng-click="checkoutBilling.customAddress = false;" type="button" class="btn btn-danger pull-right">Cancel</button>
         </div>
     </div>
 </div>

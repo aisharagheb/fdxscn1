@@ -54,7 +54,7 @@ function CheckoutBillingController($state, Orders, Addresses, BillingAddresses, 
                                     IsShipping: false
                                 })
                                 .then(function() {
-                                    Orders.Patch(order.ID, {BillingAddressID: address.ID})
+                                    Orders.SetBillingAddress(order.ID, vm.address)
                                         .then(function() {
                                             $state.reload();
                                         });
