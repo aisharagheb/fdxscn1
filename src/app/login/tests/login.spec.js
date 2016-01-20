@@ -1,19 +1,17 @@
-xdescribe('Component: Login', function() {
+describe('Component: Login', function() {
     var scope,
         q,
         loginFactory,
-        devLoginFactory,
         credentials = {
             Username: 'notarealusername',
             Password: 'notarealpassword'
         };
     beforeEach(module('orderCloud'));
     beforeEach(module('orderCloud.sdk'));
-    beforeEach(inject(function($q, $rootScope, LoginService, DevLoginService) {
+    beforeEach(inject(function($q, $rootScope, LoginService) {
         q = $q;
         scope = $rootScope.$new();
-        loginFactory = LoginService;
-        devLoginFactory = DevLoginService;
+        loginFactory = LoginService
     }));
 
     describe('Factory: LoginService', function() {
@@ -63,13 +61,15 @@ xdescribe('Component: Login', function() {
     describe('Controller: LoginCtrl', function() {
         var loginCtrl;
         beforeEach(inject(function($controller, $state, Credentials, LoginService) {
+            spyOn($state, 'go').and.callThrough();
+            var dfd = q.defer();
+            dfd.resolve(true);
+            spyOn(Credentials, 'Get').and.returnValue(dfd.promise);
             loginCtrl = $controller('LoginCtrl', {
                 $scope: scope,
                 LoginService: LoginService,
                 Credentials: Credentials
             });
-            spyOn($state, 'go').and.callThrough();
-            spyOn(Credentials, 'Get').and.callThrough();
         }));
 
         describe('form', function() {
@@ -94,7 +94,8 @@ xdescribe('Component: Login', function() {
                 expect(Credentials.Get).toHaveBeenCalledWith(credentials);
             }));
             it ('should enter the home state', inject(function($state) {
-                expect($state.go).toHaveBeenCalledWith('base.home');
+                scope.$digest();
+                expect($state.go).toHaveBeenCalledWith('home');
             }));
         });
 

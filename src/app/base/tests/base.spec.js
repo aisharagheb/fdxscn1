@@ -10,14 +10,31 @@ describe('Component: Base', function() {
     }));
     describe('State: Base', function() {
         var state;
-        beforeEach(inject(function($state, Me) {
+        beforeEach(inject(function($state, Me, BuyerID) {
             state = $state.get('base');
-            spyOn(Me, 'Get').and.returnValue(null);
+            var dfd = q.defer();
+            dfd.resolve(true);
+            spyOn(Me, 'Get').and.returnValue(dfd.promise);
+            spyOn(BuyerID, 'Set').and.callThrough();
+            spyOn($state, 'go').and.returnValue(true);
         }));
         //Skipped this test because Base now resolves with Auth.IsAuthenticated and THEN do a Me.Get() to confirm the token will work
-        xit('should resolve CurrentUser', inject(function ($injector, Me) {
+        it('should resolve CurrentUser', inject(function ($injector, Me, Auth) {
+            var dfd = q.defer();
+            dfd.resolve(true);
+            spyOn(Auth, 'IsAuthenticated').and.returnValue(dfd.promise);
             $injector.invoke(state.resolve.CurrentUser);
+            scope.$digest();
             expect(Me.Get).toHaveBeenCalled();
+        }));
+        it('should return to login if unauthenticated', inject(function($injector, Auth, BuyerID, $state) {
+            var dfd = q.defer();
+            dfd.reject(true);
+            spyOn(Auth, 'IsAuthenticated').and.returnValue(dfd.promise);
+            $injector.invoke(state.resolve.CurrentUser);
+            scope.$digest();
+            expect(BuyerID.Set).toHaveBeenCalledWith(null);
+            expect($state.go).toHaveBeenCalledWith('login');
         }));
         it ('should resolve ComponentsList', inject(function($injector) {
             var components = $injector.invoke(state.resolve.ComponentList);
