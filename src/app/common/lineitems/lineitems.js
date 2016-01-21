@@ -5,14 +5,15 @@ angular.module('ordercloud-lineitems', [])
 
 ;
 
-function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope, Products, Underscore) {
+function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope, Products, Addresses, Underscore) {
     return {
         SpecConvert: SpecConverter,
         RemoveItem: DeleteLineItem,
         UpdateQuantity: UpdateQuantity,
         GetProductInfo: GetProductInformation,
         ClearShipper: ClearShipping,
-        CustomShipper: CustomShipping
+        CustomShipping: CustomShipping,
+        UpdateShipping: UpdateShipping
     };
 
     function DeleteLineItem(Order, LineItem) {
@@ -72,12 +73,22 @@ function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal,
 
         modalInstance.result
             .then(function(address) {
+                address.ID = Math.floor(Math.random() * 1000000).toString();
                 LineItems.SetShippingAddress(Order.ID, LineItem.ID, address)
                     .then(function() {
-                        $rootScope.$broadcast('LineItemShippingUpdated', LineItem.ID);
+                        $rootScope.$broadcast('LineItemAddressUpdated', LineItem.ID, address);
                     });
             });
     }
+
+    function UpdateShipping(Order, LineItem, AddressID) {
+        Addresses.Get(AddressID)
+            .then(function(address) {
+                LineItems.SetShippingAddress(Order.ID, LineItem.ID, address);
+                $rootScope.$broadcast('LineItemAddressUpdated', LineItem.ID, address);
+            });
+    }
+}
 
     function SpecConverter(specs) {
         var results = [];
@@ -100,7 +111,6 @@ function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal,
             results.push(spec_to_push);
         });
         return results;
-    }
 }
 
 function LineItemModalController($uibModalInstance) {

@@ -86,10 +86,9 @@ function checkoutConfig($stateProvider) {
 
 }
 
-function CheckoutController($state, Order, ShippingAddresses) {
+function CheckoutController($state, $rootScope, Order, ShippingAddresses) {
     var vm = this;
     vm.currentOrder = Order;
-    vm.currentShipAddress = null;
     vm.shippingAddresses = ShippingAddresses;
     vm.isMultipleAddressShipping = true;
 
@@ -98,11 +97,16 @@ function CheckoutController($state, Order, ShippingAddresses) {
         vm.orderIsValid = true;
     }
 
-
     // default state (if someone navigates to checkout -> checkout.shipping)
     if ($state.current.name === 'checkout') {
         $state.transitionTo('checkout.shipping');
     }
+
+    $rootScope.$on('OrderShippingAddressChanged', function(event, order, address) {
+        vm.currentOrder = order;
+        vm.currentOrder.ShippingAddressID = address.ID;
+        vm.currentOrder.ShippingAddress = address;
+    })
 }
 
 function OrderConfirmationController(Order, CurrentOrder, Orders, $state, isMultipleAddressShipping, $exceptionHandler) {
@@ -169,12 +173,24 @@ function CheckoutLineItemsListDirective() {
     };
 }
 
-function CheckoutLineItemsController($scope, $q, LineItems, LineItemHelpers) {
+function CheckoutLineItemsController($scope, $q, LineItems, LineItemHelpers, Underscore) {
     var vm = this;
     vm.lineItems = {};
     vm.UpdateQuantity = LineItemHelpers.UpdateQuantity;
-    vm.UpdateShippingAddress = LineItemHelpers.UpdateShipping;
+    vm.UpdateShipping = LineItemHelpers.UpdateShipping;
+    vm.setCustomShipping = LineItemHelpers.CustomShipping;
     vm.RemoveItem = LineItemHelpers.RemoveItem;
+
+    $scope.$on('LineItemAddressUpdated', function(event, LineItemID, address) {
+        Underscore.where(vm.lineItems.Items, {ID: LineItemID})[0].ShippingAddress = address;
+    });
+
+    $scope.$on('OrderShippingAddressChanged', function(event, order, address) {
+        angular.forEach(vm.lineItems.Items, function(li) {
+            li.ShippingAddressID = address.ID;
+            li.ShippingAddress = address;
+        })
+    });
 
     $scope.$watch(function() {
         return $scope.order.ID;
