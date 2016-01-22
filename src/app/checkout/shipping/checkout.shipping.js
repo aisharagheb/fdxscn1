@@ -13,7 +13,7 @@ function checkoutShippingConfig($stateProvider) {
 		})
 }
 
-function CheckoutShippingController($state, Addresses, Orders, Me, ImpersonationService) {
+function CheckoutShippingController($state, $rootScope, Addresses, Orders, Me, ImpersonationService) {
 	var vm = this;
     vm.saveAddress = null;
     vm.isAlsoBilling = null;
@@ -25,10 +25,14 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
 
     function saveShipAddress(order) {
         if (order && order.ShippingAddressID) {
-            Orders.Patch(order.ID, {ShippingAddressID: order.ShippingAddressID})
-                .then(function() {
-                    $state.reload();
-                });
+            Addresses.Get(order.ShippingAddressID)
+                .then(function(address){
+                    Orders.SetShippingAddress(order.ID, address)
+                        .then(function() {
+                            $rootScope.$broadcast('OrderShippingAddressChanged', order, address);
+                        });
+                })
+
         }
     }
 
@@ -45,11 +49,14 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
                                     IsBilling: vm.isAlsoBilling,
                                     IsShipping: true
                                 })
-                                .then(function() {
-                                    Orders.Patch(order.ID, {ShippingAddressID: address.ID})
-                                        .then(function() {
-                                            $state.reload();
-                                        });
+                                    .then(function() {
+                                        Addresses.Get(address.ID)
+                                            .then(function(address) {
+                                                Orders.SetShippingAddress(order.ID, address)
+                                                    .then(function() {
+                                                        $state.reload();
+                                                    });
+                                    })
                                 });
                             });
                     });

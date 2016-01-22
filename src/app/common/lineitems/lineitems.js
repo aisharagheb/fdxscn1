@@ -5,14 +5,15 @@ angular.module('ordercloud-lineitems', [])
 
 ;
 
-function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope, Products, Underscore) {
+function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal, $rootScope, Products, Addresses, Underscore) {
     return {
         SpecConvert: SpecConverter,
         RemoveItem: DeleteLineItem,
         UpdateQuantity: UpdateQuantity,
         GetProductInfo: GetProductInformation,
         ClearShipper: ClearShipping,
-        CustomShipper: CustomShipping
+        CustomShipping: CustomShipping,
+        UpdateShipping: UpdateShipping
     };
 
     function DeleteLineItem(Order, LineItem) {
@@ -22,10 +23,12 @@ function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal,
                 LineItems.List(Order.ID)
                     .then(function(data) {
                         if (!data.Items.length) {
-                            Orders.Delete(Order.ID);
                             CurrentOrder.Remove();
+                            Orders.Delete(Order.ID).then(function() {
+                                $state.reload();
+                            });
                         }
-                        $state.reload();
+                        else $state.reload();
                     });
             });
     }
@@ -72,35 +75,44 @@ function LineItemFactory($q, $state, CurrentOrder, Orders, LineItems, $uibModal,
 
         modalInstance.result
             .then(function(address) {
+                address.ID = Math.floor(Math.random() * 1000000).toString();
                 LineItems.SetShippingAddress(Order.ID, LineItem.ID, address)
                     .then(function() {
-                        $rootScope.$broadcast('LineItemShippingUpdated', LineItem.ID);
+                        $rootScope.$broadcast('LineItemAddressUpdated', LineItem.ID, address);
                     });
             });
     }
 
-    function SpecConverter(specs) {
-        var results = [];
-        angular.forEach(specs, function(spec) {
-            var spec_to_push = {SpecID: spec.ID};
-            if (spec.Options.length > 0) {
-                if (spec.DefaultOptionID) {
-                    spec_to_push.OptionID = spec.DefaultOptionID;
-                }
-                if (spec.Value) {
-                    spec_to_push.Value = spec.Value;
-                }
-                else if (spec.OptionID) {
-                    spec_to_push.OptionID = spec.OptionID;
-                }
-            }
-            else {
-                spec_to_push.Value = spec.Value || spec.DefaultValue || null;
-            }
-            results.push(spec_to_push);
-        });
-        return results;
+    function UpdateShipping(Order, LineItem, AddressID) {
+        Addresses.Get(AddressID)
+            .then(function(address) {
+                LineItems.SetShippingAddress(Order.ID, LineItem.ID, address);
+                $rootScope.$broadcast('LineItemAddressUpdated', LineItem.ID, address);
+            });
     }
+}
+
+function SpecConverter(specs) {
+    var results = [];
+    angular.forEach(specs, function (spec) {
+        var spec_to_push = {SpecID: spec.ID};
+        if (spec.Options.length > 0) {
+            if (spec.DefaultOptionID) {
+                spec_to_push.OptionID = spec.DefaultOptionID;
+            }
+            if (spec.Value) {
+                spec_to_push.Value = spec.Value;
+            }
+            else if (spec.OptionID) {
+                spec_to_push.OptionID = spec.OptionID;
+            }
+        }
+        else {
+            spec_to_push.Value = spec.Value || spec.DefaultValue || null;
+        }
+        results.push(spec_to_push);
+    });
+    return results;
 }
 
 function LineItemModalController($uibModalInstance) {
