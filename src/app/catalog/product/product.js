@@ -151,10 +151,12 @@ function ProductController(Product, SpecList, Order) {
     vm.item.Specs = SpecList;
 }
 
-function LineItemEditController(Underscore, LineItem, LineItems, LineItemHelpers, LI_Product, LI_SpecList, $rootScope) {
+function LineItemEditController($state, Underscore, LineItem, LineItems, LineItemHelpers, LI_Product, LI_SpecList, $rootScope) {
     var vm = this;
     vm.item = LI_Product;
+    var originalQuantity = LineItem.Quantity;
     vm.item.Quantity = LineItem.Quantity;
+    var originalSpecs = angular.copy(LineItem.Specs);
     vm.item.Specs = LI_SpecList;
     var spec_value = null;
     angular.forEach(vm.item.Specs, function(spec) {
@@ -165,10 +167,31 @@ function LineItemEditController(Underscore, LineItem, LineItems, LineItemHelpers
         }
     });
 
+    function findDifferences() {
+        var patchObject = {};
+        if (vm.item.Quantity !== originalQuantity) {
+            patchObject.Quantity = vm.item.Quantity;
+        }
+        angular.forEach(vm.item.Specs, function(spec) {
+            var origSpec = Underscore.where(originalSpecs, {SpecID: spec.ID})[0];
+            if (!origSpec || origSpec.Value !== spec.Value || origSpec.OptionID !== spec.OptionID) {
+                if(!patchObject.Specs) patchObject.Specs = [];
+                patchObject.Specs.push(spec);
+            }
+        });
+        return patchObject;
+    }
+
     vm.UpdateLineItem = function() {
-        LineItems.Patch(LineItem.OrderID, LineItem.ID, {Quantity: vm.item.Quantity, Specs: LineItemHelpers.SpecConvert(vm.item.Specs)})
-            .then(function(data) {
-                $rootScope.$broadcast('LineItemUpdated', data);
-            });
+        var patchObj = findDifferences();
+        if (patchObj.Quantity || patchObj.Specs) {
+            if (patchObj.Specs) patchObj.Specs = LineItemHelpers.SpecConvert(patchObj.Specs);
+            console.log(patchObj);
+            LineItems.Patch(LineItem.OrderID, LineItem.ID, patchObj)
+                .then(function() {
+                    $state.go('cart')
+                });
+        }
+        else $state.go('cart');
     }
 }

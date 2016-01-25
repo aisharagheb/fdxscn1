@@ -36,6 +36,17 @@ function checkoutConfig($stateProvider) {
                         });
                     return dfd.promise;
                 },
+                OrderShipAddress: function($q, OrderShippingAddress) {
+                    var dfd = $q.defer();
+                    OrderShippingAddress.Get()
+                        .then(function(data) {
+                            dfd.resolve(data);
+                        })
+                        .catch(function() {
+                            dfd.resolve(null);
+                        });
+                    return dfd.promise;
+                },
                 ShippingAddresses: function($q, Me, Underscore, ImpersonationService) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
@@ -86,9 +97,11 @@ function checkoutConfig($stateProvider) {
 
 }
 
-function CheckoutController($state, $rootScope, Order, ShippingAddresses) {
+function CheckoutController($state, $rootScope, Order, Orders, ShippingAddresses, OrderShipAddress, OrderShippingAddress) {
     var vm = this;
     vm.currentOrder = Order;
+    vm.currentOrder.ShippingAddressID = OrderShipAddress ? OrderShipAddress.ID : null;
+    vm.currentOrder.ShippingAddress = OrderShipAddress;
     vm.shippingAddresses = ShippingAddresses;
     vm.isMultipleAddressShipping = true;
 
@@ -106,7 +119,20 @@ function CheckoutController($state, $rootScope, Order, ShippingAddresses) {
         vm.currentOrder = order;
         vm.currentOrder.ShippingAddressID = address.ID;
         vm.currentOrder.ShippingAddress = address;
-    })
+    });
+
+    $rootScope.$on('OC:UpdateOrder', function(event, OrderID) {
+        Orders.Get(OrderID)
+            .then(function(data) {
+                vm.currentOrder.Subtotal = data.Subtotal;
+            });
+    });
+
+    $rootScope.$on('LineItemAddressUpdated', function() {
+        vm.currentOrder.ShippingAddress = null;
+        vm.currentOrder.ShippingAddressID = null;
+        OrderShippingAddress.Clear();
+    });
 }
 
 function OrderConfirmationController(Order, CurrentOrder, Orders, $state, isMultipleAddressShipping, $exceptionHandler) {
@@ -189,18 +215,22 @@ function CheckoutLineItemsController($scope, $q, LineItems, LineItemHelpers, Und
         angular.forEach(vm.lineItems.Items, function(li) {
             li.ShippingAddressID = address.ID;
             li.ShippingAddress = address;
-        })
+        });
     });
 
     $scope.$watch(function() {
         return $scope.order.ID;
     }, function() {
-        LineItems.Get($scope.order.ID)
+        LineItemsInit($scope.order.ID)
+    });
+
+    function LineItemsInit(OrderID) {
+        LineItems.Get(OrderID)
             .then(function(data) {
                 vm.lineItems = data;
                 LineItemHelpers.GetProductInfo(vm.lineItems.Items);
             });
-    });
+    }
 
     vm.pagingfunction = function() {
         if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {

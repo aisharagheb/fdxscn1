@@ -2,7 +2,7 @@
     <div class="panel-heading"><b>Billing</b></div>
     <div class="panel-body">
         <div ng-if="!checkoutBilling.customAddress">
-            <div ng-if="checkoutBilling.billingAddresses.length">
+            <div class="form-group" ng-if="checkoutBilling.billingAddresses.length">
                 <label for="billing_address">Billing Address</label>
                 <select id="billing_address" required="true" name="BillingAddress" ng-change="checkoutBilling.SaveBillingAddress(checkout.currentOrder);" ng-model="checkout.currentOrder.BillingAddressID" class="form-control" ng-options="address.ID as (address.AddressName || address.Street1 + ' ' + address.Street2) for address in checkoutBilling.billingAddresses"></select>
             </div>
