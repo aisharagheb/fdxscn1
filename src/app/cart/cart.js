@@ -60,7 +60,7 @@ function CartConfig($stateProvider) {
         });
 }
 
-function CartController($q, Order, Orders, LineItemsList, LineItems, LineItemHelpers, $rootScope) {
+function CartController($q, $rootScope, Orders, Order, LineItemsList, LineItems, LineItemHelpers) {
     var vm = this;
     vm.order = Order;
     vm.lineItems = LineItemsList;
@@ -85,8 +85,8 @@ function CartController($q, Order, Orders, LineItemsList, LineItems, LineItemHel
         return dfd.promise;
     }
 
-    $rootScope.$on('LineItemQuantityUpdated', function() {
-        Orders.Get(vm.order.ID)
+    $rootScope.$on('OC:UpdateOrder', function(event, OrderID) {
+        Orders.Get(OrderID)
             .then(function(data) {
                 vm.order = data;
             });

@@ -7,7 +7,7 @@
 						}"></ng-pluralize>
         </h3>
     </div>
-    <div style="max-height:500px; overflow-y:auto;" ordercloud-infinite-scroll controlleras="checkout">
+    <div style="max-height:500px; overflow-y:auto;" ordercloud-infinite-scroll controlleras="checkoutLI">
         <table class="table table-hover">
             <tbody>
             <colgroup>
@@ -31,23 +31,20 @@
                     </button>
                 </td>
             </tr>
+            <tr ng-if="lineItem.ShippingAddress">
+                <td colspan="3">
+                    <p>Shipping To:</p>
+                    <p>{{lineItem.ShippingAddress | address:'full'}}</p>
+                </td>
+            </tr>
             <tr ng-repeat-end class="shipping_info">
                 <div ng-if="checkout.isMultipleAddressShipping">
-                    <td colspan="3" ng-if="lineItem.ShippingAddress.ID || lineItem.ShippingAddress === null">
-                        <label>Shipping To:</label>
+                    <td colspan="3">
+                        <label>Change Shipping Address:</label>
                         <div class="input-group">
-                            <span uib-tooltip="{{lineItem.ShippingAddress | address}}" tooltip-append-to-body="true" class="input-group-addon"><i class="fa fa-truck"></i></span>
-                            <select required="true" ng-change="checkoutLI.UpdateShippingAddress(lineItem);" ng-model="lineItem.ShippingAddress.ID" class="form-control" ng-options="address.ID as address.AddressName for address in addresses"></select>
+                            <span class="input-group-addon"><i class="fa fa-truck"></i></span>
+                            <select required="true" ng-change="checkoutLI.UpdateShipping(order, lineItem, lineItem.ShippingAddress.ID);" ng-model="lineItem.ShippingAddress.ID" class="form-control" ng-options="address.ID as address.AddressName for address in addresses"></select>
                             <span ng-click="checkoutLI.setCustomShipping(order, lineItem);" class="btn-success input-group-addon"><i class="fa fa-plus-circle"></i></span>
-                        </div>
-                    </td>
-                    <td colspan="3" ng-if="lineItem.ShippingAddress !== null && lineItem.ShippingAddress.ID === null">
-                        <div class="col-xs-9">
-                            <b>Shipping To:</b>
-                            <p>{{lineItem.ShippingAddress | address}}</p>
-                        </div>
-                        <div class="col-xs-3">
-                            <button class="btn btn-danger" ng-click="lineItem.ShippingAddress = null;">Clear</button>
                         </div>
                     </td>
                 </div>

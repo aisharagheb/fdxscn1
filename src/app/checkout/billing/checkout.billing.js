@@ -25,7 +25,7 @@ function checkoutBillingConfig($stateProvider) {
 		})
 }
 
-function CheckoutBillingController($state, Orders, Addresses, BillingAddresses, Me, ImpersonationService) {
+function CheckoutBillingController($state, $exceptionHandler, Orders, Addresses, BillingAddresses, Me, ImpersonationService) {
 	var vm = this;
 	vm.billingAddresses = BillingAddresses;
     vm.SaveBillingAddress = SaveBillingAddress;
@@ -37,6 +37,9 @@ function CheckoutBillingController($state, Orders, Addresses, BillingAddresses, 
                 .then(function() {
                     $state.reload();
                 })
+                .catch(function() {
+                    $exceptionHandler(ex);
+                });
         }
     }
 
@@ -54,19 +57,34 @@ function CheckoutBillingController($state, Orders, Addresses, BillingAddresses, 
                                     IsShipping: false
                                 })
                                 .then(function() {
-                                    Orders.Patch(order.ID, {BillingAddressID: address.ID})
+                                    Orders.SetBillingAddress(order.ID, vm.address)
                                         .then(function() {
                                             $state.reload();
+                                        })
+                                        .catch(function(ex) {
+                                            $exceptionHandler(ex);
                                         });
+                                })
+                                .catch(function(ex) {
+                                    $exceptionHandler(ex);
                                 });
+                            })
+                            .catch(function(ex) {
+                                $exceptionHandler(ex);
                             });
                     });
+                })
+                .catch(function(ex) {
+                    $exceptionHandler(ex);
                 });
         }
         else {
             Orders.SetBillingAddress(order.ID, vm.address)
                 .then(function() {
                     $state.reload();
+                })
+                .catch(function(ex) {
+                    $exceptionHandler(ex);
                 });
         }
     }

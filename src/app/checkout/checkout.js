@@ -36,7 +36,18 @@ function checkoutConfig($stateProvider) {
                         });
                     return dfd.promise;
                 },
-                ShippingAddresses: function($q, Me, Underscore, ImpersonationService, Order) {
+                OrderShipAddress: function($q, OrderShippingAddress) {
+                    var dfd = $q.defer();
+                    OrderShippingAddress.Get()
+                        .then(function(data) {
+                            dfd.resolve(data);
+                        })
+                        .catch(function() {
+                            dfd.resolve(null);
+                        });
+                    return dfd.promise;
+                },
+                ShippingAddresses: function($q, Me, Underscore, ImpersonationService) {
                     return ImpersonationService.Impersonation(function() {
                         var dfd = $q.defer();
                         Me.ListAddresses()
@@ -86,10 +97,11 @@ function checkoutConfig($stateProvider) {
 
 }
 
-function CheckoutController($state, Order, ShippingAddresses) {
+function CheckoutController($state, $rootScope, Order, Orders, ShippingAddresses, OrderShipAddress, OrderShippingAddress) {
     var vm = this;
     vm.currentOrder = Order;
-    vm.currentShipAddress = null;
+    vm.currentOrder.ShippingAddressID = OrderShipAddress ? OrderShipAddress.ID : null;
+    vm.currentOrder.ShippingAddress = OrderShipAddress;
     vm.shippingAddresses = ShippingAddresses;
     vm.isMultipleAddressShipping = true;
 
@@ -98,11 +110,29 @@ function CheckoutController($state, Order, ShippingAddresses) {
         vm.orderIsValid = true;
     }
 
-
     // default state (if someone navigates to checkout -> checkout.shipping)
     if ($state.current.name === 'checkout') {
         $state.transitionTo('checkout.shipping');
     }
+
+    $rootScope.$on('OrderShippingAddressChanged', function(event, order, address) {
+        vm.currentOrder = order;
+        vm.currentOrder.ShippingAddressID = address.ID;
+        vm.currentOrder.ShippingAddress = address;
+    });
+
+    $rootScope.$on('OC:UpdateOrder', function(event, OrderID) {
+        Orders.Get(OrderID)
+            .then(function(data) {
+                vm.currentOrder.Subtotal = data.Subtotal;
+            });
+    });
+
+    $rootScope.$on('LineItemAddressUpdated', function() {
+        vm.currentOrder.ShippingAddress = null;
+        vm.currentOrder.ShippingAddressID = null;
+        OrderShippingAddress.Clear();
+    });
 }
 
 function OrderConfirmationController(Order, CurrentOrder, Orders, $state, isMultipleAddressShipping, $exceptionHandler) {
@@ -124,7 +154,7 @@ function OrderConfirmationController(Order, CurrentOrder, Orders, $state, isMult
     }
 }
 
-function OrderReviewController(SubmittedOrder, isMultipleAddressShipping, LineItems, $q, LineItemHelpers, $scope) {
+function OrderReviewController(SubmittedOrder, isMultipleAddressShipping, LineItems, $q, LineItemHelpers) {
 	var vm = this;
     vm.submittedOrder = SubmittedOrder;
     vm.isMultipleAddressShipping = isMultipleAddressShipping;
@@ -169,22 +199,38 @@ function CheckoutLineItemsListDirective() {
     };
 }
 
-function CheckoutLineItemsController($scope, LineItems, LineItemHelpers) {
+function CheckoutLineItemsController($scope, $q, LineItems, LineItemHelpers, Underscore) {
     var vm = this;
     vm.lineItems = {};
     vm.UpdateQuantity = LineItemHelpers.UpdateQuantity;
-    vm.UpdateShippingAddress = LineItemHelpers.UpdateShipping;
+    vm.UpdateShipping = LineItemHelpers.UpdateShipping;
+    vm.setCustomShipping = LineItemHelpers.CustomShipping;
     vm.RemoveItem = LineItemHelpers.RemoveItem;
+
+    $scope.$on('LineItemAddressUpdated', function(event, LineItemID, address) {
+        Underscore.where(vm.lineItems.Items, {ID: LineItemID})[0].ShippingAddress = address;
+    });
+
+    $scope.$on('OrderShippingAddressChanged', function(event, order, address) {
+        angular.forEach(vm.lineItems.Items, function(li) {
+            li.ShippingAddressID = address.ID;
+            li.ShippingAddress = address;
+        });
+    });
 
     $scope.$watch(function() {
         return $scope.order.ID;
     }, function() {
-        LineItems.Get($scope.order.ID)
+        LineItemsInit($scope.order.ID)
+    });
+
+    function LineItemsInit(OrderID) {
+        LineItems.Get(OrderID)
             .then(function(data) {
                 vm.lineItems = data;
                 LineItemHelpers.GetProductInfo(vm.lineItems.Items);
             });
-    });
+    }
 
     vm.pagingfunction = function() {
         if (vm.lineItems.Meta.Page < vm.lineItems.Meta.TotalPages) {
@@ -212,7 +258,7 @@ function ConfirmationLineItemsListDirective() {
     };
 }
 
-function ConfirmationLineItemsController($scope, LineItems, LineItemHelpers, isMultipleAddressShipping) {
+function ConfirmationLineItemsController($scope, $q, LineItems, LineItemHelpers, isMultipleAddressShipping) {
     var vm = this;
     vm.lineItems = {};
     vm.isMultipleAddressShipping = isMultipleAddressShipping;

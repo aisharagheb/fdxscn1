@@ -4,7 +4,7 @@ angular.module('ordercloud-current-order', [])
 
 ;
 
-function CurrentOrderService($q, appname, ImpersonationService, $localForage, Orders, Me) {
+function CurrentOrderService($q, appname, ImpersonationService, $localForage, Auth, Orders, Me) {
     var StorageName = appname + '.CurrentOrderID';
     return {
         Get: getOrder,
@@ -19,7 +19,7 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
             .then(function(OrderID) {
                 Orders.Get(OrderID)
                     .then(function(order) {
-                        if (order.Status === 'Unsubmitted') {
+                        if (order.Status === 'Unsubmitted' && Auth.GetImpersonating()) {
                             dfd.resolve(order);
                         }
                         else {
@@ -63,9 +63,12 @@ function CurrentOrderService($q, appname, ImpersonationService, $localForage, Or
         var dfd = $q.defer();
         $localForage.getItem(StorageName)
             .then(function(orderID) {
-                if (orderID)
+                if (orderID && Auth.GetImpersonating())
                     dfd.resolve(orderID);
-                else dfd.reject();
+                else {
+                    removeOrder();
+                    dfd.reject();
+                }
             })
             .catch(function() {
                 dfd.reject();

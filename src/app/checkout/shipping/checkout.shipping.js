@@ -1,6 +1,7 @@
 angular.module('orderCloud')
 	.config(checkoutShippingConfig)
 	.controller('CheckoutShippingCtrl', CheckoutShippingController)
+    .factory('OrderShippingAddress', OrderShippingAddressFactory)
 ;
 
 function checkoutShippingConfig($stateProvider) {
@@ -13,7 +14,7 @@ function checkoutShippingConfig($stateProvider) {
 		})
 }
 
-function CheckoutShippingController($state, Addresses, Orders, Me, ImpersonationService) {
+function CheckoutShippingController($state, $rootScope, Addresses, Orders, Me, ImpersonationService, OrderShippingAddress) {
 	var vm = this;
     vm.saveAddress = null;
     vm.isAlsoBilling = null;
@@ -25,10 +26,15 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
 
     function saveShipAddress(order) {
         if (order && order.ShippingAddressID) {
-            Orders.Patch(order.ID, {ShippingAddressID: order.ShippingAddressID})
-                .then(function() {
-                    $state.reload();
-                });
+            OrderShippingAddress.Set(order.ShippingAddressID);
+            Addresses.Get(order.ShippingAddressID)
+                .then(function(address){
+                    Orders.SetShippingAddress(order.ID, address)
+                        .then(function() {
+                            $rootScope.$broadcast('OrderShippingAddressChanged', order, address);
+                        });
+                })
+
         }
     }
 
@@ -45,11 +51,14 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
                                     IsBilling: vm.isAlsoBilling,
                                     IsShipping: true
                                 })
-                                .then(function() {
-                                    Orders.Patch(order.ID, {ShippingAddressID: address.ID})
-                                        .then(function() {
-                                            $state.reload();
-                                        });
+                                    .then(function() {
+                                        Addresses.Get(address.ID)
+                                            .then(function(address) {
+                                                Orders.SetShippingAddress(order.ID, address)
+                                                    .then(function() {
+                                                        $state.reload();
+                                                    });
+                                    })
                                 });
                             });
                     });
@@ -61,5 +70,47 @@ function CheckoutShippingController($state, Addresses, Orders, Me, Impersonation
                     $state.reload();
                 });
         }
+    }
+}
+
+function OrderShippingAddressFactory($q, $localForage, appname, Addresses) {
+    var StorageName = appname + '.ShippingAddressID';
+    return {
+        Get: Get,
+        Set: Set,
+        Clear: Clear
+    };
+
+    function Get() {
+        var dfd = $q.defer();
+        $localForage.getItem(StorageName)
+            .then(function(shipID) {
+                if (shipID) {
+                    Addresses.Get(shipID)
+                        .then(function(address) {
+                            if (!address.Items) {
+                                dfd.resolve(address);
+                            }
+                            else dfd.reject();
+                        })
+                        .catch(function() {
+                            Clear();
+                            dfd.reject();
+                        });
+                }
+                else dfd.reject();
+            })
+            .catch(function() {
+                dfd.reject();
+            });
+        return dfd.promise;
+    }
+
+    function Set(ShipAddressID) {
+        $localForage.setItem(StorageName, ShipAddressID);
+    }
+
+    function Clear() {
+        $localForage.removeItem(StorageName);
     }
 }
